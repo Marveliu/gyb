@@ -4,7 +4,7 @@ layout("/layouts/platform.html"){
 <section class="content-wrap bg-white">
     <header class="header navbar bg-white shadow">
         <div class="btn-group tool-button">
-            <a id="add" class="btn btn-primary navbar-btn" href="${base}/platform/gy/country/add" data-pjax><i class="ti-plus"></i> ${msg['globals.button.add']}</a>
+            <a id="add" class="btn btn-primary navbar-btn" href="${base}/platform/gy/inf/add" data-pjax><i class="ti-plus"></i> ${msg['globals.button.add']}</a>
             <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> ${msg['globals.button.delete.more']}</button>
         </div>
     </header>
@@ -13,8 +13,19 @@ layout("/layouts/platform.html"){
             <table class="table table-bordered table-striped mg-t datatable">
                 <thead>
                     <tr>
-                            <th>${msg['dic.country.column.code']}</th>
-                            <th>${msg['dic.country.column.name']}</th>
+                            <th>${msg['gy.inf.column.userid']}</th>
+                            <th>${msg['gy.inf.column.realname']}</th>
+                            <th>${msg['gy.inf.column.qq']}</th>
+                            <th>${msg['gy.inf.column.phone']}</th>
+                            <th>${msg['gy.inf.column.birthday']}</th>
+                            <th>${msg['gy.inf.column.sex']}</th>
+                            <th>${msg['gy.inf.column.idcard']}</th>
+                            <th>${msg['gy.inf.column.college']}</th>
+                            <th>${msg['gy.inf.column.school']}</th>
+                            <th>${msg['gy.inf.column.major']}</th>
+                            <th>${msg['gy.inf.column.regYear']}</th>
+                            <th>${msg['gy.inf.column.stuLevel']}</th>
+                            <th>${msg['gy.inf.column.status']}</th>
                             <th>${msg['globals.table.column.operation']}</th>
                     </tr>
                 </thead>
@@ -22,6 +33,7 @@ layout("/layouts/platform.html"){
         </div>
     </div>
 </section>
+
 <div id="dialogDelete" class="modal fade bs-modal-sm" tabindex="-2" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -69,7 +81,7 @@ layout("/layouts/platform.html"){
                 sublime.closeLoadingbar($(".main-content"));
             },
             "ajax": {
-                "url": "${base}/platform/gy/country/data",
+                "url": "${base}/platform/gy/inf/data",
                 "type": "post",
                 "data": function (d) {
 
@@ -77,21 +89,32 @@ layout("/layouts/platform.html"){
             },
             "order": [[0, "desc"]],
             "columns": [
-                    {"data": "code", "bSortable": true},
-                    {"data": "name", "bSortable": true},
+                    {"data": "userid", "bSortable": true},
+                    {"data": "realname", "bSortable": true},
+                    {"data": "qq", "bSortable": true},
+                    {"data": "phone", "bSortable": true},
+                    {"data": "birthday", "bSortable": true},
+                    {"data": "sex", "bSortable": true},
+                    {"data": "idcard", "bSortable": true},
+                    {"data": "college", "bSortable": true},
+                    {"data": "school", "bSortable": true},
+                    {"data": "major", "bSortable": true},
+                    {"data": "regYear", "bSortable": true},
+                    {"data": "stuLevel", "bSortable": true},
+                    {"data": "status", "bSortable": true},
             ],
             "columnDefs": [
                 {
                     "render": function (data, type, row) {
                         return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
                                 ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-                                '<li><a href="${base}/platform/gy/country/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
-                                '<li><a href="${base}/platform/gy/country/edit/' + row.id + '" data-pjax>${msg["globals.button.update"]}</a></li>' +
+                                '<li><a href="${base}/platform/gy/inf/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
+                                '<li><a href="${base}/platform/gy/inf/edit/' + row.id + '" data-pjax>${msg["globals.button.update"]}</a></li>' +
                                 '<li class="divider"></li>' +
                                 '<li><a href="javascript:;" onclick="del(\'' + row.id + '\')">${msg["globals.button.delete"]}</a></li>' +
                                 '</ul></div>';
                     },
-                    "targets": 2
+                    "targets": 13
                 }
             ]
         });
@@ -109,7 +132,7 @@ layout("/layouts/platform.html"){
         dialog.find("#okDel").bind("click", function (event) {
             var btn = $(this);
             btn.button("loading");
-            $.post("${base}/platform/gy/country/delete/" + id, {}, function (data) {
+            $.post("${base}/platform/gy/inf/delete/" + id, {}, function (data) {
                 if (data.code == 0) {
                     datatable.ajax.reload(null,false);
                 } else {
@@ -133,7 +156,7 @@ layout("/layouts/platform.html"){
             dialog.find("#okDel").bind("click", function (event) {
                 var btn = $(this);
                 btn.button("loading");
-                $.post("${base}/platform/gy/country/delete", {ids: ids.toString()}, function (data) {
+                $.post("${base}/platform/gy/inf/delete", {ids: ids.toString()}, function (data) {
                     if (data.code == 0) {
                         datatable.ajax.reload(null,false);
                     } else {

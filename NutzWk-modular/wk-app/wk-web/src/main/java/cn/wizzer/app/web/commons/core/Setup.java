@@ -4,7 +4,6 @@ import cn.wizzer.app.sys.modules.models.*;
 import cn.wizzer.app.web.commons.base.Globals;
 import cn.wizzer.app.web.commons.plugin.IPlugin;
 import cn.wizzer.app.web.commons.plugin.PluginMaster;
-
 import cn.wizzer.framework.ig.RedisIdGenerator;
 import com.rabbitmq.client.*;
 import net.sf.ehcache.CacheManager;
@@ -12,13 +11,8 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Sha256Hash;
-import org.nutz.dao.Chain;
-import org.nutz.dao.Cnd;
-import org.nutz.dao.Dao;
-import org.nutz.dao.Sqls;
-import org.nutz.dao.entity.Entity;
+import org.nutz.dao.*;
 import org.nutz.dao.entity.Record;
-import org.nutz.dao.entity.annotation.Table;
 import org.nutz.dao.impl.FileSqlManager;
 import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
@@ -36,7 +30,6 @@ import org.nutz.lang.util.NutMap;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.NutConfig;
-import org.nutz.resource.Scans;
 import org.quartz.Scheduler;
 import redis.clients.jedis.Jedis;
 
@@ -48,9 +41,7 @@ import java.lang.management.ManagementFactory;
 import java.nio.charset.Charset;
 import java.sql.Driver;
 import java.sql.DriverManager;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -316,7 +307,12 @@ public class Setup implements org.nutz.mvc.Setup {
      * @param dao
      */
     private void initSysData(NutConfig config, Dao dao) {
+
+
         Daos.createTablesInPackage(dao, "cn.wizzer.app", false);
+
+        //todo: dev过程gy强制删
+        Daos.createTablesInPackage(dao, "cn.wizzer.app.gy", true);
         // 若必要的数据表不存在，则初始化数据库
         if (0 == dao.count(Sys_user.class)) {
             //初始化配置表

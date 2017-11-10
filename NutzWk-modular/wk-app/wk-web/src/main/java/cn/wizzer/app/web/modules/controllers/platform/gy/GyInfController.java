@@ -1,11 +1,12 @@
 package cn.wizzer.app.web.modules.controllers.platform.gy;
 
-import cn.wizzer.app.gy.modules.models.DicCountry;
-import cn.wizzer.app.gy.modules.services.DiccountryService;
+import cn.wizzer.app.gy.modules.models.gy_inf;
+import cn.wizzer.app.gy.modules.services.GyInfService;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
+import cn.wizzer.framework.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -19,40 +20,40 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @IocBean
-@At("/platform/gy/country")
-public class DiccountryController{
+@At("/platform/gy/inf")
+public class GyInfController{
     private static final Log log = Logs.get();
     @Inject
-    private DiccountryService dicCountryService;
+    private GyInfService gyInfService;
 
     @At("")
-    @Ok("beetl:/platform/gy/country/index.html")
-    @RequiresPermissions("platform.gy.country")
+    @Ok("beetl:/platform/gy/inf/index.html")
+    @RequiresPermissions("platform.gy.inf")
     public void index() {
     }
 
     @At("/data")
     @Ok("json")
-    @RequiresPermissions("platform.gy.country")
+    @RequiresPermissions("platform.gy.inf")
     public Object data(@Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
 		Cnd cnd = Cnd.NEW();
-    	return dicCountryService.data(length, start, draw, order, columns, cnd, null);
+    	return gyInfService.data(length, start, draw, order, columns, cnd, null);
     }
 
     @At("/add")
-    @Ok("beetl:/platform/gy/country/add.html")
-    @RequiresPermissions("platform.gy.country")
+    @Ok("beetl:/platform/gy/inf/add.html")
+    @RequiresPermissions("platform.gy.inf")
     public void add() {
 
     }
 
     @At("/addDo")
     @Ok("json")
-    @RequiresPermissions("platform.gy.country.add")
-    @SLog(tag = "国家", msg = "${args[0].id}")
-    public Object addDo(@Param("..")DicCountry dicCountry, HttpServletRequest req) {
+    @RequiresPermissions("platform.gy.inf.add")
+    @SLog(tag = "gy_inf", msg = "${args[0].id}")
+    public Object addDo(@Param("..")gy_inf gyInf, HttpServletRequest req) {
 		try {
-			dicCountryService.insert(dicCountry);
+			gyInfService.insert(gyInf);
 			return Result.success("system.success");
 		} catch (Exception e) {
 			return Result.error("system.error");
@@ -60,21 +61,21 @@ public class DiccountryController{
     }
 
     @At("/edit/?")
-    @Ok("beetl:/platform/gy/country/edit.html")
-    @RequiresPermissions("platform.gy.country")
+    @Ok("beetl:/platform/gy/inf/edit.html")
+    @RequiresPermissions("platform.gy.inf")
     public void edit(String id,HttpServletRequest req) {
-		req.setAttribute("obj", dicCountryService.fetch(id));
+		req.setAttribute("obj", gyInfService.fetch(id));
     }
 
     @At("/editDo")
     @Ok("json")
-    @RequiresPermissions("platform.gy.country.edit")
-    @SLog(tag = "国家", msg = "${args[0].id}")
-    public Object editDo(@Param("..")DicCountry dicCountry, HttpServletRequest req) {
+    @RequiresPermissions("platform.gy.inf.edit")
+    @SLog(tag = "gy_inf", msg = "${args[0].id}")
+    public Object editDo(@Param("..")gy_inf gyInf, HttpServletRequest req) {
 		try {
-//            dicCountry.setOpBy(StringUtil.getUid());
-//			dicCountry.setOpAt((int) (System.currentTimeMillis() / 1000));
-			dicCountryService.updateIgnoreNull(dicCountry);
+            gyInf.setOpBy(StringUtil.getUid());
+			gyInf.setOpAt((int) (System.currentTimeMillis() / 1000));
+			gyInfService.updateIgnoreNull(gyInf);
 			return Result.success("system.success");
 		} catch (Exception e) {
 			return Result.error("system.error");
@@ -83,15 +84,15 @@ public class DiccountryController{
 
     @At({"/delete/?", "/delete"})
     @Ok("json")
-    @RequiresPermissions("platform.gy.country.delete")
-    @SLog(tag = "国家", msg = "${req.getAttribute('id')}")
+    @RequiresPermissions("platform.gy.inf.delete")
+    @SLog(tag = "gy_inf", msg = "${req.getAttribute('id')}")
     public Object delete(String id, @Param("ids")  String[] ids, HttpServletRequest req) {
 		try {
 			if(ids!=null&&ids.length>0){
-				dicCountryService.delete(ids);
+				gyInfService.delete(ids);
     			req.setAttribute("id", org.apache.shiro.util.StringUtils.toString(ids));
 			}else{
-				dicCountryService.delete(id);
+				gyInfService.delete(id);
     			req.setAttribute("id", id);
 			}
             return Result.success("system.success");
@@ -101,11 +102,11 @@ public class DiccountryController{
     }
 
     @At("/detail/?")
-    @Ok("beetl:/platform/gy/country/detail.html")
-    @RequiresPermissions("platform.gy.country")
+    @Ok("beetl:/platform/gy/inf/detail.html")
+    @RequiresPermissions("platform.gy.inf")
 	public void detail(String id, HttpServletRequest req) {
 		if (!Strings.isBlank(id)) {
-            req.setAttribute("obj", dicCountryService.fetch(id));
+            req.setAttribute("obj", gyInfService.fetch(id));
 		}else{
             req.setAttribute("obj", null);
         }
