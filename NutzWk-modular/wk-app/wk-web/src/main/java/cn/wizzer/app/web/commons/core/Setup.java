@@ -311,8 +311,10 @@ public class Setup implements org.nutz.mvc.Setup {
 
         Daos.createTablesInPackage(dao, "cn.wizzer.app", false);
 
-        //todo: dev过程gy强制删
-        //Daos.createTablesInPackage(dao, "cn.wizzer.app.gy", true);
+        //pojo到表结构的迁移
+        Daos.migration(dao, "cn.wizzer.app.gy", true, false, false);
+
+
         // 若必要的数据表不存在，则初始化数据库
         if (0 == dao.count(Sys_user.class)) {
             //初始化配置表

@@ -80,6 +80,10 @@ public class GyHomeController {
     @Ok("beetl:/public/reg.html")
     public void reg(){}
 
+    @At("/fuck")
+    @Ok("beetl:/public/reg.html")
+    public void fuck(){}
+
     /**
     * @function: 雇员账号
     * @param:

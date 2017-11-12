@@ -66,4 +66,5 @@ public class Globals {
             Globals.RouteMap.put(route.getUrl(), route);
         }
     }
+
 }
