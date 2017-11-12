@@ -312,18 +312,18 @@ public class Setup implements org.nutz.mvc.Setup {
         Daos.createTablesInPackage(dao, "cn.wizzer.app", false);
 
         //todo: dev过程gy强制删
-        Daos.createTablesInPackage(dao, "cn.wizzer.app.gy", true);
+        //Daos.createTablesInPackage(dao, "cn.wizzer.app.gy", true);
         // 若必要的数据表不存在，则初始化数据库
         if (0 == dao.count(Sys_user.class)) {
             //初始化配置表
             Sys_config conf = new Sys_config();
             conf.setConfigKey("AppName");
-            conf.setConfigValue("NutzWk 开发框架");
+            conf.setConfigValue("雇佣帮雇佣管理系统");
             conf.setNote("系统名称");
             dao.insert(conf);
             conf = new Sys_config();
             conf.setConfigKey("AppShrotName");
-            conf.setConfigValue("NutzWk");
+            conf.setConfigValue("Gyb");
             conf.setNote("系统短名称");
             dao.insert(conf);
             conf = new Sys_config();
@@ -339,18 +339,20 @@ public class Setup implements org.nutz.mvc.Setup {
             //初始化单位
             Sys_unit unit = new Sys_unit();
             unit.setPath("0001");
-            unit.setName("系统管理");
+            unit.setName("武汉哎嘀信息科技有限公司");
             unit.setAliasName("System");
             unit.setLocation(0);
-            unit.setAddress("银河-太阳系-地球");
-            unit.setEmail("wizzer@qq.com");
+            unit.setAddress("湖北武汉洪山区武汉理工大学创业园710");
+            unit.setEmail("897920245@qq.com");
             unit.setTelephone("");
             unit.setHasChildren(false);
             unit.setParentId("");
-            unit.setWebsite("http://www.wizzer.cn");
+            unit.setWebsite("http://liushangnan.win");
             Sys_unit dbunit = dao.insert(unit);
-            //初始化菜单
+
+            //初始化菜单 menuList:超级管理员菜单；menuList1：游客菜单
             List<Sys_menu> menuList = new ArrayList<Sys_menu>();
+            List<Sys_menu> menuList1 = new ArrayList<Sys_menu>();
             Sys_menu menu = new Sys_menu();
             menu.setDisabled(false);
             menu.setPath("0001");
@@ -890,15 +892,11 @@ public class Setup implements org.nutz.mvc.Setup {
             menu.setParentId(p.getId());
             menu.setType("data");
             Sys_menu p3 = dao.insert(menu);
+
+
             //初始化角色
+            // 游客
             Sys_role role = new Sys_role();
-            role.setName("公共角色");
-            role.setCode("public");
-            role.setAliasName("Public");
-            role.setNote("All user has role");
-            role.setUnitid("");
-            role.setDisabled(false);
-            dao.insert(role);
             role = new Sys_role();
             role.setName("系统管理员");
             role.setCode("sysadmin");
@@ -908,11 +906,36 @@ public class Setup implements org.nutz.mvc.Setup {
             role.setMenus(menuList);
             role.setDisabled(false);
             Sys_role dbrole = dao.insert(role);
+
+
             //初始化用户
+
+            Sys_user user1 = new Sys_user();
+            user1.setLoginname("public");
+            user1.setUsername("普通游客");
+            user1.setOpAt(1466571305);
+
+            RandomNumberGenerator rng1 = new SecureRandomNumberGenerator();
+            String salt1 = rng1.nextBytes().toBase64();
+            String hashedPasswordBase641 = new Sha256Hash("1", salt1, 1024).toBase64();
+            user1.setSalt(salt1);
+            user1.setPassword(hashedPasswordBase641);
+            user1.setLoginIp("127.0.0.1");
+            user1.setLoginAt(0);
+            user1.setLoginCount(0);
+            user1.setEmail("wizzer@qq.com");
+            user1.setLoginTheme("palette.css");
+            user1.setLoginBoxed(false);
+            user1.setLoginScroll(false);
+            user1.setLoginSidebar(false);
+            user1.setLoginPjax(true);
+            user1.setUnitid(dbunit.getId());
+
             Sys_user user = new Sys_user();
             user.setLoginname("superadmin");
             user.setUsername("超级管理员");
             user.setOpAt(1466571305);
+
             RandomNumberGenerator rng = new SecureRandomNumberGenerator();
             String salt = rng.nextBytes().toBase64();
             String hashedPasswordBase64 = new Sha256Hash("1", salt, 1024).toBase64();
@@ -928,17 +951,24 @@ public class Setup implements org.nutz.mvc.Setup {
             user.setLoginSidebar(false);
             user.setLoginPjax(true);
             user.setUnitid(dbunit.getId());
+
+
             Sys_user dbuser = dao.insert(user);
+            Sys_user pbuser = dao.insert(user1);
+
+
             //不同的插入数据方式(安全)
             dao.insert("sys_user_unit", Chain.make("userId", dbuser.getId()).add("unitId", dbunit.getId()));
             dao.insert("sys_user_role", Chain.make("userId", dbuser.getId()).add("roleId", dbrole.getId()));
-            //执行SQL脚本
+
+            //执行SQL脚本 微信和CMS部分sql
             FileSqlManager fm = new FileSqlManager("db/");
             List<Sql> sqlList = fm.createCombo(fm.keys());
             Sql[] sqls = sqlList.toArray(new Sql[sqlList.size()]);
             for (Sql sql : sqls) {
                 dao.execute(sql);
             }
+
             //菜单关联到角色
             dao.execute(Sqls.create("INSERT INTO sys_role_menu(roleId,menuId) SELECT @roleId,id FROM sys_menu").setParam("roleId", dbrole.getId()));
 

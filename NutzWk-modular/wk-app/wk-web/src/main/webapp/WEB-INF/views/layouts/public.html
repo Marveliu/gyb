@@ -28,8 +28,8 @@
     <script src="${base!}/assets/js/respond.min.js"></script>
     <script src="${base!}/assets/js/json2.js"></script>
     <![endif]-->
-    <% if(@shiro.getPrincipalProperty('loginTheme')!=null){ %>
-    <link rel="stylesheet" href="${base!}/assets/css/skins/${@shiro.getPrincipalProperty('loginTheme')}" id="skin">
+    <% if(user.loginTheme!=null){ %>
+    <link rel="stylesheet" href="${base!}/assets/css/skins/${user.loginTheme}" id="skin">
     <% }else{ %>
     <link rel="stylesheet" href="${base!}/assets/css/skins/palette.css" id="skin">
     <% } %>
@@ -50,44 +50,34 @@
         <div class="options-container color-options">
             <h6>${msg['index.themes']}</h6>
             <a onclick="sublime.changeTheme('palette.css')" href="${base!}/assets/css/skins/palette.css"
-               class="css_orange cs_color cs_1 <% if(@shiro.getPrincipalProperty('loginTheme')==null || 'palette.css' == @shiro.getPrincipalProperty('loginTheme')){ %>active<% } %>">
+               class="css_orange cs_color cs_1 <% if(user.loginTheme==null || 'palette.css' == user.loginTheme){ %>active<% } %>">
                 <div></div>
                 <div></div>
                 <div></div>
                 <div></div>
             </a>
             <a onclick="sublime.changeTheme('palette.2.css')" href="${base!}/assets/css/skins/palette.2.css"
-               class="css_orange cs_color cs_2 <% if('palette.2.css' == @shiro.getPrincipalProperty('loginTheme')){ %>active<% } %>">
+               class="css_orange cs_color cs_2 <% if('palette.2.css' == user.loginTheme){ %>active<% } %>">
                 <div></div>
                 <div></div>
                 <div></div>
                 <div></div>
             </a>
             <a onclick="sublime.changeTheme('palette.3.css')" href="${base!}/assets/css/skins/palette.3.css"
-               class="css_orange cs_color cs_3 <% if('palette.3.css' == @shiro.getPrincipalProperty('loginTheme')){ %>active<% } %>">
+               class="css_orange cs_color cs_3 <% if('palette.3.css' == user.loginTheme){ %>active<% } %>">
                 <div></div>
                 <div></div>
                 <div></div>
                 <div></div>
             </a>
-            <!--<a onclick="sublime.changeTheme('palette.4.css')" href="${base!}/assets/css/skins/palette.4.css"-->
-               <!--class="css_orange cs_color cs_4 <% if('palette.4.css' == @shiro.getPrincipalProperty('loginTheme')){ %>active<% } %>">-->
-                <!--<div></div>-->
-                <!--<div></div>-->
-                <!--<div></div>-->
-                <!--<div></div>-->
-            <!--</a>-->
         </div>
         <div class="options-container">
             <h6>${msg['index.layout']}</h6>
-            <a class="pg-val toggle-sidebar toggle-active <% if(@shiro.getPrincipalProperty('loginSidebar')){ %>active<% } %>" href="javascript:;">
+            <a class="pg-val toggle-sidebar toggle-active <% if(user.loginSidebar){ %>active<% } %>" href="javascript:;">
                 <img src="${base!}/assets/img/panel/small.png" alt="">
             </a>
-            <a class="pg-val toggle-scroll toggle-active <% if(@shiro.getPrincipalProperty('loginScroll')){ %>active<% } %>" href="javascript:;">
+            <a class="pg-val toggle-scroll toggle-active <% if(user.loginScroll){ %>active<% } %>" href="javascript:;">
                 <img src="${base!}/assets/img/panel/scroll.png" alt="">
-            </a>
-            <a class="pg-val toggle-boxed toggle-active <% if(@shiro.getPrincipalProperty('loginBoxed')){ %>active<% } %>" href="javascript:;">
-                <img src="${base!}/assets/img/panel/boxed.png" alt="">
             </a>
         </div>
         <small class="pg-footer"><i class="ti-info-alt mr5"></i>${msg['index.panel']}</small>
@@ -95,32 +85,28 @@
 </div>
 
 
-
 <div
-        class="app <% if(@shiro.getPrincipalProperty('loginSidebar')){ %> small-menu <% } %> <% if(@shiro.getPrincipalProperty('loginScroll')){ %> fixed-scroll <% } %> <% if(@shiro.getPrincipalProperty('loginBoxed')){ %> boxed <% } %>">
+        class="app <% if(user.loginSidebar){ %> small-menu <% } %> <% if(user.loginScroll){ %> fixed-scroll <% } %> <% if(user.loginBoxed){ %> boxed <% } %>">
     <header class="header header-fixed navbar">
         <div class="brand">
 
             <a href="javascript:;" class="ti-menu off-left visible-xs" data-toggle="offscreen" data-move="ltr"></a>
 
 
-            <a href="${base!}/platform/home"  data-pjax class="navbar-brand">
-                <img src="${base!}/assets/img/logo.png" alt="" class="o_img <% if(!@shiro.getPrincipalProperty('loginSidebar')){ %>o_hide<% } %>">
-                <span class="heading-font o_img <% if(@shiro.getPrincipalProperty('loginSidebar')){ %>o_hide<% } %>">
-		            <img src="${base!}/assets/img/logoa.png">
-                </span>
+            <a href="${base!}/public"  data-pjax class="navbar-brand">
+                <img src="${base!}/assets/img/logo.png" alt="" class="o_img">
             </a>
 
         </div>
 
         <!--点击展开左侧菜单-->
-        <ul class="nav navbar-nav navbar-left">
-            <li class="hidden-xs">
-                <a href="javascript:;" class="toggle-sidebar">
-                    <i class="ti-menu"></i>
-                </a>
-            </li>
-        </ul>
+        <!--<ul class="nav navbar-nav navbar-left">-->
+            <!--<li class="hidden-xs">-->
+                <!--<a href="javascript:;" class="toggle-sidebar">-->
+                    <!--<i class="ti-menu"></i>-->
+                <!--</a>-->
+            <!--</li>-->
+        <!--</ul>-->
 
 
         <!--菜单加载-->
@@ -132,13 +118,13 @@
             <!--</a>-->
             <!--</li>-->
             <%
-            var secondMenus=@shiro.getPrincipalProperty('secondMenus');
-            for(firstMenu in @shiro.getPrincipalProperty('firstMenus')){
-
+            var secondMenus= user.secondMenus;
+            var firstMenus= user.firstMenus;
+            for(firstMenu in firstMenus){
             %>
             <li class="dropdown">
 
-                    <% if(!isEmpty(@secondMenus.get(firstMenu.path))){%>
+                <% if(!isEmpty(@secondMenus.get(firstMenu.path))){%>
                 <a href="javascript:;" data-toggle="dropdown">
                     <% if(has(firstMenu.icon)){ %>
                     <i class="${firstMenu.icon}"></i>
@@ -146,20 +132,20 @@
                     <span>
                         <%if(lang=="zh_CN"){%>${firstMenu.name}<%}else{%>${firstMenu.aliasName}<%}%></span>
                     <b class="caret"></b
-                            >
+                    >
                 </a>
                 <%}else{%>
-                    <a href="<% if(!isEmpty(firstMenu.href)){ %><%if(@string.startWith(firstMenu.href,'/')){%>${base}${firstMenu.href!}<%}else{%>${firstMenu.href!}<%}%> <% }else{ %>javascript:;<% } %>" <%if(@string.startWith(firstMenu.target,'_')){%>target="${firstMenu.target!}"<%}else{%>${firstMenu.target!}<%}%>>
+                <a href="<% if(!isEmpty(firstMenu.href)){ %><%if(@string.startWith(firstMenu.href,'/')){%>${base}${firstMenu.href!}<%}else{%>${firstMenu.href!}<%}%> <% }else{ %>javascript:;<% } %>" <%if(@string.startWith(firstMenu.target,'_')){%>target="${firstMenu.target!}"<%}else{%>${firstMenu.target!}<%}%>>
                    <span>
                         <%if(lang=="zh_CN"){%>${firstMenu.name}<%}else{%>${firstMenu.aliasName}<%}%></span></a>
-                    <%}%>
+                <%}%>
                 <% if(!isEmpty(@secondMenus.get(firstMenu.path))){%>
                 <ul class="dropdown-menu topnav">
                     <% for(secondMenu in @secondMenus.get(firstMenu.path)){ %>
                     <li class="dropdown">
                         <a href="<% if(!isEmpty(secondMenu.href)){ %><%if(@string.startWith(secondMenu.href,'/')){%>${base}${secondMenu.href!}<%}else{%>${secondMenu.href!}<%}%> <% }else{ %>javascript:;<% } %>" <%if(@string.startWith(secondMenu.target,'_')){%>target="${secondMenu.target!}"<%}else{%>${secondMenu.target!}<%}%>>
-                            <% if(!isEmpty(@secondMenus.get(secondMenu.path))){ %><i class="toggle-accordion"></i><%}%>
-                            <span><%if(lang=="zh_CN"){%>${secondMenu.name}<%}else{%>${secondMenu.aliasName}<%}%></span>
+                        <% if(!isEmpty(@secondMenus.get(secondMenu.path))){ %><i class="toggle-accordion"></i><%}%>
+                        <span><%if(lang=="zh_CN"){%>${secondMenu.name}<%}else{%>${secondMenu.aliasName}<%}%></span>
                         </a>
                         <% if(!isEmpty(@secondMenus.get(secondMenu.path))){ %>
                         <ul class="sub-menu">
@@ -174,7 +160,6 @@
                 </ul><% } %>
             </li><% }%>
         </ul>
-
 
         <ul class="nav navbar-nav navbar-right">
             <!--通知位置-->
@@ -202,33 +187,19 @@
             </li>
             <li class="off-right">
                 <a href="javascript:;" data-toggle="dropdown">
-                    <span class="hidden-xs ml10">${@shiro.getPrincipalProperty('username')}</span>
+                    <span class="hidden-xs ml10">游客</span>
                     <i class="ti-angle-down ti-caret hidden-xs"></i>
                 </a>
                 <ul class="dropdown-menu animated fadeInLeft">
-                    <li>
-                        <a href="${base!}/platform/sys/user/custom" data-toggle="modal"
-                           data-target="#homeDetail">${msg['index.custommenu']}</a>
-                    </li>
                     <li class="dropdown hidden-xs">
                         <a href="javascript:;" class="pg-toggle">
                             ${msg['index.user.layout']}
                         </a>
                     </li>
-                    <li class="dropdown hidden-xs">
-                        <a href="${base!}/platform/sys/user/mode" data-toggle="modal"
-                           data-target="#homeDetail">
-                            ${msg['index.user.mode']}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="${base!}/platform/sys/user/pass" data-toggle="modal"
-                           data-target="#homeDetail">${msg['index.user.password']}</a>
-                    </li>
                 </ul>
             </li>
             <li class="off-right">
-                <a href="${base!}/platform/login/logout">
+                <a href="${base!}/public/reg">
                     <i class="ti-power-off"></i>
                 </a>
             </li>
@@ -237,39 +208,6 @@
 
 
     <section class="layout">
-        <aside class="sidebar offscreen-left">
-            <nav class="main-navigation" data-height="auto" data-size="6px" data-distance="0" data-rail-visible="true"
-                 data-wheel-step="10">
-                <!--<p class="nav-title">MENU</p>-->
-                <ul class="nav">
-                    <li class="open">
-                        <a href="javascript:;">
-                            <%if(!isEmpty(@shiro.getPrincipalProperty('customMenus'))){%>
-                            <i class="toggle-accordion"></i>
-                            <%}%>
-                            <i class="ti-heart"></i>
-                            <span>${msg['index.custommenu']}</span>
-                        </a>
-                        <%if(!isEmpty(@shiro.getPrincipalProperty('customMenus'))){%>
-                        <ul class="sub-menu">
-                            <%for(o in @shiro.getPrincipalProperty('customMenus')){%>
-
-                            <li>
-                                <a <%if(!isEmpty(o.href)){%>href="${base}${o.href}" <%if('data-pjax'==o.target){%>data-pjax<%}}else{ %>href="javascript:;"<%}%>>
-                                <span><%if(lang=="zh_CN"){%>${o.name}<%}else{%>${o.aliasName}<%}%></span>
-                                </a>
-                            </li>
-
-                            <%}%>
-                        </ul>
-                        <%}%>
-                    </li>
-
-                </ul>
-                <ul id="leftnav" class="nav">
-                </ul>
-            </nav>
-        </aside>
         <section class="main-content" id="container">
             ${layoutContent}
         </section>
@@ -327,32 +265,12 @@
 <script src="${base!}/assets/js/date.js"></script>
 
 <script type="text/javascript">
-    function bindLeft(){
-        $('.main-navigation a[data-pjax]').on('click',function(){
-            $('.main-navigation a[data-pjax]').each(function(){
-                $(this).parent().removeClass('active');
-            });
-            $(this).parent().addClass('active');
-        });
-    }
-    $(document).ready(function () {
-
-        if($.support.pjax) {
-              <%if(@shiro.getPrincipalProperty('loginPjax')){%>
+        $(document).ready(function () {
+            if($.support.pjax) {
+                <%if(user.loginPjax){%>
             $(document).pjax('a[data-pjax]', '#container', {maxCacheLength:0,push:false, replace:true,fragment: '#container', timeout: 8000});
             <%}%>
-            bindLeft();
-            $('#topnav a[data-pjax]').on('click',function(){
-                $.get("${base!}/platform/home/left?url="+$(this).attr("href"),function (data) {
-                    $("#leftnav").html(data);
-                    bindLeft();
-                }, "html");
-            });
-            $.get("${base!}/platform/home/path?url="+window.location.href,function (data) {
-                $("#leftnav").html(data);
-                bindLeft();
-            }, "html");
-            <%if(@shiro.getPrincipalProperty('loginPjax')){%>
+            <%if(user.loginPjax){%>
             $(document).on('pjax:send', function () { //pjax链接点击后显示加载动画；
                 $(".gallery-loader").fadeIn();
             });

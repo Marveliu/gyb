@@ -133,7 +133,6 @@ public class SysLoginController {
                 user.setLoginScroll(v);
             }
         }
-
     }
 
     /**

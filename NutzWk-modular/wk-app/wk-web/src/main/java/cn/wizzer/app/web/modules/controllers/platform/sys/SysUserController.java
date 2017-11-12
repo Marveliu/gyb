@@ -122,10 +122,10 @@ public class SysUserController {
             Sys_user user = userService.fetch(id);
             RandomNumberGenerator rng = new SecureRandomNumberGenerator();
             String salt = rng.nextBytes().toBase64();
-            String hashedPasswordBase64 = new Sha256Hash("ET922", salt, 1024).toBase64();
+            String hashedPasswordBase64 = new Sha256Hash("888888", salt, 1024).toBase64();
             userService.update(Chain.make("salt", salt).add("password", hashedPasswordBase64), Cnd.where("id", "=", id));
             req.setAttribute("loginname", user.getLoginname());
-            return Result.success("system.success", "ET922");
+            return Result.success("system.success", "888888");
         } catch (Exception e) {
             return Result.error("system.error");
         }
