@@ -9,9 +9,12 @@ import org.nutz.lang.Strings;
 import org.nutz.lang.random.R;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Random;
 
 /**
- * Created by wizzer on 2016/6/21.
+ * Created by Marvleiu on 2016/6/21.
  */
 public abstract class BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -80,7 +83,36 @@ public abstract class BaseModel implements Serializable {
         this.delFlag = delFlag;
     }
 
+    /**
+    * @function: UU32
+    * @param:
+    * @return:
+    * @note:
+    */
     public String uuid() {
         return R.UU32().toLowerCase();
     }
+
+    /**
+     * 日期编号
+     * 生成规则：当天日期[8位]+序列号[3至24位]，如：201008010000001
+     * @return
+     */
+    private String RandomBatchNum()
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        String format = dateFormat.format(new Date());
+        int max=24;
+        int min=3;
+        Random random = new Random();
+        int s = random.nextInt(max)%(max-min+1) + min;
+        StringBuffer buffer =new StringBuffer();
+        for(int i=0;i<s;i++)
+        {
+            Integer val = (int)(Math.random()*9+1);
+            buffer.append(val.toString());
+        }
+        return format+buffer.toString();
+    }
+
 }

@@ -14,6 +14,7 @@ import org.nutz.mvc.impl.NutLoading;
  * Created by 89792 on 2017/11/12 0012.
  */
 
+
 @IocBean
 @At("/open/admin")
 public class GoldfingerController {

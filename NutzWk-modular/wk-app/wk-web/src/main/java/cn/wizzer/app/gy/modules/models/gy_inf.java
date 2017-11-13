@@ -1,9 +1,13 @@
 package cn.wizzer.app.gy.modules.models;
 
+import cn.wizzer.app.gy.modules.services.GyInfService;
 import cn.wizzer.framework.base.model.BaseModel;
+import cn.wizzer.framework.util.DateUtil;
 import org.nutz.dao.entity.annotation.*;
+import org.nutz.ioc.loader.annotation.Inject;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by 89792 on 2017/11/10 0010.
@@ -12,15 +16,18 @@ import java.io.Serializable;
 @Table("gy_inf")
 public class gy_inf extends BaseModel implements Serializable {
 
+    @Inject
+    private GyInfService gyInfService;
+
     @Column
     @Name
     @Comment("雇员编号")
     @ColDefine(type = ColType.VARCHAR, width = 32)
-    @Prev(els = {@EL("uuid()")})  //todo: 雇员编号的生成方式
+    @Prev(els = {@EL("gyid()")})  //todo: 雇员编号的生成方式
     private String id;
 
     @Column
-    @Comment("账号编号")
+    @Comment("登陆名")
     @ColDefine(type = ColType.VARCHAR, width = 32) //todo: 参照sys_user.id
     private String userid;
 
@@ -83,6 +90,7 @@ public class gy_inf extends BaseModel implements Serializable {
     @Comment("状态")
     @ColDefine(type = ColType.INT)
     private int status;
+
 
     public String getId() {
         return id;
@@ -194,5 +202,27 @@ public class gy_inf extends BaseModel implements Serializable {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+
+    /**
+     * @function: 雇员编号
+     * @param:
+     * @return:
+     * @note: 编号说明:17年份,10497学校代码,0学历:(0本科1研究生2博士),0性别 (0女生 ,1男生),010顺序码
+     */
+    public String gyid() {
+        StringBuilder str = new StringBuilder();
+        //年份
+        str.append(DateUtil.format(new Date(),"yyyy").indexOf(2,2));
+        //学校代码
+        str.append(this.college);
+        //学历
+        str.append(this.stuLevel);
+        //性别
+        str.append(this.sex);
+        //顺序码
+        str.append(gyInfService.count());
+        return str.toString();
     }
 }

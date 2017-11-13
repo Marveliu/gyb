@@ -59,7 +59,6 @@ public class GyHomeController {
         return ctx;
     }
 
-
     /**
      * @function: 登陆界面
      * @param:
