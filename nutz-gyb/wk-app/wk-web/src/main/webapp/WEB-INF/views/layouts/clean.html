@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html class="signin no-js" lang="${lang!}">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="${AppName!}">
+    <title>${AppName!}</title>
+    <link rel="stylesheet" href="${base!}/assets/plugins/stepy/jquery.stepy.css">
+    <link rel="stylesheet" href="${base!}/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${base!}/assets/css/font-awesome.css">
+    <link rel="stylesheet" href="${base!}/assets/css/themify-icons.css">
+    <link rel="stylesheet" href="${base!}/assets/css/animate.min.css">
+    <link rel="stylesheet" href="${base!}/assets/css/skins/palette.css">
+    <link rel="stylesheet" href="${base!}/assets/css/fonts/font.css">
+    <link rel="stylesheet" href="${base!}/assets/css/main.css">
+    <link rel="stylesheet" href="${base!}/assets/css/panel.css">
+    <link rel="stylesheet" href="${base!}/assets/plugins/jstree/themes/default/style.min.css">
+    <link rel="stylesheet" href="${base!}/assets/plugins/treetable/jquery.treetable.css">
+    <link rel="stylesheet" href="${base!}/assets/plugins/datatables/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="${base!}/assets/plugins/chosen/chosen.min.css">
+    <link rel="stylesheet" href="${base!}/assets/plugins/datepicker/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="${base!}/assets/plugins/emoji/emoji.css">
+    <link rel="stylesheet" href="${base!}/assets/plugins/x-editable/bootstrap-editable.css">
+    <!--[if lt IE 9]>
+    <script src="${base!}/assets/js/html5shiv.js"></script>
+    <script src="${base!}/assets/js/respond.min.js"></script>
+    <script src="${base!}/assets/js/json2.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="${base!}/assets/css/skins/palette.css" id="skin">
+    <script src="${base!}/assets/plugins/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript">
+        var base = '${base!}';
+    </script>
+</head>
+            ${layoutContent}
+
+<!--script-->
+<script src="${base!}/assets/plugins/modernizr.js"></script>
+<script src="${base!}/assets/js/jquery.pjax.js"></script>
+<script src="${base!}/assets/bootstrap/js/bootstrap.js"></script>
+<script src="${base!}/assets/plugins/jquery.form.js"></script>
+<script src="${base!}/assets/plugins/parsley.min.js"></script>
+<script src="${base!}/assets/plugins/parsley.zh_cn.js"></script>
+<script src="${base!}/assets/plugins/jquery.sortable.js"></script>
+<script src="${base!}/assets/plugins/jquery.nestable.js"></script>
+<script src="${base!}/assets/plugins/icheck/icheck.js"></script>
+<script src="${base!}/assets/plugins/jquery.slimscroll.min.js"></script>
+<script src="${base!}/assets/plugins/jquery.easing.min.js"></script>
+<script src="${base!}/assets/plugins/appear/jquery.appear.js"></script>
+<script src="${base!}/assets/plugins/jquery.placeholder.js"></script>
+<script src="${base!}/assets/plugins/fastclick.js"></script>
+<script src="${base!}/assets/plugins/count-to/jquery.countTo.js"></script>
+<script src="${base!}/assets/js/toast.js"></script>
+<script src="${base!}/assets/plugins/chosen/chosen.jquery.min.js"></script>
+<script src="${base!}/assets/plugins/treetable/jquery.treetable.js"></script>
+<script src="${base!}/assets/plugins/datatables/jquery.dataTables.js"></script>
+<script src="${base!}/assets/plugins/datatables/dataTables.bootstrap.js"></script>
+<script src="${base!}/assets/plugins/jstree/jstree.min.js"></script>
+<script src="${base!}/assets/plugins/switchery/switchery.js"></script>
+<script src="${base!}/assets/plugins/stepy/jquery.stepy.js"></script>
+<script src="${base!}/assets/plugins/stepy/jquery.validate.min.js"></script>
+<script src="${base!}/assets/plugins/icheck/icheck.js"></script>
+<script src="${base!}/assets/plugins/chosen/chosen.jquery.min.js"></script>
+<script src="${base!}/assets/plugins/jquery.form.js"></script>
+<script src="${base!}/assets/plugins/uploadifive/jquery.uploadifive.min.js"></script>
+<script src="${base!}/assets/plugins/datepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="${base!}/assets/plugins/datepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="${base!}/assets/plugins/emoji/emoji.js"></script>
+<script src="${base!}/assets/plugins/sorttable/Sortable.min.js"></script>
+<script src="${base!}/assets/plugins/jquery.qrcode.min.js"></script>
+<script src="${base!}/assets/plugins/jquery.sparkline.js"></script>
+<script src="${base!}/assets/plugins/x-editable/bootstrap-editable.js"></script>
+<script src="${base!}/assets/plugins/moment.min.js"></script>
+<script src="${base!}/assets/js/form.js"></script>
+<script src="${base!}/assets/js/offscreen.js"></script>
+<script src="${base!}/assets/js/main.js"></script>
+<script src="${base!}/assets/js/page.js"></script>
+<script src="${base!}/assets/js/date.js"></script>
+<script src="${base!}/assets/js/form-wizard.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        try {
+            $(".gallery-loader").fadeOut();
+        } catch (e) {
+        }
+        $('#homeDetail').on('hidden.bs.modal',function(){
+            $(this).removeData("bs.modal");
+        });
+        $(".toggle-sidebar").click(function(){
+            $(".o_img").toggleClass("o_hide");
+        });
+    });
+</script>
+<!--script-->
+</html>
