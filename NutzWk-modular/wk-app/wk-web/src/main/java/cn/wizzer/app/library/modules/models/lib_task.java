@@ -11,9 +11,9 @@ import java.io.Serializable;
  */
 
 //技能库
-@Table("lib_skill")
+@Table("lib_task")
 @TableIndexes({@Index(name = "INDEX_SYS_UNIT_PATH", fields = {"path"}, unique = true)})
-public class lib_skill extends BaseModel implements Serializable {
+public class lib_task extends BaseModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

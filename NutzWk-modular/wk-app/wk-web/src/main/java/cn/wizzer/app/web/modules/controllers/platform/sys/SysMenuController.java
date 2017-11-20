@@ -73,7 +73,7 @@ public class SysMenuController {
     }
 
     @At("/edit/?")
-    @Ok("beetl:/platform/sys/menu/infedit.html")
+    @Ok("beetl:/platform/sys/menu/edit.html")
     @RequiresPermissions("sys.manager.menu")
     public Object edit(String id, HttpServletRequest req) {
         Sys_menu menu = menuService.fetch(id);

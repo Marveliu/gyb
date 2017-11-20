@@ -174,6 +174,7 @@ public class SysRoleController {
         }
         List<Sys_menu> datas = roleService.getDatas();
         List<Sys_menu> roleMenu = roleService.getMenusAndButtons(roleId);
+
         for (Sys_menu m : roleMenu) {
             roleMenuIds.append(m.getId() + "#");
         }
