@@ -1,0 +1,92 @@
+<%
+layout("/layouts/platform.html"){
+%>
+
+    <div class="content-wrap">
+        <div class="wrapper" style="min-height:500px;">
+            <section class="panel panel-form">
+                <form id="editForm" role="form" class="form-horizontal parsley-form" data-parsley-validate action="${base}/platform/gy/auth/editDo"
+                    method="post">
+                    <input name="id" type="hidden" value="${obj.id}">
+                    <div class="row mb10">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="gyid" class="col-sm-2 control-label">${msg['gy.auth.column.gyid']}</label>
+                                <div class="col-sm-8">
+                                    <input disabled="true" type="text" id="gyid" class="form-control" name="gyid" data-parsley-required="true" placeholder="${msg['gy.auth.column.gyid']}"
+                                        value="${obj.gyid}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="reAuthTime" class="col-sm-2 control-label">${msg['gy.auth.column.reAuthTime']}</label>
+                                <div class="col-sm-8">
+                                    <input disabled="true" type="text" id="reAuthTime" class="form-control" name="reAuthTime" data-parsley-required="true" placeholder="${msg['gy.auth.column.reAuthTime']}"
+                                        value="${@date.getDate(obj.reAuthTime)}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="idcardF" class="col-sm-2 control-label">${msg['gy.auth.column.idcardF']}</label>
+                                <div class="col-sm-8">
+                                    <img style="max-width: 200px" src="${obj.idcardF}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="idcardB" class="col-sm-2 control-label">${msg['gy.auth.column.idcardB']}</label>
+                                <div class="col-sm-8">
+                                    <img style="max-width: 200px" src="${obj.idcardB}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="stuCardF" class="col-sm-2 control-label">${msg['gy.auth.column.stuCardF']}</label>
+                                <div class="col-sm-8">
+                                    <img style="max-width: 200px" src="${obj.stuCardF}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="stuCardB" class="col-sm-2 control-label">${msg['gy.auth.column.stuCardB']}</label>
+                                <div class="col-sm-8">
+                                    <img style="max-width: 200px" src="${obj.stuCardB}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="status" class="col-sm-2 control-label">${msg['gy.auth.column.status']}</label>
+                                <div class="col-sm-8">
+                                    <input disabled="true" type="text" id="status" class="form-control" name="status" data-parsley-required="true" placeholder="${msg['gy.auth.column.status']}"
+                                        value="
+                                        <%if(obj.status==0){%>正在审核
+                                        <%}%> <%else if(obj.status==1){%>审核通过<%}%>
+                                        <%else{%>审核未通过<%}%>"
+                                        >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </section>
+
+        </div>
+    </div>
+    <script language="JavaScript">
+        $(document).ready(function () {
+            $('#editForm').ajaxForm({
+                dataType: 'json',
+                beforeSubmit: function (arr, form, options) {
+                    form.find("button:submit").button("loading");
+                },
+                success: function (data, statusText, xhr, form) {
+                    if (data.code == 0) {
+                        Toast.success(data.msg);
+                        setTimeout(function () {
+                            $("#goBack").trigger("click");
+                        }, 1000);
+                    } else {
+                        Toast.error(data.msg);
+                    }
+                    form.find("button:submit").button("reset");
+                }
+            });
+        });
+    </script>
+    <%}%>

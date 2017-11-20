@@ -1,0 +1,72 @@
+<div class="modal-body no-p">
+    <div class="row">
+        <div class="col-xs-12">
+            <section class="panel panel-primary no-b">
+                <header class="panel-heading clearfix brtl brtr">
+                    <div class="overflow-hidden">
+                        <a href="javascript:;" class="h4 show no-m pt5">验证信息</a>
+                        <small>${obj.id}</small>
+                    </div>
+                </header>
+                <div class="list-group">
+                    <table class="table table-bordered table-striped mg-t datatable">
+                        <tbody>
+                        <tr>
+                            <td>${msg['gy.auth.column.gyid']}</td>
+                            <td>${obj.gyid}</td>
+                        </tr>
+                        <tr>
+                            <td>真实姓名</td>
+                            <td>${obj.realname}</td>
+                        </tr>
+                        <tr>
+                            <td>电话</td>
+                            <td>${obj.phone}</td>
+                        </tr>
+                        <tr>
+                            <td>邮箱</td>
+                            <td>${obj.email}</td>
+                        </tr>
+                        <tr>
+                            <td>身份证件</td>
+                            <td>${obj.idcard}</td>
+                        </tr>
+                        <tr>
+                            <td>${msg['gy.auth.column.reAuthTime']}</td>
+                            <td>
+                                <%if(!isEmpty(obj.reAuthTime)){%>
+                                ${@date.getDate(obj.reAuthTime)}
+                                <%}%>
+                        </tr>
+                        <tr>
+                            <td>${msg['gy.auth.column.idcardF']}</td>
+                            <td><img src="${obj.idcardF}" style="max-width:200px;" alt="证件审核图片"></td>
+                        </tr>
+                        <tr>
+                            <td>${msg['gy.auth.column.idcardB']}</td>
+                            <td><img src="${obj.idcardB}" style="max-width:200px;" alt="证件审核图片"></td>
+                        </tr>
+                        <tr>
+                            <td>${msg['gy.auth.column.stuCardF']}</td>
+                            <td><img src="${obj.stuCardF}" style="max-width:200px;" alt="证件审核图片"></td>
+                        </tr>
+                        <tr>
+                            <td>${msg['gy.auth.column.stuCardB']}</td>
+                            <td><img src="${obj.stuCardB}" style="max-width:200px;" alt="证件审核图片"></td>
+                        </tr>
+                        <tr>
+                            <td>${msg['gy.auth.column.status']}</td>
+                            <td>
+                                ${obj.status}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">${msg['globals.button.ok']}</button>
+</div>
