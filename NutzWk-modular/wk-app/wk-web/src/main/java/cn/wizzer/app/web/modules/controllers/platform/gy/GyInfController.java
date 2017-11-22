@@ -55,7 +55,7 @@ public class GyInfController{
     @At("/addDo")
     @Ok("json")
     @RequiresPermissions("platform.gy.inf.add")
-    @SLog(tag = "gy_inf", msg = "${args[0].id}")
+    @SLog(tag = "gz_inf", msg = "${args[0].id}")
     public Object addDo(@Param("..")gy_inf gyInf, HttpServletRequest req) {
 		try {
 			gyInfService.insert(gyInf);
@@ -77,7 +77,7 @@ public class GyInfController{
     @At("/editDo")
     @Ok("json")
     @RequiresPermissions("platform.gy.inf.edit")
-    @SLog(tag = "gy_inf", msg = "${args[0].id}")
+    @SLog(tag = "gz_inf", msg = "${args[0].id}")
     public Object editDo(
             @Param("..") gy_inf gyInf,
             @Param("birthdayat") String birthday,
@@ -112,7 +112,7 @@ public class GyInfController{
     @At({"/delete/?", "/delete"})
     @Ok("json")
     @RequiresPermissions("platform.gy.inf.delete")
-    @SLog(tag = "gy_inf", msg = "${req.getAttribute('id')}")
+    @SLog(tag = "gz_inf", msg = "${req.getAttribute('id')}")
     public Object delete(String id, @Param("ids")  String[] ids, HttpServletRequest req) {
 		try {
 			if(ids!=null&&ids.length>0){

@@ -63,7 +63,7 @@ public class GyPersonController {
     @At("/infedit")
     @Ok("json")
     @RequiresPermissions("gy.person")
-    @SLog(tag = "gy_inf", msg = "${args[0].id}")
+    @SLog(tag = "gz_inf", msg = "${args[0].id}")
     public Object editDo(
             @Param("..") gy_inf gyInf,
             @Param("birthdayat") String birthday,

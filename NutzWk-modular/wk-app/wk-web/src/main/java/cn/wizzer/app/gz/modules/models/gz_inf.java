@@ -1,4 +1,4 @@
-package cn.wizzer.app.gy.modules.models;
+package cn.wizzer.app.gz.modules.models;
 
 import cn.wizzer.app.gy.modules.services.GyInfService;
 import cn.wizzer.app.gy.modules.services.impl.GyInfServiceImpl;
@@ -15,15 +15,15 @@ import java.util.Date;
  * Created by 89792 on 2017/11/10 0010.
  */
 
+//产品经理等
 @Table("gz_inf")
-@View("v_gy")
-public class gy_inf extends BaseModel implements Serializable {
+public class gz_inf extends BaseModel implements Serializable {
 
     @Column
     @Name
-    @Comment("雇员编号")
+    @Comment("雇主编号")
     @ColDefine(type = ColType.VARCHAR, width = 32)
-    @Prev(els = {@EL("$me.gyid()")})  //todo: 雇员编号的生成方式
+    @Prev(els = {@EL("$me.gzid()")})  //todo: 雇主编号的生成方式
     private String id;
 
     @Column
@@ -62,60 +62,11 @@ public class gy_inf extends BaseModel implements Serializable {
     private String idcard;
 
     @Column
-    @Comment("就读学校")
-    @ColDefine(type = ColType.VARCHAR, width = 20)
-    private String college;
-
-    @Column
-    @Comment("所在学院")
-    @ColDefine(type = ColType.VARCHAR, width = 20)
-    private String school;
-
-    @Column
-    @Comment("就读专业")
-    @ColDefine(type = ColType.VARCHAR, width = 20)
-    private String major;
-
-    @Column
-    @Comment("注册年份")
-    @ColDefine(type = ColType.INT)
-    private Integer regYear;
-
-    @Column
-    @Comment("最高学历")
-    @ColDefine(type = ColType.INT)
-    private int stuLevel;
-
-    @Column
     @Comment("状态")
     @ColDefine(type = ColType.INT)
     private int status;
 
-    //视图字段
-    @Column("email")
-    @Readonly
-    private String email;
 
-    @Column("gyid")
-    @Readonly
-    private String gyid;
-
-
-    public String getGyid() {
-        return gyid;
-    }
-
-    public void setGyid(String gyid) {
-        this.gyid = gyid;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getId() {
         return id;
@@ -181,46 +132,6 @@ public class gy_inf extends BaseModel implements Serializable {
         this.idcard = idcard;
     }
 
-    public String getCollege() {
-        return college;
-    }
-
-    public void setCollege(String college) {
-        this.college = college;
-    }
-
-    public String getSchool() {
-        return school;
-    }
-
-    public void setSchool(String school) {
-        this.school = school;
-    }
-
-    public String getMajor() {
-        return major;
-    }
-
-    public void setMajor(String major) {
-        this.major = major;
-    }
-
-    public Integer getRegYear() {
-        return regYear;
-    }
-
-    public void setRegYear(Integer regYear) {
-        this.regYear = regYear;
-    }
-
-    public int getStuLevel() {
-        return stuLevel;
-    }
-
-    public void setStuLevel(int stuLevel) {
-        this.stuLevel = stuLevel;
-    }
-
     public int getStatus() {
         return status;
     }
@@ -229,21 +140,17 @@ public class gy_inf extends BaseModel implements Serializable {
         this.status = status;
     }
 
-
     /**
-     * @function: 雇员编号
+     * @function: 雇主编号
      * @param:
      * @return:
-     * @note: 编号说明:17年份,10497学校代码,0学历:(0本科1研究生2博士),0性别 (0女生 ,1男生),010顺序码
+     * @note:
      */
-    public String gyid() {
+    public String gzid() {
         StringBuilder str = new StringBuilder();
+        str.append("gz");
         //年份
         str.append(DateUtil.format(new Date(),"yyyy").substring(2,4));
-        //学校代码
-        str.append(this.college);
-        //学历
-        str.append(this.stuLevel);
         //性别
         str.append(this.sex);
         //顺序码
@@ -252,4 +159,5 @@ public class gy_inf extends BaseModel implements Serializable {
         str.append(gyservice.count());
         return str.toString();
     }
+
 }
