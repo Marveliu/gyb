@@ -5,6 +5,7 @@ import org.nutz.dao.DB;
 import org.nutz.dao.entity.annotation.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by 89792 on 2017/11/17 0017.
@@ -70,6 +71,10 @@ public class lib_task extends BaseModel implements Serializable {
     @Column
     @Comment("有子节点")
     private boolean hasChildren;
+
+    //映射
+    @ManyMany(relation = "lib_task_skill", from = "taskId", to = "skillId")
+    private List<lib_skill> skills;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -153,5 +158,13 @@ public class lib_task extends BaseModel implements Serializable {
 
     public void setHasChildren(boolean hasChildren) {
         this.hasChildren = hasChildren;
+    }
+
+
+    public List<lib_skill> getSkills() {
+        return skills;
+    }
+    public void setSkills(List<lib_skill> skills) {
+        this.skills = skills;
     }
 }

@@ -15,7 +15,7 @@ import java.util.Date;
  * Created by 89792 on 2017/11/10 0010.
  */
 
-@Table("gz_inf")
+@Table("gy_inf")
 @View("v_gy")
 public class gy_inf extends BaseModel implements Serializable {
 

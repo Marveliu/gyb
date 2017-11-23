@@ -1,9 +1,8 @@
 package cn.wizzer.app.web.commons.processor;
 
 import cn.wizzer.app.web.commons.base.Globals;
-import cn.wizzer.framework.util.DateUtil;
-import cn.wizzer.framework.util.ShiroUtil;
-import cn.wizzer.framework.util.StringUtil;
+import cn.wizzer.app.web.commons.util.ViewUtil;
+import cn.wizzer.framework.util.*;
 import org.nutz.lang.Strings;
 import org.nutz.mvc.ActionContext;
 import org.nutz.mvc.Mvcs;
@@ -24,6 +23,9 @@ public class GlobalsSettingProcessor extends AbstractProcessor {
 		ac.getRequest().setAttribute("shiro", Mvcs.ctx().getDefaultIoc().get(ShiroUtil.class));
 		ac.getRequest().setAttribute("date", Mvcs.ctx().getDefaultIoc().get(DateUtil.class));
 		ac.getRequest().setAttribute("string", Mvcs.ctx().getDefaultIoc().get(StringUtil.class));
+		ac.getRequest().setAttribute("view", Mvcs.ctx().getDefaultIoc().get(ViewUtil.class));
+
+
 		// 如果url中有语言属性则设置
 		String lang=ac.getRequest().getParameter("lang");
 		if (!Strings.isEmpty(lang)) {

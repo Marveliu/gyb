@@ -78,4 +78,30 @@ public class UploadController {
     }
 
 
+    @AdaptBy(type = UploadAdaptor.class, args = {"ioc:fileUpload"})
+    @POST
+    @At
+    @Ok("json")
+    @RequiresAuthentication
+    public Object file(@Param("Filedata") TempFile tf, HttpServletRequest req, AdaptorErrorContext err) {
+        NutMap nutMap = new NutMap();
+        try {
+            if (err != null && err.getAdaptorErr() != null) {
+                return nutMap.addv("code", 1).addv("msg", "文件不合法");
+            } else if (tf == null) {
+                return Result.error("空文件");
+            } else {
+                String p = Globals.AppRoot;
+                String f = Globals.AppUploadPath + "/file/" + DateUtil.format(new Date(), "yyyyMMdd") + "/" + tf.getSubmittedFileName();
+                Files.write(new File(p + f), tf.getInputStream());
+                return Result.success("上传成功", Globals.AppBase+f);
+            }
+        } catch (Exception e) {
+            return Result.error("系统错误");
+        } catch (Throwable e) {
+            return Result.error("文件格式错误，请检查");
+        }
+    }
+
+
 }

@@ -1,9 +1,8 @@
 package cn.wizzer.app.xm.modules.models;
 
-import cn.wizzer.app.gy.modules.services.GyInfService;
-import cn.wizzer.app.gy.modules.services.impl.GyInfServiceImpl;
 import cn.wizzer.app.gz.modules.models.gz_inf;
 import cn.wizzer.app.library.modules.models.lib_task;
+import cn.wizzer.app.xm.modules.services.Impl.XmTaskServiceImpl;
 import cn.wizzer.framework.base.model.BaseModel;
 import cn.wizzer.framework.util.DateUtil;
 import org.nutz.dao.DB;
@@ -19,14 +18,14 @@ import java.util.List;
  * Created by 89792 on 2017/11/17 0017.
  */
 
-@Table("xm_lnf")
+@Table("xm_task")
 public class xm_task extends BaseModel implements Serializable {
 
     @Column
     @Name
     @Comment("任务书编号")
     @ColDefine(type = ColType.VARCHAR, width = 32)
-    @Prev(els = {@EL("taskid()")})
+    @Prev(els = {@EL("$me.taskid()")})
     private String id;
 
     @Column
@@ -109,7 +108,7 @@ public class xm_task extends BaseModel implements Serializable {
     @One(field = "author")
     private gz_inf gzinf;
 
-    @Many(field = "id")
+    @Many(field = "xmtaskid")
     private List<xm_limit> xmlimits;
 
 
@@ -264,15 +263,17 @@ public class xm_task extends BaseModel implements Serializable {
      * @note: 编号说明:17年份,10497学校代码,0学历:(0本科1研究生2博士),0性别 (0女生 ,1男生),010顺序码
      */
     public String taskid() {
+
+        Dao dao =  Mvcs.getIoc().get((Dao.class));
         StringBuilder str = new StringBuilder();
         //年份
         str.append(DateUtil.format(new Date(),"yyyy").substring(2,4));
         //项目类型
-        str.append(this.category);
+        str.append(dao.fetch(lib_task.class,this.category).getUnitcode());
+
         //顺序码
-        Dao dao =  Mvcs.getIoc().get((Dao.class));
-        GyInfService gyservice = new GyInfServiceImpl(dao);
-        str.append(gyservice.count());
+        XmTaskServiceImpl xmTaskService = new XmTaskServiceImpl(dao);
+        str.append(xmTaskService.count());
         return str.toString();
     }
 }

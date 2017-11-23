@@ -12,14 +12,15 @@ layout("/layouts/platform.html"){
         <section class="panel panel-form">
             <form id="editForm" role="form" class="form-horizontal parsley-form" data-parsley-validate
                   action="${base}/platform/gz/inf/editDo" method="post">
+                <input name="userid" type="hidden" value="${obj.userid}">
                 <input name="id" type="hidden" value="${obj.id}">
                 <div class="row mb10">
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="userid" class="col-sm-2 control-label">${msg['gz.inf.column.userid']}</label>
+                            <label for="id" class="col-sm-2 control-label">员工编号</label>
                             <div class="col-sm-8">
-                                <input type="text" id="userid" class="form-control" name="userid" data-parsley-required="true"
-                                       placeholder="${msg['gz.inf.column.userid']}" value="${obj.userid}" >
+                                <input type="text" id="id" class="form-control"  data-parsley-required="true" disabled="disabled"
+                                       placeholder="" value="${obj.id}" >
                             </div>
                         </div>
                         <div class="form-group">
@@ -43,20 +44,37 @@ layout("/layouts/platform.html"){
                                        placeholder="${msg['gz.inf.column.phone']}" value="${obj.phone}" >
                             </div>
                         </div>
+
                         <div class="form-group">
-                            <label for="birthday" class="col-sm-2 control-label">${msg['gz.inf.column.birthday']}</label>
-                            <div class="col-sm-8">
-                                <input type="text" id="birthday" class="form-control" name="birthday" data-parsley-required="true"
-                                       placeholder="${msg['gz.inf.column.birthday']}" value="${obj.birthday}" >
+                            <label for="birthday" class="col-sm-2 control-label">${msg['gy.inf.column.birthday']}</label>
+                            <div class="col-sm-8 input-group date form_datetime" style="padding-left: 16px;padding-right: 16px;" data-date="1979-09-16T05:25:07Z"
+                                 data-date-format="dd MM yyyy - HH:ii p" data-link-field="birthday">
+                                <input type="text" size="16" readonly class="form-control" value="${@date.getDate(obj.birthday)}" data-parsley-required="true">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </span>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-th"></span>
+                                    </span>
                             </div>
+                            <input type="hidden" id="birthday" name="birthdayat" value="${@date.getDate(obj.birthday)}" />
                         </div>
+
                         <div class="form-group">
                             <label for="sex" class="col-sm-2 control-label">${msg['gz.inf.column.sex']}</label>
+
                             <div class="col-sm-8">
-                                <input type="text" id="sex" class="form-control" name="sex" data-parsley-required="true"
-                                       placeholder="${msg['gz.inf.column.sex']}" value="${obj.sex}" >
+                                <select id="sex" name="sex" data-parsley-required="true" class="form-control">
+                                    <option value="0"
+                                    <%@view.bindSexSelect(obj.sex,0); %>
+                                    >男</option>
+                                    <option value="1"
+                                    <%@view.bindSexSelect(obj.sex,1); %>
+                                    >女</option>
+                                </select>
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label for="idcard" class="col-sm-2 control-label">${msg['gz.inf.column.idcard']}</label>
                             <div class="col-sm-8">
@@ -64,6 +82,7 @@ layout("/layouts/platform.html"){
                                        placeholder="${msg['gz.inf.column.idcard']}" value="${obj.idcard}" >
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label for="status" class="col-sm-2 control-label">${msg['gz.inf.column.status']}</label>
                             <div class="col-sm-8">
@@ -90,6 +109,21 @@ layout("/layouts/platform.html"){
 </div>
 <script language="JavaScript">
     $(document).ready(function () {
+
+
+        //        时间选择
+        $('.form_datetime').datetimepicker({
+            language: 'zh-CN',
+            format: 'yyyy-mm-dd',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1
+        });
+
         $('#editForm').ajaxForm({
             dataType: 'json',
             beforeSubmit: function (arr, form, options) {

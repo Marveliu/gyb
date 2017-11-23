@@ -13,7 +13,7 @@ layout("/layouts/platform.html"){
             <table class="table table-bordered table-striped mg-t datatable">
                 <thead>
                     <tr>
-                            <th>${msg['gz.inf.column.userid']}</th>
+                            <th>员工编号</th>
                             <th>${msg['gz.inf.column.realname']}</th>
                             <th>${msg['gz.inf.column.qq']}</th>
                             <th>${msg['gz.inf.column.phone']}</th>
@@ -83,7 +83,7 @@ layout("/layouts/platform.html"){
             },
             "order": [[0, "desc"]],
             "columns": [
-                    {"data": "userid", "bSortable": true},
+                    {"data": "id", "bSortable": true},
                     {"data": "realname", "bSortable": true},
                     {"data": "qq", "bSortable": true},
                     {"data": "phone", "bSortable": true},
@@ -104,7 +104,36 @@ layout("/layouts/platform.html"){
                                 '</ul></div>';
                     },
                     "targets": 8
-                }
+                },
+                {
+                    "render": function (data, type, row) {
+                        if (1 == data) {
+                            return '<i id="status' + row.gyid + '" class="fa fa-circle text-success ml5"></i>';
+                        } else {
+                            return '<i id="status' + row.gyid + '" class="fa fa-circle text-danger ml5"></i>';
+                        }
+                    },
+                    "targets": -1,
+                },
+                {
+                    "render": function (data, type, row) {
+                        if (data) {
+                            return moment(parseInt(data * 1000)).format("YYYY-MM-DD HH:mm:ss");
+                        }
+                        return '';
+                    },
+                    "targets": 4
+                },
+                {
+                    "render": function (data, type, row) {
+                        if (0 == data) {
+                            return '男';
+                        } else {
+                            return '女';
+                        }
+                    },
+                    "targets": 5
+                },
             ]
         });
         datatable.on('click', 'tr', function () {

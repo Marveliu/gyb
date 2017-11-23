@@ -12,6 +12,7 @@ import java.io.Serializable;
 
 //设定项目所需技能级别限制
 
+@Table("xm_limit")
 public class xm_limit extends BaseModel implements Serializable {
 
     @Column

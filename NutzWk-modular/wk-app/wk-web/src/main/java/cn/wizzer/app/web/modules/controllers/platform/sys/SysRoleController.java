@@ -379,7 +379,7 @@ public class SysRoleController {
     }
 
     @At("/edit/?")
-    @Ok("beetl:/platform/sys/role/infedit.html")
+    @Ok("beetl:/platform/sys/role/edit.html")
     @RequiresPermissions("sys.manager.role")
     public Object edit(String roleId, HttpServletRequest req) {
         Sys_role role = roleService.fetch(roleId);

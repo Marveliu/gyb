@@ -1,6 +1,5 @@
 package cn.wizzer.app.web.modules.controllers.platform.xm;
 
-import cn.wizzer.app.gy.modules.models.gy_inf;
 import cn.wizzer.app.gz.modules.models.gz_inf;
 import cn.wizzer.app.gz.modules.services.GzInfService;
 import cn.wizzer.app.library.modules.models.lib_task;
@@ -47,23 +46,25 @@ public class XmTaskController {
 
     @At("")
     @Ok("beetl:/platform/xm/task/index.html")
-    @RequiresPermissions("xm.content.article")
+    @RequiresPermissions("platform.xm.task")
     public void index() {
     }
 
     @At
     @Ok("json")
-    @RequiresPermissions("xm.task")
+    @RequiresPermissions("platform.xm.task")
     public Object tree(@Param("pid") String pid) {
         List<lib_task> list = libTaskService.query(Cnd.where("parentId", "=", Strings.sBlank(pid)).asc("location").asc("path"));
         List<Map<String, Object>> tree = new ArrayList<>();
+
         if (Strings.isBlank(pid)) {
             Map<String, Object> obj = new HashMap<>();
             obj.put("id", "0");
-            obj.put("text", "所有栏目");
+            obj.put("text", "所有类型");
             obj.put("children", false);
             tree.add(obj);
         }
+
         for (lib_task libTask : list) {
             Map<String, Object> obj = new HashMap<>();
             obj.put("id", libTask.getId());
@@ -75,15 +76,15 @@ public class XmTaskController {
     }
 
     /**
-    * @function: 任务书列表
-    * @param: 任务书所属项目类别，任务书题目
-    * @return:
-    * @note:
-    */
+     * @function: 任务书列表
+     * @param: 任务书所属项目类别，任务书题目
+     * @return:
+     * @note:
+     */
     @At
     @Ok("json:full")
-    @RequiresPermissions("xm.content.article")
-    public Object data(@Param("libtaskid") String libtaskid,@Param("title") String title, @Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
+    @RequiresPermissions("platform.xm.task")
+    public Object data(@Param("libtaskId") String libtaskid,@Param("title") String title, @Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
         Cnd cnd = Cnd.NEW();
         gz_inf gz= getCurrentGz();
 
@@ -97,43 +98,54 @@ public class XmTaskController {
         if (!Strings.isBlank(title)) {
             cnd.and("title", "like", "%" + title + "%");
         }
-        return libTaskService.data(length, start, draw, order, columns, cnd, null);
+        return xmTaskService.data(length, start, draw, order, columns, cnd, null);
     }
 
 
     //跳转到任务书添加界面
     @At
     @Ok("beetl:/platform/xm/task/add.html")
-    @RequiresPermissions("xm.content.article")
-    public void add(HttpServletRequest req) {
+    @RequiresPermissions("platform.xm.task")
+    public void add(@Param("libtaskId") String libtaskid,HttpServletRequest req) {
+        req.setAttribute("libtask", libtaskid != null && !"0".equals(libtaskid) ? libTaskService.fetch(libtaskid) : null);
     }
 
 
     /**
-    * @function: 添加任务书
-    * @param: xm_task,xm_limit
-    * @return:
-    * @note:
-    */
+     * @function: 添加任务书
+     * @param: xm_task,xm_limit
+     * @return:
+     * @note:
+     */
     @At
     @Ok("json")
-    @RequiresPermissions("xm.content.article.add")
-    @SLog(tag = "添加任务书", msg = "任务书标题:${args[0].title}")
+    @RequiresPermissions("platform.xm.task.add")
+    @SLog(tag = "添加任务书", msg = "任务书标题:${args[0].taskname}")
     @AdaptBy(type = WhaleAdaptor.class)
-    public Object addDo(@Param("..") xm_task xmtask, @Param("limits") List<xm_limit> limits, @Param("at") String at, HttpServletRequest req) {
+    public Object addDo(
+            @Param("::") xm_task xmtask,
+            @Param("firstcommitat") String firstcommit,
+            @Param("endtimeat") String endtime,
+            @Param("at") String at,
+            HttpServletRequest req) {
         try {
 
             //获取当前用户信息
-            gy_inf gy = UserInfUtil.getCurrentGy();
+            gz_inf gz = UserInfUtil.getCurrentGz();
 
-            //xmlimit
-            xmtask.setXmlimits(limits);
 
-            //设置发布时间
+
+            //设置时间
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             int publishAt = (int) (sdf.parse(at).getTime() / 1000);
+            int firstcommitAt = (int) (sdf.parse(firstcommit).getTime() / 1000);
+            int endtimeAt = (int) (sdf.parse(endtime).getTime() / 1000);
             xmtask.setPublishAt(publishAt);
-            xmtask.setAuthor(gy.getId());
+            xmtask.setFirstcommit(firstcommitAt);
+            xmtask.setEndtime(endtimeAt);
+
+            //初始编辑者和阅读数量
+            xmtask.setAuthor(gz.getId());
             xmtask.setReadnum(0);
 
             //插入任务书，和任务书的技能要求
@@ -147,15 +159,15 @@ public class XmTaskController {
 
     @At("/edit/?")
     @Ok("beetl:/platform/xm/task/edit.html")
-    @RequiresPermissions("xm.content.article")
+    @RequiresPermissions("platform.xm.task")
     public Object edit(String id, HttpServletRequest req) {
-        xm_task task = xmTaskService.fetchLinks(xmTaskService.fetch(id),"xmlimits");
+        xm_task task = xmTaskService.fetchLinks(xmTaskService.fetchx(id),"xmlimits");
         return task;
     }
 
     @At
     @Ok("json")
-    @RequiresPermissions("xm.content.article.edit")
+    @RequiresPermissions("platform.xm.task.edit")
     @SLog(tag = "修改任务书", msg = "任务书标题:${args[0].title}")
     @AdaptBy(type = WhaleAdaptor.class)
     public Object editDo(@Param("..") xm_task task, @Param("limits") List<xm_limit> limits,@Param("at") String at, HttpServletRequest req) {
@@ -179,7 +191,7 @@ public class XmTaskController {
 
     @At("/enable/?")
     @Ok("json")
-    @RequiresPermissions("xm.content.article.edit")
+    @RequiresPermissions("platform.xm.task.edit")
     @SLog(tag = "发布任务书", msg = "任务书标题:${args[1].getAttribute('title')}")
     public Object enable(String id, HttpServletRequest req) {
         try {
@@ -193,7 +205,7 @@ public class XmTaskController {
 
     @At("/disable/?")
     @Ok("json")
-    @RequiresPermissions("xm.task")
+    @RequiresPermissions("platform.xm.task")
     @SLog(tag = "取消发布任务书", msg = "任务书标题:${args[1].getAttribute('title')}")
     public Object disable(String id, HttpServletRequest req) {
         try {
@@ -207,7 +219,7 @@ public class XmTaskController {
 
     @At({"/delete/?", "/delete"})
     @Ok("json")
-    @RequiresPermissions("xm.task.delete")
+    @RequiresPermissions("platform.xm.task.delete")
     @SLog(tag = "删除任务书", msg = "ID:${args[2].getAttribute('id')}")
     public Object delete(String oneId, @Param("ids") String[] ids, HttpServletRequest req) {
         try {
@@ -225,6 +237,23 @@ public class XmTaskController {
             return Result.error("system.error");
         }
     }
+
+    /**
+    * @function: 获得指定任务类型的所有需要技能
+    * @param:
+    * @return:
+    * @note:
+    */
+    @At
+    @Ok("json:full")
+    @RequiresPermissions("platform.xm.task")
+    public Object limitdata(@Param("libtaskid") String libtaskid){
+
+        lib_task libtask = libTaskService.fetch(libtaskid);
+        libtask = libTaskService.fetchLinks(libtask,"skills");
+        return libtask.getSkills();
+    }
+
 
 
 }
