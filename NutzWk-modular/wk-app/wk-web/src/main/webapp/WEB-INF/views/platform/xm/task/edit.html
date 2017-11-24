@@ -19,7 +19,7 @@ layout("/layouts/platform.html"){
     <div class="wrapper" style="min-height:500px;height: 100%;">
         <form id="addForm" role="form" class="form-horizontal parsley-form" data-parsley-validate
               action="${base}/platform/xm/task/editDo" method="post">
-
+                    <input type="hidden" name="id" value="${obj.id}">
                         <div class="col-lg-12">
                             <div class="form-group has-feedback">
                                 <label for="libtaskid" class="col-sm-2 control-label">所属任务类型</label>
@@ -27,7 +27,6 @@ layout("/layouts/platform.html"){
                                     <div class="input-group">
                                         <input id="libtaskId" type="text" class="form-control" placeholder="请选择任务类型" disabled
                                                value="<%if(!isEmpty(libtask)){%>${libtask.name}<%}%>" />
-
 			                             		<span class="input-group-btn">
 			                             			<button type="button" class="btn btn-primary" data-toggle="modal"
                                                             data-target="#dialogSelect"><i class="ti-plus"></i>选择
@@ -53,7 +52,7 @@ layout("/layouts/platform.html"){
                                 <label for="taskname" class="col-sm-2 control-label">任务书标题</label>
                                 <div class="col-sm-8">
                                     <input type="text" id="taskname" class="form-control" name="taskname" data-parsley-required="true"
-                                           value="" placeholder="任务书标题">
+                                           value="${obj.taskname!}" placeholder="任务书标题">
                                 </div>
                             </div>
 
@@ -62,7 +61,7 @@ layout("/layouts/platform.html"){
                                 <label for="designnum" class="col-sm-2 control-label">设计方案套数</label>
                                 <div class="col-sm-8">
                                     <input type="number" id="designnum" class="form-control" name="designnum" data-parsley-type="integer" data-parsley-required="true"
-                                           value="1" placeholder="请输入金额数值">
+                                           value="${obj.designnum!}" placeholder="请输入设计方案套数" >
                                 </div>
                             </div>
 
@@ -70,28 +69,30 @@ layout("/layouts/platform.html"){
                                 <label for="award" class="col-sm-2 control-label">酬金</label>
                                 <div class="col-sm-8">
                                     <input type="number" id="award" class="form-control" name="award" data-parsley-type="number" data-parsley-required="true"
-                                           value="" placeholder="请输入金额数值">
+                                           value="${obj.award!}" placeholder="请输入金额数值">
                                 </div>
+
+
                             </div>
 
                             <div class="form-group">
                                 <label for="firstcommit" class="col-sm-2 control-label">初稿时间</label>
                                 <div class="col-sm-8 input-group date form_datetime " style="padding-left: 16px;padding-right: 16px;" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="at">
-                                    <input type="text" size="16" readonly class="form-control" value="${@date.getDateTime()}" data-parsley-required="true">
+                                    <input type="text" size="16" readonly class="form-control" value="${@date.getDate(obj.firstcommit)}" data-parsley-required="true">
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                                 </div>
-                                <input type="hidden" id="firstcommit" name="firstcommitat" value="${@date.getDateTime()}" />
+                                <input type="hidden" id="firstcommit" name="firstcommitat" value="${@date.getDate(obj.firstcommit)}" />
                             </div>
 
                             <div class="form-group">
                                 <label for="entime" class="col-sm-2 control-label">终稿时间</label>
                                 <div class="col-sm-8 input-group date form_datetime " style="padding-left: 16px;padding-right: 16px;" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="at">
-                                    <input type="text" size="16" readonly class="form-control" value="${@date.getDateTime()}" data-parsley-required="true">
+                                    <input type="text" size="16" readonly class="form-control" value="${@date.getDate(obj.endtime)}" data-parsley-required="true">
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                                 </div>
-                                <input type="hidden" id="entime" name="endtimeat" value="${@date.getDateTime()}" />
+                                <input type="hidden" id="entime" name="endtimeat" value="${@date.getDate(obj.endtime)}" />
                             </div>
 
 
@@ -100,7 +101,7 @@ layout("/layouts/platform.html"){
 
                                 <div class="col-sm-8">
                                     <input type="text" id="author" class="form-control" name="author"
-                                           value="${username!}" placeholder="作者">
+                                           value="${obj.author!}" placeholder="作者">
                                 </div>
                             </div>
 
@@ -109,7 +110,7 @@ layout("/layouts/platform.html"){
                                 <label for="info" class="col-sm-2 control-label">文章简介</label>
 
                                 <div class="col-sm-8">
-                                    <textarea id="info" name="info" class="form-control" style="width:100%;height:80px;"></textarea>
+                                    <textarea id="info" name="info" class="form-control" style="width:100%;height:80px;">${obj.info!}</textarea>
                                 </div>
                             </div>
 
@@ -121,7 +122,7 @@ layout("/layouts/platform.html"){
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                                 </div>
-                                <input type="hidden" id="at" name="at" value="${@date.getDateTime()}" />
+                                <input type="hidden" id="at" name="at" value="${@date.getDate(obj.publishAt)}" />
                             </div>
 
 
@@ -130,7 +131,7 @@ layout("/layouts/platform.html"){
                                 <label for="disabled" class="col-sm-2 control-label">取消发布</label>
                                 <div class="col-sm-8 switcha">
                                     <div class="mr15">
-                                        <input type="checkbox" id="disabled" name="disabled" class="js-switch-blue" value="true" >
+                                        <input type="checkbox" id="disabled" name="disabled" class="js-switch-blue" value="true"  <%if(obj.disabled){%>checked<%}%>>
                                     </div>
                                 </div>
                             </div>
@@ -144,14 +145,15 @@ layout("/layouts/platform.html"){
                                     </div>
                                     <div id="file" style="padding: 5px;">
                                     </div>
-                                    <input type="hidden" id="fileurl" name="fileurl" value="" >
+                                    <a href="${obj.fileurl!}">附件下载</a>
+                                    <input type="hidden" id="fileurl" name="fileurl" value="${obj.fileurl!}" >
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="content" class="col-sm-2 control-label">文章内容</label>
                                 <div class="col-sm-8">
-                                    <textarea id="content" name="content" style="width:100%;height:200px;"></textarea>
+                                    <textarea id="content" name="content" style="width:100%;height:200px;">${obj.content!}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -210,6 +212,8 @@ layout("/layouts/platform.html"){
         $("#addForm input[name='category']").val(node[0].id);
         $("#dialogSelect").modal("hide");
 
+        //清空技能限制
+        $("#skilllimit").html('')
         //初始化技能限制
         $.ajax({
             url:"${base}/platform/xm/task/limitdata?libtaskid="+node[0].id,
@@ -240,10 +244,37 @@ layout("/layouts/platform.html"){
     }
     var ue;
     $(document).ready(function () {
+
         setTimeout(function () {
             ue= new baidu.editor.ui.Editor();
             ue.render('content');
         },500);
+
+        var limits = ${xmlimits};
+
+        console.log(limits);
+        $.each(limits,function (i,n)
+        {
+            $("#skilllimit").append(
+                    '<div class="form-group">'+
+                    '<label for="libskillid' +i+
+                    '" class="col-sm-2 control-label">' + n["skill"]["name"]+
+                    '</label>' +
+                    '<div class="col-sm-8">' +
+                    '<input id="libskillid' + i+
+                    '" type="number"  class="form-control" data-parsley-type="integer" data-parsley-required="true" placeholder="请输入要求等级1-5" name="xmlimits:' +i+
+                    '.skilllevel" value="' + n.skilllevel +
+                    '">' +
+                    '<input type="hidden" name="xmlimits:' +i +
+                    '.skillid" value="' + n["skill"]["id"] +
+                    '" >'+
+                    '</div> '+
+                    '</div>'
+            )
+        })
+
+
+
         myForm.init();
         $('.form_datetime').datetimepicker({
             language:  'zh-CN',

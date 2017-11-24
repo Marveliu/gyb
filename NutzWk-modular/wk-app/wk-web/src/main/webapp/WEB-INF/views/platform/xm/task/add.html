@@ -210,6 +210,9 @@ layout("/layouts/platform.html"){
         $("#addForm input[name='category']").val(node[0].id);
         $("#dialogSelect").modal("hide");
 
+        //清空技能限制
+        $("#skilllimit").html('')
+
         //初始化技能限制
         $.ajax({
             url:"${base}/platform/xm/task/limitdata?libtaskid="+node[0].id,

@@ -3,6 +3,7 @@ package cn.wizzer.app.web.modules.controllers.platform.xm;
 import cn.wizzer.app.gz.modules.models.gz_inf;
 import cn.wizzer.app.gz.modules.services.GzInfService;
 import cn.wizzer.app.library.modules.models.lib_task;
+import cn.wizzer.app.library.modules.services.LibSkillService;
 import cn.wizzer.app.library.modules.services.LibTaskService;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
 import cn.wizzer.app.web.commons.util.UserInfUtil;
@@ -14,13 +15,17 @@ import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.nutz.mvc.Mvcs;
 import org.nutz.mvc.adaptor.WhaleAdaptor;
 import org.nutz.mvc.annotation.*;
+import org.nutz.trans.Atom;
+import org.nutz.trans.Trans;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
@@ -40,6 +45,9 @@ public class XmTaskController {
 
     @Inject
     private LibTaskService libTaskService;
+
+    @Inject
+    private LibSkillService libSkillService;
 
     @Inject
     private GzInfService gzInfService;
@@ -161,26 +169,65 @@ public class XmTaskController {
     @Ok("beetl:/platform/xm/task/edit.html")
     @RequiresPermissions("platform.xm.task")
     public Object edit(String id, HttpServletRequest req) {
-        xm_task task = xmTaskService.fetchLinks(xmTaskService.fetchx(id),"xmlimits");
+        xm_task task = xmTaskService.fetchLinks(xmTaskService.fetch(id),null);
+        req.setAttribute("libtask", task.getLibtask());
+        List<xm_limit>  limits = task.getXmlimits();
+
+        List<xm_limit>  xmlimits = new ArrayList<>();
+
+        for( xm_limit limit :limits){
+            limit = libSkillService.fetchLinks(limit,"skill");
+            xmlimits.add(limit);
+        }
+        req.setAttribute("xmlimits", xmlimits);
         return task;
     }
 
     @At
     @Ok("json")
     @RequiresPermissions("platform.xm.task.edit")
-    @SLog(tag = "修改任务书", msg = "任务书标题:${args[0].title}")
+    @SLog(tag = "修改任务书", msg = "任务书标题:${args[0].taskname}")
     @AdaptBy(type = WhaleAdaptor.class)
-    public Object editDo(@Param("..") xm_task task, @Param("limits") List<xm_limit> limits,@Param("at") String at, HttpServletRequest req) {
+    public Object editDo(
+            @Param("::") xm_task xmtask,
+            @Param("firstcommitat") String firstcommit,
+            @Param("endtimeat") String endtime,
+            @Param("at") String at,
+            HttpServletRequest req) {
         try {
+
+
+            //获取当前用户信息
+            gz_inf gz = UserInfUtil.getCurrentGz();
+
+            //设置时间
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             int publishAt = (int) (sdf.parse(at).getTime() / 1000);
-            task.setPublishAt(publishAt);
+            int firstcommitAt = (int) (sdf.parse(firstcommit).getTime() / 1000);
+            int endtimeAt = (int) (sdf.parse(endtime).getTime() / 1000);
+            xmtask.setPublishAt(publishAt);
+            xmtask.setFirstcommit(firstcommitAt);
+            xmtask.setEndtime(endtimeAt);
 
-            //修改技能限制信息
-            task.setXmlimits(limits);
+            //初始编辑者和阅读数量
+            xmtask.setAuthor(gz.getId());
 
-            //更新
-            xmTaskService.updateWith(task,"xmlimits");
+
+            //
+            Trans.exec(new Atom() {
+                @Override
+                public void run() {
+                    //清空之前的技能限制
+                    xm_task oldxmtask = xmTaskService.fetchLinks(xmTaskService.fetch(xmtask.getId()),null);
+                    Dao dao = Mvcs.getIoc().get(Dao.class);
+                    dao.deleteLinks(oldxmtask,"xmlimits");
+                    xmTaskService.insertLinks(xmtask,"xmlimits");
+
+                    //更新
+                    xmTaskService.update(xmtask);
+                }
+            });
+
 
             return Result.success("system.success");
         } catch (Exception e) {
@@ -248,11 +295,13 @@ public class XmTaskController {
     @Ok("json:full")
     @RequiresPermissions("platform.xm.task")
     public Object limitdata(@Param("libtaskid") String libtaskid){
-
         lib_task libtask = libTaskService.fetch(libtaskid);
         libtask = libTaskService.fetchLinks(libtask,"skills");
         return libtask.getSkills();
     }
+
+
+
 
 
 

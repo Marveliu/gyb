@@ -102,7 +102,7 @@ public class xm_task extends BaseModel implements Serializable {
     private boolean disabled;
 
     //参照
-    @One(field = "category",key="unitcode")
+    @One(field = "category")
     private lib_task libtask;
 
     @One(field = "author")

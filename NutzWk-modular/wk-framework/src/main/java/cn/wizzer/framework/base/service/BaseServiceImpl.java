@@ -873,6 +873,7 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
      * @param linkName 关联查询
      * @return
      */
+
     public NutMap data(int length, int start, int draw, List<DataTableOrder> orders, List<DataTableColumn> columns, Cnd cnd, String linkName) {
         NutMap re = new NutMap();
         if (orders != null && orders.size() > 0) {

@@ -1,0 +1,224 @@
+<%
+layout("/layouts/platform.html"){
+%>
+
+
+<!-- content wrapper -->
+<div class="content-wrap">
+
+    <!-- inner content wrapper -->
+    <div class="wrapper">
+
+        <!-- 项目列表 -->
+        <div class="row mb15">
+            <div class="col-xs-6">
+
+                <div class="pull-left offscreen-left" style="padding-top:15px;">
+                    <div class="input-group mb15">
+                        <input type="text" class="form-control" placeholder="请输入任务书名称">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">Go!</button>
+                            </span>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <div class="col-xs-6 text-right">
+                <div class="btn-group mr5 mt10">
+                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown"
+                            aria-expanded="false">查询条件
+                        <span class="ti-angle-down ml10"></span>
+                    </button>
+                    <ul class="dropdown-menu text-left filter" data-option-key="filter" role="menu">
+                        <li>
+                            <a href="javascript:;" data-filter="*">全部</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="btn-group view-options mt10" data-toggle="buttons">
+                    <label class="btn btn-primary btn-sm active" data-view="grid">
+                        <input type="radio" name="options" id="option1">
+                        <i class="ti-view-grid"></i>
+                    </label>
+                    <label class="btn btn-primary btn-sm" data-view="list">
+                        <input type="radio" name="options" id="option2">
+                        <i class="ti-view-list"></i>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="switcher view-list">
+            <div class="row feed" style="position: relative;">
+                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 switch-item">
+                    <section class="panel">
+                        <!--<div class="thumb">-->
+                        <!--<img class="img-responsive" alt="Responsive image" src="">-->
+                        <!--</div>-->
+                        <div class="panel-body">
+                            <div class="switcher-content">
+
+                                <!--相关信息-->
+                                <div class="tile-title h4 mt5 mb5">
+                                    <b>Realtime page clicks</b>
+                                </div>
+                                <p>Shaw, those twelve beige hooks are joined if I patch a young, gooey mouth.
+                                </p>
+
+                                <!--主要信息-->
+                                <div class="mb10">
+                                    <a href="javascript:;" class="mr15">
+                                        <i class="ti-file text-warning mr5"></i>MAY 2014, 19:20
+                                    </a>
+                                    <a href="javascript:;" class="mr15">
+                                        <i class="ti-alarm-clock  text-danger mr5"></i>MAY 2014, 19:20
+                                    </a>
+                                    <a href="javascript:;">
+                                        <i class="ti-wallet  text-danger mr5"></i><b>1000</b> RMB
+                                    </a>
+                                </div>
+
+                                <!--技能等级-->
+                                <p class=" mg-b">
+                                    <span class="label label-default">Default</span>
+                                    <span class="label label-primary">Primary</span>
+                                    <span class="label label-success">Success</span>
+                                    <span class="label label-info">Info</span>
+                                    <span class="label label-warning">Warning</span>
+                                    <span class="label label-danger">Danger</span>
+                                    <span class="label label-color">Color</span>
+                                </p>
+
+                                <!--<ul class="text-muted list-style-none md10">-->
+                                <!--<span class="fa fa-star text-warning"></span>-->
+                                <!--<span class="fa fa-star text-warning"></span>-->
+                                <!--<span class="fa fa-star text-warning"></span>-->
+                                <!--<span class="fa fa-star text-warning"></span>-->
+                                <!--<span class="fa fa-star-o"></span>-->
+                                <!--</ul>-->
+                            </div>
+                        </div>
+
+                        <small class="pull-right mr15 mb5">Yesterday, 13:48</small>
+                    </section>
+
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 索引 -->
+        <section class="panel bg-none">
+            <div class="text-center">
+                <ul class="pagination">
+                    <li>
+                        <a href="javascript:;">«</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">1</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">2</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">3</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">4</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">5</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">»</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="pager"></div>
+        </section>
+    </div>
+    <!-- /inner content wrapper -->
+
+</div>
+<!-- /content wrapper -->
+<a class="exit-offscreen"></a>
+<script type="text/javascript">
+    $(function(){
+        //自动加载
+        loadMyEssay();
+
+        function loadMyEssay() {
+            var pageSize = 5;
+
+            $(document).ready(function() {
+                //设置默认第1页
+                init(1);
+            });
+
+            //默认加载
+            function init(pageNo){
+                $("#result").html("");
+                $.ajax({
+                    url:"/frame/myEssay"+'/'+pageNo+'/'+pageSize,
+                    type:"get",
+                    contentType:"application/json;charset=utf-8",
+                    dataType:"json",
+                    success:function(data){
+                        //i表示在data中的索引位置，n表示包含的信息的对象
+                        $.each(data.datas,function(i,n){
+                            //获取对象中属性为value的值
+                            var essayId = n.id;
+                            var essayTitle = n.title;
+                            var createTime = new Date(n.createTime).pattern("yyyy-MM-dd hh:mm:ss");
+                            var admire = n.admireCount;
+                            var evaluate = n.evaluateCount;
+                            var blog =
+                                    '<tr>'+
+                                    '<td>'+
+                                    '<img alt="头像" src="/img/logo.jpg">'+
+                                    '</td>'+
+                                    '<td>'+
+                                    '<a href="/views/blogDetail.html?essayId='+essayId+'">&nbsp;&nbsp;&nbsp;'+essayTitle+'</a>'+
+                                    '<br>'+
+                                    '<br>'+
+                                    '<span>'+createTime+'<span>'+
+                                    '</td>'+
+                                    '</tr>'+
+                                    '<tr>'+
+                                    '<td>'+
+                                    '<a href="#">赞(<span style="color: red; cursor: pointer">'+admire+'</span>)</a>'+
+                                    '<a href="#">评论(<span style="color: red; cursor: pointer">'+evaluate+'</span>)</a>'+
+                                    '</td>'+
+                                    '</tr>';
+
+                            $('#result').append(blog);
+                        });
+
+                        $("#pager").pager({
+                            pagenumber: pageNo,
+                            pagecount:data.pageCount,
+                            totalcount:data.total,
+                            buttonClickCallback: PageClick
+                        });
+                    },
+                    error:function(){
+                        alert("error");
+                    }
+                });
+            }
+
+            //回调函数
+            PageClick = function(pageclickednumber) {
+                init(pageclickednumber);
+            }
+        }
+    });
+</script>
+
+<%}%>

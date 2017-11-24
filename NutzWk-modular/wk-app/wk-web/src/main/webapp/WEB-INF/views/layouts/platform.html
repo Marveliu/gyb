@@ -229,40 +229,40 @@
     </header>
     <section class="layout">
 
-        <aside class="sidebar offscreen-left">
+        <!--<aside class="sidebar offscreen-left">-->
 
-            <nav class="main-navigation" data-height="auto" data-size="6px" data-distance="0" data-rail-visible="true"
-                 data-wheel-step="10">
-                <!--<p class="nav-title">MENU</p>-->
-                <ul class="nav">
-                    <li class="open">
-                        <a href="javascript:;">
-                            <%if(!isEmpty(@shiro.getPrincipalProperty('customMenus'))){%>
-                            <i class="toggle-accordion"></i>
-                            <%}%>
-                            <i class="ti-heart"></i>
-                            <span>${msg['index.custommenu']}</span>
-                        </a>
-                        <%if(!isEmpty(@shiro.getPrincipalProperty('customMenus'))){%>
-                        <ul class="sub-menu">
-                            <%for(o in @shiro.getPrincipalProperty('customMenus')){%>
+            <!--<nav class="main-navigation" data-height="auto" data-size="6px" data-distance="0" data-rail-visible="true"-->
+                 <!--data-wheel-step="10">-->
+                <!--&lt;!&ndash;<p class="nav-title">MENU</p>&ndash;&gt;-->
+                <!--<ul class="nav">-->
+                    <!--<li class="open">-->
+                        <!--<a href="javascript:;">-->
+                            <!--<%if(!isEmpty(@shiro.getPrincipalProperty('customMenus'))){%>-->
+                            <!--<i class="toggle-accordion"></i>-->
+                            <!--<%}%>-->
+                            <!--<i class="ti-heart"></i>-->
+                            <!--<span>${msg['index.custommenu']}</span>-->
+                        <!--</a>-->
+                        <!--<%if(!isEmpty(@shiro.getPrincipalProperty('customMenus'))){%>-->
+                        <!--<ul class="sub-menu">-->
+                            <!--<%for(o in @shiro.getPrincipalProperty('customMenus')){%>-->
 
-                            <li>
-                                <a <%if(!isEmpty(o.href)){%>href="${base}${o.href}" <%if('data-pjax'==o.target){%>data-pjax<%}}else{ %>href="javascript:;"<%}%>>
-                                <span><%if(lang=="zh_CN"){%>${o.name}<%}else{%>${o.aliasName}<%}%></span>
-                                </a>
-                            </li>
+                            <!--<li>-->
+                                <!--<a <%if(!isEmpty(o.href)){%>href="${base}${o.href}" <%if('data-pjax'==o.target){%>data-pjax<%}}else{ %>href="javascript:;"<%}%>>-->
+                                <!--<span><%if(lang=="zh_CN"){%>${o.name}<%}else{%>${o.aliasName}<%}%></span>-->
+                                <!--</a>-->
+                            <!--</li>-->
 
-                            <%}%>
-                        </ul>
-                        <%}%>
-                    </li>
+                            <!--<%}%>-->
+                        <!--</ul>-->
+                        <!--<%}%>-->
+                    <!--</li>-->
 
-                </ul>
-                <ul id="leftnav" class="nav">
-                </ul>
-            </nav>
-        </aside>
+                <!--</ul>-->
+                <!--<ul id="leftnav" class="nav">-->
+                <!--</ul>-->
+            <!--</nav>-->
+        <!--</aside>-->
         <section class="main-content" id="container">
             ${layoutContent}
         </section>
