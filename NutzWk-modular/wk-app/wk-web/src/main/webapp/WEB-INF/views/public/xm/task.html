@@ -1,0 +1,133 @@
+<%
+layout("/layouts/platform.html"){
+%>
+
+
+        <aside class="sidebar-250 canvas-right bg-default ">
+            <header class="header navbar clearfix bb bg-default pl0 pr0">
+                <p class="navbar-text">摘要</p>
+                <div class="btn-group pull-right mr10">
+                    <button type="button" class="btn btn-sm btn-primary navbar-btn">
+                        <i class="ti-comment-alt"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-primary navbar-btn">
+                        <i class="ti-help-alt"></i>
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-wrap no-p">
+
+                <div class="wrapper">
+
+                    <div class="m15">
+                        <a href="/platform/xm/apply/apply" class="btn btn-primary btn-block navbar-btn">
+                            报名
+                        </a>
+                    </div>
+
+                    <nav role="navigation">
+                        <div class="no-padding">
+                            <ul class="nav nav-stacked">
+                                <li class="disabled text-uppercase">
+                                    <a href="javascript:;">
+                                        <b>重要信息</b>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;">
+                                        <span class="badge pull-right bg-success">${obj.award}</span>
+                                        <i class="ti-import mr5"></i>酬金
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;">
+                                        <span class="badge pull-right bg-warning">${@date.getDate(obj.firstcommit)}</span>
+                                        <i class="ti-pin-alt mr5"></i>初稿
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;">
+                                        <span class="badge pull-right bg-danger">${@date.getDate(obj.endtime)}</span>
+                                        <i class="ti-share mr5"></i>终止
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <ul class="nav nav-stacked">
+                                <li class="disabled text-uppercase">
+                                    <a href="javascript:;">
+                                        <b>技能限制</b>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;">
+                                        <i class="ti-control-record text-warning pull-right"></i> Home
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;">
+                                        <i class="ti-control-record text-success pull-right"></i> Work
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;">
+                                        <i class="ti-control-record text-danger pull-right"></i> Family
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+
+                </div>
+            </div>
+        </aside>
+
+        <section class="main-content bg-white ">
+
+            <header class="header navbar clearfix bb bg-default pl0">
+                <p class="navbar-text">任务书详情</p>
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-default navbar-btn btn-sm">
+                        <i class="fa fa-mail-reply"></i>
+                    </button>
+                    <button type="button" class="btn btn-default navbar-btn btn-sm">
+                        <i class="fa fa-mail-forward"></i>
+                    </button>
+                    <button type="button" class="btn btn-default  navbar-btn btn-sm" onclick="location='${obj.fileurl}'" >附件下载
+                    </button>
+                </div>
+            </header>
+
+            <!-- content wrapper -->
+            <div class="content-wrap bl">
+
+                <!-- inner content wrapper -->
+                <div class="wrapper" style="bottom: 50px;">
+
+                    <div class="lead"> ${obj.taskname!}</div>
+                    <div class="">
+                        <em id="post-date" class="">${@date.getDate(obj.publishAt,"yyyy-MM-dd")}</em>
+                        <em class="">${obj.author!}</em>
+                    </div>
+
+                    <div class="rich_media_content " id="js_content">
+                        ${obj.content!}
+                    </div>
+
+                </div>
+                <!-- /inner content wrapper -->
+
+            </div>
+            <!-- /content wrapper -->
+
+            <footer class="bl bt">
+                <p>© 武汉哎嘀信息科技有限公司 2017</p>
+                <p class="pull-right">All rights reserved
+                </p>
+            </footer>
+
+            <a class="exit-offscreen"></a>
+        </section>
+
+<%}%>

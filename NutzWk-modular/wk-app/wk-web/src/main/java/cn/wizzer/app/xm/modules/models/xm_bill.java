@@ -6,4 +6,6 @@ package cn.wizzer.app.xm.modules.models;
 public class xm_bill {
 
 
+
+
 }

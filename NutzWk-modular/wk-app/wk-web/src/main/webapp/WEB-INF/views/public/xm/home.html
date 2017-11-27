@@ -2,6 +2,7 @@
 layout("/layouts/platform.html"){
 %>
 
+<link rel="stylesheet" href="${base!}/assets/css/pagination.css">
 
 <!-- content wrapper -->
 <div class="content-wrap">
@@ -28,13 +29,16 @@ layout("/layouts/platform.html"){
 
             <div class="col-xs-6 text-right">
                 <div class="btn-group mr5 mt10">
-                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown"
-                            aria-expanded="false">查询条件
+                    <button type="button" id="SearchType" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown"
+                            aria-expanded="false" value="0">
+                        <span id="search">查询条件</span>
                         <span class="ti-angle-down ml10"></span>
                     </button>
-                    <ul class="dropdown-menu text-left filter" data-option-key="filter" role="menu">
+                    <ul class="dropdown-menu text-left" >
                         <li>
-                            <a href="javascript:;" data-filter="*">全部</a>
+                            <a id="type0" onclick="setSearchFilter(0)">全部</a>
+                            <a id="type1" onclick="setSearchFilter(1)">最近发布</a>
+                            <a id="type2" onclick="setSearchFilter(2)">限制匹配</a>
                         </li>
                     </ul>
                 </div>
@@ -52,95 +56,70 @@ layout("/layouts/platform.html"){
             </div>
         </div>
 
+
         <div class="switcher view-list">
-            <div class="row feed" style="position: relative;">
-                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 switch-item">
-                    <section class="panel">
-                        <!--<div class="thumb">-->
-                        <!--<img class="img-responsive" alt="Responsive image" src="">-->
+            <div class="row feed" id="result" style="position: relative;">
+                <!--<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 switch-item">-->
+                    <!--<section class="panel">-->
+                        <!--&lt;!&ndash;<div class="thumb">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<img class="img-responsive" alt="Responsive image" src="">&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <!--<div class="panel-body">-->
+                            <!--<div class="switcher-content">-->
+
+                                <!--&lt;!&ndash;相关信息&ndash;&gt;-->
+                                <!--<div class="tile-title h4 mt5 mb5">-->
+                                    <!--<b>Realtime page clicks</b>-->
+                                <!--</div>-->
+                                <!--<p>Shaw, those twelve beige hooks are joined if I patch a young, gooey mouth.-->
+                                <!--</p>-->
+
+                                <!--&lt;!&ndash;主要信息&ndash;&gt;-->
+                                <!--<div class="mb10">-->
+                                    <!--<a href="javascript:;" class="mr15">-->
+                                        <!--<i class="ti-file text-warning mr5"></i>MAY 2014, 19:20-->
+                                    <!--</a>-->
+                                    <!--<a href="javascript:;" class="mr15">-->
+                                        <!--<i class="ti-alarm-clock  text-danger mr5"></i>MAY 2014, 19:20-->
+                                    <!--</a>-->
+                                    <!--<a href="javascript:;">-->
+                                        <!--<i class="ti-wallet  text-danger mr5"></i><b>1000</b> RMB-->
+                                    <!--</a>-->
+                                <!--</div>-->
+
+                                <!--&lt;!&ndash;技能等级&ndash;&gt;-->
+                                <!--<p class=" mg-b">-->
+                                    <!--<span class="label label-default">Default</span>-->
+                                    <!--<span class="label label-primary">Primary</span>-->
+                                    <!--<span class="label label-success">Success</span>-->
+                                    <!--<span class="label label-info">Info</span>-->
+                                    <!--<span class="label label-warning">Warning</span>-->
+                                    <!--<span class="label label-danger">Danger</span>-->
+                                    <!--<span class="label label-color">Color</span>-->
+                                <!--</p>-->
+
+                                <!--&lt;!&ndash;<ul class="text-muted list-style-none md10">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<span class="fa fa-star text-warning"></span>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<span class="fa fa-star text-warning"></span>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<span class="fa fa-star text-warning"></span>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<span class="fa fa-star text-warning"></span>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<span class="fa fa-star-o"></span>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</ul>&ndash;&gt;-->
+                            <!--</div>-->
                         <!--</div>-->
-                        <div class="panel-body">
-                            <div class="switcher-content">
 
-                                <!--相关信息-->
-                                <div class="tile-title h4 mt5 mb5">
-                                    <b>Realtime page clicks</b>
-                                </div>
-                                <p>Shaw, those twelve beige hooks are joined if I patch a young, gooey mouth.
-                                </p>
-
-                                <!--主要信息-->
-                                <div class="mb10">
-                                    <a href="javascript:;" class="mr15">
-                                        <i class="ti-file text-warning mr5"></i>MAY 2014, 19:20
-                                    </a>
-                                    <a href="javascript:;" class="mr15">
-                                        <i class="ti-alarm-clock  text-danger mr5"></i>MAY 2014, 19:20
-                                    </a>
-                                    <a href="javascript:;">
-                                        <i class="ti-wallet  text-danger mr5"></i><b>1000</b> RMB
-                                    </a>
-                                </div>
-
-                                <!--技能等级-->
-                                <p class=" mg-b">
-                                    <span class="label label-default">Default</span>
-                                    <span class="label label-primary">Primary</span>
-                                    <span class="label label-success">Success</span>
-                                    <span class="label label-info">Info</span>
-                                    <span class="label label-warning">Warning</span>
-                                    <span class="label label-danger">Danger</span>
-                                    <span class="label label-color">Color</span>
-                                </p>
-
-                                <!--<ul class="text-muted list-style-none md10">-->
-                                <!--<span class="fa fa-star text-warning"></span>-->
-                                <!--<span class="fa fa-star text-warning"></span>-->
-                                <!--<span class="fa fa-star text-warning"></span>-->
-                                <!--<span class="fa fa-star text-warning"></span>-->
-                                <!--<span class="fa fa-star-o"></span>-->
-                                <!--</ul>-->
-                            </div>
-                        </div>
-
-                        <small class="pull-right mr15 mb5">Yesterday, 13:48</small>
-                    </section>
-
-
-                </div>
-
+                        <!--<small class="pull-right mr15 mb5">Yesterday, 13:48</small>-->
+                    <!--</section>-->
+                <!--</div>-->
             </div>
         </div>
 
         <!-- 索引 -->
         <section class="panel bg-none">
-            <div class="text-center">
-                <ul class="pagination">
-                    <li>
-                        <a href="javascript:;">«</a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">1</a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">2</a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">3</a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">4</a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">5</a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">»</a>
-                    </li>
+            <div class="text-center ">
+                <ul class="pagination M-box3">
                 </ul>
             </div>
-
-            <div id="pager"></div>
         </section>
     </div>
     <!-- /inner content wrapper -->
@@ -148,77 +127,139 @@ layout("/layouts/platform.html"){
 </div>
 <!-- /content wrapper -->
 <a class="exit-offscreen"></a>
+<script src="${base!}/assets/js/jquery.pagination.js"></script>
 <script type="text/javascript">
-    $(function(){
-        //自动加载
-        loadMyEssay();
 
-        function loadMyEssay() {
-            var pageSize = 5;
+    var defaultstart = 0;       //默认页
+    var current = 1;            //当前页
+    var pagecount = 0;           //当前页
+    var eachpage = 16;          //默认每页列表数目
+    var SearchType = 0;         //默认过滤类型
+    var taskName = "";          //默认项目名称
 
-            $(document).ready(function() {
-                //设置默认第1页
-                init(1);
-            });
+    function initxmlist(){
+        $.ajax({
+            url:"/public/xm/data?start="+defaultstart,
+            type:"get",
+            contentType:"application/json;charset=utf-8",
+            dataType:"json",
+            success:function(data){
+                console.log(data);
+                //i表示在data中的索引位置，n表示包含的信息的对象
+                $.each(data["data"],function(i,n) {
+                    //获取对象中属性为value的值
+                    var xmtaskid = n.id;                //编号
+                    var xmtitle = n.taskname;              //名称
+                    var xminfo = n.info;                //简介
+                    var award = n.award;                //奖金
+                    var firstcommit = format(n.firstcommit);     //初稿时间
+                    var endtime = format(n.endtime);             //截止时间
+                    var at = format(n.publishAt);                //发布时间
+                    var resultitem = '<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 switch-item">' +
+                            '<section class="panel">' +
+                            '<div class="panel-body">' +
+                            '<div class="switcher-content">' +
+                            '<div class="tile-title h4 mt5 mb5">' +
+                            '<b><a href="/public/xm/task/' + xmtaskid + '">' + xmtitle + '</a></b>' +
+                            '</div>' +
+                            '<p>' + xminfo + '</p>' +
+                            '<div class="mb10">' +
+                            '<a href="javascript:;" class="mr15">' +
+                            '<i class="ti-file text-warning mr5"></i>' + firstcommit +
+                            '</a>' +
+                            '<a href="javascript:;" class="mr15">' +
+                            '<i class="ti-alarm-clock  text-danger mr5"></i>' + endtime +
+                            '</a>' +
+                            '<a href="javascript:;">' +
+                            '<i class="ti-wallet  text-danger mr5"></i><b>' + award + '</b> RMB' +
+                            '</a>' +
+                            '</div>' +
+                            '<p class=" mg-b">';
+                    $.each(data["data"], function (i, n) {
+                        console.log("skilllimit");
+                        console.log(n);
+                        switch (n.skilllevel) {
+                            case 1:
+                                resultitem = resultitem + '<span class="label label-default">' + n.skilllevel + '</span>';
+                                break;
+                            case 2:
+                                resultitem = resultitem + '<span class="label label-default">' + n.skilllevel + '</span>';
+                                break;
+                            case 3:
+                                resultitem = resultitem + '<span class="label label-default">' + n.skilllevel + '</span>';
+                                break;
+                            case 4:
+                                resultitem = resultitem + '<span class="label label-default">' + n.skilllevel + '</span>';
+                                break;
+                            case 5:
+                                resultitem = resultitem + '<span class="label label-default">' + n.skilllevel + '</span>';
+                                break;
+                            default:
+                                break;
+                        }
+                    }),
+                            resultitem = resultitem + '</p></div> </div> <small class="pull-right mr15 mb5">' + at + '</small></section></div>';
+                    $('#result').append(resultitem);
+                    pagecount = data.listCount;
+                    eachpage = data.recordsTotal;
+                })
+            },
+            error:function(){
+                alert("error");
+            }
+        });
+    }
 
-            //默认加载
-            function init(pageNo){
-                $("#result").html("");
-                $.ajax({
-                    url:"/frame/myEssay"+'/'+pageNo+'/'+pageSize,
-                    type:"get",
-                    contentType:"application/json;charset=utf-8",
-                    dataType:"json",
-                    success:function(data){
-                        //i表示在data中的索引位置，n表示包含的信息的对象
-                        $.each(data.datas,function(i,n){
-                            //获取对象中属性为value的值
-                            var essayId = n.id;
-                            var essayTitle = n.title;
-                            var createTime = new Date(n.createTime).pattern("yyyy-MM-dd hh:mm:ss");
-                            var admire = n.admireCount;
-                            var evaluate = n.evaluateCount;
-                            var blog =
-                                    '<tr>'+
-                                    '<td>'+
-                                    '<img alt="头像" src="/img/logo.jpg">'+
-                                    '</td>'+
-                                    '<td>'+
-                                    '<a href="/views/blogDetail.html?essayId='+essayId+'">&nbsp;&nbsp;&nbsp;'+essayTitle+'</a>'+
-                                    '<br>'+
-                                    '<br>'+
-                                    '<span>'+createTime+'<span>'+
-                                    '</td>'+
-                                    '</tr>'+
-                                    '<tr>'+
-                                    '<td>'+
-                                    '<a href="#">赞(<span style="color: red; cursor: pointer">'+admire+'</span>)</a>'+
-                                    '<a href="#">评论(<span style="color: red; cursor: pointer">'+evaluate+'</span>)</a>'+
-                                    '</td>'+
-                                    '</tr>';
+    $(function() {
+        //初始化当前页
+        initxmlist();
 
-                            $('#result').append(blog);
-                        });
 
-                        $("#pager").pager({
-                            pagenumber: pageNo,
-                            pagecount:data.pageCount,
-                            totalcount:data.total,
-                            buttonClickCallback: PageClick
-                        });
-                    },
-                    error:function(){
-                        alert("error");
-                    }
+        $('.M-box3').pagination({
+            pageCount: 10,      //pagecount,
+            showData: 16,       //eachpage,
+            current: 1,         //current,
+            jump: true,
+            coping: true,
+            homePage: '首页',
+            endPage: '末页',
+            prevContent: '<<',
+            nextContent: '>>',
+            isHide: 'false',
+            jump: true,
+            callback: function (api) {
+                var data = {
+                    start: api.getCurrent(),
+                    SearchFilter: $('SearchType').val(),
+                    taskName: taskName
+                };
+                $.getJSON('/public/xm/data', data, function (json) {
+                    console.log(json);
+                    api.setPageCount(100)
                 });
             }
-
-            //回调函数
-            PageClick = function(pageclickednumber) {
-                init(pageclickednumber);
-            }
-        }
+        });
     });
+
+    function setSearchFilter(type) {
+        var typeid = "type" + type;
+        var SearchName = $('#'+typeid).text();
+        $('#search').text(SearchName);
+        var SearchType = $('#SearchType').val(type);
+
+    }
+    function add0(m){return m<10?'0'+m:m }
+    function format(shijianchuo)
+    {
+        var time = new Date(shijianchuo);
+        var y = time.getFullYear();
+        var m = time.getMonth()+1;
+        var d = time.getDate();
+        var h = time.getHours();
+        var mm = time.getMinutes();
+        var s = time.getSeconds();
+        return y+'-'+add0(m)+'-'+add0(d)+' '+add0(h)+':'+add0(mm)+':'+add0(s);
+    }
 </script>
 
 <%}%>
