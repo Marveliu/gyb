@@ -25,7 +25,7 @@ public class LibTaskServiceImpl extends BaseServiceImpl<lib_task> implements Lib
     }
 
     /**
-     * 新增单位
+     * 新增任务类型
      *
      * @param skill
      * @param pid

@@ -21,9 +21,9 @@ layout("/layouts/platform.html"){
                 <div class="wrapper">
 
                     <div class="m15">
-                        <a href="/platform/xm/apply/apply" class="btn btn-primary btn-block navbar-btn">
+                        <button id="xmapply" onclick="xmapply('${obj.id}')" class="btn btn-primary btn-block navbar-btn">
                             报名
-                        </a>
+                        </button>
                     </div>
 
                     <nav role="navigation">
@@ -130,4 +130,19 @@ layout("/layouts/platform.html"){
             <a class="exit-offscreen"></a>
         </section>
 
+
+<script>
+    function xmapply(id) {
+            $("#xmapply").button("loading");
+            $.post("${base}/platform/xm/person/apply?xmtaskid" + id, function (data) {
+                if (data.code == 0) {
+                    Toast.error(data.msg);
+                } else {
+                    Toast.error(data.msg);
+                }
+                btn.button("reset");
+            }, "json");
+            $("#xmapply").button("reset");
+    }
+</script>
 <%}%>

@@ -2,6 +2,7 @@ package cn.wizzer.app.gy.modules.models;
 
 import cn.wizzer.app.gy.modules.services.GyInfService;
 import cn.wizzer.app.gy.modules.services.impl.GyInfServiceImpl;
+import cn.wizzer.app.xm.modules.models.xm_task;
 import cn.wizzer.framework.base.model.BaseModel;
 import cn.wizzer.framework.util.DateUtil;
 import org.nutz.dao.Dao;
@@ -10,6 +11,7 @@ import org.nutz.mvc.Mvcs;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by 89792 on 2017/11/10 0010.
@@ -90,6 +92,11 @@ public class gy_inf extends BaseModel implements Serializable {
     @Comment("状态")
     @ColDefine(type = ColType.INT)
     private int status;
+
+    //参照
+    @ManyMany(relation = "xm_apply", from = "gyid", to = "xmtaskid")
+    private List<xm_task> xmtasks;
+
 
     //视图字段
     @Column("email")
@@ -229,6 +236,16 @@ public class gy_inf extends BaseModel implements Serializable {
         this.status = status;
     }
 
+    //参照
+
+
+    public List<xm_task> getXmtasks() {
+        return xmtasks;
+    }
+
+    public void setXmtasks(List<xm_task> xmtasks) {
+        this.xmtasks = xmtasks;
+    }
 
     /**
      * @function: 雇员编号

@@ -30,6 +30,20 @@ public class UserInfUtil {
         return  gz;
     }
 
+
+    /**
+    * @function: 返回雇员di
+    * @param:
+    * @return:
+    * @note:
+    */
+    public static String getCurrentGzid(){
+        Subject currentUser = SecurityUtils.getSubject();
+        Sys_user user = (Sys_user) currentUser.getPrincipal();
+        gz_inf gz = Mvcs.getIoc().get(Dao.class).fetch(gz_inf.class,Cnd.where("userid","=",user.getId()));
+        return  gz.getId();
+    }
+
     /**
      * @function: 查询当前登陆的雇员信息
      * @param:
@@ -41,5 +55,12 @@ public class UserInfUtil {
         Sys_user user = (Sys_user) currentUser.getPrincipal();
         gy_inf gy = Mvcs.getIoc().get(Dao.class).fetch(gy_inf.class,Cnd.where("userid","=",user.getId()));
         return gy;
+    }
+
+    public static String getCurrentGyid(){
+        Subject currentUser = SecurityUtils.getSubject();
+        Sys_user user = (Sys_user) currentUser.getPrincipal();
+        gy_inf gy = Mvcs.getIoc().get(Dao.class).fetch(gy_inf.class,Cnd.where("userid","=",user.getId()));
+        return gy.getGyid();
     }
 }

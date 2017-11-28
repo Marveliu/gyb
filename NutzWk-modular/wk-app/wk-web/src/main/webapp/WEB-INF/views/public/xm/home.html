@@ -152,9 +152,9 @@ layout("/layouts/platform.html"){
                     var xmtitle = n.taskname;              //名称
                     var xminfo = n.info;                //简介
                     var award = n.award;                //奖金
-                    var firstcommit = format(n.firstcommit);     //初稿时间
-                    var endtime = format(n.endtime);             //截止时间
-                    var at = format(n.publishAt);                //发布时间
+                    var firstcommit = moment(parseInt(n.firstcommit * 1000)).format("YYYY-MM-DD HH:mm:ss");     //初稿时间
+                    var endtime = moment(parseInt(n.endtime * 1000)).format("YYYY-MM-DD HH:mm:ss");             //截止时间
+                    var at = moment(parseInt(n.publishAt * 1000)).format("YYYY-MM-DD HH:mm:ss");                //发布时间
                     var resultitem = '<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 switch-item">' +
                             '<section class="panel">' +
                             '<div class="panel-body">' +
@@ -247,18 +247,6 @@ layout("/layouts/platform.html"){
         $('#search').text(SearchName);
         var SearchType = $('#SearchType').val(type);
 
-    }
-    function add0(m){return m<10?'0'+m:m }
-    function format(shijianchuo)
-    {
-        var time = new Date(shijianchuo);
-        var y = time.getFullYear();
-        var m = time.getMonth()+1;
-        var d = time.getDate();
-        var h = time.getHours();
-        var mm = time.getMinutes();
-        var s = time.getSeconds();
-        return y+'-'+add0(m)+'-'+add0(d)+' '+add0(h)+':'+add0(mm)+':'+add0(s);
     }
 </script>
 

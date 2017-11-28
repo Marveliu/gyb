@@ -14,9 +14,9 @@ public class xm_apply extends BaseModel implements Serializable {
 
     @Column
     @Name
-    @Comment("任务书编号")
+    @Comment("申请编号")
     @ColDefine(type = ColType.VARCHAR, width = 32)
-    @Prev(els = {@EL("$me.taskid()")})
+    @Prev(els = {@EL("uuid()")})
     private String id;
 
     @Column

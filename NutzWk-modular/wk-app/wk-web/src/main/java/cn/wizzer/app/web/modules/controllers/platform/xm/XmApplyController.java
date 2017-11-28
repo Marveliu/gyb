@@ -1,6 +1,8 @@
 package cn.wizzer.app.web.modules.controllers.platform.xm;
 
+import cn.wizzer.app.gz.modules.models.gz_inf;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
+import cn.wizzer.app.web.commons.util.UserInfUtil;
 import cn.wizzer.app.xm.modules.models.xm_apply;
 import cn.wizzer.app.xm.modules.services.XmApplyService;
 import cn.wizzer.framework.base.Result;
@@ -8,13 +10,15 @@ import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
 import cn.wizzer.framework.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.nutz.dao.Cnd;
+import org.nutz.dao.*;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.*;
+import org.nutz.trans.Atom;
+import org.nutz.trans.Trans;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -26,10 +30,49 @@ public class XmApplyController{
     @Inject
     private XmApplyService xmApplyService;
 
+    @Inject
+    private Dao dao;
+
     @At("")
     @Ok("beetl:/platform/xm/apply/index.html")
     @RequiresPermissions("platform.xm.apply")
     public void index() {
+    }
+
+    @At({"/deal/?"})
+    @Ok("json")
+    @RequiresPermissions("platform.xm.apply.deal")
+    @SLog(tag = "xm_apply", msg = "${req.getAttribute('id')}")
+    public Object delete(String id, HttpServletRequest req) {
+        try {
+            gz_inf gz = UserInfUtil.getCurrentGz();
+            String opBy = gz.getId();
+            int opAt = (int) (System.currentTimeMillis() / 1000);
+            Trans.exec(new Atom() {
+                @Override
+                public void run() {
+                    //更新其他列表
+                    dao.execute(Sqls.create("update xm_apply set status = @status,opBy = @opBy,opAt = @opAt where xmtaskid = @xmtaskid")
+                            .setParam("status",2)
+                            .setParam("opBy",opBy)
+                            .setParam("opAt",opAt)
+                            .setParam("xmtaskid",id)
+                    );
+                    xm_apply apply =  xmApplyService.fetch(id);
+                    apply.setStatus(1);
+                    apply.setOpBy(opBy);
+                    apply.setOpAt(opAt);
+                    xmApplyService.update(apply);
+                    //正式立项
+                }
+            });
+            return Result.success("system.success");
+        } catch (Exception e) {
+            return Result.error("system.error");
+        }
+
+
+
     }
 
     @At("/data")

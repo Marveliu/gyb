@@ -1,11 +1,13 @@
 package cn.wizzer.app.web.modules.controllers.platform.xm;
 
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
+import cn.wizzer.app.web.commons.util.UserInfUtil;
 import cn.wizzer.app.xm.modules.models.xm_apply;
 import cn.wizzer.app.xm.modules.services.XmApplyService;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
+import cn.wizzer.framework.util.DateUtil;
 import cn.wizzer.framework.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
@@ -20,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @IocBean
-@At("/platform/xm/apply")
+@At("/platform/xm/person")
 public class XmPersonController {
     private static final Log log = Logs.get();
     @Inject
@@ -28,20 +30,28 @@ public class XmPersonController {
 
     /**
     * @function: 受理用户提交任务书的申请
-    * @param:
-    * @return:
+    * @param: 申请人编号，任务书编号
+    * @return: 是否已经申请
     * @note:
     */
     @At
     @Ok("json")
     @RequiresPermissions("platform.xm.person")
-    @SLog(tag = "xm_apply", msg = "${args[0].id}")
+    @SLog(tag = "xm_apply", msg = "")
     public Object apply(
-            @Param("xmtaskid") String xmtaskid,
-            HttpServletRequest req) {
+            @Param("xmtaskid") String xmtaskid) {
         try {
-
-
+            String gyid = UserInfUtil.getCurrentGyid();
+            if(null!= xmApplyService.fetch(Cnd.where("gyid","=",gyid).and("xmtaskid","=",xmtaskid)))
+            {
+                return Result.error("你已经申请过了！");
+            }
+            xm_apply apply = new xm_apply();
+            apply.setXmtaskid(xmtaskid);
+            apply.setGyid(gyid);
+            apply.setStatus(0);
+            apply.setAt(DateUtil.getTime(DateUtil.getDate()));
+            xmApplyService.insert(apply);
             return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");
