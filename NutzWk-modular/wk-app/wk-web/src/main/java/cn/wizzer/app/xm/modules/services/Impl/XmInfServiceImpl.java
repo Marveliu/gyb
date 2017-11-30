@@ -1,8 +1,8 @@
-package cn.wizzer.app.code.modules.services.impl;
+package cn.wizzer.app.xm.modules.services.Impl;
 
+import cn.wizzer.app.xm.modules.models.xm_inf;
+import cn.wizzer.app.xm.modules.services.XmInfService;
 import cn.wizzer.framework.base.service.BaseServiceImpl;
-import cn.wizzer.app.code.modules.models.xm_inf;
-import cn.wizzer.app.code.modules.services.XmInfService;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.IocBean;
 

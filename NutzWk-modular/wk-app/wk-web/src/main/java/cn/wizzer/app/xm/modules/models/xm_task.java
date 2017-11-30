@@ -263,14 +263,12 @@ public class xm_task extends BaseModel implements Serializable {
      * @note: 编号说明:17年份,10497学校代码,0学历:(0本科1研究生2博士),0性别 (0女生 ,1男生),010顺序码
      */
     public String taskid() {
-
         Dao dao =  Mvcs.getIoc().get((Dao.class));
         StringBuilder str = new StringBuilder();
         //年份
         str.append(DateUtil.format(new Date(),"yyyy").substring(2,4));
         //项目类型
         str.append(dao.fetch(lib_task.class,this.category).getUnitcode());
-
         //顺序码
         XmTaskServiceImpl xmTaskService = new XmTaskServiceImpl(dao);
         str.append(xmTaskService.count());

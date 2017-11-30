@@ -1,7 +1,7 @@
-package cn.wizzer.app.code.modules.services;
+package cn.wizzer.app.xm.modules.services;
 
+import cn.wizzer.app.xm.modules.models.xm_inf;
 import cn.wizzer.framework.base.service.BaseService;
-import cn.wizzer.app.code.modules.models.xm_inf;
 
 public interface XmInfService extends BaseService<xm_inf>{
 

@@ -1,0 +1,50 @@
+<div class="modal-body no-p">
+    <div class="row">
+        <div class="col-xs-12">
+            <section class="panel panel-primary no-b">
+                <header class="panel-heading clearfix brtl brtr">
+                    <div class="overflow-hidden">
+                        <a href="javascript:;" class="h4 show no-m pt5">xm_feedback</a>
+                        <small>${obj.id}</small>
+                    </div>
+                </header>
+                <div class="list-group">
+                    <table class="table table-bordered table-striped mg-t datatable">
+                        <tbody>
+                                                        <tr>
+                                <td>${msg['xm.feedback.column.parentid']}</td><td>${obj.parentid}</td>
+                            </tr>
+                                                        <tr>
+                                <td>${msg['xm.feedback.column.xminfid']}</td><td>${obj.xminfid}</td>
+                            </tr>
+                                                        <tr>
+                                <td>${msg['xm.feedback.column.at']}</td><td>${obj.at}</td>
+                            </tr>
+                                                        <tr>
+                                <td>${msg['xm.feedback.column.fileurl']}</td><td>${obj.fileurl}</td>
+                            </tr>
+                                                        <tr>
+                                <td>${msg['xm.feedback.column.note']}</td><td>${obj.note}</td>
+                            </tr>
+                                                        <tr>
+                                <td>${msg['xm.feedback.column.gyid']}</td><td>${obj.gyid}</td>
+                            </tr>
+                                                        <tr>
+                                <td>${msg['xm.feedback.column.nextcommit']}</td><td>${obj.nextcommit}</td>
+                            </tr>
+                                                        <tr>
+                                <td>${msg['xm.feedback.column.reply']}</td><td>${obj.reply}</td>
+                            </tr>
+                                                        <tr>
+                                <td>${msg['xm.feedback.column.status']}</td><td>${obj.status}</td>
+                            </tr>
+                                                    </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">${msg['globals.button.ok']}</button>
+</div>

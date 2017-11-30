@@ -3,8 +3,8 @@ package cn.wizzer.app.web.modules.controllers.platform.xm;
 import cn.wizzer.app.gz.modules.models.gz_inf;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
 import cn.wizzer.app.web.commons.util.UserInfUtil;
-import cn.wizzer.app.xm.modules.models.xm_apply;
-import cn.wizzer.app.xm.modules.services.XmApplyService;
+import cn.wizzer.app.xm.modules.models.*;
+import cn.wizzer.app.xm.modules.services.*;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
@@ -31,6 +31,15 @@ public class XmApplyController{
     private XmApplyService xmApplyService;
 
     @Inject
+    private XmTaskService xmTaskService;
+
+    @Inject
+    private XmInfService xmInfService;
+
+    @Inject
+    private XmBillService xmBillService;
+
+    @Inject
     private Dao dao;
 
     @At("")
@@ -42,12 +51,16 @@ public class XmApplyController{
     @At({"/deal/?"})
     @Ok("json")
     @RequiresPermissions("platform.xm.apply.deal")
-    @SLog(tag = "xm_apply", msg = "${req.getAttribute('id')}")
-    public Object delete(String id, HttpServletRequest req) {
+    @SLog(tag = "xm_apply", msg = "受理项目申请")
+    public Object deal(String id, HttpServletRequest req) {
         try {
             gz_inf gz = UserInfUtil.getCurrentGz();
+
+            xm_apply apply =  xmApplyService.fetch(id);
+            xm_task task = xmTaskService.fetch(apply.getXmtaskid());
             String opBy = gz.getId();
             int opAt = (int) (System.currentTimeMillis() / 1000);
+
             Trans.exec(new Atom() {
                 @Override
                 public void run() {
@@ -58,12 +71,27 @@ public class XmApplyController{
                             .setParam("opAt",opAt)
                             .setParam("xmtaskid",id)
                     );
-                    xm_apply apply =  xmApplyService.fetch(id);
+
                     apply.setStatus(1);
                     apply.setOpBy(opBy);
                     apply.setOpAt(opAt);
                     xmApplyService.update(apply);
-                    //正式立项
+
+                    //立项 账单
+                    xm_inf xf = new  xm_inf();
+                    xm_bill bill = new xm_bill();
+                    xf.setGyid(gz.getId());
+                    xf.setXmtaskid(id);
+                    xf.setAt(opAt);
+                    xf.setOpBy(opBy);
+                    xf.setStatus(0);
+                    xf = xmInfService.insert(xf);
+
+                    bill.setXminfid(xf.getId());
+                    bill.setOpBy(opBy);
+                    bill.setOpAt(opAt);
+                    bill.setPaysum(task.getAward());
+                    xmBillService.insert(bill);
                 }
             });
             return Result.success("system.success");

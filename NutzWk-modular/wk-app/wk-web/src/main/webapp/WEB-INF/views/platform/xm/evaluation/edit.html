@@ -3,7 +3,7 @@ layout("/layouts/platform.html"){
 %>
 <header class="header navbar bg-white shadow">
     <div class="btn-group tool-button">
-        <a class="btn btn-primary navbar-btn" href="${base}/platform/code/inf" id="goBack" data-pjax><i class="ti-angle-left"></i>${msg['globals.button.back']}</a>
+        <a class="btn btn-primary navbar-btn" href="${base}/platform/xm/evaluation" id="goBack" data-pjax><i class="ti-angle-left"></i>${msg['globals.button.back']}</a>
     </div>
 </header>
 
@@ -11,43 +11,36 @@ layout("/layouts/platform.html"){
     <div class="wrapper" style="min-height:500px;">
         <section class="panel panel-form">
             <form id="editForm" role="form" class="form-horizontal parsley-form" data-parsley-validate
-                  action="${base}/platform/code/inf/editDo" method="post">
+                  action="${base}/platform/xm/evaluation/editDo" method="post">
                 <input name="id" type="hidden" value="${obj.id}">
                 <div class="row mb10">
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="gyid" class="col-sm-2 control-label">${msg['xm.inf.column.gyid']}</label>
+                            <label for="xminfid" class="col-sm-2 control-label">${msg['xm.evaluation.column.xminfid']}</label>
                             <div class="col-sm-8">
-                                <input type="text" id="gyid" class="form-control" name="gyid" data-parsley-required="true"
-                                       placeholder="${msg['xm.inf.column.gyid']}" value="${obj.gyid}" >
+                                <input type="text" id="xminfid" class="form-control" name="xminfid" data-parsley-required="true"
+                                       placeholder="${msg['xm.evaluation.column.xminfid']}" value="${obj.xminfid}" >
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="xmtaskid" class="col-sm-2 control-label">${msg['xm.inf.column.xmtaskid']}</label>
+                            <label for="grade" class="col-sm-2 control-label">${msg['xm.evaluation.column.grade']}</label>
                             <div class="col-sm-8">
-                                <input type="text" id="xmtaskid" class="form-control" name="xmtaskid" data-parsley-required="true"
-                                       placeholder="${msg['xm.inf.column.xmtaskid']}" value="${obj.xmtaskid}" >
+                                <input type="text" id="grade" class="form-control" name="grade" data-parsley-required="true"
+                                       placeholder="${msg['xm.evaluation.column.grade']}" value="${obj.grade}" >
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="at" class="col-sm-2 control-label">${msg['xm.inf.column.at']}</label>
-                            <div class="col-sm-8">
-                                <input type="text" id="at" class="form-control" name="at" data-parsley-required="true"
-                                       placeholder="${msg['xm.inf.column.at']}" value="${obj.at}" >
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="status" class="col-sm-2 control-label">${msg['xm.inf.column.status']}</label>
-                            <div class="col-sm-8">
-                                <input type="text" id="status" class="form-control" name="status" data-parsley-required="true"
-                                       placeholder="${msg['xm.inf.column.status']}" value="${obj.status}" >
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="note" class="col-sm-2 control-label">${msg['xm.inf.column.note']}</label>
+                            <label for="note" class="col-sm-2 control-label">${msg['xm.evaluation.column.note']}</label>
                             <div class="col-sm-8">
                                 <input type="text" id="note" class="form-control" name="note" data-parsley-required="true"
-                                       placeholder="${msg['xm.inf.column.note']}" value="${obj.note}" >
+                                       placeholder="${msg['xm.evaluation.column.note']}" value="${obj.note}" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="at" class="col-sm-2 control-label">${msg['xm.evaluation.column.at']}</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="at" class="form-control" name="at" data-parsley-required="true"
+                                       placeholder="${msg['xm.evaluation.column.at']}" value="${obj.at}" >
                             </div>
                         </div>
                     </div>
