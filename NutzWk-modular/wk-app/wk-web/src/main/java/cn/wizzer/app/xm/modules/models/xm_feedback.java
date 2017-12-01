@@ -34,7 +34,7 @@ public class xm_feedback extends BaseModel implements Serializable {
     private int at;
 
     @Column
-    @Comment("审核文件编号")
+    @Comment("审核文件")
     @ColDefine(type = ColType.VARCHAR, width = 255)
     private String fileurl;
 

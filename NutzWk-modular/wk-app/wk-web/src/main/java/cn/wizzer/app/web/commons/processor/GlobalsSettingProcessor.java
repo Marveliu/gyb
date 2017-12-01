@@ -1,6 +1,7 @@
 package cn.wizzer.app.web.commons.processor;
 
 import cn.wizzer.app.web.commons.base.Globals;
+import cn.wizzer.app.web.commons.util.UserInfUtil;
 import cn.wizzer.app.web.commons.util.ViewUtil;
 import cn.wizzer.framework.util.*;
 import org.nutz.lang.Strings;
@@ -20,10 +21,12 @@ public class GlobalsSettingProcessor extends AbstractProcessor {
 		ac.getRequest().setAttribute("AppName", Globals.AppName);
 		ac.getRequest().setAttribute("AppDomain", Globals.AppDomain);
 		ac.getRequest().setAttribute("AppShrotName", Globals.AppShrotName);
+
 		ac.getRequest().setAttribute("shiro", Mvcs.ctx().getDefaultIoc().get(ShiroUtil.class));
 		ac.getRequest().setAttribute("date", Mvcs.ctx().getDefaultIoc().get(DateUtil.class));
 		ac.getRequest().setAttribute("string", Mvcs.ctx().getDefaultIoc().get(StringUtil.class));
 		ac.getRequest().setAttribute("view", Mvcs.ctx().getDefaultIoc().get(ViewUtil.class));
+		ac.getRequest().setAttribute("user", Mvcs.ctx().getDefaultIoc().get(UserInfUtil.class));
 
 
 		// 如果url中有语言属性则设置

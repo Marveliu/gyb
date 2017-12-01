@@ -12,11 +12,11 @@ layout("/layouts/platform.html"){
                     <nav role="navigation">
                         <div class="no-padding">
                             <ul class="nav nav-stacked" id="xminflist">
-                                <li>
-                                    <a onclick="xmfeedback()">
-                                        <i class="ti-control-record text-success pull-right"></i> Work
-                                    </a>
-                                </li>
+                                <!--<li>-->
+                                    <!--<a onclick="xmfeedback()">-->
+                                    <!--<i class="ti-control-record text-success pull-right"></i> Work-->
+                                <!--</a>-->
+                                <!--</li>-->
                             </ul>
                         </div>
                     </nav>
@@ -29,7 +29,7 @@ layout("/layouts/platform.html"){
 <section class="content-wrap bg-white">
     <header class="header navbar bg-white shadow">
         <div class="btn-group tool-button">
-            <a id="add" class="btn btn-primary navbar-btn" href="${base}/platform/xm/feedback/add" data-pjax><i class="ti-plus"></i> ${msg['globals.button.add']}</a>
+            <button id="add" class="btn btn-primary navbar-btn"  onclick="addfeedback()" ><i class="ti-plus"></i> ${msg['globals.button.add']}</button>
             <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> ${msg['globals.button.delete.more']}</button>
         </div>
         <div class="pull-right offscreen-right">
@@ -41,6 +41,8 @@ layout("/layouts/platform.html"){
     </header>
     <div class=panel-body style="padding-top: 50px;">
         <div class="table-responsive no-border">
+            <input id="xmid" type="hidden" value="">
+            <input id="gyid" type="hidden" value="${@user.getCurrentGyid()}">
             <table class="table table-bordered table-striped mg-t datatable">
                 <thead>
                 <tr>
@@ -101,14 +103,53 @@ layout("/layouts/platform.html"){
         </div>
     </div>
 </div>
+<div id="dialogCommit" class="modal fade bs-modal-sm" tabindex="-2" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">提交反馈 </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        提交您的项目反馈之后，原来的项目反馈将不能进行修改，请确认！
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">${msg['globals.button.cancel']}</button>
+                <button id="doCommit" type="button" class="btn btn-primary" data-loading-text="正在提交">确认提交</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="dialogDetail" class="modal fade bs-modal-sm" tabindex="-3" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
         </div>
     </div>
 </div>
+
 <script language="JavaScript">
     var datatable;
+    
+    function addfeedback() {
+        var xmid = $('#xmid').val();
+        if(xmid.length == 0){
+            Toast.error("你必须选择一个正在进行的项目！")
+        }
+        else{
+            $.post("${base}/platform/xm/person/addcheck/"+xmid,{} , function (data) {
+                if (data.code == 0) {
+                    $(location).attr('href', '${base}/platform/xm/person/feedbackadd/'+xmid);
+                } else {
+                    Toast.error(data.msg);
+                }
+            }, "json");
+        }
+    }
+
     function initDatatable() {
         datatable = $('.datatable').DataTable({
             "dom": '<"toolbar">frtip',
@@ -130,7 +171,8 @@ layout("/layouts/platform.html"){
                 "url": "${base}/platform/xm/person/feedbackdata",
                 "type": "post",
                 "data": function (d) {
-                    d.unitid = $('#unitid').val();
+                    d.xmid = $('#xmid').val();
+                    d.gyid = $('#gyid').val();
                 }
             },
             "order": [[0, "desc"]],
@@ -151,12 +193,23 @@ layout("/layouts/platform.html"){
                         return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
                                 ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
                                 '<li><a href="${base}/platform/xm/feedback/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
-                                '<li><a href="${base}/platform/xm/feedback/edit/' + row.id + '" data-pjax>${msg["globals.button.update"]}</a></li>' +
+                                '<li><a href="javascript:;" onclick="modify(\'' + row.id + '\')">修 改</a></li>' +
                                 '<li class="divider"></li>' +
                                 '<li><a href="javascript:;" onclick="del(\'' + row.id + '\')">${msg["globals.button.delete"]}</a></li>' +
+                                '<li><a href="javascript:;" onclick="commit(\'' + row.id + '\')">提 交</a></li>' +
                                 '</ul></div>';
                     },
                     "targets": 9
+                },
+                {
+                    "render": function (data, type, row) {
+                        if (data) {
+                            return '<i id="status' + row.id + '" class="fa fa-circle text-success ml5"></i>';
+                        } else {
+                            return '<i id="status' + row.id + '" class="fa fa-circle text-danger ml5"></i>';
+                        }
+                    },
+                    "targets": -1
                 }
             ]
         });
@@ -165,6 +218,33 @@ layout("/layouts/platform.html"){
         });
         $("#searchBtn").on('click', function () {
             datatable.ajax.reload();
+        });
+    }
+    function initxmlist() {
+        $('#xminflist').html();
+        $.ajax({
+            url:"/platform/xm/person/xminflist",
+            type:"get",
+            contentType:"application/json;charset=utf-8",
+            dataType:"json",
+            success:function(data){
+                console.log(data);
+                //i表示在data中的索引位置，n表示包含的信息的对象
+                for(var key in data) {
+                    console.log(key, data[key]);
+                    var xmname = key;
+                    var xmid = data[key];
+                    var resultitem = '<li>' +
+                            '<a onclick="xmfeedback(' + "'"+ xmid +"'"+')">' +
+                            '<i class="ti-control-record text-success pull-right"></i>' + xmname +
+                            '</a>' +
+                            '</li>';
+                    $('#xminflist').append(resultitem);
+                }
+            },
+            error:function(){
+                Toast.error("加载出错！")
+            }
         });
     }
     function del(id) {
@@ -214,11 +294,43 @@ layout("/layouts/platform.html"){
     }
     $(function () {
         initDatatable();
+        initxmlist();
         $("#dialogDetail").on("hidden.bs.modal", function () {
             $(this).removeData("bs.modal");
         });
     });
     function xmfeedback(id) {
+        $('#xmid').val(id);
+        datatable.ajax.reload();
+    }
+    function modify(id) {
+            $.post("${base}/platform/xm/person/modifycheck/"+id,{} , function (data) {
+                if (data.code == 0) {
+                    $(location).attr('href', '${base}/platform/xm/person/feedbackedit/'+id);
+                } else {
+                    Toast.error(data.msg);
+                }
+                btn.button("reset");
+                dialog.modal("hide");
+            }, "json");
+    }
+    function commit(id) {
+        var dialog = $("#dialogCommit");
+        dialog.modal("show");
+        dialog.find("#doCommit").unbind("click");
+        dialog.find("#doCommit").bind("click", function (event) {
+            var btn = $(this);
+            btn.button("loading");
+            $.post("${base}/platform/xm/person/feedbackcommit/"+id,{} , function (data) {
+                if (data.code == 0) {
+                    datatable.ajax.reload(null,false);
+                } else {
+                    Toast.error(data.msg);
+                }
+                btn.button("reset");
+                dialog.modal("hide");
+            }, "json");
+        });
     }
 </script>
 <%}%>

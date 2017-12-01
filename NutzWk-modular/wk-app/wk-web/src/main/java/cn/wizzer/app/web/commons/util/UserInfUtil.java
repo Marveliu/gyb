@@ -32,7 +32,7 @@ public class UserInfUtil {
 
 
     /**
-    * @function: 返回雇员di
+    * @function: 返回登陆的雇员
     * @param:
     * @return:
     * @note:

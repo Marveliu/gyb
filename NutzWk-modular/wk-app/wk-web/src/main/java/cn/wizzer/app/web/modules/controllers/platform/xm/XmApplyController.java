@@ -48,11 +48,20 @@ public class XmApplyController{
     public void index() {
     }
 
-    @At({"/deal/?"})
+    /**
+    * @function:
+    * @param: 雇员编号，申请编号
+    * @return:
+    * @note:
+    */
+    @At({"/deal"})
     @Ok("json")
     @RequiresPermissions("platform.xm.apply.deal")
     @SLog(tag = "xm_apply", msg = "受理项目申请")
-    public Object deal(String id, HttpServletRequest req) {
+    public Object deal(
+            @Param("applyid") String id,
+            @Param("gyid") String gyid,
+            HttpServletRequest req) {
         try {
             gz_inf gz = UserInfUtil.getCurrentGz();
 
@@ -80,8 +89,8 @@ public class XmApplyController{
                     //立项 账单
                     xm_inf xf = new  xm_inf();
                     xm_bill bill = new xm_bill();
-                    xf.setGyid(gz.getId());
-                    xf.setXmtaskid(id);
+                    xf.setGyid(gyid);
+                    xf.setXmtaskid(task.getId());
                     xf.setAt(opAt);
                     xf.setOpBy(opBy);
                     xf.setStatus(0);

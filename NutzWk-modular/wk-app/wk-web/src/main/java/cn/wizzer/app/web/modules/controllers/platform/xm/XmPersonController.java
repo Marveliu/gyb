@@ -105,7 +105,7 @@ public class XmPersonController {
     * @return:
     * @note:
     */
-    @At("/psersonxm")
+    @At("/personxm")
     @Ok("beetl:/platform/xm/person/personxm.html")
     @RequiresPermissions("platform.xm.person")
     public void psersonxm() {
@@ -120,9 +120,20 @@ public class XmPersonController {
     @At("/feedbackdata")
     @Ok("json")
     @RequiresPermissions("platform.xm.person")
-    public Object feedbackdata(@Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
+    public Object feedbackdata(
+            @Param("xmid") String xmid,
+            @Param("length") int length,
+            @Param("start") int start,
+            @Param("draw") int draw,
+            @Param("::order") List<DataTableOrder> order,
+            @Param("::columns") List<DataTableColumn> columns) {
+
         Cnd cnd = Cnd.NEW();
         String gyid = UserInfUtil.getCurrentGyid();
+
+        cnd.and("xminfid","=",xmid);
+        cnd.desc("at");
+
         return xmFeedbackService.data(length, start, draw, order, columns, cnd, null);
     }
 
@@ -133,11 +144,20 @@ public class XmPersonController {
     * @return:
     * @note:
     */
-    @At("/feedbackadd")
+    @At("/feedbackadd/?")
     @Ok("beetl:/platform/xm/person/addfeedback.html")
     @RequiresPermissions("platform.xm.person")
-    public void feedbackadd() {
+    public void feedbackadd(String id,HttpServletRequest req) {
 
+        String gyid = UserInfUtil.getCurrentGyid();
+        int count = xmFeedbackService.count(Cnd.where("gyid","=",gyid));
+        if(count != 0){
+            //设置父id
+            List<xm_feedback> xfd = xmFeedbackService.query(Cnd.where("gyid","=",gyid).desc("at"));
+            req.setAttribute("parentid",xfd.get(0).getId());
+        }
+        req.setAttribute("count",0);
+        req.setAttribute("xmid",id);
     }
 
     /**
@@ -153,18 +173,10 @@ public class XmPersonController {
     public Object feedbackaddDo(@Param("..")xm_feedback xmFeedback, HttpServletRequest req) {
         try {
             String gyid = UserInfUtil.getCurrentGyid();
-
             xmFeedback.setAt((int) (System.currentTimeMillis() / 1000));
             xmFeedback.setGyid(gyid);
-            xmFeedback.setStatus(0);;
-
-            int count = xmFeedbackService.count(Cnd.where("gyid","=",gyid));
-
-            if(count != 0){
-                //设置父id
-                List<xm_feedback> xfd = xmFeedbackService.query(Cnd.where("gyid","=",gyid).desc("at"));
-                xmFeedback.setParentid(xfd.get(0).getId());
-            }
+            xmFeedback.setStatus(0);
+            xmFeedback.setReply(" ");
             xmFeedbackService.insert(xmFeedback);
             return Result.success("system.success");
 
@@ -193,9 +205,9 @@ public class XmPersonController {
         }
         //检查上一次提交状态
 
-        xm_feedback xfd = xmFeedbackService.query(Cnd.where("id","=",id).desc("at")).get(0);
-        if(xfd.getStatus()<3){
-            return Result.error("上次反馈为完结");
+        List<xm_feedback> xfd = xmFeedbackService.query(Cnd.where("xminfid","=",id).desc("at"));
+        if(xfd.get(0).getStatus()<3){
+            return Result.error("上次反馈未完结");
         }else{
             return  Result.success("允许添加");
         }
@@ -208,7 +220,7 @@ public class XmPersonController {
     * @return:
     * @note:
     */
-    @At("feedbackcommit")
+    @At("/feedbackcommit/?")
     @Ok("json")
     @RequiresPermissions("platform.xm.person")
     @SLog(tag = "xm_feedback", msg = "")
@@ -231,13 +243,13 @@ public class XmPersonController {
     @At("/modifycheck/?")
     @Ok("json")
     @RequiresPermissions("platform.xm.person")
-    public Object modifycheck(String id,HttpServletRequest req) {
+    public Object modifycheck(int id,HttpServletRequest req) {
         //检查feedback的审核状态，如果已经提交则雇员无法再修改或者删除
         xm_feedback xfd = xmFeedbackService.fetch(id);
         if (xfd.getStatus() != 0) {
-            return Result.success("system.success");
+            return Result.error("你已经确认提交！");
         }
-        return Result.error("你已经确认提交！");
+        return Result.success("system.success");
     }
 
     /**
@@ -247,10 +259,11 @@ public class XmPersonController {
     * @note:
     */
     @At("/feedbackedit/?")
-    @Ok("json")
+    @Ok("beetl:/platform/xm/person/feedbackedit.html")
     @RequiresPermissions("platform.xm.person")
-    public void edit(String id,HttpServletRequest req) {
-        req.setAttribute("obj", xmFeedbackService.fetch(id));
+    public void edit(int id,HttpServletRequest req) {
+        req.setAttribute("obj", xmFeedbackService.fetch(id)
+        );
     }
 
     /**
@@ -267,7 +280,9 @@ public class XmPersonController {
         try {
             xmFeedback.setOpBy(StringUtil.getUid());
             xmFeedback.setOpAt((int) (System.currentTimeMillis() / 1000));
+
             xmFeedbackService.updateIgnoreNull(xmFeedback);
+
             return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");
@@ -280,21 +295,19 @@ public class XmPersonController {
     * @return:
     * @note:
     */
-    @At("xminflist")
+    @At("/xminflist")
     @Ok("json")
     @RequiresPermissions("platform.xm.person")
-    public Object tree(@Param("pid") String pid) {
+    public Object xminflist() {
         String gyid = UserInfUtil.getCurrentGyid();
-
         //<name,id>
         List<xm_inf> xm_infs = xmInfService.query(Cnd.where("gyid","=",gyid));
         Map<String, String> obj = new HashMap<>();
         for(xm_inf inf:xm_infs){
-            //要改试图
-            obj.put(xmTaskService.fetch(inf.getXmtaskid()).getTaskname() ,inf.getId());
+            xm_task task = xmTaskService.fetch(inf.getXmtaskid());
+            String taskname = task.getTaskname();
+            obj.put(taskname,inf.getId());
         }
         return obj;
     }
-
-
 }
