@@ -7,7 +7,6 @@ import cn.wizzer.app.xm.modules.services.*;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
-import cn.wizzer.framework.util.DateUtil;
 import cn.wizzer.framework.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
@@ -41,7 +40,7 @@ public class XmPersonController {
     * @return: 是否已经申请
     * @note:
     */
-    @At("apply")
+    @At("/apply")
     @Ok("json")
     @RequiresPermissions("platform.xm.person")
     @SLog(tag = "xm_apply", msg = "")
@@ -49,16 +48,24 @@ public class XmPersonController {
             @Param("xmtaskid") String xmtaskid) {
         try {
             String gyid = UserInfUtil.getCurrentGyid();
+
+            if(null == xmtaskid){
+                return Result.error("请选择申请的项目");
+            }
+
             if(null!= xmApplyService.fetch(Cnd.where("gyid","=",gyid).and("xmtaskid","=",xmtaskid)))
             {
                 return Result.error("你已经申请过了！");
             }
+
             xm_apply apply = new xm_apply();
             apply.setXmtaskid(xmtaskid);
             apply.setGyid(gyid);
             apply.setStatus(0);
-            apply.setAt(DateUtil.getTime(DateUtil.getDate()));
+            apply.setAt((int) (System.currentTimeMillis() / 1000));
             xmApplyService.insert(apply);
+
+
             return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");

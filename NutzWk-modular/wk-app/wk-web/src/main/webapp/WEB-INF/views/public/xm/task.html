@@ -134,9 +134,9 @@ layout("/layouts/platform.html"){
 <script>
     function xmapply(id) {
             $("#xmapply").button("loading");
-            $.post("${base}/platform/xm/person/apply?xmtaskid" + id, function (data) {
+            $.post("${base}/platform/xm/person/apply?xmtaskid=" + id, function (data) {
                 if (data.code == 0) {
-                    Toast.error(data.msg);
+                    Toast.success(data.msg);
                 } else {
                     Toast.error(data.msg);
                 }

@@ -44,6 +44,8 @@ public class xm_inf extends BaseModel implements Serializable {
     private String note;
 
     //参照
+    @One(field = "xmtaskid")
+    private xm_task xmtask;
 
 
     public String getId() {

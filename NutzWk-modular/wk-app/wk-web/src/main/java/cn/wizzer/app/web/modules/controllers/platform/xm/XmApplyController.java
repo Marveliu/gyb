@@ -107,9 +107,6 @@ public class XmApplyController{
         } catch (Exception e) {
             return Result.error("system.error");
         }
-
-
-
     }
 
     @At("/data")
