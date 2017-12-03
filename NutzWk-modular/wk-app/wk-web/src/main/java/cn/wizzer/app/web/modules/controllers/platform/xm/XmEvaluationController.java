@@ -1,5 +1,8 @@
 package cn.wizzer.app.web.modules.controllers.platform.xm;
 
+import cn.wizzer.app.web.commons.util.UserInfUtil;
+import cn.wizzer.app.xm.modules.models.v_xminf;
+import cn.wizzer.app.xm.modules.services.V_XmInfService;
 import cn.wizzer.app.xm.modules.services.XmEvaluationService;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
 import cn.wizzer.app.xm.modules.models.xm_evaluation;
@@ -17,7 +20,7 @@ import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.*;
 
 @IocBean
 @At("/platform/xm/evaluation")
@@ -25,6 +28,9 @@ public class XmEvaluationController{
     private static final Log log = Logs.get();
     @Inject
     private XmEvaluationService xmEvaluationService;
+
+    @Inject
+    private V_XmInfService v_xmInfService;
 
     @At("")
     @Ok("beetl:/platform/xm/evaluation/index.html")
@@ -37,6 +43,8 @@ public class XmEvaluationController{
     @RequiresPermissions("platform.xm.evaluation")
     public Object data(@Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
 		Cnd cnd = Cnd.NEW();
+
+
     	return xmEvaluationService.data(length, start, draw, order, columns, cnd, null);
     }
 
@@ -110,6 +118,31 @@ public class XmEvaluationController{
 		}else{
             req.setAttribute("obj", null);
         }
+    }
+
+    /**
+     * @function: 查询当前雇员经理负责的所有项目
+     * @param:
+     * @return:
+     * @note:
+     */
+    @At("/xminflist")
+    @Ok("json")
+    @RequiresPermissions("platform.xm.feedback")
+    public Object xminflist(){
+
+        String gzid = UserInfUtil.getCurrentGzid();
+
+        //查询视图
+        List<v_xminf> vxminfs = v_xmInfService.query(Cnd.where("author","=",gzid));
+        Map<String, String> obj = new HashMap<>();
+
+        for(v_xminf inf:vxminfs){
+            String taskname = inf.getTaskname();
+            obj.put(taskname,inf.getId());
+        }
+
+        return obj;
     }
 
 }

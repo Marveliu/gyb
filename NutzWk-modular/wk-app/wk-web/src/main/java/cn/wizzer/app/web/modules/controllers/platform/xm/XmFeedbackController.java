@@ -13,7 +13,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.View;
@@ -156,12 +155,8 @@ public class XmFeedbackController{
     @At("/detail/?")
     @Ok("beetl:/platform/xm/feedback/detail.html")
     @RequiresPermissions("platform.xm.feedback")
-	public void detail(String id, HttpServletRequest req) {
-		if (!Strings.isBlank(id)) {
-            req.setAttribute("obj", xmFeedbackService.fetch(id));
-		}else{
-            req.setAttribute("obj", null);
-        }
+	public void detail(int id, HttpServletRequest req) {
+        req.setAttribute("obj", v_xmFeedbackService.fetch(Cnd.where("id","=",id)));
     }
 
     /**
@@ -189,7 +184,6 @@ public class XmFeedbackController{
         return obj;
     }
 
-
     /**
      * @function: 确认提交
      * @param:
@@ -210,4 +204,12 @@ public class XmFeedbackController{
         }
     }
 
+    public Object checkstatus(int id){
+        xm_feedback xfd = xmFeedbackService.fetch(id);
+        if(xfd.getStatus() < 2){
+            return Result.error("system.error");
+        }else {
+            return true;
+        }
+    }
 }

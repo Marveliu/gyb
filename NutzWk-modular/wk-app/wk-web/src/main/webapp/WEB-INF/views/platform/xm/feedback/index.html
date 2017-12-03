@@ -1,29 +1,6 @@
 <%
-layout("/layouts/platform.html"){
+layout("/layouts/platform-xm.html"){
 %>
-
-<aside class="sidebar-250 canvas-right bg-default ">
-    <header class="header navbar clearfix bb bg-default pl0 pr0">
-        <p class="navbar-text"><i class="fa fa-sitemap mr5"></i> 平台项目表</p>
-    </header>
-    <div class="content-wrap no-p">
-        <div class="wrapper2">
-            <div class="m5">
-                <nav role="navigation">
-                    <div class="no-padding">
-                        <ul class="nav nav-stacked" id="xminflist">
-                            <!--<li>-->
-                            <!--<a onclick="xmfeedback()">-->
-                            <!--<i class="ti-control-record text-success pull-right"></i> Work-->
-                            <!--</a>-->
-                            <!--</li>-->
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-        </div>
-    </div>
-</aside>
 
 
 <section class="content-wrap bg-white">
@@ -113,34 +90,8 @@ layout("/layouts/platform.html"){
 </div>
 <script language="JavaScript">
     var datatable;
-    function initxmlist() {
-        $('#xminflist').html();
-        $.ajax({
-            url:"/platform/xm/feedback/xminflist",
-            type:"get",
-            contentType:"application/json;charset=utf-8",
-            dataType:"json",
-            success:function(data){
-                console.log(data);
-                //i表示在data中的索引位置，n表示包含的信息的对象
-                for(var key in data) {
-                    console.log(key, data[key]);
-                    var xmname = key;
-                    var xmid = data[key];
-                    var resultitem = '<li>' +
-                            '<a onclick="xmfeedback(' + "'"+ xmid +"'"+')">' +
-                            '<i class="ti-control-record text-success pull-right"></i>' + xmname +
-                            '</a>' +
-                            '</li>';
-                    $('#xminflist').append(resultitem);
-                }
-            },
-            error:function(){
-                Toast.error("加载出错！")
-            }
-        });
-    }
-    function xmfeedback(id) {
+
+    function xminfset(id) {
         $('#xmid').val(id);
         datatable.ajax.reload();
     }
@@ -183,6 +134,12 @@ layout("/layouts/platform.html"){
             "columnDefs": [
                 {
                     "render": function (data, type, row) {
+                        if(row.status != 2 && row.status != 1){
+                            return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
+                                    ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
+                                    '<li><a href="${base}/platform/xm/feedback/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
+                                    '</ul></div>';
+                        }
                         return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
                                 ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
                                 '<li><a href="${base}/platform/xm/feedback/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
@@ -251,7 +208,6 @@ layout("/layouts/platform.html"){
 
     $(function () {
         initDatatable();
-        initxmlist();
         $("#dialogDetail").on("hidden.bs.modal", function () {
             $(this).removeData("bs.modal");
         });

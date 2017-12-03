@@ -12,11 +12,11 @@ layout("/layouts/platform.html"){
                     <nav role="navigation">
                         <div class="no-padding">
                             <ul class="nav nav-stacked" id="xminflist">
-                                <!--<li>-->
-                                    <!--<a onclick="xmfeedback()">-->
-                                    <!--<i class="ti-control-record text-success pull-right"></i> Work-->
-                                <!--</a>-->
-                                <!--</li>-->
+                                <li>
+                                    <a onclick="xmfeedback()">
+                                    <i class="ti-control-record text-success pull-right"></i> 全部项目
+                                </a>
+                                </li>
                             </ul>
                         </div>
                     </nav>
@@ -47,7 +47,7 @@ layout("/layouts/platform.html"){
                 <thead>
                 <tr>
                     <th>${msg['xm.feedback.column.parentid']}</th>
-                    <th>${msg['xm.feedback.column.xminfid']}</th>
+                    <th>项目名称</th>
                     <th>${msg['xm.feedback.column.at']}</th>
                     <th>${msg['xm.feedback.column.fileurl']}</th>
                     <th>${msg['xm.feedback.column.note']}</th>
@@ -178,7 +178,7 @@ layout("/layouts/platform.html"){
             "order": [[0, "desc"]],
             "columns": [
                 {"data": "parentid", "bSortable": true},
-                {"data": "xminfid", "bSortable": true},
+                {"data": "taskname", "bSortable": true},
                 {"data": "at", "bSortable": true},
                 {"data": "fileurl", "bSortable": true},
                 {"data": "note", "bSortable": true},
@@ -190,12 +190,17 @@ layout("/layouts/platform.html"){
             "columnDefs": [
                 {
                     "render": function (data, type, row) {
+                        if(row.status != 0){
+                            return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
+                                    ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
+                                    '<li><a href="${base}/platform/xm/person/feedbackdetail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
+                                    '</ul></div>';
+                        }
                         return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
                                 ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-                                '<li><a href="${base}/platform/xm/feedback/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
+                                '<li><a href="${base}/platform/xm/person/feedbackdetail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
                                 '<li><a href="javascript:;" onclick="modify(\'' + row.id + '\')">修 改</a></li>' +
                                 '<li class="divider"></li>' +
-                                '<li><a href="javascript:;" onclick="del(\'' + row.id + '\')">${msg["globals.button.delete"]}</a></li>' +
                                 '<li><a href="javascript:;" onclick="commit(\'' + row.id + '\')">提 交</a></li>' +
                                 '</ul></div>';
                     },
@@ -204,13 +209,30 @@ layout("/layouts/platform.html"){
                 {
                     "render": function (data, type, row) {
                         if (data) {
-                            return '<i id="status' + row.id + '" class="fa fa-circle text-success ml5"></i>';
-                        } else {
-                            return '<i id="status' + row.id + '" class="fa fa-circle text-danger ml5"></i>';
+                            return moment(parseInt(data*1000)).format("YYYY-MM-DD HH:mm:ss");
+                        }
+                        return '';
+                    },
+                    "targets": 6
+                },
+                {
+                    "render": function (data, type, row) {
+                        switch(data){
+                            case 0: return '雇员编辑中';
+                            case 1: return '雇员已提交';
+                            case 2: return '正在审核';
+                            case 3: return '审核完成';
+                            case 4: return '最终反馈';
                         }
                     },
                     "targets": -1
-                }
+                },
+                {
+                    "render": function (data, type, row) {
+                        return '<a href="'+data+'" class="btn btn-default btn-sm mr5">附件下载</a>'
+                    },
+                    "targets": 3
+                },
             ]
         });
         datatable.on('click', 'tr', function () {
@@ -295,42 +317,56 @@ layout("/layouts/platform.html"){
     $(function () {
         initDatatable();
         initxmlist();
+
         $("#dialogDetail").on("hidden.bs.modal", function () {
             $(this).removeData("bs.modal");
         });
     });
+
+
     function xmfeedback(id) {
         $('#xmid').val(id);
         datatable.ajax.reload();
     }
-    function modify(id) {
+
+
+    function  modify(id) {
             $.post("${base}/platform/xm/person/modifycheck/"+id,{} , function (data) {
                 if (data.code == 0) {
                     $(location).attr('href', '${base}/platform/xm/person/feedbackedit/'+id);
                 } else {
                     Toast.error(data.msg);
+                    return false;
                 }
                 btn.button("reset");
                 dialog.modal("hide");
             }, "json");
     }
     function commit(id) {
-        var dialog = $("#dialogCommit");
-        dialog.modal("show");
-        dialog.find("#doCommit").unbind("click");
-        dialog.find("#doCommit").bind("click", function (event) {
-            var btn = $(this);
-            btn.button("loading");
-            $.post("${base}/platform/xm/person/feedbackcommit/"+id,{} , function (data) {
-                if (data.code == 0) {
-                    datatable.ajax.reload(null,false);
-                } else {
-                    Toast.error(data.msg);
-                }
-                btn.button("reset");
-                dialog.modal("hide");
-            }, "json");
-        });
+        $.post("${base}/platform/xm/person/modifycheck/"+id,{} , function (data) {
+            if (data.code == 0) {
+                var dialog = $("#dialogCommit");
+                dialog.modal("show");
+                dialog.find("#doCommit").unbind("click");
+                dialog.find("#doCommit").bind("click", function (event) {
+                    var btn = $(this);
+                    btn.button("loading");
+                    $.post("${base}/platform/xm/person/feedbackcommit/"+id,{} , function (data) {
+                        if (data.code == 0) {
+                            datatable.ajax.reload(null,false);
+                        } else {
+                            Toast.error(data.msg);
+                        }
+                        btn.button("reset");
+                        dialog.modal("hide");
+                    }, "json");
+                });
+            } else {
+                Toast.error(data.msg);
+            }
+            btn.button("reset");
+            dialog.modal("hide");
+        }, "json");
     }
 </script>
 <%}%>

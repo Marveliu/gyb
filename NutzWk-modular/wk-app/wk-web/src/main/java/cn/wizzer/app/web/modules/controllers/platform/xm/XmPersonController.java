@@ -30,6 +30,9 @@ public class XmPersonController {
     private XmFeedbackService xmFeedbackService;
 
     @Inject
+    private V_XmFeedbackService v_xmFeedbackService;
+
+    @Inject
     private XmInfService xmInfService;
 
     @Inject
@@ -119,7 +122,7 @@ public class XmPersonController {
     }
 
     /**
-    * @function: 加载个人开始项目信息
+    * @function: 加载个人已经开始的项目信息
     * @param:
     * @return:
     * @note:
@@ -128,7 +131,7 @@ public class XmPersonController {
     @Ok("json")
     @RequiresPermissions("platform.xm.person")
     public Object feedbackdata(
-            @Param("xmid") String xmid,
+            @Param("xmid") String xminfid,
             @Param("length") int length,
             @Param("start") int start,
             @Param("draw") int draw,
@@ -138,10 +141,28 @@ public class XmPersonController {
         Cnd cnd = Cnd.NEW();
         String gyid = UserInfUtil.getCurrentGyid();
 
-        cnd.and("xminfid","=",xmid);
+        if("".equals(xminfid)){
+            //默认查看该雇员经理下面所有的项目反馈
+            cnd.and("gyid","=",gyid);
+        }else{
+            //查看指定id
+            cnd.and("xminfid","=",xminfid);
+        }
         cnd.desc("at");
 
-        return xmFeedbackService.data(length, start, draw, order, columns, cnd, null);
+        return v_xmFeedbackService.data(length, start, draw, order, columns, cnd, null);
+    }
+
+
+    @At("/feedbackdetail/?")
+    @Ok("beetl:/platform/xm/feedback/detail.html")
+    @RequiresPermissions("platform.xm.person")
+    public void detail(int id, HttpServletRequest req) {
+        if (id != 0) {
+            req.setAttribute("obj", v_xmFeedbackService.fetch(Cnd.where("id","=",id)));
+        }else{
+            req.setAttribute("obj", null);
+        }
     }
 
 
@@ -157,13 +178,13 @@ public class XmPersonController {
     public void feedbackadd(String id,HttpServletRequest req) {
 
         String gyid = UserInfUtil.getCurrentGyid();
-        int count = xmFeedbackService.count(Cnd.where("gyid","=",gyid));
+        int count = xmFeedbackService.count(Cnd.where("xminfid","=",id));
         if(count != 0){
             //设置父id
             List<xm_feedback> xfd = xmFeedbackService.query(Cnd.where("gyid","=",gyid).desc("at"));
             req.setAttribute("parentid",xfd.get(0).getId());
         }
-        req.setAttribute("count",0);
+        req.setAttribute("count",count);
         req.setAttribute("xmid",id);
     }
 
@@ -179,19 +200,17 @@ public class XmPersonController {
     @SLog(tag = "xm_feedback", msg = "")
     public Object feedbackaddDo(@Param("..")xm_feedback xmFeedback, HttpServletRequest req) {
         try {
-            String gyid = UserInfUtil.getCurrentGyid();
-            xmFeedback.setAt((int) (System.currentTimeMillis() / 1000));
-            xmFeedback.setGyid(gyid);
-            xmFeedback.setStatus(0);
+            xmFeedback.setGyid(UserInfUtil.getCurrentGyid());
+            xmFeedback.setOpBy(StringUtil.getUid());
+            xmFeedback.setOpAt((int) (System.currentTimeMillis() / 1000));
             xmFeedback.setReply(" ");
+            xmFeedback.setAt((int) (System.currentTimeMillis() / 1000));
             xmFeedbackService.insert(xmFeedback);
             return Result.success("system.success");
-
         } catch (Exception e) {
             return Result.error("system.error");
         }
     }
-
     /**
     * @function: 添加反馈检查
     * @param:
@@ -206,7 +225,7 @@ public class XmPersonController {
         String gyid = UserInfUtil.getCurrentGyid();
 
         //初次提交
-        int count = xmFeedbackService.count(Cnd.where("gyid","=",gyid));
+        int count = xmFeedbackService.count(Cnd.where("xminfid","=",id));
         if(count == 0 ){
             return Result.success("action permmit!");
         }
@@ -253,10 +272,10 @@ public class XmPersonController {
     public Object modifycheck(int id,HttpServletRequest req) {
         //检查feedback的审核状态，如果已经提交则雇员无法再修改或者删除
         xm_feedback xfd = xmFeedbackService.fetch(id);
-        if (xfd.getStatus() != 0) {
-            return Result.error("你已经确认提交！");
+        if (xfd.getStatus() == 0) {
+            return Result.success("system.success");
         }
-        return Result.success("system.success");
+        return Result.error("当前反馈状态不允许修改哦！");
     }
 
     /**
@@ -287,9 +306,7 @@ public class XmPersonController {
         try {
             xmFeedback.setOpBy(StringUtil.getUid());
             xmFeedback.setOpAt((int) (System.currentTimeMillis() / 1000));
-
             xmFeedbackService.updateIgnoreNull(xmFeedback);
-
             return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");

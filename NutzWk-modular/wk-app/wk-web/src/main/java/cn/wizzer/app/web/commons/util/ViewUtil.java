@@ -51,4 +51,21 @@ public class ViewUtil {
             return "启用";
         }
     }
+
+    /**
+    * @function: feedback status
+    * @param:
+    * @return:
+    * @note:
+    */
+    public static String bindFeedbackStatus(int status){
+        switch(status){
+            case 0: return "雇员编辑中";
+            case 1: return "雇员已提交";
+            case 2: return "正在审核";
+            case 3: return "审核完成";
+            case 4: return "最终反馈";
+            default: return "error";
+        }
+    }
 }

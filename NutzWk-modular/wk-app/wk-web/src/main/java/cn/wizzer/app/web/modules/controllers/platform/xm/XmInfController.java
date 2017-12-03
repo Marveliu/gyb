@@ -1,8 +1,11 @@
 package cn.wizzer.app.web.modules.controllers.platform.xm;
 
-import cn.wizzer.app.gy.modules.XmInfService;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
+import cn.wizzer.app.web.commons.util.UserInfUtil;
+import cn.wizzer.app.xm.modules.models.v_xminf;
 import cn.wizzer.app.xm.modules.models.xm_inf;
+import cn.wizzer.app.xm.modules.services.V_XmInfService;
+import cn.wizzer.app.xm.modules.services.XmInfService;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
@@ -17,14 +20,17 @@ import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.*;
 
 @IocBean
 @At("/platform/xm/inf")
 public class XmInfController{
     private static final Log log = Logs.get();
+
     @Inject
     private XmInfService xmInfService;
+    @Inject
+    private V_XmInfService v_xmInfService;
 
     @At("")
     @Ok("beetl:/platform/code/inf/index.html")
@@ -110,6 +116,27 @@ public class XmInfController{
 		}else{
             req.setAttribute("obj", null);
         }
+    }
+
+    /**
+     * @function: 查询当前雇员经理负责的所有项目
+     * @param:
+     * @return:
+     * @note:
+     */
+    @At("/xminflist")
+    @Ok("json")
+    @RequiresPermissions("platform.xm.inf")
+    public Object xminflist(){
+        String gzid = UserInfUtil.getCurrentGzid();
+        //查询视图
+        List<v_xminf> vxminfs = v_xmInfService.query(Cnd.where("author","=",gzid));
+        Map<String, String> obj = new HashMap<>();
+        for(v_xminf inf:vxminfs){
+            String taskname = inf.getTaskname();
+            obj.put(taskname,inf.getId());
+        }
+        return obj;
     }
 
 }

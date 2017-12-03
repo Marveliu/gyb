@@ -4,8 +4,8 @@
             <section class="panel panel-primary no-b">
                 <header class="panel-heading clearfix brtl brtr">
                     <div class="overflow-hidden">
-                        <a href="javascript:;" class="h4 show no-m pt5">xm_feedback</a>
-                        <small>${obj.id}</small>
+                        <a href="javascript:;" class="h4 show no-m pt5">项目反馈信息</a>
+                        <small>${obj.taskname}--${obj.id}</small>
                     </div>
                 </header>
                 <div class="list-group">
@@ -18,10 +18,10 @@
                                 <td>${msg['xm.feedback.column.xminfid']}</td><td>${obj.xminfid}</td>
                             </tr>
                                                         <tr>
-                                <td>${msg['xm.feedback.column.at']}</td><td>${obj.at}</td>
+                                <td>${msg['xm.feedback.column.at']}</td><td>${@date.getDate(obj.at)}</td>
                             </tr>
                                                         <tr>
-                                <td>${msg['xm.feedback.column.fileurl']}</td><td>${obj.fileurl}</td>
+                                <td>${msg['xm.feedback.column.fileurl']}</td><td><a href="${obj.fileurl}" class="btn btn-default btn-sm mr5">附件下载</a></td>
                             </tr>
                                                         <tr>
                                 <td>${msg['xm.feedback.column.note']}</td><td>${obj.note}</td>
@@ -30,13 +30,13 @@
                                 <td>${msg['xm.feedback.column.gyid']}</td><td>${obj.gyid}</td>
                             </tr>
                                                         <tr>
-                                <td>${msg['xm.feedback.column.nextcommit']}</td><td>${obj.nextcommit}</td>
+                                <td>${msg['xm.feedback.column.nextcommit']}</td><td>${@date.getDate(obj.nextcommit)}</td>
                             </tr>
                                                         <tr>
                                 <td>${msg['xm.feedback.column.reply']}</td><td>${obj.reply}</td>
                             </tr>
                                                         <tr>
-                                <td>${msg['xm.feedback.column.status']}</td><td>${obj.status}</td>
+                                <td>${msg['xm.feedback.column.status']}</td><td>${@view.bindFeedbackStatus(obj.status)}</td>
                             </tr>
                                                     </tbody>
                     </table>
