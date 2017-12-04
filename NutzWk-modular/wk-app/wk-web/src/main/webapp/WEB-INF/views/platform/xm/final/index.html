@@ -6,51 +6,33 @@ layout("/layouts/platform-xm.html"){
     <div class="row" style="padding: 15px;">
         <div class="col-md-3 col-sm-6 col-xs-12">
             <section class="dash-tile">
-                <div class="tile-title">ALL TIME EARNING</div>
-                <div class="tile-stats"><b>8068</b>
-                </div>
-                <div class="progress progress-xs mt5 mb10">
-                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40"
-                         aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                    </div>
+                <div class="tile-title">总项目数</div>
+                <div class="tile-stats"><b>${total!}</b>
                 </div>
                 <div class="tile-footer">
-                    Based on new sales
+                    总共发布的项目
                 </div>
             </section>
         </div>
         <div class="col-md-3 col-sm-6 col-xs-12">
             <section class="dash-tile bg-danger">
                 <div class="tile-title">
-                    <span class="pull-right">
-                                            <i class="ti-arrow-circle-up mr5"></i>8%
-                                        </span>
-                    <span>Realtime page clicks</span>
+                    <span>需要处理的项目数</span>
                 </div>
-                <div class="tile-stats"><b>4565</b>
-                </div>
-                <div class="mb20"></div>
-                <div class="tile-chart tile-line" style="padding: 0px;">
-                    <canvas class="flot-base" width="327" height="40"
-                            style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 327px; height: 40px;"></canvas>
-                    <canvas class="flot-overlay" width="327" height="40"
-                            style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 327px; height: 40px;"></canvas>
+                <div class="tile-stats"><b>${final}</b>
                 </div>
                 <div class="tile-footer">
-                    800ms intervals
+                    这些项目需要进行评价与付款
                 </div>
             </section>
         </div>
         <div class="col-md-3 col-sm-6 col-xs-12">
             <section class="dash-tile bg-success">
-                <div class="tile-title">ALL TIME EARNING</div>
-                <div class="tile-stats"><b>89790</b>
-                </div>
-                <div class="tile-bottom">
-                    <small><i class="ti-arrow-circle-up mr5"></i>4.6% Weekly <b>Change</b></small>
+                <div class="tile-title">运行总的项目</div>
+                <div class="tile-stats"><b>${doing!}</b>
                 </div>
                 <div class="tile-footer">
-                    Based on new sales
+                    正在跟踪反馈中的项目
                 </div>
                 <div class="tile-icon">
                     <i class="ti-timer"></i>
@@ -62,15 +44,12 @@ layout("/layouts/platform-xm.html"){
                 <div class="tile-title title-heading text-center bg-warning">
                     <a href="javascript:;" class="widget-refresh"><i class="ti-reload pull-right"></i></a>
                     <a href="javascript:;"><i class="ti-menu pull-left"></i></a>
-                    <span>Open support cases</span>
+                    <span>完成的项目</span>
                 </div>
-                <div class="tile-stats"><b>478</b>
-                </div>
-                <div class="tile-bottom">
-                    <small><i class="ti-arrow-circle-down mr5"></i>.65% Weekly <b>Change</b></small>
+                <div class="tile-stats"><b>${finish!}</b>
                 </div>
                 <div class="tile-footer">
-                    Based on today's tickets
+                    已经完成的项目
                 </div>
             </section>
         </div>
@@ -82,9 +61,9 @@ layout("/layouts/platform-xm.html"){
                 <thead>
                 <tr>
                     <th>${msg['xm.evaluation.column.xminfid']}</th>
-                    <th>${msg['xm.evaluation.column.grade']}</th>
-                    <th>${msg['xm.evaluation.column.note']}</th>
-                    <th>${msg['xm.evaluation.column.at']}</th>
+                    <th>项目名称</th>
+                    <th>雇员编号</th>
+                    <th>雇员名称</th>
                     <th>${msg['globals.table.column.operation']}</th>
                 </tr>
                 </thead>
@@ -92,6 +71,13 @@ layout("/layouts/platform-xm.html"){
         </div>
     </div>
 </section>
+
+<div id="dialogDetail" class="modal fade bs-modal-sm" tabindex="-3" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
 
 
 <script language="JavaScript">
@@ -114,7 +100,7 @@ layout("/layouts/platform-xm.html"){
                 sublime.closeLoadingbar($(".main-content"));
             },
             "ajax": {
-                "url": "${base}/platform/xm/evaluation/data",
+                "url": "${base}/platform/xm/final/data",
                 "type": "post",
                 "data": function (d) {
 
@@ -122,20 +108,18 @@ layout("/layouts/platform-xm.html"){
             },
             "order": [[0, "desc"]],
             "columns": [
-                {"data": "xminfid", "bSortable": true},
-                {"data": "grade", "bSortable": true},
-                {"data": "note", "bSortable": true},
-                {"data": "at", "bSortable": true},
+                {"data": "id", "bSortable": true},
+                {"data": "taskname", "bSortable": true},
+                {"data": "gyid", "bSortable": true},
+                {"data": "author", "bSortable": true},
             ],
             "columnDefs": [
                 {
                     "render": function (data, type, row) {
                         return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
                                 ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-                                '<li><a href="${base}/platform/xm/evaluation/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
-                                '<li><a href="${base}/platform/xm/evaluation/edit/' + row.id + '" data-pjax>${msg["globals.button.update"]}</a></li>' +
-                                '<li class="divider"></li>' +
-                                '<li><a href="javascript:;" onclick="del(\'' + row.id + '\')">${msg["globals.button.delete"]}</a></li>' +
+                                '<li><a href="${base}/platform/xm/final/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">查 看</a></li>' +
+                                '<li><a href="${base}/platform/xm/final/item/' + row.id + '">结 算</a></li>' +
                                 '</ul></div>';
                     },
                     "targets": 4

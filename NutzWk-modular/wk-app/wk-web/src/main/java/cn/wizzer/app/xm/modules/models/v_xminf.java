@@ -21,15 +21,96 @@ public class v_xminf extends BaseModel implements Serializable {
     @Readonly
     private String gyid;
 
-    @Column("author")
+    @Column("gyname")
     @Readonly
-    private String author;
+    private String gyname;
 
     @Column("taskname")
     @Readonly
     private String taskname;
 
+    @Column("category")
+    @Readonly
+    private String category;
 
+    @Column("award")
+    @Readonly
+    private float award;
+
+    @Column("designnum")
+    @Readonly
+    private Integer designnum;
+
+    @Column("author")
+    @Readonly
+    private String author;
+
+    @Column("endtime")
+    @Readonly
+    private Integer endtime;
+
+
+    @Column("info")
+    @Readonly
+    private String info;
+
+    @Column("content")
+    @Readonly
+    private String content;
+
+    @Column("publishAt")
+    @Readonly
+    private Integer publishAt;
+
+    @Column("fileurl")
+    @Readonly
+    private String fileurl;
+
+    @Column("status")
+    @Readonly
+    private int status;
+
+    // bill
+
+    @Column("billid")
+    @Readonly
+    private String billid;
+
+    @Column("gypayid")
+    @Readonly
+    private String gypayid;
+
+    @Column("prepaysum")
+    @Readonly
+    private float prepaysum;
+
+    @Column("paysum")
+    @Readonly
+    private float paysum;
+
+    @Column("realpayid")
+    @Readonly
+    private String realpayid;
+
+    @Column("billnote")
+    @Readonly
+    private String billnote;
+
+    @Column("payby")
+    @Readonly
+    private String payby;
+
+    @Column("evaid")
+    @Readonly
+    private String evaid;
+
+    @Column("grade")
+    @Readonly
+    private float grade;
+
+    @Column("evanote")
+    @Readonly
+    private float evanote;
 
 
     public String getId() {
@@ -62,5 +143,165 @@ public class v_xminf extends BaseModel implements Serializable {
 
     public void setTaskname(String taskname) {
         this.taskname = taskname;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public float getAward() {
+        return award;
+    }
+
+    public void setAward(float award) {
+        this.award = award;
+    }
+
+    public Integer getDesignnum() {
+        return designnum;
+    }
+
+    public void setDesignnum(Integer designnum) {
+        this.designnum = designnum;
+    }
+
+    public Integer getEndtime() {
+        return endtime;
+    }
+
+    public void setEndtime(Integer endtime) {
+        this.endtime = endtime;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Integer getPublishAt() {
+        return publishAt;
+    }
+
+    public void setPublishAt(Integer publishAt) {
+        this.publishAt = publishAt;
+    }
+
+    public String getFileurl() {
+        return fileurl;
+    }
+
+    public void setFileurl(String fileurl) {
+        this.fileurl = fileurl;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getGyname() {
+        return gyname;
+    }
+
+    public void setGyname(String gyname) {
+        this.gyname = gyname;
+    }
+
+    public String getGypayid() {
+        return gypayid;
+    }
+
+    public void setGypayid(String gypayid) {
+        this.gypayid = gypayid;
+    }
+
+    public float getPrepaysum() {
+        return prepaysum;
+    }
+
+    public void setPrepaysum(float prepaysum) {
+        this.prepaysum = prepaysum;
+    }
+
+    public String getRealpayid() {
+        return realpayid;
+    }
+
+    public void setRealpayid(String realpayid) {
+        this.realpayid = realpayid;
+    }
+
+    public String getBillnote() {
+        return billnote;
+    }
+
+    public void setBillnote(String billnote) {
+        this.billnote = billnote;
+    }
+
+    public String getPayby() {
+        return payby;
+    }
+
+    public void setPayby(String payby) {
+        this.payby = payby;
+    }
+
+    public String getBillid() {
+        return billid;
+    }
+
+    public void setBillid(String billid) {
+        this.billid = billid;
+    }
+
+    public float getPaysum() {
+        return paysum;
+    }
+
+    public void setPaysum(float paysum) {
+        this.paysum = paysum;
+    }
+
+
+    public String getEvaid() {
+        return evaid;
+    }
+
+    public void setEvaid(String evaid) {
+        this.evaid = evaid;
+    }
+
+    public float getGrade() {
+        return grade;
+    }
+
+    public void setGrade(float grade) {
+        this.grade = grade;
+    }
+
+    public float getEvanote() {
+        return evanote;
+    }
+
+    public void setEvanote(float evanote) {
+        this.evanote = evanote;
     }
 }

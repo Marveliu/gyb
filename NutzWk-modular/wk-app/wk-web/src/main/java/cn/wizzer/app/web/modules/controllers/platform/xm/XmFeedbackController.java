@@ -19,6 +19,8 @@ import org.nutz.mvc.View;
 import org.nutz.mvc.annotation.*;
 import org.nutz.mvc.view.UTF8JsonView;
 import org.nutz.mvc.view.ViewWrapper;
+import org.nutz.trans.Atom;
+import org.nutz.trans.Trans;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
@@ -185,7 +187,7 @@ public class XmFeedbackController{
     }
 
     /**
-     * @function: 确认提交
+     * @function: 确认终稿
      * @param:
      * @return:
      * @note:
@@ -197,7 +199,16 @@ public class XmFeedbackController{
     public Object feedbackcommit(
             @Param("id") String id) {
         try {
-            xmFeedbackService.update(org.nutz.dao.Chain.make("Status",4),Cnd.where("id","=",id));
+            Trans.exec(new Atom() {
+                @Override
+                public void run() {
+                    //修改feedback
+                    xmFeedbackService.update(org.nutz.dao.Chain.make("Status",4),Cnd.where("id","=",id));
+                    //更新项目信息
+                    xmInfService.update(org.nutz.dao.Chain.make("Status",4),Cnd.where("id","=",xmFeedbackService.fetch(id).getXminfid()));
+                }
+            });
+
             return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");
