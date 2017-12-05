@@ -110,7 +110,7 @@ public class v_xminf extends BaseModel implements Serializable {
 
     @Column("evanote")
     @Readonly
-    private float evanote;
+    private String evanote;
 
 
     public String getId() {
@@ -297,11 +297,11 @@ public class v_xminf extends BaseModel implements Serializable {
         this.grade = grade;
     }
 
-    public float getEvanote() {
+    public String getEvanote() {
         return evanote;
     }
 
-    public void setEvanote(float evanote) {
+    public void setEvanote(String evanote) {
         this.evanote = evanote;
     }
 }

@@ -327,6 +327,7 @@ layout("/layouts/platform.html"){
             $("#footer_content").val(ue.getContent());
             $('#addForm').submit();
         });
+
         $('#addForm').ajaxForm({
             dataType: 'json',
             beforeSubmit: function (arr, form, options) {

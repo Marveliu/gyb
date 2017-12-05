@@ -9,7 +9,7 @@ layout("/layouts/platform-xm.html"){
                 <div class="panel-body">
                     <div class="mb25 clearfix">
                         <div class="">
-                            <i class="ti-microphone fa-5x"></i>
+                            <!--<i class="ti-microphone fa-5x"></i>-->
 
                             <h3 class="text-uppercase">${obj.taskname!}</h3>
                             项目编号:${obj.id!}<br>
@@ -41,8 +41,8 @@ layout("/layouts/platform-xm.html"){
                             <address>
                                 <strong>说明:</strong><br>
                                 <br>
-                                <p>&nbsp武汉哎嘀信息科技有限公司  ${obj.billnote!}</p><br>
-                                <p>&nbsp武汉哎嘀信息科技有限公司  ${obj.billnote!}</p><br>
+                                <p>&nbsp ${obj.billnote!}</p><br>
+                                <p>&nbsp ${obj.evanote!}</p><br>
                             </address>
                         </div>
                     </div>
@@ -77,23 +77,6 @@ layout("/layouts/platform-xm.html"){
                                 </td>
                                 <td>
                                     $250.00
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    VPN Hosting
-                                </td>
-                                <td>
-                                    <span class="label label-danger">Renewal</span> Monthly dedicated VPN web hosting (1 Jan - 30 Jan, 2014)
-                                </td>
-                                <td>
-                                    $650.00
-                                </td>
-                                <td>
-                                    1
-                                </td>
-                                <td>
-                                    $650.00
                                 </td>
                             </tr>
                             <tr>
@@ -138,41 +121,41 @@ layout("/layouts/platform-xm.html"){
         <div class="col-md-4 mb25 bg-white">
             <div class="p15 clearfix">
                 <div class="h3 text-uppercase mb25">结算信息</div>
-                <form role="form" id="editForm"  method="post" class="form-horizontal parsley-form" action="${base}/platform/xm/feedback/editDo">
-                    <input name="id" type="hidden" value="">
+                <form role="form" id="fianlForm"  method="post" class="form-horizontal parsley-form" action="${base}/platform/xm/final/addDo">
+                    <input name="id" type="hidden" value="${obj.id!}">
 
                     <div class="form-group">
-                        <label for="award">评分</label>
-                        <input type="number" id="award" class="form-control" name="award" data-parsley-type="number" data-parsley-required="true"
+                        <label for="grade">评分</label>
+                        <input type="number" id="grade" class="form-control" name="grade" data-parsley-type="number" data-parsley-required="true"
                                value="" placeholder="请输入评分！">
                     </div>
 
                     <div class="form-group">
-                        <label for="reply">评价意见</label>
-                        <textarea id="reply" name="reply" style="width:100%;" rows="5" data-parsley-required="true" placeholder="请输入200以内的评价！"></textarea>
+                        <label for="evanote">评价意见</label>
+                        <textarea id="evanote" name="evanote" style="width:100%;" rows="5" data-parsley-required="true" placeholder="请输入200以内的评价！"></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label for="award">结算金额</label>
+                        <label for="paysum">结算金额</label>
                         <input type="number" id="paysum" class="form-control" name="paysum" data-parsley-type="number" data-parsley-required="true"
                                value="" placeholder="请输入最终结算金额！">
                     </div>
 
                     <div class="form-group">
-                        <label for="reply">付款补充说明</label>
+                        <label for="billnote">付款补充说明</label>
                         <textarea id="billnote" name="billnote" style="width:100%;" rows="5" data-parsley-required="true" placeholder="请输入200以内的评价！"></textarea>
                     </div>
 
                     <div class="row">
                         <div class="col-sm-6">
                             <p>
-                                <button type="button" class="btn btn-success btn-sm no-print" onclick="">
-                                    <i class="ti-printer mr5"></i>预览账单</button>
+                                <button type="button"   class="btn btn-success btn-sm no-print" onclick="">
+                                    <i  class="ti-printer mr5"></i>预览账单</button>
                             </p>
                         </div>
                         <div class="col-sm-6">
                             <p class="pull-right">
-                                <button type="submit" class="btn btn-primary">保存反馈</button>
+                                <button  type="button" id="save"  class="btn btn-primary">保存反馈</button>
                             </p>
                         </div>
                     </div>
@@ -187,111 +170,49 @@ layout("/layouts/platform-xm.html"){
     </div>
 </div>
 
-
+<div id="dialogCommit" class="modal fade bs-modal-sm" tabindex="-2" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">提交反馈 </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        提交您的项目反馈之后，原来的项目反馈将不能进行修改，请确认！
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">${msg['globals.button.cancel']}</button>
+                <button id="doCommit" type="button" class="btn btn-primary" data-loading-text="正在提交">确认提交</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script language="JavaScript">
-    var datatable;
-    function initDatatable() {
-        datatable = $('.datatable').DataTable({
-            "dom": '<"toolbar">frtip',
-            "searching":false,
-            "processing": false,
-            "serverSide": true,
-            "select": true,
-            "ordering": true,
-            "language": {
-                "url": "${base}/assets/plugins/datatables/${lang}.json"
-            },
-            "preDrawCallback": function () {
-                sublime.showLoadingbar($(".main-content"));
-            },
-            "drawCallback": function () {
-                sublime.closeLoadingbar($(".main-content"));
-            },
-            "ajax": {
-                "url": "${base}/platform/xm/evaluation/data",
-                "type": "post",
-                "data": function (d) {
-
-                }
-            },
-            "order": [[0, "desc"]],
-            "columns": [
-                    {"data": "xminfid", "bSortable": true},
-                    {"data": "grade", "bSortable": true},
-                    {"data": "note", "bSortable": true},
-                    {"data": "at", "bSortable": true},
-            ],
-            "columnDefs": [
-                {
-                    "render": function (data, type, row) {
-                        return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
-                                ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-                                '<li><a href="${base}/platform/xm/evaluation/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
-                                '<li><a href="${base}/platform/xm/evaluation/edit/' + row.id + '" data-pjax>${msg["globals.button.update"]}</a></li>' +
-                                '<li class="divider"></li>' +
-                                '<li><a href="javascript:;" onclick="del(\'' + row.id + '\')">${msg["globals.button.delete"]}</a></li>' +
-                                '</ul></div>';
-                    },
-                    "targets": 4
-                }
-            ]
-        });
-        datatable.on('click', 'tr', function () {
-            $(this).toggleClass('selected');
-        });
-        $("#searchBtn").on('click', function () {
-            datatable.ajax.reload();
-        });
-    }
-    function del(id) {
-        var dialog = $("#dialogDelete");
-        dialog.modal("show");
-        dialog.find("#okDel").unbind("click");
-        dialog.find("#okDel").bind("click", function (event) {
-            var btn = $(this);
-            btn.button("loading");
-            $.post("${base}/platform/xm/evaluation/delete/" + id, {}, function (data) {
-                if (data.code == 0) {
-                    datatable.ajax.reload(null,false);
-                } else {
-                    Toast.error(data.msg);
-                }
-                btn.button("reset");
-                dialog.modal("hide");
-            }, "json");
-        });
-    }
-    function delCheck() {
-        var chks = datatable.rows('.selected').data();
-        if (chks.length > 0) {
-            var ids = [];
-            $.each(datatable.rows('.selected').data(), function (i, n) {
-                ids.push(n.id);
-            });
-            var dialog = $("#dialogDelete");
-            dialog.modal("show");
-            dialog.find("#okDel").unbind("click");
-            dialog.find("#okDel").bind("click", function (event) {
-                var btn = $(this);
-                btn.button("loading");
-                $.post("${base}/platform/xm/evaluation/delete", {ids: ids.toString()}, function (data) {
-                    if (data.code == 0) {
-                        datatable.ajax.reload(null,false);
-                    } else {
-                        Toast.error(data.msg);
-                    }
-                    btn.button("reset");
-                    dialog.modal("hide");
-                }, "json");
-            });
-        } else {
-            Toast.warning("${msg['globals.button.delete.select']}");
-        }
-    }
     $(function () {
         myForm.init();
-        initDatatable();
+
+        $("#save").on("click",function(){
+            $("#dialogCommit").modal("show");
+        });
+
+        $("#doCommit").on("click",function(){
+            var btn = $(this);
+            btn.button("loading");
+
+            $('#fianlForm').submit();
+//            $('#fianlForm').submit(function () {
+//                $(this).ajaxSubmit(function () {
+//
+//                })
+//                return false; //阻止表单默认提交
+//            });
+        });
+
         $("#dialogDetail").on("hidden.bs.modal", function () {
             $(this).removeData("bs.modal");
         });
@@ -301,5 +222,6 @@ layout("/layouts/platform-xm.html"){
         $('#xmid').val(id);
         datatable.ajax.reload();
     }
+
 </script>
 <%}%>

@@ -45,6 +45,11 @@ public class xm_bill extends BaseModel implements Serializable {
     private float paysum;
 
     @Column
+    @Comment("状态")
+    @ColDefine(type = ColType.INT)
+    private int status;
+
+    @Column
     @Comment("说明")
     @ColDefine(type = ColType.VARCHAR,width = 200)
     private String note;
@@ -132,5 +137,13 @@ public class xm_bill extends BaseModel implements Serializable {
 
     public void setXminfid(String xminfid) {
         this.xminfid = xminfid;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }
