@@ -12,9 +12,12 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.*;
+import org.nutz.trans.Atom;
+import org.nutz.trans.Trans;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -37,6 +40,12 @@ public class XmPersonController {
 
     @Inject
     private XmTaskService xmTaskService;
+
+    @Inject
+    private XmBillService xmBillService;
+
+    @Inject
+    private  V_XmInfService v_xmInfService;
     /**
     * @function: 受理用户提交任务书的申请
     * @param: 申请人编号，任务书编号
@@ -82,7 +91,7 @@ public class XmPersonController {
     * @note:
     */
     @At("/applyindex")
-    @Ok("beetl:/platform/xm/person/apply.html")
+    @Ok("beetl:/platform/xm/person/xmapply.html")
     @RequiresPermissions("platform.xm.person.applyindex")
     public void applyindex() {
     }
@@ -116,7 +125,7 @@ public class XmPersonController {
     * @note:
     */
     @At("/personxm")
-    @Ok("beetl:/platform/xm/person/personxm.html")
+    @Ok("beetl:/platform/xm/person/xmfeedback.html")
     @RequiresPermissions("platform.xm.person")
     public void psersonxm() {
     }
@@ -173,7 +182,7 @@ public class XmPersonController {
     * @note:
     */
     @At("/feedbackadd/?")
-    @Ok("beetl:/platform/xm/person/addfeedback.html")
+    @Ok("beetl:/platform/xm/person/xmfeedbackadd.html")
     @RequiresPermissions("platform.xm.person")
     public void feedbackadd(String id,HttpServletRequest req) {
 
@@ -285,7 +294,7 @@ public class XmPersonController {
     * @note:
     */
     @At("/feedbackedit/?")
-    @Ok("beetl:/platform/xm/person/feedbackedit.html")
+    @Ok("beetl:/platform/xm/person/xmfeedbackedit.html")
     @RequiresPermissions("platform.xm.person")
     public void edit(int id,HttpServletRequest req) {
         req.setAttribute("obj", xmFeedbackService.fetch(id)
@@ -313,6 +322,73 @@ public class XmPersonController {
         }
     }
 
+    @At
+    @Ok("beetl:/platform//xm/person/xmcompleted.html")
+    @RequiresPermissions("platform.xm.person")
+    public void xmcompleted() {}
+
+    @At
+    @Ok("json")
+    @RequiresPermissions("platform.xm.person")
+    public Object xmcompleteddata(@Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
+        Cnd cnd = Cnd.NEW();
+        String gyid = UserInfUtil.getCurrentGyid();
+
+        cnd.and("status","=",2);
+        cnd.and("gyid","=",gyid);
+
+        return v_xmInfService.data(length, start, draw, order, columns, cnd, null);
+    }
+
+    @At("/xmcompleteddetail/?")
+    @Ok("beetl:/platform/xm/person/xmcompleteddetail.html")
+    @RequiresPermissions("platform.xm.person")
+    public void xmcompleteddetail(String id, HttpServletRequest req) {
+        if (!Strings.isBlank(id)) {
+            req.setAttribute("obj", v_xmInfService.fetch(Cnd.where("id","=",id)));
+        }else{
+            req.setAttribute("obj", null);
+        }
+    }
+
+    @At("/xminfdetail/?")
+    @Ok("beetl:/platform/xm/person/xminfdetail.html")
+    @RequiresPermissions("platform.xm.final")
+    public void xminfdetail(String id, HttpServletRequest req) {
+        if (!Strings.isBlank(id)) {
+            req.setAttribute("obj", v_xmInfService.fetch(Cnd.where("id","=",id)));
+        }else{
+            req.setAttribute("obj", null);
+        }
+    }
+
+    @At("/xmcompletedcommit")
+    @Ok("json")
+    @RequiresPermissions("platform.xm.person")
+    @SLog(tag = "xmcompletedcommit", msg = "")
+    public Object commit(
+            @Param("id") String xminfid,
+            @Param("gypayid") String gypayid,
+            HttpServletRequest req) {
+        try {
+            int at =  (int) (System.currentTimeMillis() / 1000);
+
+            Trans.exec(new Atom() {
+                @Override
+                public void run() {
+                    //账单转入财务，更新账单时间
+                    xmBillService.update(org.nutz.dao.Chain.make("status",2).add("realgypayid",gypayid).add("at",at),Cnd.where("xminfid","=",xminfid));
+                    //项目完结
+                    xmInfService.update(org.nutz.dao.Chain.make("status",3),Cnd.where("id","=",xminfid));
+                }
+            });
+
+            return Result.success("system.success");
+        } catch (Exception e) {
+            return Result.error("system.error");
+        }
+    }
+
     /**
     * @function: 项目信息加载
     * @param:
@@ -334,4 +410,7 @@ public class XmPersonController {
         }
         return obj;
     }
+
+
+
 }

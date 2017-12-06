@@ -112,4 +112,11 @@ public class GyPayController{
         }
     }
 
+    @At("/payselect")
+    @Ok("beetl:/platform/gy/pay/payselect.html")
+    @RequiresPermissions("platform.gy.pay")
+    public void payselect() {}
+
+
+
 }

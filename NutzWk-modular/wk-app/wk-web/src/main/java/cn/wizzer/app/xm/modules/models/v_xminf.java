@@ -71,14 +71,9 @@ public class v_xminf extends BaseModel implements Serializable {
     private int status;
 
     // bill
-
     @Column("billid")
     @Readonly
     private String billid;
-
-    @Column("gypayid")
-    @Readonly
-    private String gypayid;
 
     @Column("prepaysum")
     @Readonly
@@ -111,6 +106,24 @@ public class v_xminf extends BaseModel implements Serializable {
     @Column("evanote")
     @Readonly
     private String evanote;
+
+    //pay
+    @Column("gypayid")
+    @Readonly
+    private String gypayid;
+
+    @Column("payid")
+    @Readonly
+    private String payid;
+
+    @Column("payname")
+    @Readonly
+    private String payname;
+
+    @Column("type")
+    @Readonly
+    private int paytype;
+
 
 
     public String getId() {
@@ -303,5 +316,29 @@ public class v_xminf extends BaseModel implements Serializable {
 
     public void setEvanote(String evanote) {
         this.evanote = evanote;
+    }
+
+    public String getPayname() {
+        return payname;
+    }
+
+    public void setPayname(String payname) {
+        this.payname = payname;
+    }
+
+    public int getPaytype() {
+        return paytype;
+    }
+
+    public void setPaytype(int paytype) {
+        this.paytype = paytype;
+    }
+
+    public String getPayid() {
+        return payid;
+    }
+
+    public void setPayid(String payid) {
+        this.payid = payid;
     }
 }

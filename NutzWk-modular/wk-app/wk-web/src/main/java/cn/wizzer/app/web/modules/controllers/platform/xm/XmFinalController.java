@@ -95,11 +95,11 @@ public class XmFinalController {
         }
     }
 
-    @At("/addDo")
+    @At("/commit")
     @Ok("json")
     @RequiresPermissions("platform.xm.final")
-    @SLog(tag = "xm_feedback", msg = "")
-    public Object addDo(
+    @SLog(tag = "xmfinal", msg = "")
+    public Object commit(
             @Param("id") String id,
             @Param("grade") float grade,
             @Param("evanote")String evanote,
@@ -127,7 +127,7 @@ public class XmFinalController {
                     xmBillService.update(org.nutz.dao.Chain.make("status",1).add("gypayid",pay.getId()).add("note",billnote).add("at",at),Cnd.where("xminfid","=",id));
 
                     //项目状态
-                    xmInfService.update(org.nutz.dao.Chain.make("status",2),Cnd.where("xminfid","=",id));
+                    xmInfService.update(org.nutz.dao.Chain.make("status",2),Cnd.where("id","=",id));
                 }
             });
             return Result.success("system.success");

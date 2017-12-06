@@ -1,10 +1,22 @@
 <%
-layout("/layouts/platform-xm.html"){
+layout("/layouts/platform.html"){
 %>
 
-<div class="content-wrap bg-white">
-    <div class="row">
-        <div class="col-md-8">
+<header class="header navbar bg-white shadow">
+    <div class="btn-group tool-button">
+        <a class="btn btn-primary navbar-btn" href="${base}/platform/xm/task" data-pjax><i class="ti-angle-left"></i> 返回</a>
+    </div>
+    <div class="pull-right">
+        <div class="btn-group tool-button">
+            <button class="btn btn-primary navbar-btn" type="button" id="save"> 确认</button>
+        </div>
+    </div>
+</header>
+
+
+<div class="content-wrap">
+    <div class="row wrapper">
+        <div class="col-md-9">
             <section class="panel no-m">
                 <div class="panel-body">
                     <div class="mb25 clearfix">
@@ -32,6 +44,7 @@ layout("/layouts/platform-xm.html"){
                                 <br>
                                 ${obj.gyname!}<br>
                                 雇员编号: ${obj.gyid!}<br>
+
                             </address>
                         </div>
                     </div>
@@ -39,10 +52,12 @@ layout("/layouts/platform-xm.html"){
                     <div class="row">
                         <div class="col-xs-12">
                             <address>
-                                <strong>说明:</strong><br>
+                                <strong>账单说明:</strong><br>
                                 <br>
                                 <p>&nbsp ${obj.billnote!}</p><br>
-                                <p>&nbsp ${obj.evanote!}</p><br>
+                                <strong>项目评分: ${obj.grade!}</strong><br>
+                                <br>
+                                <p>${obj.evanote!}</p><br>
                             </address>
                         </div>
                     </div>
@@ -105,67 +120,61 @@ layout("/layouts/platform-xm.html"){
                         <div class="col-sm-6">
                             <p>
                                 <button type="button" class="btn btn-danger btn-sm no-print" onclick="window.print();">
-                                    <i class="ti-printer mr5"></i>Print</button>
+                                    <i class="ti-printer mr5"></i>Print
+                                </button>
                             </p>
                         </div>
                         <div class="col-sm-6">
                             <p class="pull-right">
-                                <button type="button" class="btn btn-primary btn-sm no-print">Pay With PayPal</button>
-                                <button type="button" class="btn btn-default btn-sm no-print">Pay With Credit Card</button>
+                                <a class="btn btn-primary btn-sm" href="/platform/gy/pay/payselect" data-toggle="modal"
+                                   data-target="#dialogPaySelect"><i class="ti-plus"></i> 修改收款信息</a>
                             </p>
                         </div>
                     </div>
                 </div>
             </section>
         </div>
-        <div class="col-md-4 mb25 bg-white">
+        <div id="payway" class="col-md-3 mb25 bg-white">
             <div class="p15 clearfix">
-                <div class="h3 text-uppercase mb25">结算信息</div>
-                <form role="form" id="fianlForm"  method="post" class="form-horizontal parsley-form" action="${base}/platform/xm/final/commit">
-                    <input name="id" type="hidden" value="${obj.id!}">
+                <div class="h3 text-uppercase">支付信息</div>
+                <form id="fianlForm" role="form" class="form-horizontal parsley-form" data-parsley-validate
+                      action="${base}/platform/xm/person/xmcompletedcommit" method="post">
 
-                    <div class="form-group">
-                        <label for="grade">评分</label>
-                        <input type="number" id="grade" class="form-control" name="grade" data-parsley-type="number" data-parsley-required="true"
-                               value="" placeholder="请输入评分！">
-                    </div>
+                    <input name="id" type="hidden" value="${obj.id}">
+                    <input  id="gypayid" name="gypayid" type="hidden" value="${obj.gypayid}">
 
-                    <div class="form-group">
-                        <label for="evanote">评价意见</label>
-                        <textarea id="evanote" name="evanote" style="width:100%;" rows="5" data-parsley-required="true" placeholder="请输入200以内的评价！"></textarea>
-                    </div>
+                    <div class="row mb10">
+                        <div class="col-lg-12">
 
-                    <div class="form-group">
-                        <label for="paysum">结算金额</label>
-                        <input type="number" id="paysum" class="form-control" name="paysum" data-parsley-type="number" data-parsley-required="true"
-                               value="" placeholder="请输入最终结算金额！">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="billnote">付款补充说明</label>
-                        <textarea id="billnote" name="billnote" style="width:100%;" rows="5" data-parsley-required="true" placeholder="请输入200以内的评价！"></textarea>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <p>
-                                <button type="button"   class="btn btn-success btn-sm no-print" onclick="">
-                                    <i  class="ti-printer mr5"></i>预览账单</button>
-                            </p>
-                        </div>
-                        <div class="col-sm-6">
-                            <p class="pull-right">
-                                <button  type="button" id="save"  class="btn btn-primary">保存反馈</button>
-                            </p>
+                            <div class="form-group">
+                                <label for="payid" class="control-label">收款账户</label>
+                                    <input type="text" id="payid" class="form-control" name="payid" data-parsley-required="true"
+                                           placeholder="${msg['gy.pay.column.payname']}" value="${obj.payid}" readonly >
+                            </div>
+                            <div class="form-group">
+                                <label for="payname" class="control-label">收款人</label>
+                                    <input type="text" id="payname" class="form-control" name="payname" data-parsley-required="true"
+                                           placeholder="${msg['gy.pay.column.payname']}" value="${obj.payname}" readonly >
+                            </div>
+                            <div class="form-group">
+                                <label for="paytype" class="control-label">支付方式</label>
+                                    <input type="text" id="paytype" class="form-control" name="type" data-parsley-required="true"
+                                           placeholder="${msg['gy.pay.column.payname']}" value="${obj.paytype}"  readonly>
+                            </div>
                         </div>
                     </div>
-
-
                 </form>
-
-
             </div>
+        </div>
+    </div>
+</div>
 
+
+
+
+<div id="dialogPaySelect" class="modal fade bs-modal-sm" tabindex="-3" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="width: 700px;">
+        <div class="modal-content" style="width: 700px;">
         </div>
     </div>
 </div>
@@ -175,18 +184,22 @@ layout("/layouts/platform-xm.html"){
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">提交反馈 </h4>
+                <h4 class="modal-title">项目结算确认 </h4>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-xs-12">
-                        提交您的项目反馈之后，原来的项目反馈将不能进行修改，请确认！
+                    <div id="commitmessage" class="col-xs-12">
+                        提交您的确认之后，您的支付信息将无法修改，请您确认您的支付信息是否正确！<br>
+                        收款方式：${obj.paytype}<br>
+                        收款人名称：${obj.payname}<br>
+                        收款人账户：${obj.payid}<br>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">${msg['globals.button.cancel']}</button>
-                <button id="doCommit" type="button" class="btn btn-primary" data-loading-text="正在提交">确认提交</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">${msg['globals.button.cancel']}
+                </button>
+                <button id="doCommit" type="button" class="btn btn-primary" data-loading-text="正在提交">确认无误</button>
             </div>
         </div>
     </div>
@@ -195,12 +208,11 @@ layout("/layouts/platform-xm.html"){
 <script language="JavaScript">
     $(function () {
         myForm.init();
-
-        $("#save").on("click",function(){
+        $("#save").on("click", function () {
             $("#dialogCommit").modal("show");
         });
 
-        $("#doCommit").on("click",function(){
+        $("#doCommit").on("click", function () {
             var btn = $(this);
             btn.button("loading");
 
@@ -212,16 +224,44 @@ layout("/layouts/platform-xm.html"){
 //                return false; //阻止表单默认提交
 //            });
         });
-
         $("#dialogDetail").on("hidden.bs.modal", function () {
             $(this).removeData("bs.modal");
         });
     });
 
-    function xminfset(id) {
-        $('#xmid').val(id);
-        datatable.ajax.reload();
-    }
+    function _selectOn() {
+        var pay = datatable_select.rows('.selected');
+        if (pay.length > 1) {
+            Toast.warning("只能选择一种您的收款方式");
+        } else if (pay.length = 1) {
+            console.log(pay.data()[0]["id"]);
 
+            var payid = pay.data()[0]["payid"];
+            var payname = pay.data()[0]["payname"];
+            var gypayid = pay.data()[0]["id"];
+            var paytype = pay.data()[0]["type"];
+
+            $("#payid ").val(payid);
+            $("#payname ").val(payname);
+            $("#gypayid ").val(gypayid);
+            $("#paytype ").val(paytype);
+
+            $("#dialogPaySelect").modal("hide");
+            $("#payway").show();
+
+            $("#commitmessage").html("");
+
+            $("#commitmessage").append(
+                    '提交您的确认之后，您的支付信息将无法修改，请您确认您的支付信息是否正确！'+
+                    '<br>收款方式：' + paytype +
+                    '<br>收款人名称：' + payname +
+                    '<br>收款账号：' + payid
+            );
+
+            Toast.success("添加用户编号：" + pay.data()[0]["id"])
+        } else {
+            Toast.warning("请先选择您的收款方式！");
+        }
+    }
 </script>
 <%}%>
