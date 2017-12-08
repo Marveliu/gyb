@@ -152,6 +152,7 @@ public class SysLoginController {
             errCount = NumberUtils.toInt(Strings.sNull(SecurityUtils.getSubject().getSession(true).getAttribute("platformErrCount")));
             Subject subject = SecurityUtils.getSubject();
             ThreadContext.bind(subject);
+            //进入shiro
             subject.login(token);
             Sys_user user = (Sys_user) subject.getPrincipal();
             int count = user.getLoginCount() == null ? 0 : user.getLoginCount();

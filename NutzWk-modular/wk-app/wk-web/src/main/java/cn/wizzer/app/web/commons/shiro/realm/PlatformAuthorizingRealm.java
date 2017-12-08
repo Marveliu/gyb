@@ -73,6 +73,8 @@ public class PlatformAuthorizingRealm extends AuthorizingRealm {
                 throw Lang.makeThrow(CaptchaIncorrectException.class, "Captcha is error");
             }
         }
+
+        //创建登录信息
         Sys_user user = getUserService().fetch(Cnd.where("loginname", "=", loginname));
         if (Lang.isEmpty(user)) {
             throw Lang.makeThrow(UnknownAccountException.class, "Account [ %s ] not found", loginname);
@@ -82,9 +84,11 @@ public class PlatformAuthorizingRealm extends AuthorizingRealm {
         }
         getUserService().fetchLinks(user, null);
         getUserService().fillMenu(user);
+
         SecurityUtils.getSubject().getSession(true).setAttribute("platformErrCount", 0);
         SecurityUtils.getSubject().getSession(true).setAttribute("uid", user.getId());
         SecurityUtils.getSubject().getSession(true).setAttribute("username", user.getUsername());
+
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, user.getPassword(), getName());
         info.setCredentialsSalt(ByteSource.Util.bytes(user.getSalt()));
         return info;

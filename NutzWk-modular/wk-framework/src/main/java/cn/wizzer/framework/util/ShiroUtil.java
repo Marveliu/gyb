@@ -91,7 +91,6 @@ public class ShiroUtil {
                         return pd.getReadMethod().invoke(principal, (Object[]) null);
                     }
                 }
-
                 logger.trace("Property [{}] not found in principal of type [{}]", property,
                         principal.getClass().getName());
             } catch (Exception e) {

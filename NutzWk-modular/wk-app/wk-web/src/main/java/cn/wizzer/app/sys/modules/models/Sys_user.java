@@ -10,6 +10,7 @@ import java.util.Map;
 /**
  * Created by wizzer on 2016/6/21.
  */
+
 @Table("sys_user")
 @TableIndexes({@Index(name = "INDEX_SYS_USER_LOGINNAMAE", fields = {"loginname"}, unique = true)})
 public class Sys_user extends BaseModel implements Serializable {

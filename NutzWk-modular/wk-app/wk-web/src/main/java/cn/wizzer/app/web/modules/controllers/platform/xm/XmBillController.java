@@ -37,6 +37,7 @@ public class XmBillController{
     @RequiresPermissions("platform.xm.bill")
     public Object data(@Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
 		Cnd cnd = Cnd.NEW();
+        cnd.and("status","=",2);
     	return xmBillService.data(length, start, draw, order, columns, cnd, null);
     }
 

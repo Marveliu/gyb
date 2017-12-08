@@ -70,22 +70,25 @@
                 <div></div>
             </a>
             <!--<a onclick="sublime.changeTheme('palette.4.css')" href="${base!}/assets/css/skins/palette.4.css"-->
-               <!--class="css_orange cs_color cs_4 <% if('palette.4.css' == @shiro.getPrincipalProperty('loginTheme')){ %>active<% } %>">-->
-                <!--<div></div>-->
-                <!--<div></div>-->
-                <!--<div></div>-->
-                <!--<div></div>-->
+            <!--class="css_orange cs_color cs_4 <% if('palette.4.css' == @shiro.getPrincipalProperty('loginTheme')){ %>active<% } %>">-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
             <!--</a>-->
         </div>
         <div class="options-container">
             <h6>${msg['index.layout']}</h6>
-            <a class="pg-val toggle-sidebar toggle-active <% if(@shiro.getPrincipalProperty('loginSidebar')){ %>active<% } %>" href="javascript:;">
+            <a class="pg-val toggle-sidebar toggle-active <% if(@shiro.getPrincipalProperty('loginSidebar')){ %>active<% } %>"
+               href="javascript:;">
                 <img src="${base!}/assets/img/panel/small.png" alt="">
             </a>
-            <a class="pg-val toggle-scroll toggle-active <% if(@shiro.getPrincipalProperty('loginScroll')){ %>active<% } %>" href="javascript:;">
+            <a class="pg-val toggle-scroll toggle-active <% if(@shiro.getPrincipalProperty('loginScroll')){ %>active<% } %>"
+               href="javascript:;">
                 <img src="${base!}/assets/img/panel/scroll.png" alt="">
             </a>
-            <a class="pg-val toggle-boxed toggle-active <% if(@shiro.getPrincipalProperty('loginBoxed')){ %>active<% } %>" href="javascript:;">
+            <a class="pg-val toggle-boxed toggle-active <% if(@shiro.getPrincipalProperty('loginBoxed')){ %>active<% } %>"
+               href="javascript:;">
                 <img src="${base!}/assets/img/panel/boxed.png" alt="">
             </a>
         </div>
@@ -100,8 +103,9 @@
             <a href="javascript:;" class="ti-menu off-left visible-xs" data-toggle="offscreen" data-move="ltr"></a>
 
 
-            <a href="${base!}/platform/home"  data-pjax class="navbar-brand">
-                <img src="${base!}/assets/img/logo.png" alt="" class="o_img <% if(!@shiro.getPrincipalProperty('loginSidebar')){ %>o_hide<% } %>">
+            <a href="${base!}/platform/home" data-pjax class="navbar-brand">
+                <img src="${base!}/assets/img/logo.png" alt=""
+                     class="o_img <% if(!@shiro.getPrincipalProperty('loginSidebar')){ %>o_hide<% } %>">
                 <span class="heading-font o_img <% if(@shiro.getPrincipalProperty('loginSidebar')){ %>o_hide<% } %>">
 		            <img src="${base!}/assets/img/logoa.png">
                 </span>
@@ -132,7 +136,7 @@
             %>
             <li class="dropdown">
 
-                    <% if(!isEmpty(@secondMenus.get(firstMenu.path))){%>
+                <% if(!isEmpty(@secondMenus.get(firstMenu.path))){%>
                 <a href="javascript:;" data-toggle="dropdown">
                     <% if(has(firstMenu.icon)){ %>
                     <i class="${firstMenu.icon}"></i>
@@ -140,33 +144,43 @@
                     <span>
                         <%if(lang=="zh_CN"){%>${firstMenu.name}<%}else{%>${firstMenu.aliasName}<%}%></span>
                     <b class="caret"></b
-                            >
+                    >
                 </a>
                 <%}else{%>
-                    <a href="<% if(!isEmpty(firstMenu.href)){ %><%if(@string.startWith(firstMenu.href,'/')){%>${base}${firstMenu.href!}<%}else{%>${firstMenu.href!}<%}%> <% }else{ %>javascript:;<% } %>" <%if(@string.startWith(firstMenu.target,'_')){%>target="${firstMenu.target!}"<%}else{%>${firstMenu.target!}<%}%>>
+                <a href="<% if(!isEmpty(firstMenu.href)){ %><%if(@string.startWith(firstMenu.href,'/')){%>${base}${firstMenu.href!}<%}else{%>${firstMenu.href!}<%}%> <% }else{ %>javascript:;<% } %>"
+                <%if(@string.startWith(firstMenu.target,'_')){%>target="${firstMenu.target!}"<%}else{%>${firstMenu.target!}<%}%>>
                    <span>
                         <%if(lang=="zh_CN"){%>${firstMenu.name}<%}else{%>${firstMenu.aliasName}<%}%></span></a>
-                    <%}%>
+                <%}%>
                 <% if(!isEmpty(@secondMenus.get(firstMenu.path))){%>
                 <ul class="dropdown-menu topnav">
                     <% for(secondMenu in @secondMenus.get(firstMenu.path)){ %>
                     <li class="dropdown">
-                        <a href="<% if(!isEmpty(secondMenu.href)){ %><%if(@string.startWith(secondMenu.href,'/')){%>${base}${secondMenu.href!}<%}else{%>${secondMenu.href!}<%}%> <% }else{ %>javascript:;<% } %>" <%if(@string.startWith(secondMenu.target,'_')){%>target="${secondMenu.target!}"<%}else{%>${secondMenu.target!}<%}%>>
-                            <% if(!isEmpty(@secondMenus.get(secondMenu.path))){ %><i class="toggle-accordion"></i><%}%>
-                            <span><%if(lang=="zh_CN"){%>${secondMenu.name}<%}else{%>${secondMenu.aliasName}<%}%></span>
+                        <a href="<% if(!isEmpty(secondMenu.href)){ %><%if(@string.startWith(secondMenu.href,'/')){%>${base}${secondMenu.href!}<%}else{%>${secondMenu.href!}<%}%> <% }else{ %>javascript:;<% } %>"
+                        <%if(@string.startWith(secondMenu.target,'_')){%>target="${secondMenu.target!}"<%}else{%>${secondMenu.target!}<%}%>>
+                        <% if(!isEmpty(@secondMenus.get(secondMenu.path))){ %><i class="toggle-accordion"></i><%}%>
+                        <span><%if(lang=="zh_CN"){%>${secondMenu.name}<%}else{%>${secondMenu.aliasName}<%}%></span>
                         </a>
                         <% if(!isEmpty(@secondMenus.get(secondMenu.path))){ %>
                         <ul class="sub-menu">
                             <% for(thMenu in @secondMenus.get(secondMenu.path)){ %>
-                            <li class="clearfix" >
-                                <a <% if(!isEmpty(thMenu.href)){ %>href="<%if(@string.startWith(thMenu.href,'/')){%>${base}${thMenu.href!}<%}else{%>${thMenu.href!}<%}%>" <% }else{ %>href="javascript:;"<% } %> <%if(@string.startWith(thMenu.target,'_')){%>target="${thMenu.target!}"<%}else{%>${thMenu.target!}<%}%>>
+                            <li class="clearfix">
+                                <a <% if(!isEmpty(thMenu.href)){
+                                %>href="<%if(@string.startWith(thMenu.href,'/')){%>${base}${thMenu.href!}<%}else{%>${thMenu.href!}<%}%>"
+                                <% }else{ %>href="javascript:;"<% } %>
+                                <%if(@string.startWith(thMenu.target,'_')){%>target="${thMenu.target!}"<%}else{%>${thMenu.target!}<%}%>>
                                 <span><%if(lang=="zh_CN"){%>${thMenu.name}<%}else{%>${thMenu.aliasName}<%}%></span>
                                 </a>
-                            </li><% }%>
-                        </ul><%}%>
-                    </li><% } %>
-                </ul><% } %>
-            </li><% }%>
+                            </li>
+                            <% }%>
+                        </ul>
+                        <%}%>
+                    </li>
+                    <% } %>
+                </ul>
+                <% } %>
+            </li>
+            <% }%>
 
         </ul>
         <ul class="nav navbar-nav navbar-right">
@@ -231,37 +245,37 @@
 
         <!--<aside class="sidebar offscreen-left">-->
 
-            <!--<nav class="main-navigation" data-height="auto" data-size="6px" data-distance="0" data-rail-visible="true"-->
-                 <!--data-wheel-step="10">-->
-                <!--&lt;!&ndash;<p class="nav-title">MENU</p>&ndash;&gt;-->
-                <!--<ul class="nav">-->
-                    <!--<li class="open">-->
-                        <!--<a href="javascript:;">-->
-                            <!--<%if(!isEmpty(@shiro.getPrincipalProperty('customMenus'))){%>-->
-                            <!--<i class="toggle-accordion"></i>-->
-                            <!--<%}%>-->
-                            <!--<i class="ti-heart"></i>-->
-                            <!--<span>${msg['index.custommenu']}</span>-->
-                        <!--</a>-->
-                        <!--<%if(!isEmpty(@shiro.getPrincipalProperty('customMenus'))){%>-->
-                        <!--<ul class="sub-menu">-->
-                            <!--<%for(o in @shiro.getPrincipalProperty('customMenus')){%>-->
+        <!--<nav class="main-navigation" data-height="auto" data-size="6px" data-distance="0" data-rail-visible="true"-->
+        <!--data-wheel-step="10">-->
+        <!--&lt;!&ndash;<p class="nav-title">MENU</p>&ndash;&gt;-->
+        <!--<ul class="nav">-->
+        <!--<li class="open">-->
+        <!--<a href="javascript:;">-->
+        <!--<%if(!isEmpty(@shiro.getPrincipalProperty('customMenus'))){%>-->
+        <!--<i class="toggle-accordion"></i>-->
+        <!--<%}%>-->
+        <!--<i class="ti-heart"></i>-->
+        <!--<span>${msg['index.custommenu']}</span>-->
+        <!--</a>-->
+        <!--<%if(!isEmpty(@shiro.getPrincipalProperty('customMenus'))){%>-->
+        <!--<ul class="sub-menu">-->
+        <!--<%for(o in @shiro.getPrincipalProperty('customMenus')){%>-->
 
-                            <!--<li>-->
-                                <!--<a <%if(!isEmpty(o.href)){%>href="${base}${o.href}" <%if('data-pjax'==o.target){%>data-pjax<%}}else{ %>href="javascript:;"<%}%>>-->
-                                <!--<span><%if(lang=="zh_CN"){%>${o.name}<%}else{%>${o.aliasName}<%}%></span>-->
-                                <!--</a>-->
-                            <!--</li>-->
+        <!--<li>-->
+        <!--<a <%if(!isEmpty(o.href)){%>href="${base}${o.href}" <%if('data-pjax'==o.target){%>data-pjax<%}}else{ %>href="javascript:;"<%}%>>-->
+        <!--<span><%if(lang=="zh_CN"){%>${o.name}<%}else{%>${o.aliasName}<%}%></span>-->
+        <!--</a>-->
+        <!--</li>-->
 
-                            <!--<%}%>-->
-                        <!--</ul>-->
-                        <!--<%}%>-->
-                    <!--</li>-->
+        <!--<%}%>-->
+        <!--</ul>-->
+        <!--<%}%>-->
+        <!--</li>-->
 
-                <!--</ul>-->
-                <!--<ul id="leftnav" class="nav">-->
-                <!--</ul>-->
-            <!--</nav>-->
+        <!--</ul>-->
+        <!--<ul id="leftnav" class="nav">-->
+        <!--</ul>-->
+        <!--</nav>-->
         <!--</aside>-->
         <section class="main-content" id="container">
 
@@ -270,18 +284,53 @@
                 <header class="header navbar clearfix bb bg-default pl0 pr0">
                     <p class="navbar-text"><i class="fa fa-sitemap mr5"></i> 平台项目表</p>
                 </header>
+
                 <div class="content-wrap no-p">
                     <div class="wrapper2">
                         <div class="m5">
                             <nav role="navigation">
                                 <div class="no-padding">
+
+
+
+                                    <div class="input-group mb15">
+                                        <input type="text" class="form-control" placeholder="查询任务书名称">
+                                        <span class="input-group-btn"><button class="btn btn-default" type="button">Go!</button></span>
+                                    </div>
+
+                                    <!--项目列表-->
                                     <ul class="nav nav-stacked" id="xminflist">
                                         <li>
-                                            <a onclick="xminfset()">
-                                                <i class="ti-control-record text-success pull-right"></i> 全部项目
-                                            </a>
+                                            <button class="dropdown-toggle form-control" data-toggle="dropdown" aria-expanded="true" value="0" >
+                                                <i class="ti-arrow-down text-success pull-right"></i>查询条件
+                                            </button>
+                                                <!--<i class="dropdown-toggle form-control" data-toggle="dropdown" aria-expanded="true" value="0">-->
+                                                    <!--<span id="xmsearch">条件</span>-->
+                                                    <!--<span class="ti-angle-down ml10"></span>-->
+                                                <!--</i>-->
+                                                <ul class="dropdown-menu" style="width:100%; text-align: center; cursor: pointer" >
+                                                    <li>
+                                                        <a id="type0"  onclick="setSearchFilter(0)">全部项目</a>
+                                                    </li>
+                                                    <li>
+                                                        <a id="type1" onclick="setSearchFilter(1)">进行中</a>
+                                                    </li>
+                                                    <li>
+                                                        <a id="type2" onclick="setSearchFilter(2)">待结算</a>
+                                                    </li>
+                                                    <li>
+                                                        <a id="type3" onclick="setSearchFilter(3)">已结算</a>
+                                                    </li>
+                                                </ul>
                                         </li>
+
+                                        <li><a onclick="xminfset('b4141d0d18a1498e9df15b76901f6ef2')">
+                                            <i class="ti-control-record text-success pull-right"></i>詹天佑门户网站设计</a>
+                                        </li>
+
                                     </ul>
+
+
                                 </div>
                             </nav>
                         </div>
@@ -345,9 +394,9 @@
 <script src="${base!}/assets/js/date.js"></script>
 
 <script type="text/javascript">
-    function bindLeft(){
-        $('.main-navigation a[data-pjax]').on('click',function(){
-            $('.main-navigation a[data-pjax]').each(function(){
+    function bindLeft() {
+        $('.main-navigation a[data-pjax]').on('click', function () {
+            $('.main-navigation a[data-pjax]').each(function () {
                 $(this).parent().removeClass('active');
             });
             $(this).parent().addClass('active');
@@ -355,39 +404,59 @@
     }
     $(document).ready(function () {
         initxmlist();
-        if($.support.pjax) {
-              <%if(@shiro.getPrincipalProperty('loginPjax')){%>
-            $(document).pjax('a[data-pjax]', '#container', {maxCacheLength:0,push:false, replace:true,fragment: '#container', timeout: 8000});
-            <%}%>
+        if ($.support.pjax) {
+        <%
+            if (@
+            shiro.getPrincipalProperty('loginPjax')
+        )
+            {%>
+                $(document).pjax('a[data-pjax]', '#container', {
+                    maxCacheLength: 0,
+                    push: false,
+                    replace: true,
+                    fragment: '#container',
+                    timeout: 8000
+                });
+            <%
+            }
+        %>
             bindLeft();
-            $('#topnav a[data-pjax]').on('click',function(){
-                $.get("${base!}/platform/home/left?url="+$(this).attr("href"),function (data) {
+            $('#topnav a[data-pjax]').on('click', function () {
+                $.get("${base!}/platform/home/left?url=" + $(this).attr("href"), function (data) {
                     $("#leftnav").html(data);
                     bindLeft();
                 }, "html");
             });
-            $.get("${base!}/platform/home/path?url="+window.location.href,function (data) {
+            $.get("${base!}/platform/home/path?url=" + window.location.href, function (data) {
                 $("#leftnav").html(data);
                 bindLeft();
             }, "html");
-            <%if(@shiro.getPrincipalProperty('loginPjax')){%>
-            $(document).on('pjax:send', function () { //pjax链接点击后显示加载动画；
-                $(".gallery-loader").fadeIn();
-            });
-            $(document).on('pjax:complete', function () { //pjax链接加载完成后隐藏加载动画；
-                setTimeout(function(){$(".gallery-loader").fadeOut()},250);
-            });
-            <%}%>
+        <%
+            if (@
+            shiro.getPrincipalProperty('loginPjax')
+        )
+            {%>
+                $(document).on('pjax:send', function () { //pjax链接点击后显示加载动画；
+                    $(".gallery-loader").fadeIn();
+                });
+                $(document).on('pjax:complete', function () { //pjax链接加载完成后隐藏加载动画；
+                    setTimeout(function () {
+                        $(".gallery-loader").fadeOut()
+                    }, 250);
+                });
+            <%
+            }
+        %>
         }
 
         try {
             $(".gallery-loader").fadeOut();
         } catch (e) {
         }
-        $('#homeDetail').on('hidden.bs.modal',function(){
+        $('#homeDetail').on('hidden.bs.modal', function () {
             $(this).removeData("bs.modal");
         });
-        $(".toggle-sidebar").click(function(){
+        $(".toggle-sidebar").click(function () {
             $(".o_img").toggleClass("o_hide");
         });
     });
@@ -395,26 +464,26 @@
     function initxmlist() {
         $('#xminflist').html();
         $.ajax({
-            url:"/platform/xm/inf/xminflist",
-            type:"get",
-            contentType:"application/json;charset=utf-8",
-            dataType:"json",
-            success:function(data){
+            url: "/platform/xm/inf/xminflist",
+            type: "get",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (data) {
                 console.log(data);
                 //i表示在data中的索引位置，n表示包含的信息的对象
-                for(var key in data) {
+                for (var key in data) {
                     console.log(key, data[key]);
                     var xmname = key;
                     var xmid = data[key];
                     var resultitem = '<li>' +
-                            '<a onclick="xminfset(' + "'"+ xmid +"'"+')">' +
+                            '<a onclick="xminfset(' + "'" + xmid + "'" + ')">' +
                             '<i class="ti-control-record text-success pull-right"></i>' + xmname +
                             '</a>' +
                             '</li>';
                     $('#xminflist').append(resultitem);
                 }
             },
-            error:function(){
+            error: function () {
                 Toast.error("加载出错！")
             }
         });

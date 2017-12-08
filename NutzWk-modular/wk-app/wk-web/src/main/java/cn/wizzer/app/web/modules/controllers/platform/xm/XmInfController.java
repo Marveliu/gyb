@@ -38,11 +38,16 @@ public class XmInfController{
     public void index() {
     }
 
+
+    //自动判断权限获取值
     @At("/data")
     @Ok("json")
     @RequiresPermissions("platform.code.inf")
     public Object data(@Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
-		Cnd cnd = Cnd.NEW();
+
+        Cnd cnd = Cnd.NEW();
+        //todo: judge gy gz (cnd)
+
     	return xmInfService.data(length, start, draw, order, columns, cnd, null);
     }
 
