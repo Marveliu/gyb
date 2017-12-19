@@ -26,6 +26,7 @@ import java.util.List;
 @At("/platform/gy/inf")
 public class GyInfController{
     private static final Log log = Logs.get();
+
     @Inject
     private GyInfService gyInfService;
     @Inject

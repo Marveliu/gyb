@@ -11,4 +11,6 @@ public class GyAuthServiceImpl extends BaseServiceImpl<gy_auth> implements GyAut
     public GyAuthServiceImpl(Dao dao) {
         super(dao);
     }
+
+
 }
