@@ -250,6 +250,7 @@ layout("/layouts/platform.html"){
             }
         }, "json");
     }
+
     function disable(id) {
         $.post("${base}/platform/gy/auth/disable/" + id, {}, function (data) {
             if (data.code == 0) {

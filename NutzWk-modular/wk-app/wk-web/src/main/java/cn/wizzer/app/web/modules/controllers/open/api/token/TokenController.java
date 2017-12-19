@@ -30,6 +30,7 @@ public class TokenController {
     @Inject
     private SysApiService apiService;
 
+
     /**
      * @api {post} /open/api/token/get 获取Token
      * @apiGroup Token
