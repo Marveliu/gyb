@@ -2,6 +2,8 @@ package cn.wizzer.app.sys.modules.models;
 
 import cn.wizzer.framework.base.model.BaseModel;
 import org.nutz.dao.entity.annotation.*;
+import org.nutz.json.JsonField;
+import org.nutz.lang.random.R;
 
 import java.io.Serializable;
 import java.util.List;
@@ -55,6 +57,19 @@ public class Sys_user extends BaseModel implements Serializable {
     @Column
     @ColDefine(type = ColType.VARCHAR, width = 255)
     private String email;
+
+
+    /**邮箱是否已经验证过*/
+    @Column("email_checked")
+    @Comment("邮箱是否已经验证过")
+    protected boolean emailChecked;
+
+    /**头像的byte数据*/
+    @Column
+    @JsonField(ignore=true)
+    @Comment("用户头像")
+    protected byte[] avatar;
+
 
     @Column
     @Comment("登陆时间")
@@ -312,5 +327,21 @@ public class Sys_user extends BaseModel implements Serializable {
 
     public void setCustomMenus(List<Sys_menu> customMenus) {
         this.customMenus = customMenus;
+    }
+
+    public boolean isEmailChecked() {
+        return emailChecked;
+    }
+
+    public void setEmailChecked(boolean emailChecked) {
+        this.emailChecked = emailChecked;
+    }
+
+    public byte[] getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(byte[] avatar) {
+        this.avatar = avatar;
     }
 }

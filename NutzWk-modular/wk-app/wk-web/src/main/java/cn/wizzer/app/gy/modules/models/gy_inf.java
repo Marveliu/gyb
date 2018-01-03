@@ -18,7 +18,6 @@ import java.util.List;
  */
 
 @Table("gy_inf")
-@View("v_gy")
 public class gy_inf extends BaseModel implements Serializable {
 
     @Column

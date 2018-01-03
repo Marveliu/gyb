@@ -3,6 +3,7 @@ package cn.wizzer.framework.base.model;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.nutz.dao.entity.annotation.*;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
 import org.nutz.lang.Strings;
@@ -14,6 +15,7 @@ import java.io.Serializable;
  * Created by wizzer on 2016/6/21.
  */
 public abstract class BaseModel implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Column
     @Comment("操作人")
@@ -55,6 +57,7 @@ public abstract class BaseModel implements Serializable {
         }
         return "";
     }
+
 
     public String getOpBy() {
         return opBy;

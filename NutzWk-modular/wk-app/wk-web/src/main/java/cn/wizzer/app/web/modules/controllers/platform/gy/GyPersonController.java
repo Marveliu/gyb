@@ -47,6 +47,19 @@ public class GyPersonController {
 
 
     //个人信息修改
+    @At("")
+    @Ok("beetl:/platform/gy/person/index.html")
+    @RequiresPermissions("gy.person")
+    public void index(HttpServletRequest req) {
+        Cnd cnd = Cnd.NEW();
+        Subject currentUser = SecurityUtils.getSubject();
+        Sys_user user = (Sys_user) currentUser.getPrincipal();
+        String id = user.getId();
+        Object test = gyInfService.fetch(cnd.and("userid","=",id));
+        req.setAttribute("obj", test);
+    }
+
+    //个人信息修改
     @At("/inf")
     @Ok("beetl:/platform/gy/person/infedit.html")
     @RequiresPermissions("gy.person")

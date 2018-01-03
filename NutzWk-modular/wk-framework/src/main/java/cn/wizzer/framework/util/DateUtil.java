@@ -17,7 +17,7 @@ public class DateUtil {
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
-     * 获取当前时间(HH:mm:ss)
+     * 获取当前时间(yyyy-MM-dd)
      *
      * @return
      */
