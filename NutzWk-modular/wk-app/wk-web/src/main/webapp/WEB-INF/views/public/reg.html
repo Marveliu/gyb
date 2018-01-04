@@ -40,7 +40,7 @@ layout("/layouts/clean.html"){
                                         <label for="username" class="col-sm-3 control-label">用户名</label>
 
                                         <div class="col-sm-8">
-                                            <input type="text" id="username" class="form-control" name="user.username" data-parsley-required="true" placeholder="用户名">
+                                            <input type="text" id="username" class="form-control" name="username" data-parsley-required="true" placeholder="用户名">
                                         </div>
                                     </div>
 
@@ -48,7 +48,7 @@ layout("/layouts/clean.html"){
                                     <div class="form-group">
                                         <label for="email" class="col-sm-3 control-label">邮箱</label>
                                         <div class="col-sm-8">
-                                            <input type="text" id="email" name="gyinf.email" data-parsley-type="email" class="form-control" placeholder="请输入您的邮箱!" data-parsley-trigger="change">
+                                            <input type="text" id="email" name="email" data-parsley-type="email" class="form-control" placeholder="请输入您的邮箱!" data-parsley-trigger="change">
                                         </div>
                                     </div>
 
@@ -56,7 +56,7 @@ layout("/layouts/clean.html"){
                                     <div class="form-group">
                                         <label for="password" class="col-sm-3 control-label">登陆密码</label>
                                         <div class="col-sm-8">
-                                            <input type="password" id="password" class="form-control" name="user.password" data-parsley-required="true" placeholder="请输入8-16位密码！"
+                                            <input type="password" id="password" class="form-control" name="password" data-parsley-required="true" placeholder="请输入8-16位密码！"
                                                 data-parsley-maxlength="16" data-parsley-minlength="8" data-parsley-trigger="change">
                                         </div>
                                     </div>
@@ -64,11 +64,11 @@ layout("/layouts/clean.html"){
                                     <div class="form-group">
                                         <label for="repassword" class="col-sm-3 control-label">确认密码</label>
                                         <div class="col-sm-8">
-                                            <input type="password" id="repassword" class="form-control" name="user.password" placeholder="请重新输入密码！"
+                                            <input type="password" id="repassword" class="form-control"  placeholder="请重新输入密码！"
                                                    data-parsley-required="true"
-                                                   data-parsley-trigger="focusout"
+                                                   data-parsley-trigger="change"
                                                    data-parsley-required-message="确认密码不可为空"
-                                                   data-parsley-equalto="#reg_phone_pwd"
+                                                   data-parsley-equalto="#password"
                                                    data-parsley-equalto-message="两次密码输入不一致" >
                                         </div>
                                     </div>
@@ -98,17 +98,11 @@ layout("/layouts/clean.html"){
             </div>
         </div>
 
-        <div id="dialogDetail" class="modal fade bs-modal-sm" tabindex="-3" role="dialog" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                </div>
-            </div>
-        </div>
-
         <script type="text/javascript">
             var el = document.getElementById("year"),
                 year = (new Date().getFullYear());
             el.innerHTML = year;
+
             $(document).ready(function () {
                 myForm.init();
                 //        提交注册信息
@@ -120,8 +114,9 @@ layout("/layouts/clean.html"){
                     success: function (data, statusText, xhr, form) {
                         if (data.code == 0) {
                             Toast.success(data.msg);
-                            window.location.href("/sysadmin")
-                            //登入系统
+                            window.location.href = "/sysadmin";
+                            // 用户详情界面
+
                         } else {
                             Toast.error(data.msg);
                         }
@@ -130,9 +125,9 @@ layout("/layouts/clean.html"){
                 });
 
                 //  邮箱注册信息提示
-                $("#dialogDetail").on("hidden.bs.modal", function () {
-                    $(this).removeData("bs.modal");
-                });
+//                $("#dialogDetail").on("hidden.bs.modal", function () {
+//                    $(this).removeData("bs.modal");
+//                });
 
             });
         </script>

@@ -27,8 +27,10 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
+ * 雇佣模块
  * Created by 89792 on 2017/11/13 0013.
  */
+
 @IocBean
 @At("/platform/gy/person/")
 public class GyPersonController {
@@ -36,6 +38,7 @@ public class GyPersonController {
     //todo:RequiresPermissions没有处理
 
     private static final Log log = Logs.get();
+
     @Inject
     private GyInfService gyInfService;
     @Inject
@@ -46,11 +49,17 @@ public class GyPersonController {
     private GyPayService gyPayService;
 
 
-    //个人信息修改
+    /**
+     *
+     * 根据不同的雇员等级来显示个人中心
+     *
+     * @param req
+     */
     @At("")
     @Ok("beetl:/platform/gy/person/index.html")
     @RequiresPermissions("gy.person")
     public void index(HttpServletRequest req) {
+        //获得当前登录用户
         Cnd cnd = Cnd.NEW();
         Subject currentUser = SecurityUtils.getSubject();
         Sys_user user = (Sys_user) currentUser.getPrincipal();

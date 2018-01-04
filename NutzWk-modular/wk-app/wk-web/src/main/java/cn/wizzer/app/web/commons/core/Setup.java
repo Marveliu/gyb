@@ -314,6 +314,7 @@ public class Setup implements org.nutz.mvc.Setup {
         //pojo到表结构的迁移
         Daos.migration(dao, "cn.wizzer.app.gy", true, false, false);
         Daos.migration(dao, "cn.wizzer.app.gy", true, false, false);
+        Daos.migration(dao, "cn.wizzer.app.sys", true, false, false);
 
 
         // 若必要的数据表不存在，则初始化数据库

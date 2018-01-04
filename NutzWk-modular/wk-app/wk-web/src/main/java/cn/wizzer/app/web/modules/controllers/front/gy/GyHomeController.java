@@ -9,6 +9,7 @@ import cn.wizzer.app.sys.modules.services.*;
 import cn.wizzer.app.web.commons.services.email.EmailService;
 import cn.wizzer.app.web.commons.slog.SLogService;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
+import cn.wizzer.app.web.modules.controllers.open.api.email.EmailController;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.util.DateUtil;
 import org.apache.shiro.crypto.RandomNumberGenerator;
@@ -59,9 +60,11 @@ public class GyHomeController {
     private SysRoleService roleService;
     @Inject
     private EmailService emailService;
+    @Inject
+    private EmailController emailController;
 
-    private String loginname = "public";
-    private String rolecode = "gy-level1";
+    private String loginname = "public";        //
+    private String rolecode = "gy1";            //注册雇员绑定角色类型
 
 
     @At("")
@@ -169,9 +172,11 @@ public class GyHomeController {
     //         return Result.error("system.error");
     //     }
     // }
+
+
     @At("/doreg")
     @Ok("json")
-    @SLog(tag = "新雇员注册", msg = "用户名:${args[0].loginname}")
+    @SLog(tag = "新雇员注册", msg = "用户名:${username}")
     @AdaptBy(type = WhaleAdaptor.class)
     public Object regDo(
             @Param("email") String email,
@@ -181,35 +186,46 @@ public class GyHomeController {
     ) {
 
         //验证用户名，邮箱是否被注册
-        if (null != userService.fetch(Cnd.where("email", "=", email))) {
-            return Result.error("账号存在！");
+        if (null != userService.fetch(Cnd.where("email", "=", email).and("emailChecked","=",true))) {
+            return Result.error("邮箱存在！");
         }
 
         if (null != userService.fetch(Cnd.where("username", "=", username).and("disabled", "=", false))) {
-            return Result.error("邮箱已经注册！");
+            return Result.error("账号存在！");
         }
+
 
         //初始化用户注册信息
         Sys_user user = new Sys_user();
-        user.setLoginname(username);
-        user.setPassword(password);
-        user.setEmail(email);
-        user.setDisabled(true);         //邮箱未验证
 
+        RandomNumberGenerator rng = new SecureRandomNumberGenerator();
+        String salt = rng.nextBytes().toBase64();
+        String hashedPasswordBase64 = new Sha256Hash(password, salt, 1024).toBase64();
+        user.setPassword(hashedPasswordBase64);
+        user.setSalt(salt);
+
+        user.setLoginname(username);
+        user.setUsername(username);
+        user.setLoginPjax(true);
+        user.setLoginCount(0);
+        user.setLoginAt(0);
+        user.setEmail(email);
+        user.setDisabled(false);
+        user.setEmailChecked(false);//邮箱未验证
+
+        // 注册用户并发送激活邮件
         try {
             Trans.exec(new Atom() {
                 @Override
                 public void run() {
-                    if (null != userService.insert(user)) {
-
-
-                        emailService.send(email,"测试","ce");
+                    Sys_user result = userService.insert(user);
+                    dao.insert("sys_user_role", org.nutz.dao.Chain.make("userId", result.getId()).add("roleId", roleService.fetch(Cnd.where("code", "=", rolecode)).getId()));
+                    if (null != result) {
+                        emailController.activeMail(user.getId());
                     }
                 }
             });
-            
-            return Result.success("system.success");
-
+            return Result.success("注册成功，请前往邮箱进行账号激活！");
         } catch (Exception e) {
             return Result.error("system.error");
         }

@@ -1,5 +1,6 @@
 package cn.wizzer.app.web.commons.services.email;
 
+import cn.wizzer.framework.util.Code128Util;
 import org.apache.commons.mail.HtmlEmail;
 import org.nutz.ioc.Ioc;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -20,6 +21,7 @@ public class EmailService {
     public boolean send(String to, String subject, String html) {
         try {
             HtmlEmail email = ioc.get(HtmlEmail.class);
+            email.setCharset("UTF-8");
             email.setSubject(subject);
             email.setHtmlMsg(html);
             email.addTo(to);

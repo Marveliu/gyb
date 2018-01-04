@@ -1,6 +1,7 @@
 package cn.wizzer.app;
 
 import cn.wizzer.app.web.commons.core.Module;
+import cn.wizzer.app.web.modules.controllers.open.api.email.EmailController;
 import net.sf.ehcache.CacheManager;
 import org.junit.After;
 import org.junit.Assert;
