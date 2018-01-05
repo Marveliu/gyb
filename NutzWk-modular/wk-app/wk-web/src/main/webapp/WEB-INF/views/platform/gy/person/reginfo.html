@@ -57,38 +57,40 @@ layout("/layouts/platform.html"){
                     </div>
                     <input type="hidden" id="birthday" name="birthdayat" value="${@date.getDate()}" />
                 </div>
+
+
+
                 <div class="form-group">
-                    <label for="college" class="col-sm-3 control-label">${msg['gy.inf.column.college']}</label>
-                    <div class="col-sm-8">
-                        <input type="text" id="college" class="form-control" name="gyinf.college" data-parsley-required="true" placeholder="${msg['gy.inf.column.college']}">
-                    </div>
-                </div>
-
-
-                <div class="form-group has-feedback">
-                    <label for="school" class="col-sm-2 control-label">选择学校</label>
+                    <label for="college" class="col-sm-3 control-label">选择学校</label>
                     <div class="col-sm-8">
                         <div class="input-group">
-                            <input id="school" type="text" class="form-control" placeholder="不选择默认为顶级菜单" disabled
-                                   value="<%if(!isEmpty(obj)){%>${obj.name}<%}%>"/>
+                            <input id="college" type="text" class="form-control" placeholder="请选择您的学校" disabled
+                                    value=""/>
 
                             <span class="input-group-btn">
 			                             			<button type="button" class="btn btn-primary" data-toggle="modal"
-                                                            data-target="#dialogSelectParentUnit"><i class="ti-plus"></i>选择
+                                                            data-target="#dialogSelectSchool"><i class="ti-plus"></i>选择
                                                     </button>
 			                             		</span>
                         </div>
-                        <input type="hidden"  name="gyinf.school"  data-parsley-required="true" value="">
+                        <input type="hidden"  name="gyinf.college"  data-parsley-required="true" value="">
                     </div>
                 </div>
-
 
                 <div class="form-group">
                     <label for="school" class="col-sm-3 control-label">${msg['gy.inf.column.school']}</label>
                     <div class="col-sm-8">
-                        <input type="text" id="school" class="form-control" name="gyinf.school" data-parsley-required="true" placeholder="${msg['gy.inf.column.school']}">
+                        <input type="text" id="school" class="form-control" name="gyinf.school" data-parsley-required="true" placeholder="${msg['gy.inf.column.college']}">
                     </div>
                 </div>
+
+
+                <!--<div class="form-group">-->
+                    <!--<label for="school" class="col-sm-3 control-label">${msg['gy.inf.column.school']}</label>-->
+                    <!--<div class="col-sm-8">-->
+                        <!--<input type="text" id="school" class="form-control" name="gyinf.school" data-parsley-required="true" placeholder="${msg['gy.inf.column.school']}">-->
+                    <!--</div>-->
+                <!--</div>-->
 
 
                 <div class="form-group">
@@ -188,6 +190,32 @@ layout("/layouts/platform.html"){
 </div>
 </div>
 
+<!-- 选择上级单位 -->
+<div id="dialogSelectSchool" class="modal fade bs-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">选择上级菜单</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="jsTreeParentUnit" class="demo"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="pull-left">
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="selectFirstMenu()">设为顶级菜单</button>
+                </div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+                <button type="button" class="btn btn-primary" onclick="selectParentMenu()">确认选择</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
 
     // 学校选择
@@ -198,7 +226,7 @@ layout("/layouts/platform.html"){
                 data: {
                     dataType: "json",
                     url: function (node) {
-                        return node.id === "#" ? "${base}/platform/sys/menu/opentree?code="+ code: "${base}/platform/sys/menu/tree?pid=" + node.id
+                        return node.id === "#" ? "${base}/platform/sys/dict/opentree?code="+ code: "${base}/platform/sys/dict/opentree?pid=" + node.id
                     }
                 },
                 multiple: false
@@ -211,19 +239,19 @@ layout("/layouts/platform.html"){
     function selectParentMenu() {
         var tree = $.jstree.reference("#jsTreeParentUnit");
         var node = tree.get_selected(true);
-        $("#unitAddForm #school").val(node[0].text);
-        $("#unitAddForm input[name='gyinf.school']").val(node[0].id);
-        $("#dialogSelectParentUnit").modal("hide");
+        $("#addForm #college").val(node[0].text);
+        $("#addForm input[name='gyinf.college']").val(node[0].id);
+        $("#dialogSelectSchool").modal("hide");
     }
     function selectFirstMenu() {
-        $("#unitAddForm #parentId").val("顶级菜单");
-        $("#unitAddForm input[name='gyinf.school']").val("");
-        $("#dialogSelectParentUnit").modal("hide");
+        $("#addForm #parentId").val("顶级菜单");
+        $("#addForm input[name='gyinf.college']").val("");
+        $("#dialogSelectSchool").modal("hide");
     }
 
 
     $(document).ready(function () {
-        initSysDictTreeView(code);
+        initSysDictTreeView("school");
         myForm.init();
 
         // 时间选择器

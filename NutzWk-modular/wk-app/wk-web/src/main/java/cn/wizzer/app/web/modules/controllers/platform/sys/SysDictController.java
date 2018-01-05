@@ -132,17 +132,19 @@ public class SysDictController {
      */
     @At
     @Ok("json")
-    public Object Opentree(
+    public Object opentree(
             @Param("code") String code,
             @Param("pid") String pid) {
         Cnd cnd = Cnd.NEW();
 
         // TODO: 2018/1/5 0005 指定树根,serveice貌似有 
-        if(!code.isEmpty()){
-            cnd.and("","","");
+        if(null != code){
+            cnd.and("code","=",code);
+        }else {
+            cnd.and("parentId", "=", Strings.sBlank(pid)).asc("path");
         }
 
-        List<Sys_dict> list = dictService.query(cnd.and("parentId", "=", Strings.sBlank(pid)).asc("path"));
+        List<Sys_dict> list = dictService.query(cnd);
         List<Map<String, Object>> tree = new ArrayList<>();
         for (Sys_dict dict : list) {
             Map<String, Object> obj = new HashMap<>();
