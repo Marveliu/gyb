@@ -46,12 +46,14 @@ public class XmPersonController {
 
     @Inject
     private  V_XmInfService v_xmInfService;
+
+
     /**
-    * @function: 受理用户提交任务书的申请
-    * @param: 申请人编号，任务书编号
-    * @return: 是否已经申请
-    * @note:
-    */
+     * 用户提交项目申请
+     *
+     * @param xmtaskid
+     * @return
+     */
     @At("/apply")
     @Ok("json")
     @RequiresPermissions("platform.xm.person")
@@ -64,20 +66,16 @@ public class XmPersonController {
             if(null == xmtaskid){
                 return Result.error("请选择申请的项目");
             }
-
             if(null!= xmApplyService.fetch(Cnd.where("gyid","=",gyid).and("xmtaskid","=",xmtaskid)))
             {
                 return Result.error("你已经申请过了！");
             }
-
             xm_apply apply = new xm_apply();
             apply.setXmtaskid(xmtaskid);
             apply.setGyid(gyid);
             apply.setStatus(0);
             apply.setAt((int) (System.currentTimeMillis() / 1000));
             xmApplyService.insert(apply);
-
-
             return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");
@@ -111,9 +109,7 @@ public class XmPersonController {
         //查询雇员
         Cnd cnd = Cnd.NEW();
         cnd.and("gyid","=",gyid);
-
         //高级筛选
-
         return xmApplyService.data(length, start, draw, order, columns, cnd, null);
     }
 

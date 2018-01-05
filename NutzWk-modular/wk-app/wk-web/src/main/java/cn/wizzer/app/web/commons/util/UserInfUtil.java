@@ -3,10 +3,12 @@ package cn.wizzer.app.web.commons.util;
 import cn.wizzer.app.gy.modules.models.gy_inf;
 import cn.wizzer.app.gz.modules.models.gz_inf;
 import cn.wizzer.app.sys.modules.models.Sys_user;
+import cn.wizzer.app.sys.modules.services.SysUserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import static org.nutz.mvc.Mvcs.getIoc;
@@ -17,6 +19,23 @@ import static org.nutz.mvc.Mvcs.getIoc;
 
 @IocBean
 public class UserInfUtil {
+
+
+    @Inject
+    private SysUserService sysUserService;
+
+    /**
+     * 获得用户以及相关的角色单位信息
+     *
+     * @return
+     */
+    public  Sys_user getCurrentUser(){
+        Subject currentUser = SecurityUtils.getSubject();
+        Sys_user user = (Sys_user) currentUser.getPrincipal();
+        user = sysUserService.fetchLinks(user,"role");
+        return  user;
+    }
+
 
     /**
      * @function: 查询当前登陆的雇主信息
@@ -62,8 +81,16 @@ public class UserInfUtil {
         Subject currentUser = SecurityUtils.getSubject();
         Sys_user user = (Sys_user) currentUser.getPrincipal();
         gy_inf gy = getIoc().get(Dao.class).fetch(gy_inf.class,Cnd.where("userid","=",user.getId()));
+        return gy.getId();
+    }
+
+    public static String getCurrentGyRoleId(){
+        Subject currentUser = SecurityUtils.getSubject();
+        Sys_user user = (Sys_user) currentUser.getPrincipal();
+        gy_inf gy = getIoc().get(Dao.class).fetch(gy_inf.class,Cnd.where("userid","=",user.getId()));
         return gy.getGyid();
     }
+
 
     public static void setCndByRole(Cnd cnd){
 

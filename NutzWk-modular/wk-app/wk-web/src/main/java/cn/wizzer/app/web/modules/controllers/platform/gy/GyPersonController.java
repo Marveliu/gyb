@@ -1,33 +1,48 @@
 package cn.wizzer.app.web.modules.controllers.platform.gy;
 
+import cn.wizzer.app.gy.modules.models.gy_auth;
 import cn.wizzer.app.gy.modules.models.gy_inf;
 import cn.wizzer.app.gy.modules.models.gy_pay;
 import cn.wizzer.app.gy.modules.services.*;
+import cn.wizzer.app.sys.modules.models.Sys_role;
 import cn.wizzer.app.sys.modules.models.Sys_user;
+import cn.wizzer.app.sys.modules.services.SysRoleService;
 import cn.wizzer.app.sys.modules.services.SysUserService;
+import cn.wizzer.app.web.commons.services.gy.GyService;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
+import cn.wizzer.app.web.commons.util.UserInfUtil;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
+import cn.wizzer.framework.util.DateUtil;
 import cn.wizzer.framework.util.StringUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.crypto.RandomNumberGenerator;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.apache.shiro.subject.Subject;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.nutz.mvc.adaptor.WhaleAdaptor;
 import org.nutz.mvc.annotation.*;
+import org.nutz.trans.Atom;
+import org.nutz.trans.Trans;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.regex.Matcher;
 
 /**
- * 雇佣模块
+ * 雇员controller
+ *
  * Created by 89792 on 2017/11/13 0013.
  */
 
@@ -44,29 +59,98 @@ public class GyPersonController {
     @Inject
     private GyAuthService gyAuthService;
     @Inject
-    private SysUserService userService;
+    private SysUserService sysuserService;
     @Inject
     private GyPayService gyPayService;
+    @Inject
+    private UserInfUtil userInfUtil;
+    @Inject
+    private Dao dao;
+    @Inject
+    private SysRoleService sysRoleService;
+    @Inject
+    private GyService gyService;
 
 
     /**
      *
-     * 根据不同的雇员等级来显示个人中心
+     * 雇员等级分发
      *
      * @param req
      */
     @At("")
-    @Ok("beetl:/platform/gy/person/index.html")
+    @Ok("re:beetl:/platform/gy/person/index.html")
     @RequiresPermissions("gy.person")
-    public void index(HttpServletRequest req) {
+    public String index(HttpServletRequest req) {
         //获得当前登录用户
         Cnd cnd = Cnd.NEW();
-        Subject currentUser = SecurityUtils.getSubject();
-        Sys_user user = (Sys_user) currentUser.getPrincipal();
-        String id = user.getId();
-        Object test = gyInfService.fetch(cnd.and("userid","=",id));
-        req.setAttribute("obj", test);
+        Sys_user user = userInfUtil.getCurrentUser();
+        req.setAttribute("obj", user);
+
+
+        for(String item :sysuserService.getRoleCodeList(user)){
+            switch (item){
+                case("gy1"): return "beetl:/platform/gy/person/reginfo.html";
+                default: break;
+            }
+        }
+        return null;
     }
+
+
+    /**
+     * @function: 雇员注册
+     * @param:
+     * @return:
+     * @note: 仅仅是注册基本的账号信息
+     */
+    @At
+    @Ok("json")
+    @SLog(tag = "雇员信息完善", msg = "用户名:${userid}")
+    @AdaptBy(type = WhaleAdaptor.class)
+    public Object reginfo(
+                        @Param("userid") String userid,
+                        @Param("::gyinf.") gy_inf gyinf,
+                        @Param("::gyauth.") gy_auth gyauth,
+                        @Param("birthdayat") String birthday,
+                        @Param("regYearat") String regyear,
+                        HttpServletRequest req) {
+        try {
+
+
+            if(gyService.checkGyRegByUsrid(userid)){
+                return Result.error("你注册了雇员信息！");
+            }
+
+            //日期登记
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            int birthdayat = (int) (sdf.parse(birthday).getTime() / 1000);
+            int regyearat = (int) (sdf.parse(regyear).getTime() / 1000);
+            int now =  (int) (sdf.parse(DateUtil.getDateTime()).getTime() / 1000);
+            gyinf.setRegYear(regyearat);
+            gyinf.setRegYear(regyearat);
+            gyauth.setReAuthTime(now);
+
+
+            // 事务操作：插入用户与绑定角色,并且初始化雇员编号信息，雇员认证信息
+            Trans.exec(new Atom() {
+                @Override
+                public void run() {
+                    // 雇员基本信息
+                    gyinf.setUserid(userid);
+                    // 雇员认证信息
+                    gyauth.setGyid(gyInfService.insert(gyinf).getId());
+                    gyAuthService.insert(gyauth);
+                    // 修改角色信息为gy2
+                    gyService.updateGyRole(userid,"gy2");
+                }
+            });
+            return Result.success("system.success");
+        } catch (Exception e) {
+            return Result.error("system.error");
+        }
+    }
+
 
     //个人信息修改
     @At("/inf")
@@ -93,12 +177,12 @@ public class GyPersonController {
             HttpServletRequest req) {
         try {
             String userid = gyInf.getUserid();
-            Sys_user user = userService.fetch(userid);
+            Sys_user user = sysuserService.fetch(userid);
             //修改邮箱
             user.setEmail(gyInf.getEmail());
             user.setOpBy(StringUtil.getUid());
             user.setOpAt((int) (System.currentTimeMillis() / 1000));
-            userService.updateIgnoreNull(user);
+            sysuserService.updateIgnoreNull(user);
             //修改雇员信息
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             int birthdayat = (int) (sdf.parse(birthday).getTime() / 1000);

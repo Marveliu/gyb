@@ -123,6 +123,37 @@ public class SysDictController {
         return tree;
     }
 
+
+    /**
+     * 开放的数据字典树
+     *
+     * @param pid
+     * @return
+     */
+    @At
+    @Ok("json")
+    public Object Opentree(
+            @Param("code") String code,
+            @Param("pid") String pid) {
+        Cnd cnd = Cnd.NEW();
+
+        // TODO: 2018/1/5 0005 指定树根,serveice貌似有 
+        if(!code.isEmpty()){
+            cnd.and("","","");
+        }
+
+        List<Sys_dict> list = dictService.query(cnd.and("parentId", "=", Strings.sBlank(pid)).asc("path"));
+        List<Map<String, Object>> tree = new ArrayList<>();
+        for (Sys_dict dict : list) {
+            Map<String, Object> obj = new HashMap<>();
+            obj.put("id", dict.getId());
+            obj.put("text", dict.getName());
+            obj.put("children", dict.isHasChildren());
+            tree.add(obj);
+        }
+        return tree;
+    }
+
     @At
     @Ok("beetl:/platform/sys/dict/sort.html")
     @RequiresPermissions("sys.manager.dict")

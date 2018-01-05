@@ -44,6 +44,7 @@ import java.util.HashMap;
 @At("/platform/login") // 整个模块的路径前缀
 @Ok("json:{locked:'password|createAt',ignoreNull:true}") // 忽略password和createAt属性,忽略空属性的json输出
 public class SysLoginController {
+
     private static final Log log = Logs.get();
     @Inject
     private SysUserService userService;
@@ -79,6 +80,10 @@ public class SysLoginController {
         }
     }
 
+
+    /**
+     *  越权访问
+     */
     @At("/noPermission")
     @Ok("beetl:/platform/sys/noPermission.html")
     @Filters

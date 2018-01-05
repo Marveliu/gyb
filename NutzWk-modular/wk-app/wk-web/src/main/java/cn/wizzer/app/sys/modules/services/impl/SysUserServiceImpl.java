@@ -34,6 +34,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
 
     @Inject
     private SysMenuService sysMenuService;
+
     /**
      * 查询用户角色code列表
      *

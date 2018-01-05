@@ -4,6 +4,7 @@ import cn.wizzer.app.sys.modules.models.Sys_user;
 import cn.wizzer.app.sys.modules.services.SysUserService;
 import cn.wizzer.app.web.commons.base.Globals;
 import cn.wizzer.app.web.commons.services.email.EmailService;
+import cn.wizzer.framework.base.Result;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -62,7 +63,7 @@ public class EmailController {
             }
         } catch (Throwable e) {
             log.debug("发送邮件失败", e);
-            return re.setv("ok", false).setv("msg", "发送失败");
+            re.setv("ok", false).setv("msg", "发送失败");
         }
         return re.setv("ok", true);
     }
@@ -106,6 +107,7 @@ public class EmailController {
             log.debug("检查token时出错", e);
             return "非法token";
         }
+
     }
 
 }

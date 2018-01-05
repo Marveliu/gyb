@@ -89,4 +89,14 @@ public class SysRoleServiceImpl extends BaseServiceImpl<Sys_role> implements Sys
         this.dao().clear("sys_role_menu", Cnd.where("roleId", "in", roleids));
         this.delete(roleids);
     }
+
+    /**
+     * 根据code获得角色
+     * @param code
+     * @return
+     */
+    public Sys_role getRoleFormCode(String code){
+       return this.dao().fetch(Sys_role.class, Cnd.where("code", "=", code));
+    }
+
 }

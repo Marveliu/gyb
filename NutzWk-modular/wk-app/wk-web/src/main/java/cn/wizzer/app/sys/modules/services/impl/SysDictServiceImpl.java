@@ -26,6 +26,8 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
     public SysDictServiceImpl(Dao dao) {
         super(dao);
     }
+
+
     /**
      * 通过code获取name
      *

@@ -29,16 +29,12 @@ public class XmApplyController{
     private static final Log log = Logs.get();
     @Inject
     private XmApplyService xmApplyService;
-
     @Inject
     private XmTaskService xmTaskService;
-
     @Inject
     private XmInfService xmInfService;
-
     @Inject
     private XmBillService xmBillService;
-
     @Inject
     private Dao dao;
 
@@ -49,11 +45,14 @@ public class XmApplyController{
     }
 
     /**
-    * @function:
-    * @param: 雇员编号，申请编号
-    * @return:
-    * @note:
-    */
+     *
+     * 处理项目申请
+     *
+     * @param id
+     * @param gyid
+     * @param req
+     * @return
+     */
     @At({"/deal"})
     @Ok("json")
     @RequiresPermissions("platform.xm.apply.deal")
@@ -64,7 +63,6 @@ public class XmApplyController{
             HttpServletRequest req) {
         try {
             gz_inf gz = UserInfUtil.getCurrentGz();
-
             xm_apply apply =  xmApplyService.fetch(id);
             xm_task task = xmTaskService.fetch(apply.getXmtaskid());
             String opBy = gz.getId();
@@ -124,6 +122,15 @@ public class XmApplyController{
 
     }
 
+
+    /**
+     *
+     * 雇员申请项目
+     *
+     * @param xmApply
+     * @param req
+     * @return
+     */
     @At("/addDo")
     @Ok("json")
     @RequiresPermissions("platform.xm.apply.add")

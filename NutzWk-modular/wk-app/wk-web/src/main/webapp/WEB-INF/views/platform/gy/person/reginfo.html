@@ -1,0 +1,409 @@
+<%
+layout("/layouts/platform.html"){
+%>
+<div class="content-wrap">
+    <div class="wrapper" style="-min-height:500px;">
+        <section class="panel panel-form">
+            <!--form-->
+            <form id="addForm" role="form" class="form-horizontal parsley-form" data-parsley-validate action="${base}/platform/gy/person/reginfo" method="post">
+
+                <input type="text" name="userid" value="${obj.id}" hidden>
+
+                <!--基本信息-->
+                <div class="form-group">
+                    <label for="realname" class="col-sm-3 control-label">真实姓名</label>
+                    <div class="col-sm-8">
+                        <input type="text" id="realname" class="form-control" name="gyinf.realname" data-parsley-required="true" placeholder="请输入您的真实姓名！"  data-parsley-pattern="/^[\u4E00-\u9FA5A-Za-z]+$/"  data-parsley-trigger="change">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sex" class="col-sm-3 control-label">性别</label>
+                    <div class="col-sm-8">
+                        <select id="sex" name="gyinf.sex" data-parsley-required="true" class="form-control">
+                            <option value="0">男</option>
+                            <option value="1">女</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="qq" class="col-sm-3 control-label">qq</label>
+                    <div class="col-sm-8">
+                        <input type="text" id="qq" class="form-control" name="gyinf.qq" data-parsley-required="true" placeholder="请填写您的qq，方便我们联系。" data-parsley-pattern="[1-9][0-9]{4,14}" data-parsley-trigger="change">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="phone" class="col-sm-3 control-label">${msg['gy.inf.column.phone']}</label>
+                    <div class="col-sm-8">
+                        <input type="text" id="phone" class="form-control" name="gyinf.phone" data-parsley-required="true" placeholder="请输入您本人的手机号！" data-parsley-trigger="change">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="idcard" class="col-sm-3 control-label">${msg['gy.inf.column.idcard']}</label>
+                    <div class="col-sm-8">
+                        <input type="text" id="idcard" class="form-control" name="gyinf.idcard" data-parsley-required="true" placeholder="请输入您本人的身份证号！" data-parsley-trigger="change">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="birthday" class="col-sm-3 control-label">${msg['gy.inf.column.birthday']}</label>
+                    <div class="col-sm-8 input-group date form_datetime" style="padding-left: 16px;padding-right: 16px;" data-date="1979-09-16T05:25:07Z"
+                         data-date-format="dd MM yyyy - HH:ii p" data-link-field="birthday">
+                        <input type="text" size="16" readonly class="form-control" value="${@date.getDate()}" data-parsley-required="true">
+                        <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </span>
+                        <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </span>
+                    </div>
+                    <input type="hidden" id="birthday" name="birthdayat" value="${@date.getDate()}" />
+                </div>
+                <div class="form-group">
+                    <label for="college" class="col-sm-3 control-label">${msg['gy.inf.column.college']}</label>
+                    <div class="col-sm-8">
+                        <input type="text" id="college" class="form-control" name="gyinf.college" data-parsley-required="true" placeholder="${msg['gy.inf.column.college']}">
+                    </div>
+                </div>
+
+
+                <div class="form-group has-feedback">
+                    <label for="school" class="col-sm-2 control-label">选择学校</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <input id="school" type="text" class="form-control" placeholder="不选择默认为顶级菜单" disabled
+                                   value="<%if(!isEmpty(obj)){%>${obj.name}<%}%>"/>
+
+                            <span class="input-group-btn">
+			                             			<button type="button" class="btn btn-primary" data-toggle="modal"
+                                                            data-target="#dialogSelectParentUnit"><i class="ti-plus"></i>选择
+                                                    </button>
+			                             		</span>
+                        </div>
+                        <input type="hidden"  name="gyinf.school"  data-parsley-required="true" value="">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="school" class="col-sm-3 control-label">${msg['gy.inf.column.school']}</label>
+                    <div class="col-sm-8">
+                        <input type="text" id="school" class="form-control" name="gyinf.school" data-parsley-required="true" placeholder="${msg['gy.inf.column.school']}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="major" class="col-sm-3 control-label">${msg['gy.inf.column.major']}</label>
+                    <div class="col-sm-8">
+                        <input type="text" id="major" class="form-control" name="gyinf.major" data-parsley-required="true" placeholder="${msg['gy.inf.column.major']}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="stuLevel" class="col-sm-3 control-label">${msg['gy.inf.column.stuLevel']}</label>
+                    <div class="col-sm-8">
+                        <select id="stuLevel" name="gyinf.stuLevel" data-parsley-required="true" class="form-control">
+                            <option value="0">本科在读</option>
+                            <option value="1">研究生在读</option>
+                            <option value="2">博士在读</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="regYear" class="col-sm-3 control-label">${msg['gy.inf.column.regYear']}</label>
+                    <div class="col-sm-8 input-group date form_datetime" style="padding-left: 16px;padding-right: 16px;" data-date-format="dd MM yyyy"
+                         data-link-field="regYear">
+                        <input type="text" size="16" readonly class="form-control" value="${@date.getDate()}" data-parsley-required="true">
+                        <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </span>
+                        <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </span>
+                    </div>
+                    <input type="hidden" id="regYear" name="regYearat" value="${@date.getDate()}" />
+                </div>
+
+
+                <!--证件上传-->
+                <div class="form-group">
+                    <label for="idcardF" class="col-sm-3 control-label">${msg['gy.auth.column.idcardF']}</label>
+                    <div class="col-sm-8">
+                        <div id="idcardFqueue"></div>
+                        <div>
+                            <input id="idcardF_upload" name="file_upload" type="file" multiple="false">
+                        </div>
+                        <div id="idcardFimg" style="padding: 5px;">
+                        </div>
+                        <input type="hidden" id="idcardF" name="gyauth.idcardF" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="idcardB" class="col-sm-3 control-label">${msg['gy.auth.column.idcardB']}</label>
+                    <div class="col-sm-8">
+                        <div id="idcardBqueue"></div>
+                        <div>
+                            <input id="idcardB_upload" name="file_upload" type="file" multiple="false">
+                        </div>
+                        <div id="idcardBimg" style="padding: 5px;">
+                        </div>
+                        <input type="hidden" id="idcardB" name="gyauth.idcardB" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="stuCardF" class="col-sm-3 control-label">${msg['gy.auth.column.stuCardF']}</label>
+                    <div class="col-sm-8">
+                        <div id="stuCardFqueue"></div>
+                        <div>
+                            <input id="stuCardF_upload" name="file_upload" type="file" multiple="false">
+                        </div>
+                        <div id="stuCardFimg" style="padding: 5px;">
+                        </div>
+                        <input type="hidden" id="stuCardF" name="gyauth.stuCardF" value="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="stuCardB" class="col-sm-3 control-label">${msg['gy.auth.column.stuCardB']}</label>
+                    <div class="col-sm-8">
+                        <div id="stuCardBqueue"></div>
+                        <div>
+                            <input id="stuCardB_upload" name="file_upload" type="file" multiple="false">
+                        </div>
+                        <div id="stuCardBimg" style="padding: 5px;">
+                        </div>
+                        <input type="hidden" id="stuCardB" name="gyauth.stuCardB" value="">
+                    </div>
+                </div>
+
+
+                <div class="form-group text-center">
+                    <div class="col-lg-3"></div>
+                    <div class="col-lg-6">
+                        <label></label>
+                        <button class="btn btn-primary btn-block btn-lg btn-parsley" data-loading-text="正在提交...">提 交
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+</div>
+
+<script type="text/javascript">
+
+    // 学校选择
+    function initSysDictTreeView(code) {
+        $("#jsTreeParentUnit").jstree({
+            plugins: ["wholerow", "json_data"],
+            core: {
+                data: {
+                    dataType: "json",
+                    url: function (node) {
+                        return node.id === "#" ? "${base}/platform/sys/menu/opentree?code="+ code: "${base}/platform/sys/menu/tree?pid=" + node.id
+                    }
+                },
+                multiple: false
+            }
+        }).on("dblclick.jstree", function (node) {
+            selectParentMenu();
+        });
+    }
+    //选择父菜单
+    function selectParentMenu() {
+        var tree = $.jstree.reference("#jsTreeParentUnit");
+        var node = tree.get_selected(true);
+        $("#unitAddForm #school").val(node[0].text);
+        $("#unitAddForm input[name='gyinf.school']").val(node[0].id);
+        $("#dialogSelectParentUnit").modal("hide");
+    }
+    function selectFirstMenu() {
+        $("#unitAddForm #parentId").val("顶级菜单");
+        $("#unitAddForm input[name='gyinf.school']").val("");
+        $("#dialogSelectParentUnit").modal("hide");
+    }
+
+
+    $(document).ready(function () {
+        initSysDictTreeView(code);
+        myForm.init();
+
+        // 时间选择器
+        $('.form_datetime').datetimepicker({
+            language: 'zh-CN',
+            format: 'yyyy-mm-dd',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1
+        });
+
+        //        上传文件
+        $('#idcardF_upload').uploadifive({
+            'auto': true,
+            'multi': false,
+            'width': '100%',
+            'height': '35',
+            'buttonText': '请选择图片',
+            'fileType': 'image/jpg,image/jpeg,image/png',
+            'fileSizeLimit': 1024,
+            'queueSizeLimit': 1,
+            'formData': {},
+            'queueID': 'idcardFqueue',
+            'uploadScript': '${base}/open/file/upload/gyauimage',
+            'onUploadComplete': function (file, data) {
+                data = JSON.parse(data);
+                if (data.code == 0) {
+                    Toast.success(data.msg);
+                    $("#idcardFimg").html("<img src='" + data.data + "' style='width:150px;height:95px;'>");
+                    $("#idcardF").val(data.data);
+                } else {
+                    clearFile("idcardF");
+                    Toast.error(data.msg);
+                }
+            },
+            'onDrop': function (file, fileDropCount) {
+                clearFile("idcardF");
+            },
+            'onClearQueue': function (queue) {
+                clearFile("idcardF");
+            },
+            'onCancel': function () {
+                clearFile("idcardF");
+            }
+        });
+
+        $('#idcardB_upload').uploadifive({
+            'auto': true,
+            'multi': false,
+            'width': '100%',
+            'height': '35',
+            'buttonText': '请选择图片',
+            'fileType': 'image/jpg,image/jpeg,image/png',
+            'fileSizeLimit': 1024,
+            'queueSizeLimit': 1,
+            'formData': {},
+            'queueID': 'idcardBqueue',
+            'uploadScript': '${base}/open/file/upload/gyauimage',
+            'onUploadComplete': function (file, data) {
+                data = JSON.parse(data);
+                if (data.code == 0) {
+                    Toast.success(data.msg);
+                    $("#idcardBimg").html("<img src='" + data.data + "' style='width:150px;height:95px;'>");
+                    $("#idcardB").val(data.data);
+                } else {
+                    clearFile("idcardB");
+                    Toast.error(data.msg);
+                }
+            },
+            'onDrop': function (file, fileDropCount) {
+                clearFile("idcardB");
+            },
+            'onClearQueue': function (queue) {
+                clearFile("idcardB");
+            },
+            'onCancel': function () {
+                clearFile("idcardB");
+            }
+        });
+
+        $('#stuCardF_upload').uploadifive({
+            'auto': true,
+            'multi': false,
+            'width': '100%',
+            'height': '35',
+            'buttonText': '请选择图片',
+            'fileType': 'image/jpg,image/jpeg,image/png',
+            'fileSizeLimit': 1024,
+            'queueSizeLimit': 1,
+            'formData': {},
+            'queueID': 'stuCardFqueue',
+            'uploadScript': '${base}/open/file/upload/gyauimage',
+            'onUploadComplete': function (file, data) {
+                data = JSON.parse(data);
+                if (data.code == 0) {
+                    Toast.success(data.msg);
+                    $("#stuCardFimg").html("<img src='" + data.data + "' style='width:150px;height:95px;'>");
+                    $("#stuCardF").val(data.data);
+                } else {
+                    clearFile("stuCardF");
+                    Toast.error(data.msg);
+                }
+            },
+            'onDrop': function (file, fileDropCount) {
+                clearFile("stuCardF");
+            },
+            'onClearQueue': function (queue) {
+                clearFile("stuCardF");
+            },
+            'onCancel': function () {
+                clearFile("stuCardF");
+            }
+        });
+
+        $('#stuCardB_upload').uploadifive({
+            'auto': true,
+            'multi': false,
+            'width': '100%',
+            'height': '35',
+            'buttonText': '请选择图片',
+            'fileType': 'image/jpg,image/jpeg,image/png',
+            'fileSizeLimit': 1024,
+            'queueSizeLimit': 1,
+            'formData': {},
+            'queueID': 'stuCardBqueue',
+            'uploadScript': '${base}/open/file/upload/gyauimage',
+            'onUploadComplete': function (file, data) {
+                data = JSON.parse(data);
+                if (data.code == 0) {
+                    Toast.success(data.msg);
+                    $("#stuCardBimg").html("<img src='" + data.data + "' style='width:150px;height:95px;'>");
+                    $("#stuCardB").val(data.data);
+                } else {
+                    clearFile("stuCardB");
+                    Toast.error(data.msg);
+                }
+            },
+            'onDrop': function (file, fileDropCount) {
+                clearFile("stuCardB");
+            },
+            'onClearQueue': function (queue) {
+                clearFile("stuCardB");
+            },
+            'onCancel': function () {
+                clearFile("stuCardB");
+            }
+        });
+
+        function clearFile(temp) {
+            $("#" + temp + "img").html("");
+            $("#" + temp + "queue").html("");
+            $("#" + temp + "picurl").val("");
+        }
+
+        //        提交注册信息
+        $('#addForm').ajaxForm({
+            dataType: 'json',
+            beforeSubmit: function (arr, form, options) {
+                form.find("button:submit").button("loading");
+            },
+            success: function (data, statusText, xhr, form) {
+                if (data.code == 0) {
+                    Toast.success(data.msg);
+                    window.location.href ="/gy/person";
+                    //登入系统
+                } else {
+                    Toast.error(data.msg);
+                }
+                form.find("button:submit").button("reset");
+            }
+        });
+    });
+</script>
+</body>
+
+<script src="${base!}/assets/plugins/fuelux/wizard.js"></script>
+
+
+<%}%>

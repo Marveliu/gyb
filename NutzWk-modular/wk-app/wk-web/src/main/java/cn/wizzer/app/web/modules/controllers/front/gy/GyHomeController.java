@@ -101,82 +101,10 @@ public class GyHomeController {
     }
 
 
-    /**
-     * @function: 雇员注册
-     * @param:
-     * @return:
-     * @note: 仅仅是注册基本的账号信息
-     */
-    // @At("/doreg")
-    // @Ok("json")
-    // @SLog(tag = "新雇员注册", msg = "用户名:${args[0].loginname}")
-    // @AdaptBy(type = WhaleAdaptor.class)
-    // public Object addDo(@Param("::user.") Sys_user user,
-    //                     @Param("::gyinf.") gy_inf gyinf,
-    //                     @Param("::gyauth.") gy_auth gyauth,
-    //                     @Param("birthdayat") String birthday,
-    //                     @Param("regYearat") String regyear,
-    //                     HttpServletRequest req) {
-    //
-    //     Sys_user test = userService.fetch(Cnd.where("loginname","=",user.getLoginname()));
-    //     //验证用户名是否被注册
-    //     if (null != userService.fetch(Cnd.where("loginname","=",user.getLoginname()))){
-    //         return Result.error("账号存在！");
-    //     }
-    //
-    //     //检验雇员信息是否被注册
-    //     if (null != gyInfService.fetch(Cnd.where("idcard","=",gyinf.getIdcard()))){
-    //         return Result.error("雇员信息存在！");
-    //     }
-    //
-    //     try {
-    //         RandomNumberGenerator rng = new SecureRandomNumberGenerator();
-    //         String salt = rng.nextBytes().toBase64();
-    //         String hashedPasswordBase64 = new Sha256Hash(user.getPassword(), salt, 1024).toBase64();
-    //         // 账号
-    //         user.setSalt(salt);
-    //         user.setPassword(hashedPasswordBase64);
-    //         user.setLoginPjax(true);
-    //         user.setLoginCount(0);
-    //         user.setLoginAt(0);
-    //
-    //         //日期登记
-    //         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    //         int birthdayat = (int) (sdf.parse(birthday).getTime() / 1000);
-    //         int regyearat = (int) (sdf.parse(regyear).getTime() / 1000);
-    //         int now =  (int) (sdf.parse(DateUtil.getDateTime()).getTime() / 1000);
-    //         gyinf.setRegYear(regyearat);
-    //         gyinf.setRegYear(regyearat);
-    //         gyauth.setReAuthTime(now);
-    //
-    //         //状态信息修改
-    //         //....
-    //
-    //
-    //         // 事务操作：插入用户与绑定角色,并且初始化雇员编号信息，雇员认证信息
-    //         Trans.exec(new Atom() {
-    //             @Override
-    //             public void run() {
-    //                 userService.insert(user);
-    //                 //插入雇员基本信息
-    //                 gyinf.setUserid(user.getId());
-    //                 //插入认证信息
-    //                 gyauth.setGyid(gyInfService.insert(gyinf).getId());
-    //                 gyAuthService.insert(gyauth);
-    //                 String test =  roleService.fetch(Cnd.where("code", "=", rolecode)).getId();
-    //                 dao.insert("sys_user_role", org.nutz.dao.Chain.make("userId", user.getId()).add("roleId", roleService.fetch(Cnd.where("code", "=", rolecode)).getId()));
-    //             }
-    //         });
-    //         return Result.success("system.success");
-    //     } catch (Exception e) {
-    //         return Result.error("system.error");
-    //     }
-    // }
-
 
     @At("/doreg")
     @Ok("json")
-    @SLog(tag = "新雇员注册", msg = "用户名:${username}")
+    //@SLog(tag = "新雇员注册", msg = "用户名:${username}")
     @AdaptBy(type = WhaleAdaptor.class)
     public Object regDo(
             @Param("email") String email,
