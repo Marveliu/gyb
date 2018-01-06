@@ -11,6 +11,11 @@ import static org.junit.Assert.*;
  */
 public class GyServiceTest extends TestBase{
     @Test
+    public void checkGyRegByUsrid() throws Exception {
+        ioc.get(GyService.class).checkGyRegByUsrid("171001");
+    }
+
+    @Test
     public void updateGyRole() throws Exception {
         assertTrue(ioc.get(GyService.class).updateGyRole("171001","gy1") == true);
     }

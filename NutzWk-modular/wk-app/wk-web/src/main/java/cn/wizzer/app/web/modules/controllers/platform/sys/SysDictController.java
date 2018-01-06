@@ -149,6 +149,7 @@ public class SysDictController {
         for (Sys_dict dict : list) {
             Map<String, Object> obj = new HashMap<>();
             obj.put("id", dict.getId());
+            obj.put("code", dict.getCode());
             obj.put("text", dict.getName());
             obj.put("children", dict.isHasChildren());
             tree.add(obj);

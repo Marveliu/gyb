@@ -1,6 +1,11 @@
 package cn.wizzer.app.web.commons.services.gy;
 
+import cn.wizzer.app.gy.modules.models.gy_inf;
+import cn.wizzer.app.gy.modules.models.gy_skill;
 import cn.wizzer.app.gy.modules.services.GyInfService;
+import cn.wizzer.app.gy.modules.services.GySkillService;
+import cn.wizzer.app.library.modules.models.lib_skill;
+import cn.wizzer.app.library.modules.services.LibSkillService;
 import cn.wizzer.app.sys.modules.services.SysRoleService;
 import cn.wizzer.app.sys.modules.services.SysUserService;
 import cn.wizzer.app.web.modules.controllers.platform.gy.GyInfController;
@@ -8,8 +13,11 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Lang;
 import org.nutz.log.Logs;
 import sun.rmi.runtime.Log;
+
+import java.util.List;
 
 /**
  * 雇员模块
@@ -28,7 +36,11 @@ public class GyService {
     @Inject
     private GyInfService gyInfService;
     @Inject
+    private GySkillService gySkillService;
+    @Inject
     private SysUserService sysUserService;
+    @Inject
+    private LibSkillService libSkillService;
     @Inject
     private Dao dao;
 
@@ -58,11 +70,23 @@ public class GyService {
      */
     public boolean checkGyRegByUsrid(String userId){
 
-            if(null != gyInfService.getGyByUserId(userId))
-            {
-                return true;
-            }
-            return false;
+        gy_inf gy = gyInfService.getGyByUserId(userId);
+        return !Lang.isEmpty(gy);
+    }
+
+
+    /**
+     * 初始化雇员技能信息
+     * @param gyid
+     * @return
+     */
+    public boolean initGySkill(String gyid){
+
+        // TODO: 2018/1/6 0006 技能认证懒加载，用的时候再进行初始化
+        // 检查雇员技能库现有信息
+        List<gy_skill> skills = gyInfService.getSkillsByGyid(gyid);
+        List<lib_skill> libSkills = libSkillService.query();
+        return  true;
     }
 
 

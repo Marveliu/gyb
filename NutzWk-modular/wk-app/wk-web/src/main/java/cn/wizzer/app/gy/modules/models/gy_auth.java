@@ -1,7 +1,11 @@
 package cn.wizzer.app.gy.modules.models;
 
+import cn.wizzer.app.web.commons.util.NumberUtil;
 import cn.wizzer.framework.base.model.BaseModel;
 import org.nutz.dao.entity.annotation.*;
+import org.nutz.ioc.loader.annotation.Inject;
+import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.mvc.Mvcs;
 
 import java.io.Serializable;
 
@@ -9,15 +13,15 @@ import java.io.Serializable;
 /**
  * Createdby89792on2017/11/130013.
  */
+
 @Table("gy_auth")
-@View("v_gy")
 public class gy_auth extends BaseModel implements Serializable {
 
     @Column
     @Name
     @Comment("认证单号")
     @ColDefine(type = ColType.VARCHAR, width = 32)
-    @Prev(els = {@EL("uuid()")})
+    @Prev(els = {@EL("$me.gyauid()")})
     private String id;
 
     @Column
@@ -191,7 +195,8 @@ public class gy_auth extends BaseModel implements Serializable {
     }
 
 
-
-
+    public String gyauid() {
+        return Mvcs.getIoc().get(NumberUtil.class).GyAuthIdGeneraotr(this.getGyid());
+    }
 
 }

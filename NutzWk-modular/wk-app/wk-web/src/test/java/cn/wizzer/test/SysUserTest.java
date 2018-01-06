@@ -2,6 +2,8 @@ package cn.wizzer.test;
 
 import cn.wizzer.app.TestBase;
 
+import cn.wizzer.app.gy.modules.services.GyInfService;
+import cn.wizzer.app.gy.modules.services.impl.GyInfServiceImpl;
 import cn.wizzer.app.sys.modules.models.Sys_user;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
@@ -17,6 +19,9 @@ public class SysUserTest extends TestBase {
 
     @Test
     public void testInsert() {
+
+        GyInfService test = this.ioc.get(GyInfServiceImpl.class);
+        log.debug(test.getPaysByGyid("fuck"));
 
        // Sys_user user = new Sys_user();
        // user.setLoginname("test");

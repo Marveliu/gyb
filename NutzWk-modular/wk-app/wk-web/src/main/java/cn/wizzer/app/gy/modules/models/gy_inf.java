@@ -2,11 +2,15 @@ package cn.wizzer.app.gy.modules.models;
 
 import cn.wizzer.app.gy.modules.services.GyInfService;
 import cn.wizzer.app.gy.modules.services.impl.GyInfServiceImpl;
+import cn.wizzer.app.web.commons.util.NumberUtil;
 import cn.wizzer.app.xm.modules.models.xm_task;
 import cn.wizzer.framework.base.model.BaseModel;
 import cn.wizzer.framework.util.DateUtil;
 import org.nutz.dao.Dao;
 import org.nutz.dao.entity.annotation.*;
+import org.nutz.ioc.loader.annotation.Inject;
+import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.log.Logs;
 import org.nutz.mvc.Mvcs;
 
 import java.io.Serializable;
@@ -95,6 +99,12 @@ public class gy_inf extends BaseModel implements Serializable {
     //参照
     @ManyMany(relation = "xm_apply", from = "gyid", to = "xmtaskid")
     private List<xm_task> xmtasks;
+
+    @ManyMany(relation = "gy_skill", from = "gyid", to = "skillid")
+    private List<gy_skill> gyskills;
+
+    @Many(field = "id")
+    private List<gy_pay> gypays;
 
 
     //视图字段
@@ -219,7 +229,7 @@ public class gy_inf extends BaseModel implements Serializable {
         this.regYear = regYear;
     }
 
-    public int getStuLevel() {
+    public Integer getStuLevel() {
         return stuLevel;
     }
 
@@ -235,8 +245,13 @@ public class gy_inf extends BaseModel implements Serializable {
         this.status = status;
     }
 
-    //参照
+    public List<gy_skill> getGyskills() {
+        return gyskills;
+    }
 
+    public void setGyskills(List<gy_skill> gyskills) {
+        this.gyskills = gyskills;
+    }
 
     public List<xm_task> getXmtasks() {
         return xmtasks;
@@ -246,6 +261,15 @@ public class gy_inf extends BaseModel implements Serializable {
         this.xmtasks = xmtasks;
     }
 
+
+    public List<gy_pay> getGypays() {
+        return gypays;
+    }
+
+    public void setGypays(List<gy_pay> gypays) {
+        this.gypays = gypays;
+    }
+
     /**
      * @function: 雇员编号
      * @param:
@@ -253,19 +277,14 @@ public class gy_inf extends BaseModel implements Serializable {
      * @note: 编号说明:17年份,10497学校代码,0学历:(0本科1研究生2博士),0性别 (0女生 ,1男生),010顺序码
      */
     public String gyid() {
-        StringBuilder str = new StringBuilder();
-        //年份
-        str.append(DateUtil.format(new Date(),"yyyy").substring(2,4));
-        //学校代码
-        str.append(this.college);
-        //学历
-        str.append(this.stuLevel);
-        //性别
-        str.append(this.sex);
-        //顺序码
-        Dao dao =  Mvcs.getIoc().get((Dao.class));
-        GyInfService gyservice = new GyInfServiceImpl(dao);
-        str.append(gyservice.count());
-        return str.toString();
+        String id = new String();
+        try {
+            int count = Mvcs.getIoc().get(GyInfServiceImpl.class).count();
+            id =  Mvcs.getIoc().get(NumberUtil.class).GyIdGeneraotr(count,this.getCollege(),this.getStuLevel().toString(),this.getSex().toString());
+        }catch (Exception e){
+            Logs.get().debug(e);
+        }
+
+        return id;
     }
 }

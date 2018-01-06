@@ -1,5 +1,7 @@
 package cn.wizzer.app.gy.modules.services.impl;
 
+import cn.wizzer.app.gy.modules.models.gy_pay;
+import cn.wizzer.app.gy.modules.models.gy_skill;
 import cn.wizzer.app.sys.modules.services.SysUserService;
 import cn.wizzer.framework.base.service.BaseServiceImpl;
 import cn.wizzer.app.gy.modules.models.gy_inf;
@@ -8,6 +10,8 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+
+import java.util.List;
 
 @IocBean(args = {"refer:dao"})
 public class GyInfServiceImpl extends BaseServiceImpl<gy_inf> implements GyInfService {
@@ -28,4 +32,25 @@ public class GyInfServiceImpl extends BaseServiceImpl<gy_inf> implements GyInfSe
         return this.dao().fetch(gy_inf.class,Cnd.where("userid","=",userid));
     }
 
+    /**
+     * 根据雇员id获取技能信息
+     * @param gyid
+     * @return
+     */
+    public List<gy_skill> getSkillsByGyid(String gyid){
+        gy_inf gy = this.fetch(gyid);
+        gy = this.fetchLinks(gy,"gyskills");
+        return gy.getGyskills();
+    }
+
+    /**
+     * 根据雇员id获取支付信息
+     * @param gyid
+     * @return
+     */
+    public List<gy_pay> getPaysByGyid(String gyid){
+        gy_inf gy = this.fetch(gyid);
+        gy = this.fetchLinks(gy,"gy_pays");
+        return gy.getGypays();
+    }
 }

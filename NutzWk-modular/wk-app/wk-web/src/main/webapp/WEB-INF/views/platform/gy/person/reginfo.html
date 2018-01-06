@@ -239,8 +239,10 @@ layout("/layouts/platform.html"){
     function selectParentMenu() {
         var tree = $.jstree.reference("#jsTreeParentUnit");
         var node = tree.get_selected(true);
+        var a = node    ;
+        console.log(a );
         $("#addForm #college").val(node[0].text);
-        $("#addForm input[name='gyinf.college']").val(node[0].id);
+        $("#addForm input[name='gyinf.college']").val(node[0].original.code);
         $("#dialogSelectSchool").modal("hide");
     }
     function selectFirstMenu() {

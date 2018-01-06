@@ -136,13 +136,19 @@ public class GyPersonController {
             Trans.exec(new Atom() {
                 @Override
                 public void run() {
-                    // 雇员基本信息
                     gyinf.setUserid(userid);
                     // 雇员认证信息
-                    gyauth.setGyid(gyInfService.insert(gyinf).getId());
-                    gyAuthService.insert(gyauth);
-                    // 修改角色信息为gy2
-                    gyService.updateGyRole(userid,"gy2");
+                    // 雇员基本信息
+                    try{
+                        gyauth.setGyid(gyInfService.insertOrUpdate(gyinf).getId());
+                        gyAuthService.insertOrUpdate(gyauth);
+                        // 修改角色信息为gy2
+                        gyService.updateGyRole(userid,"gy2");
+                    }catch (Exception e){
+                        log.debug(e);
+                    }
+
+
                 }
             });
             return Result.success("system.success");

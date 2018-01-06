@@ -10,6 +10,8 @@ import org.nutz.ioc.Ioc;
 import org.nutz.ioc.IocLoader;
 import org.nutz.ioc.impl.NutIoc;
 import org.nutz.ioc.loader.combo.ComboIocLoader;
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.IocBy;
 
 /**
@@ -18,6 +20,7 @@ import org.nutz.mvc.annotation.IocBy;
 public class TestBase extends Assert {
 
     protected Ioc ioc;
+    protected static final Log log = Logs.get();
 
     @Before
     public void before() throws Exception {

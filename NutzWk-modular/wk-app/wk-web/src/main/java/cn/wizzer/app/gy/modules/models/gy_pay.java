@@ -50,6 +50,13 @@ public class gy_pay extends BaseModel implements Serializable {
     @ColDefine(type = ColType.BOOLEAN)
     private boolean disabled;
 
+
+    // 参照
+
+    @One(field = "gyid")
+    public gy_inf gy;
+
+
     public String getGyid() {
         return gyid;
     }
@@ -104,5 +111,13 @@ public class gy_pay extends BaseModel implements Serializable {
 
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
+    }
+
+    public gy_inf getGy() {
+        return gy;
+    }
+
+    public void setGy(gy_inf gy) {
+        this.gy = gy;
     }
 }
