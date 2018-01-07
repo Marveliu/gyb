@@ -14,6 +14,7 @@ import cn.wizzer.app.web.commons.util.UserInfUtil;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
+import cn.wizzer.framework.shiro.token.CaptchaToken;
 import cn.wizzer.framework.util.DateUtil;
 import cn.wizzer.framework.util.StringUtil;
 import org.apache.shiro.SecurityUtils;
@@ -129,9 +130,11 @@ public class GyPersonController {
             int now =  (int) (sdf.parse(DateUtil.getDateTime()).getTime() / 1000);
             gyinf.setRegYear(regyearat);
             gyinf.setRegYear(regyearat);
+            gyinf.setBirthday(birthdayat);
             gyauth.setReAuthTime(now);
 
 
+            try{
             // 事务操作：插入用户与绑定角色,并且初始化雇员编号信息，雇员认证信息
             Trans.exec(new Atom() {
                 @Override
@@ -139,18 +142,21 @@ public class GyPersonController {
                     gyinf.setUserid(userid);
                     // 雇员认证信息
                     // 雇员基本信息
-                    try{
                         gyauth.setGyid(gyInfService.insertOrUpdate(gyinf).getId());
                         gyAuthService.insertOrUpdate(gyauth);
                         // 修改角色信息为gy2
                         gyService.updateGyRole(userid,"gy2");
-                    }catch (Exception e){
-                        log.debug(e);
-                    }
-
+                        // 更新shiro信息
+                        Subject currentUser = SecurityUtils.getSubject();
+                        CaptchaToken token = (CaptchaToken) req.getSession().getAttribute("sysUserToken");
+                    // TODO: 2018/1/7 0007 重复login，应该会创造两个session 
+                        currentUser.login(token);
 
                 }
             });
+            }catch (Exception e){
+                log.debug(e);
+            }
             return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");

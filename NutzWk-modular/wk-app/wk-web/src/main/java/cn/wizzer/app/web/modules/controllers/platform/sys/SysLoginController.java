@@ -72,6 +72,7 @@ public class SysLoginController {
                 req.setAttribute("publicKeyExponent", publicKeyExponent);
                 req.setAttribute("publicKeyModulus", publicKeyModulus);
                 session.setAttribute("platformPrivateKey", privateKey);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -158,8 +159,11 @@ public class SysLoginController {
             Subject subject = SecurityUtils.getSubject();
             ThreadContext.bind(subject);
             //进入shiro
+
+            session.setAttribute("sysUserToken", token);
             subject.login(token);
             Sys_user user = (Sys_user) subject.getPrincipal();
+
             int count = user.getLoginCount() == null ? 0 : user.getLoginCount();
             userService.update(Chain.make("loginIp", user.getLoginIp()).add("loginAt", (int) (System.currentTimeMillis() / 1000))
                             .add("loginCount", count + 1).add("isOnline", true)

@@ -17,7 +17,7 @@ public class GyServiceTest extends TestBase{
 
     @Test
     public void updateGyRole() throws Exception {
-        assertTrue(ioc.get(GyService.class).updateGyRole("171001","gy1") == true);
+        assertTrue(ioc.get(GyService.class).updateGyRole("5d16cfb5109446ac86d19e163df6e4bd","gy1") == true);
     }
 
 }
