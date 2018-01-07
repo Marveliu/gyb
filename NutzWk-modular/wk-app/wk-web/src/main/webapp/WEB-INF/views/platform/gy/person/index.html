@@ -28,8 +28,8 @@ layout("/layouts/platform.html"){
                             <div class="col-sm-12">
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-8">
-                                        <h4 class="mb5"> <b>真实姓名</b> 女士，你好！ </h4>
-                                        <h6 class="mt15 mb15">雇员编号</h6>
+                                        <h4 class="mb5"> <b>${gy.realname!}</b> ${@status.bind( 'sex'+gy.sex!)}，你好！ </h4>
+                                        <h6 class="mt15 mb15">雇员编号：${gy.id!}</h6>
 
 
 
@@ -39,7 +39,7 @@ layout("/layouts/platform.html"){
                                             <ul class="user-meta ">
                                                 <li >
                                                     <i class="fa fa-graduation-cap mr5"></i>
-                                                    <a href="javascript:;">武汉理工大学</a>
+                                                    <a href="javascript:;">${@status.bind( gy.college!)}</a>
                                                 </li>
                                                 <li >
                                                     <i class="fa fa-institution mr5"></i>
@@ -47,7 +47,7 @@ layout("/layouts/platform.html"){
                                                 </li>
                                                 <li >
                                                     <i class="fa fa-cube mr5"></i>
-                                                    <a href="javascript:;">本科</a>
+                                                    <a href="javascript:;">${@status.bind( 'stulevel'+gy.stuLevel!)}</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -56,15 +56,15 @@ layout("/layouts/platform.html"){
                                             <ul class="user-meta ">
                                                 <li >
                                                     <i class="ti-email mr5"></i>
-                                                    <a href="javascript:;">897920245@qq.com</a>
+                                                    <a href="javascript:;">${obj.email!}</a>
                                                 </li>
                                                 <li >
                                                     <i class="ti-mobile mr5"></i>
-                                                    <a href="javascript:;">15927448761</a>
+                                                    <a href="javascript:;">${gy.phone!}</a>
                                                 </li>
                                                 <li >
                                                     <i class="fa fa-qq mr5"></i>
-                                                    <a href="javascript:;">15927448761</a>
+                                                    <a href="javascript:;">${gy.qq!}</a>
                                                 </li>
                                             </ul>
                                         </div>

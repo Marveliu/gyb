@@ -1,6 +1,7 @@
 package cn.wizzer.app.web.commons.processor;
 
 import cn.wizzer.app.web.commons.base.Globals;
+import cn.wizzer.app.web.commons.util.StatusCodeUtil;
 import cn.wizzer.app.web.commons.util.UserInfUtil;
 import cn.wizzer.app.web.commons.util.ViewUtil;
 import cn.wizzer.framework.util.*;
@@ -27,6 +28,7 @@ public class GlobalsSettingProcessor extends AbstractProcessor {
 		ac.getRequest().setAttribute("string", Mvcs.ctx().getDefaultIoc().get(StringUtil.class));
 		ac.getRequest().setAttribute("view", Mvcs.ctx().getDefaultIoc().get(ViewUtil.class));
 		ac.getRequest().setAttribute("user", Mvcs.ctx().getDefaultIoc().get(UserInfUtil.class));
+		ac.getRequest().setAttribute("status", Mvcs.ctx().getDefaultIoc().get(StatusCodeUtil.class));
 
 
 		// 如果url中有语言属性则设置

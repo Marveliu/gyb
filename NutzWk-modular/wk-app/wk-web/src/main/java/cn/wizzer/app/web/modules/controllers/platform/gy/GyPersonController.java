@@ -40,6 +40,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 雇员controller
@@ -88,8 +89,15 @@ public class GyPersonController {
         Sys_user user = userInfUtil.getCurrentUser();
         req.setAttribute("obj", user);
 
-
+        // 查询角色
+        Pattern gypattern = Pattern.compile("^gy");               // 雇员匹配正则表达式
         for(String item :sysuserService.getRoleCodeList(user)){
+            Matcher match = gypattern.matcher(item);
+            if(match.lookingAt()){
+
+                gy_inf gy = gyInfService.getGyByUserId(user.getId());
+                req.setAttribute("gy", gy);
+            }
             switch (item){
                 case("gy1"): return "beetl:/platform/gy/person/reginfo.html";
                 default: break;
@@ -132,8 +140,6 @@ public class GyPersonController {
             gyinf.setRegYear(regyearat);
             gyinf.setBirthday(birthdayat);
             gyauth.setReAuthTime(now);
-
-
             try{
             // 事务操作：插入用户与绑定角色,并且初始化雇员编号信息，雇员认证信息
             Trans.exec(new Atom() {
