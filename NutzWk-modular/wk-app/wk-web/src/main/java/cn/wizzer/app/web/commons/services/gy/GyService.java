@@ -6,8 +6,10 @@ import cn.wizzer.app.gy.modules.services.GyInfService;
 import cn.wizzer.app.gy.modules.services.GySkillService;
 import cn.wizzer.app.library.modules.models.lib_skill;
 import cn.wizzer.app.library.modules.services.LibSkillService;
+import cn.wizzer.app.sys.modules.models.Sys_user;
 import cn.wizzer.app.sys.modules.services.SysRoleService;
 import cn.wizzer.app.sys.modules.services.SysUserService;
+import cn.wizzer.app.web.commons.services.websocket.WsService;
 import cn.wizzer.app.web.modules.controllers.platform.gy.GyInfController;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
@@ -41,6 +43,8 @@ public class GyService {
     private SysUserService sysUserService;
     @Inject
     private LibSkillService libSkillService;
+    @Inject
+    private WsService wsService;
     @Inject
     private Dao dao;
 
@@ -87,6 +91,18 @@ public class GyService {
         List<gy_skill> skills = gyInfService.getSkillsByGyid(gyid);
         List<lib_skill> libSkills = libSkillService.query();
         return  true;
+    }
+
+    /**
+     * 通过websocket给雇员发送消息
+     * @param gyid
+     * @param msg
+     * @return
+     */
+    public boolean sendMsgByGyid(String gyid,String msg){
+        Sys_user user = gyInfService.getUserByGyid(gyid);
+        String wsid = user.getWsid();
+        return  wsService.sendMsgByWsid(wsid,msg);
     }
 
 

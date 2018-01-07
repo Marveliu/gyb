@@ -1,5 +1,6 @@
 package cn.wizzer.app.web.commons.websocket;
 
+import cn.wizzer.app.web.commons.util.UserInfUtil;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -21,14 +22,18 @@ import java.util.Map;
 @IocBean // 使用NutWsConfigurator的必备条件
 public class GybWebsocket extends AbstractWsEndpoint {
 
-    public static Map<String,Session> onlineUsers = new HashMap<String,Session>();  //在线雇员列表
-    private String username;	                                                    //当前会话的用户名
-    private int id;	                                                                //当前用户id
+    // public static Map<String,Session> onlineUsers = new HashMap<String,Session>();               //在线雇员列表
+    // private String username;	                                                    //当前会话的用户名
+    // private int id;	                                                                //当前用户id
 
     private static final Log log = Logs.get();
 
     @Inject
     Dao dao;
+
+    @Inject
+    UserInfUtil userInfUtil;
+
     public WsHandler createHandler(Session session, EndpointConfig config) {
         GybWsHandler handler = new GybWsHandler(roomPrefix, dao);
         handler.setRoomProvider(roomProvider);

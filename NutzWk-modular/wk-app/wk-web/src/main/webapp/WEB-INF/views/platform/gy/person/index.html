@@ -106,6 +106,14 @@ layout("/layouts/platform.html"){
                         </div>
                     </section>
 
+                    <!--vue测试-->
+                    <section class="panel panel-primary">
+                        <h5>vue 测试</h5>
+                        <div id="app1">
+                            {{message}}
+                        </div>
+                    </section>
+
                     <!-- /profile information sidebar -->
                 </div>
 
@@ -215,19 +223,31 @@ layout("/layouts/platform.html"){
     <a class="exit-offscreen"></a>
 </section>
 
+<script type="text/javascript" src="${base!}/assets/plugins/vue/vue.js"></script>
 <script>
+    var app1 = new Vue({
+        el: '#app1',
+        data: {
+            message: 'Hello Vue!'
+        }
+    });
+
+
     // 首先,需要创建一个WebSocket连接
     var ws;
     var WS_URL = window.location.host + "${base!}"+"/websocket"
+
+
     // 如果页面是https,那么必须走wss协议, 否则走ws协议
     if (location.protocol == 'http:') {
         ws = new WebSocket("ws://"+WS_URL);
     } else {
         ws = new WebSocket("wss://"+WS_URL);
     }
+
     // 连接成功后,会触发onopen回调
     ws.onopen = function(event) {
-        console.log("websocket onopen ...");
+        console.log("websocket建立：");
         // 加入home房间
         ws.send(JSON.stringify({room:'home',"action":"join"}));
     };
@@ -256,5 +276,7 @@ layout("/layouts/platform.html"){
     }
     setInterval("ws_ping()", 25000); // 25秒一次就可以了
 </script>
+
+
 
 <%}%>

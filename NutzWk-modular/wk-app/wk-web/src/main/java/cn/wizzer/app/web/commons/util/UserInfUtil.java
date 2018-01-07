@@ -24,6 +24,7 @@ public class UserInfUtil {
     @Inject
     private SysUserService sysUserService;
 
+
     /**
      * 获得用户以及相关的角色单位信息
      *
@@ -32,7 +33,7 @@ public class UserInfUtil {
     public  Sys_user getCurrentUser(){
         Subject currentUser = SecurityUtils.getSubject();
         Sys_user user = (Sys_user) currentUser.getPrincipal();
-        user = sysUserService.fetchLinks(user,"role");
+        user = sysUserService.fetchLinks(user,"roles");
         return  user;
     }
 

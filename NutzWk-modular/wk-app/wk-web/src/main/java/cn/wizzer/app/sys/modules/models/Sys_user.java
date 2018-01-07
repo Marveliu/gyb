@@ -25,6 +25,11 @@ public class Sys_user extends BaseModel implements Serializable {
     private String id;
 
     @Column
+    @Comment("wsid")
+    @ColDefine(type = ColType.VARCHAR, width = 32)
+    private String wsid;
+
+    @Column
     @Comment("用户名")
     @ColDefine(type = ColType.VARCHAR, width = 120)
     private String loginname;
@@ -344,4 +349,18 @@ public class Sys_user extends BaseModel implements Serializable {
     public void setAvatar(byte[] avatar) {
         this.avatar = avatar;
     }
+
+    public String getWsid() {
+        return wsid;
+    }
+
+    public void setWsid(String wsid) {
+        this.wsid = wsid;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
+    }
+
+
 }

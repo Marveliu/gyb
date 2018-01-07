@@ -2,6 +2,7 @@ package cn.wizzer.app.gy.modules.services.impl;
 
 import cn.wizzer.app.gy.modules.models.gy_pay;
 import cn.wizzer.app.gy.modules.models.gy_skill;
+import cn.wizzer.app.sys.modules.models.Sys_user;
 import cn.wizzer.app.sys.modules.services.SysUserService;
 import cn.wizzer.framework.base.service.BaseServiceImpl;
 import cn.wizzer.app.gy.modules.models.gy_inf;
@@ -32,6 +33,11 @@ public class GyInfServiceImpl extends BaseServiceImpl<gy_inf> implements GyInfSe
         return this.dao().fetch(gy_inf.class,Cnd.where("userid","=",userid));
     }
 
+
+    public Sys_user getUserByGyid(String gyid){
+        String userid = this.dao().fetch(gy_inf.class,gyid).getUserid();
+        return this.dao().fetch(Sys_user.class,Cnd.where("id","=",userid));
+    }
     /**
      * 根据雇员id获取技能信息
      * @param gyid

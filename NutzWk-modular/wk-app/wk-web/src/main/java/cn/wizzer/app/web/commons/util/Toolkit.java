@@ -9,6 +9,8 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpSession;
+import java.util.Enumeration;
 
 /**
  * 小工具类
@@ -98,5 +100,19 @@ public class Toolkit {
             re[i] = (byte)r;
         }
         return re;
+    }
+
+    public void showHttpSessitonAttr(HttpSession session){
+        //获取session中所有的键值
+        Enumeration enumeration = session.getAttributeNames();
+        //遍历enumeration中的
+        while (enumeration.hasMoreElements()) {
+            //获取session键值
+            String name1 = enumeration.nextElement().toString();
+            //根据键值取session中的值
+            Object value = session.getAttribute(name1);
+            //打印结果
+            log.debug(name1 + "：" + value.toString());
+        }
     }
 }

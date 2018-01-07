@@ -421,7 +421,7 @@ layout("/layouts/platform.html"){
             success: function (data, statusText, xhr, form) {
                 if (data.code == 0) {
                     Toast.success(data.msg);
-                    window.location.href ="/gy/person";
+                    window.location.href = "/platform/gy/person";
                     //登入系统
                 } else {
                     Toast.error(data.msg);
