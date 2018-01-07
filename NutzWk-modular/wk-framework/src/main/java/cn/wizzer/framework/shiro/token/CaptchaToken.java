@@ -2,8 +2,10 @@ package cn.wizzer.framework.shiro.token;
 
 import org.apache.shiro.authc.UsernamePasswordToken;
 
+
 /**
- * Created by wizzer on 2017/1/11.
+ * 登录token
+ * // TODO: 2018/1/7 0007  修改成单点的登录方式
  */
 public class CaptchaToken extends UsernamePasswordToken {
 
