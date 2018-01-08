@@ -22,4 +22,8 @@ public interface GyInfService extends BaseService<gy_inf>{
 
     // 根据雇员id获得支付
     public List<gy_pay> getPaysByGyid(String gyid);
+
+    //  获得用户id
+    public boolean ifEmailChecked(String gyid);
+
 }

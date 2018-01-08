@@ -1,6 +1,7 @@
 package cn.wizzer.app.web.modules.controllers.open.api.email;
 
 import cn.wizzer.app.TestBase;
+import cn.wizzer.app.web.modules.controllers.open.email.EmailController;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

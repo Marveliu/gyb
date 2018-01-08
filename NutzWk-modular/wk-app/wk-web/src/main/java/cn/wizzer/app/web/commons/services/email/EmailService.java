@@ -11,26 +11,8 @@ import org.nutz.log.Logs;
 /**
  * Created by Wizzer on 2016/7/31.
  */
-@IocBean
-public class EmailService {
-    private static final Log log = Logs.get();
+public interface EmailService {
 
-    @Inject("refer:$ioc")
-    protected Ioc ioc;
+    public boolean send(String to, String subject, String html);
 
-    public boolean send(String to, String subject, String html) {
-        try {
-            HtmlEmail email = ioc.get(HtmlEmail.class);
-            email.setCharset("UTF-8");
-            email.setSubject(subject);
-            email.setHtmlMsg(html);
-            email.addTo(to);
-            email.buildMimeMessage();
-            email.sendMimeMessage();
-            return true;
-        } catch (Throwable e) {
-            log.info("send email fail", e);
-            return false;
-        }
-    }
 }

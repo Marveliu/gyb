@@ -2,6 +2,7 @@ package cn.wizzer.app.web.commons.services.gy;
 
 import cn.wizzer.app.gy.modules.models.gy_inf;
 import cn.wizzer.app.gy.modules.models.gy_skill;
+import cn.wizzer.app.gy.modules.services.GyAuthService;
 import cn.wizzer.app.gy.modules.services.GyInfService;
 import cn.wizzer.app.gy.modules.services.GySkillService;
 import cn.wizzer.app.library.modules.models.lib_skill;
@@ -9,7 +10,9 @@ import cn.wizzer.app.library.modules.services.LibSkillService;
 import cn.wizzer.app.sys.modules.models.Sys_user;
 import cn.wizzer.app.sys.modules.services.SysRoleService;
 import cn.wizzer.app.sys.modules.services.SysUserService;
+import cn.wizzer.app.web.commons.services.email.EmailService;
 import cn.wizzer.app.web.commons.services.websocket.WsService;
+import cn.wizzer.app.web.modules.controllers.open.email.EmailController;
 import cn.wizzer.app.web.modules.controllers.platform.gy.GyInfController;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
@@ -17,6 +20,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
 import org.nutz.log.Logs;
+import org.nutz.trans.Trans;
 import sun.rmi.runtime.Log;
 
 import java.util.List;
@@ -38,6 +42,8 @@ public class GyService {
     @Inject
     private GyInfService gyInfService;
     @Inject
+    private GyAuthService gyAuthService;
+    @Inject
     private GySkillService gySkillService;
     @Inject
     private SysUserService sysUserService;
@@ -45,6 +51,8 @@ public class GyService {
     private LibSkillService libSkillService;
     @Inject
     private WsService wsService;
+    @Inject
+    private EmailController emailController;
     @Inject
     private Dao dao;
 
@@ -80,6 +88,16 @@ public class GyService {
 
 
     /**
+     * 检查雇员身份是否被验证
+     * @param gyid
+     * @return
+     */
+    public boolean checkGyAuthByUsrid(String gyid){
+        return gyAuthService.ifAuth(gyid);
+    }
+
+
+    /**
      * 初始化雇员技能信息
      * @param gyid
      * @return
@@ -103,6 +121,36 @@ public class GyService {
         Sys_user user = gyInfService.getUserByGyid(gyid);
         String wsid = user.getWsid();
         return  wsService.sendMsgByWsid(wsid,msg);
+    }
+
+
+    /**
+     * 邮箱更改
+     * @param gyid
+     * @param email
+     * @return
+     */
+    public boolean changeEmail(String gyid, String email){
+        gy_inf gy =  gyInfService.fetch(gyid);
+
+        // 验证邮箱是否修改
+        if(email.equals(gy.getEmail())){
+            return true;
+        }
+
+        // 邮箱修改之后，会重新激活
+        if(gyInfService.ifEmailChecked(gyid)){
+            String id = gyInfService.getUserByGyid(gyid).getId();
+           if(sysUserService.setEmail(id,email)){
+               emailController.activeMail(id);
+           }
+        }
+
+        // 系统消息通知
+        Sys_user user = gyInfService.getUserByGyid(gyid);
+        String wsid = user.getWsid();
+        //return  wsService.sendMsgByWsid(wsid);
+        return false;
     }
 
 

@@ -94,7 +94,6 @@ public class GyPersonController {
         for(String item :sysuserService.getRoleCodeList(user)){
             Matcher match = gypattern.matcher(item);
             if(match.lookingAt()){
-
                 gy_inf gy = gyInfService.getGyByUserId(user.getId());
                 req.setAttribute("gy", gy);
             }
@@ -170,7 +169,7 @@ public class GyPersonController {
     }
 
 
-    //个人信息修改
+    //  个人信息修改
     @At("/inf")
     @Ok("beetl:/platform/gy/person/infedit.html")
     @RequiresPermissions("gy.person")
@@ -179,38 +178,50 @@ public class GyPersonController {
         Subject currentUser = SecurityUtils.getSubject();
         Sys_user user = (Sys_user) currentUser.getPrincipal();
         String id = user.getId();
-        Object test = gyInfService.fetch(cnd.and("userid","=",id));
-        req.setAttribute("obj", test);
+        Object gy = gyInfService.fetch(cnd.and("userid","=",id));
+        req.setAttribute("gy", gy);
     }
 
-    //提交个人基本信息修改
+    //  个人信息修改
     @At("/infedit")
     @Ok("json")
     @RequiresPermissions("gy.person")
-    @SLog(tag = "gz_inf", msg = "${args[0].id}")
-    public Object editDo(
+    @SLog(tag = "雇员信息修改", msg = "${args[0].id}")
+    public Object infeditDo(
             @Param("..") gy_inf gyInf,
             @Param("birthdayat") String birthday,
             @Param("regYearat") String regyear,
             HttpServletRequest req) {
         try {
+
             String userid = gyInf.getUserid();
             Sys_user user = sysuserService.fetch(userid);
+
             //修改邮箱
+            gyService.changeEmail(gyInf.gyid(),gyInf.getEmail());
             user.setEmail(gyInf.getEmail());
             user.setOpBy(StringUtil.getUid());
             user.setOpAt((int) (System.currentTimeMillis() / 1000));
             sysuserService.updateIgnoreNull(user);
-            //修改雇员信息
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            int birthdayat = (int) (sdf.parse(birthday).getTime() / 1000);
-            int regyearat = (int) (sdf.parse(regyear).getTime() / 1000);
-            gyInf.setRegYear(regyearat);
-            gyInf.setRegYear(regyearat);
-            gyInf.setOpBy(StringUtil.getUid());
-            gyInf.setOpAt((int) (System.currentTimeMillis() / 1000));
-            gyInfService.updateIgnoreNull(gyInf);
-            return Result.success("system.success");
+
+            // 检验身份认证
+            if( !gyService.checkGyAuthByUsrid(gyInf.gyid())){
+                //修改雇员信息
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                int birthdayat = (int) (sdf.parse(birthday).getTime() / 1000);
+                int regyearat = (int) (sdf.parse(regyear).getTime() / 1000);
+                gyInf.setRegYear(regyearat);
+                gyInf.setRegYear(regyearat);
+                gyInf.setOpBy(StringUtil.getUid());
+                gyInf.setOpAt((int) (System.currentTimeMillis() / 1000));
+                gyInfService.updateIgnoreNull(gyInf);
+                return Result.success("system.success");
+            }
+
+            String msg = "你的身份已经认证，只修改了您的联系信息";
+
+
+            return Result.success(msg+"system.success");
 
         } catch (Exception e) {
             return Result.error("system.error");

@@ -8,6 +8,7 @@ import cn.wizzer.app.sys.modules.services.SysUserService;
 import cn.wizzer.framework.base.service.BaseServiceImpl;
 import cn.wizzer.framework.util.StringUtil;
 import org.nutz.aop.interceptor.ioc.TransAop;
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.Sqls;
@@ -154,6 +155,14 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
         dao().clear("sys_user_unit", Cnd.where("userId", "in", userIds));
         dao().clear("sys_user_role", Cnd.where("userId", "in", userIds));
         dao().clear("sys_user", Cnd.where("id", "in", userIds));
+    }
+
+
+    public boolean setEmail(String userid,String email){
+        Chain chain = Chain.make("email",email);
+        Cnd cnd = Cnd.where("id","=",userid);
+        this.dao().update(Sys_user.class,chain,cnd);
+        return  false;
     }
 
 }

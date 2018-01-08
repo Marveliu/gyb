@@ -59,4 +59,15 @@ public class GyInfServiceImpl extends BaseServiceImpl<gy_inf> implements GyInfSe
         gy = this.fetchLinks(gy,"gy_pays");
         return gy.getGypays();
     }
+
+    /**
+     *
+     * @param gyid
+     * @return
+     */
+    public boolean ifEmailChecked(String gyid){
+        Sys_user user = this.getUserByGyid(gyid);
+        return user.isEmailChecked();
+    }
+
 }

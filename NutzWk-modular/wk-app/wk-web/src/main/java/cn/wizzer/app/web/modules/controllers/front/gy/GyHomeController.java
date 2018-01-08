@@ -1,17 +1,13 @@
 package cn.wizzer.app.web.modules.controllers.front.gy;
 
-import cn.wizzer.app.gy.modules.models.gy_auth;
-import cn.wizzer.app.gy.modules.models.gy_inf;
 import cn.wizzer.app.gy.modules.services.GyAuthService;
 import cn.wizzer.app.gy.modules.services.GyInfService;
 import cn.wizzer.app.sys.modules.models.Sys_user;
 import cn.wizzer.app.sys.modules.services.*;
 import cn.wizzer.app.web.commons.services.email.EmailService;
 import cn.wizzer.app.web.commons.slog.SLogService;
-import cn.wizzer.app.web.commons.slog.annotation.SLog;
-import cn.wizzer.app.web.modules.controllers.open.api.email.EmailController;
+import cn.wizzer.app.web.modules.controllers.open.email.EmailController;
 import cn.wizzer.framework.base.Result;
-import cn.wizzer.framework.util.DateUtil;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Sha256Hash;

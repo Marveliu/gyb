@@ -1,63 +1,65 @@
-package cn.wizzer.app.web.modules.controllers.open.api.email;
+package cn.wizzer.app.web.modules.controllers.open.email;
 
 import cn.wizzer.app.sys.modules.models.Sys_user;
 import cn.wizzer.app.sys.modules.services.SysUserService;
 import cn.wizzer.app.web.commons.base.Globals;
 import cn.wizzer.app.web.commons.services.email.EmailService;
-import cn.wizzer.framework.base.Result;
+import cn.wizzer.app.web.commons.services.email.EmailThreadService;
+import cn.wizzer.app.web.commons.util.Toolkit;
+import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
+import org.nutz.lang.meta.Email;
+import org.nutz.lang.util.NutMap;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import org.nutz.mvc.annotation.*;
-import org.nutz.dao.Cnd;
-import org.nutz.lang.util.NutMap;
-import cn.wizzer.app.web.commons.util.Toolkit;
-
-import javax.servlet.http.HttpServletRequest;
+import org.nutz.mvc.annotation.Param;
 
 /**
- * 邮件Api
+ * 邮箱内部api
  *
  * @Author Marveliu
- * @Create 2018/1/3 0003.
- *
+ * @Create 2018/1/8 0008.
  */
 
 @IocBean
-@At("/open/api/email")
 public class EmailController {
 
-    private static final Log log = Logs.get();
+    private static  final Log log = Logs.get();
 
     @Inject
-    private EmailService emailService;
+    private EmailThreadService emailThreadService;
     @Inject
     private SysUserService sysUserService;
+    @Inject
+    private EmailService emailService;
     @Inject
     private Dao dao;
 
 
     /**
-     * 发送激活邮件
+     * 给userid发送激活邮件
      * @param userId
      * @return
      */
-    @At("/mail/activeMail")
-    @POST
     public Object activeMail(String  userId) {
         NutMap re = new NutMap();
         Sys_user user = sysUserService.fetch(userId);
+
         String token = String.format("%s,%s", user.getEmail(), System.currentTimeMillis());
         token = Toolkit._3DES_encode(user.getSalt().getBytes(), token.getBytes());
+
         //String url = req.getRequestURL() + "?token=" + token;
+
         String url = Globals.AppRoot + "?token=" + token +"&userId=" + userId;
         String html = "<div>如果无法点击,请拷贝一下链接到浏览器中打开<p/>验证链接 %s</div>";
         html = String.format(html, url, url);
+
         try {
-            boolean ok = emailService.send(user.getEmail(), "XXX 验证邮件 by 雇佣帮", html.toString());
+            // 直接传递函数
+            boolean ok = emailThreadService.run(emailService,"send");
             if (!ok) {
                 return re.setv("ok", false).setv("msg", "发送失败");
             }
@@ -68,18 +70,14 @@ public class EmailController {
         return re.setv("ok", true);
     }
 
+
     /**
-     * 验证激活邮件
+     * 验证邮箱测试，正式使用过程之中在openapi之中
      * @param token
-     * @param
+     * @param userId
      * @return
      */
-    @Filters
-    @At("/active/mail")
-    @GET
-    @Ok("raw")
-    public String activeMailCallback(@Param("token") String token,
-                                     @Param("userId") String userId) {
+    public String activeMailCallback(String token,String userId) {
         if (Strings.isBlank(token)) {
             return "请不要直接访问这个链接!!!";
         }
@@ -109,5 +107,6 @@ public class EmailController {
         }
 
     }
+
 
 }

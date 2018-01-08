@@ -32,7 +32,6 @@ layout("/layouts/platform.html"){
                                         <h6 class="mt15 mb15">雇员编号：${gy.id!}</h6>
 
 
-
                                     <div class="row">
                                         <div class="col-md-6">
                                             <h6 class="mt15">基本信息</h6>
@@ -72,8 +71,8 @@ layout("/layouts/platform.html"){
 
 
                                         <div class="mt10 mb10">
-                                            <a class="btn btn-social btn-xs btn-facebook mr5"><i class="fa fa-facebook"></i>修改个人信息 </a>
-                                            <a class="btn btn-social btn-xs btn-twitter mr5"><i class="fa fa-twitter"></i>发送激活邮件 </a>
+                                            <a href="${base}/platform/gy/person/inf" class="btn btn-social btn-xs btn-facebook mr5" data-toggle="modal" data-target="#dialogDeal"><i class="fa fa-facebook"></i>修改个人信息 </a>
+                                            <a id="emailchecked" class="btn btn-social btn-xs btn-twitter mr5" v-if="!emailchecked"><i class="fa fa-twitter"></i>发送激活邮件 </a>
                                         </div>
                                     </div>
                                     <div class="col-xs-12 col-sm-4 text-center">
@@ -144,7 +143,7 @@ layout("/layouts/platform.html"){
                                         </a>
                                         <div class="user-details">
                                             <p>身份认证</p>
-                                            <small class="user-department">正在审核</small>
+                                            <small class="user-department">正在审核！</small>
                                         </div>
                                     </div>
                                 </div>
@@ -221,14 +220,25 @@ layout("/layouts/platform.html"){
     </div>
     <!-- /content wrapper -->
     <a class="exit-offscreen"></a>
+
+    <!-- 状态框 -->
+    <div id="dialogDeal" class="modal fade " tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+
 </section>
 
 <script type="text/javascript" src="${base!}/assets/plugins/vue/vue.js"></script>
 <script>
+
+    // vue
     var app1 = new Vue({
-        el: '#app1',
+        el: '#emailchecked',
         data: {
-            message: 'Hello Vue!'
+            emailchecked: ${obj.emailChecked}
         }
     });
 

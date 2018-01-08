@@ -10,6 +10,7 @@ import java.util.List;
  * Created by wizzer on 2016/12/22.
  */
 public interface SysUserService extends BaseService<Sys_user> {
+
     List<String> getRoleCodeList(Sys_user user);
 
     List<Sys_menu> getMenusAndButtons(String userId);
@@ -21,4 +22,8 @@ public interface SysUserService extends BaseService<Sys_user> {
     void deleteById(String userId);
 
     void deleteByIds(String[] userIds);
+
+    boolean setEmail(String userid,String email);
+
+
 }
