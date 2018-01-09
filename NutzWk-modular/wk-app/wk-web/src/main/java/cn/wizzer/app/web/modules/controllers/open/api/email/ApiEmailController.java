@@ -1,9 +1,12 @@
 package cn.wizzer.app.web.modules.controllers.open.api.email;
 
+import cn.wizzer.app.gy.modules.services.GyInfService;
 import cn.wizzer.app.sys.modules.models.Sys_user;
 import cn.wizzer.app.sys.modules.services.SysUserService;
 import cn.wizzer.app.web.commons.base.Globals;
 import cn.wizzer.app.web.commons.services.email.EmailService;
+import cn.wizzer.app.web.commons.services.gy.GyService;
+import cn.wizzer.app.web.commons.services.websocket.WsService;
 import cn.wizzer.framework.base.Result;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -36,6 +39,8 @@ public class ApiEmailController {
     private EmailService emailService;
     @Inject
     private SysUserService sysUserService;
+    @Inject
+    private GyService gyService;
     @Inject
     private Dao dao;
 
@@ -102,6 +107,7 @@ public class ApiEmailController {
             Cnd cnd = Cnd.where("id", "=", userId);
             int re = dao.update(Sys_user.class, org.nutz.dao.Chain.make("emailChecked", true), cnd);
             if (re == 1) {
+                gyService.sendMsgByUid(userId,"邮箱已经激活");
                 return "验证成功";
             }
             return "验证失败!!请重新验证!!";
