@@ -9,9 +9,10 @@
                 </header>
                 <section class="panel panel-form">
                     <!--form-->
-                    <form id="addForm" role="form" class="form-horizontal parsley-form" data-parsley-validate action="${base}/platform/gy/person/reginfo" method="post">
+                    <form id="addForm" role="form" class="form-horizontal parsley-form" data-parsley-validate action="${base}/platform/gy/person/infeditDo" method="post">
 
-                        <input type="text" name="userid" value="${gy.id}" hidden>
+                        <input type="text" name="userid" value="${gy.userid}" hidden>
+                        <input type="text" name="id" value="${gy.id}" hidden>
 
                         <div class="ro">
 
@@ -19,34 +20,40 @@
                                 <div class="form-group">
                                     <label for="realname" class="col-sm-3 control-label">真实姓名</label>
                                     <div class="col-sm-8">
-                                        <input type="text" id="realname" class="form-control" name="gyinf.realname" value="${gy.realname}" data-parsley-required="true" placeholder="请输入您的真实姓名！"  data-parsley-pattern="/^[\u4E00-\u9FA5A-Za-z]+$/"  data-parsley-trigger="change">
+                                        <input type="text" id="realname" class="form-control" name="realname" value="${gy.realname}" data-parsley-required="true" placeholder="请输入您的真实姓名！"  data-parsley-pattern="/^[\u4E00-\u9FA5A-Za-z]+$/"  data-parsley-trigger="change">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="sex" class="col-sm-3 control-label">性别</label>
                                     <div class="col-sm-8">
-                                        <select id="sex" name="gyinf.sex" data-parsley-required="true" class="form-control">
+                                        <select id="sex" name="sex" data-parsley-required="true" class="form-control">
                                             <option value="0">男</option>
                                             <option value="1">女</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label for="email" class="col-sm-3 control-label">邮箱</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="email" class="form-control" name="email" value="${email}" data-parsley-required="true" placeholder="请输入您邮箱"  data-parsley-type="email" data-parsley-trigger="change">
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label for="qq" class="col-sm-3 control-label">qq</label>
                                     <div class="col-sm-8">
-                                        <input type="text" id="qq" class="form-control" name="gyinf.qq" value="${gy.qq}" data-parsley-required="true" placeholder="请填写您的qq，方便我们联系。" data-parsley-pattern="[1-9][0-9]{4,14}" data-parsley-trigger="change">
+                                        <input type="text" id="qq" class="form-control" name="qq" value="${gy.qq}" data-parsley-required="true" placeholder="请填写您的qq，方便我们联系。" data-parsley-pattern="[1-9][0-9]{4,14}" data-parsley-trigger="change">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="phone" class="col-sm-3 control-label">${msg['gy.inf.column.phone']}</label>
                                     <div class="col-sm-8">
-                                        <input type="text" id="phone" class="form-control" name="gyinf.phone" value="${gy.phone}" data-parsley-required="true" placeholder="请输入您本人的手机号！" data-parsley-trigger="change">
+                                        <input type="text" id="phone" class="form-control" name="phone" value="${gy.phone}" data-parsley-required="true" placeholder="请输入您本人的手机号！" data-parsley-trigger="change">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="idcard" class="col-sm-3 control-label">${msg['gy.inf.column.idcard']}</label>
                                     <div class="col-sm-8">
-                                        <input type="text" id="idcard" class="form-control" name="gyinf.idcard" value="${gy.idcard}" data-parsley-required="true" placeholder="请输入您本人的身份证号！" data-parsley-trigger="change">
+                                        <input type="text" id="idcard" class="form-control" name="idcard" value="${gy.idcard}" data-parsley-required="true" placeholder="请输入您本人的身份证号！" data-parsley-trigger="change">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -61,7 +68,7 @@
                                                 <span class="glyphicon glyphicon-th"></span>
                                             </span>
                                     </div>
-                                    <input type="hidden" id="birthday" name="birthdayat" value="${gy.birthday}" />
+                                    <input type="hidden" id="birthday" name="birthdayat" value="${@date.getDate(gy.regYear,'yyyy-MM-dd')}" />
                                 </div>
                             </div>
 
@@ -79,25 +86,25 @@
                                                     </button>
 			                             		</span>
                                         </div>
-                                        <input type="hidden"  name="gyinf.college"  data-parsley-required="true" value="${gy.college}">
+                                        <input type="hidden"  name="college"  data-parsley-required="true" value="${gy.college}">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="school" class="col-sm-3 control-label">${msg['gy.inf.column.school']}</label>
                                     <div class="col-sm-8">
-                                        <input type="text" id="school" class="form-control" name="gyinf.school" value="${gy.school}" data-parsley-required="true" placeholder="${msg['gy.inf.column.college']}">
+                                        <input type="text" id="school" class="form-control" name="school" value="${gy.school}" data-parsley-required="true" placeholder="${msg['gy.inf.column.college']}">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="major" class="col-sm-3 control-label">${msg['gy.inf.column.major']}</label>
                                     <div class="col-sm-8">
-                                        <input type="text" id="major" class="form-control" name="gyinf.major" value="${gy.major}" data-parsley-required="true" placeholder="${msg['gy.inf.column.major']}">
+                                        <input type="text" id="major" class="form-control" name="major" value="${gy.major}" data-parsley-required="true" placeholder="${msg['gy.inf.column.major']}">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="stuLevel" class="col-sm-3 control-label">${msg['gy.inf.column.stuLevel']}</label>
                                     <div class="col-sm-8">
-                                        <select id="stuLevel" name="gyinf.stuLevel" data-parsley-required="true" class="form-control">
+                                        <select id="stuLevel" name="stuLevel" data-parsley-required="true" class="form-control">
                                             <option value="0">本科在读</option>
                                             <option value="1">研究生在读</option>
                                             <option value="2">博士在读</option>
@@ -116,7 +123,7 @@
                                                 <span class="glyphicon glyphicon-th"></span>
                                             </span>
                                     </div>
-                                    <input type="hidden" id="regYear" name="regYearat" value="${gy.regYear}" />
+                                    <input type="hidden" id="regYear" name="regYearat" value="${@date.getDate(gy.regYear,'yyyy-MM-dd')}" />
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label"></label>

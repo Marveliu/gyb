@@ -1,75 +1,265 @@
-<%
-layout("/layouts/platform.html"){
-%>
-
-    <div class="content-wrap">
-        <div class="wrapper" style="min-height:500px;">
-            <section class="panel panel-form">
-                <form id="editForm" role="form" class="form-horizontal parsley-form" data-parsley-validate action="${base}/platform/gy/auth/editDo"
+<div class="modal-body no-p">
+    <div class="row">
+        <div class="col-xs-12">
+            <section class="panel panel-primary no-b">
+                <header class="panel-heading clearfix brtl brtr">
+                    <div class="overflow-hidden">
+                        <a href="javascript:;" class="h4 show no-m pt5">个人信息修改</a>
+                    </div>
+                </header>
+                <section class="panel panel-form">
+                    <!--form-->
+                     <form id="editForm" role="form" class="form-horizontal parsley-form" data-parsley-validate action="${base}/platform/gy/person/autheditDo"
                     method="post">
                     <input name="id" type="hidden" value="${obj.id}">
                     <div class="row mb10">
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label for="gyid" class="col-sm-2 control-label">${msg['gy.auth.column.gyid']}</label>
-                                <div class="col-sm-8">
+                                <div class="col-sm-9">
                                     <input disabled="true" type="text" id="gyid" class="form-control" name="gyid" data-parsley-required="true" placeholder="${msg['gy.auth.column.gyid']}"
                                         value="${obj.gyid}">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="reAuthTime" class="col-sm-2 control-label">${msg['gy.auth.column.reAuthTime']}</label>
-                                <div class="col-sm-8">
+                                <div class="col-sm-9">
                                     <input disabled="true" type="text" id="reAuthTime" class="form-control" name="reAuthTime" data-parsley-required="true" placeholder="${msg['gy.auth.column.reAuthTime']}"
                                         value="${@date.getDate(obj.reAuthTime)}">
                                 </div>
                             </div>
+
+                            <!--证件上传-->
+                            <!--证件-->
                             <div class="form-group">
                                 <label for="idcardF" class="col-sm-2 control-label">${msg['gy.auth.column.idcardF']}</label>
-                                <div class="col-sm-8">
-                                    <img style="max-width: 200px" src="${obj.idcardF}">
+                                <div class="col-sm-9">
+                                    <div id="idcardFqueue"></div>
+                                    <div>
+                                        <input id="idcardF_upload" name="file_upload" type="file" multiple="false">
+                                    </div>
+                                    <div id="idcardFimg" style="padding: 5px;">
+                                    </div>
+                                    <input type="hidden" id="idcardF" name="idcardF" value="">
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label for="idcardB" class="col-sm-2 control-label">${msg['gy.auth.column.idcardB']}</label>
-                                <div class="col-sm-8">
-                                    <img style="max-width: 200px" src="${obj.idcardB}">
+                                <div class="col-sm-9">
+                                    <div id="idcardBqueue"></div>
+                                    <div>
+                                        <input id="idcardB_upload" name="file_upload" type="file" multiple="false">
+                                    </div>
+                                    <div id="idcardBimg" style="padding: 5px;">
+                                    </div>
+                                    <input type="hidden" id="idcardB" name="idcardB" value="">
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label for="stuCardF" class="col-sm-2 control-label">${msg['gy.auth.column.stuCardF']}</label>
-                                <div class="col-sm-8">
-                                    <img style="max-width: 200px" src="${obj.stuCardF}">
+                                <div class="col-sm-9">
+                                    <div id="stuCardFqueue"></div>
+                                    <div>
+                                        <input id="stuCardF_upload" name="file_upload" type="file" multiple="false">
+                                    </div>
+                                    <div id="stuCardFimg" style="padding: 5px;">
+                                    </div>
+                                    <input type="hidden" id="stuCardF" name="stuCardF" value="">
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="stuCardB" class="col-sm-2 control-label">${msg['gy.auth.column.stuCardB']}</label>
-                                <div class="col-sm-8">
-                                    <img style="max-width: 200px" src="${obj.stuCardB}">
+                                <div class="col-sm-9">
+                                    <div id="stuCardBqueue"></div>
+                                    <div>
+                                        <input id="stuCardB_upload" name="file_upload" type="file" multiple="false">
+                                    </div>
+                                    <div id="stuCardBimg" style="padding: 5px;">
+                                    </div>
+                                    <input type="hidden" id="stuCardB" name="stuCardB" value="">
                                 </div>
                             </div>
 
+
                             <div class="form-group">
                                 <label for="status" class="col-sm-2 control-label">${msg['gy.auth.column.status']}</label>
-                                <div class="col-sm-8">
+                                <div class="col-sm-9">
                                     <input disabled="true" type="text" id="status" class="form-control" name="status" data-parsley-required="true" placeholder="${msg['gy.auth.column.status']}"
-                                        value="
-                                        <%if(obj.status==0){%>正在审核
-                                        <%}%> <%else if(obj.status==1){%>审核通过<%}%>
-                                        <%else{%>审核未通过<%}%>"
-                                        >
+                                        value="${@status.bind( 'gyauth'+ obj.status!)}">
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-9">
+                                    <button class="btn btn-primary btn-block btn-parsley" data-loading-text="正在提交...">提 交
+                                    </button>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </form>
+                </section>
             </section>
 
         </div>
     </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+</div>
+
+
     <script language="JavaScript">
         $(document).ready(function () {
+
+            //        上传文件
+            $('#idcardF_upload').uploadifive({
+                'auto': true,
+                'multi': false,
+                'width': '100%',
+                'height': '35',
+                'buttonText': '请选择图片',
+                'fileType': 'image/jpg,image/jpeg,image/png',
+                'fileSizeLimit': 1024,
+                'queueSizeLimit': 1,
+                'formData': {},
+                'queueID': 'idcardFqueue',
+                'uploadScript': '${base}/open/file/upload/gyauimage',
+                'onUploadComplete': function (file, data) {
+                    data = JSON.parse(data);
+                    if (data.code == 0) {
+                        Toast.success(data.msg);
+                        $("#idcardFimg").html("<img src='" + data.data + "' style='width:150px;height:95px;'>");
+                        $("#idcardF").val(data.data);
+                    } else {
+                        clearFile("idcardF");
+                        Toast.error(data.msg);
+                    }
+                },
+                'onDrop': function (file, fileDropCount) {
+                    clearFile("idcardF");
+                },
+                'onClearQueue': function (queue) {
+                    clearFile("idcardF");
+                },
+                'onCancel': function () {
+                    clearFile("idcardF");
+                }
+            });
+
+            $('#idcardB_upload').uploadifive({
+                'auto': true,
+                'multi': false,
+                'width': '100%',
+                'height': '35',
+                'buttonText': '请选择图片',
+                'fileType': 'image/jpg,image/jpeg,image/png',
+                'fileSizeLimit': 1024,
+                'queueSizeLimit': 1,
+                'formData': {},
+                'queueID': 'idcardBqueue',
+                'uploadScript': '${base}/open/file/upload/gyauimage',
+                'onUploadComplete': function (file, data) {
+                    data = JSON.parse(data);
+                    if (data.code == 0) {
+                        Toast.success(data.msg);
+                        $("#idcardBimg").html("<img src='" + data.data + "' style='width:150px;height:95px;'>");
+                        $("#idcardB").val(data.data);
+                    } else {
+                        clearFile("idcardB");
+                        Toast.error(data.msg);
+                    }
+                },
+                'onDrop': function (file, fileDropCount) {
+                    clearFile("idcardB");
+                },
+                'onClearQueue': function (queue) {
+                    clearFile("idcardB");
+                },
+                'onCancel': function () {
+                    clearFile("idcardB");
+                }
+            });
+
+            $('#stuCardF_upload').uploadifive({
+                'auto': true,
+                'multi': false,
+                'width': '100%',
+                'height': '35',
+                'buttonText': '请选择图片',
+                'fileType': 'image/jpg,image/jpeg,image/png',
+                'fileSizeLimit': 1024,
+                'queueSizeLimit': 1,
+                'formData': {},
+                'queueID': 'stuCardFqueue',
+                'uploadScript': '${base}/open/file/upload/gyauimage',
+                'onUploadComplete': function (file, data) {
+                    data = JSON.parse(data);
+                    if (data.code == 0) {
+                        Toast.success(data.msg);
+                        $("#stuCardFimg").html("<img src='" + data.data + "' style='width:150px;height:95px;'>");
+                        $("#stuCardF").val(data.data);
+                    } else {
+                        clearFile("stuCardF");
+                        Toast.error(data.msg);
+                    }
+                },
+                'onDrop': function (file, fileDropCount) {
+                    clearFile("stuCardF");
+                },
+                'onClearQueue': function (queue) {
+                    clearFile("stuCardF");
+                },
+                'onCancel': function () {
+                    clearFile("stuCardF");
+                }
+            });
+
+            $('#stuCardB_upload').uploadifive({
+                'auto': true,
+                'multi': false,
+                'width': '100%',
+                'height': '35',
+                'buttonText': '请选择图片',
+                'fileType': 'image/jpg,image/jpeg,image/png',
+                'fileSizeLimit': 1024,
+                'queueSizeLimit': 1,
+                'formData': {},
+                'queueID': 'stuCardBqueue',
+                'uploadScript': '${base}/open/file/upload/gyauimage',
+                'onUploadComplete': function (file, data) {
+                    data = JSON.parse(data);
+                    if (data.code == 0) {
+                        Toast.success(data.msg);
+                        $("#stuCardBimg").html("<img src='" + data.data + "' style='width:150px;height:95px;'>");
+                        $("#stuCardB").val(data.data);
+                    } else {
+                        clearFile("stuCardB");
+                        Toast.error(data.msg);
+                    }
+                },
+                'onDrop': function (file, fileDropCount) {
+                    clearFile("stuCardB");
+                },
+                'onClearQueue': function (queue) {
+                    clearFile("stuCardB");
+                },
+                'onCancel': function () {
+                    clearFile("stuCardB");
+                }
+            });
+
+            function clearFile(temp) {
+                $("#" + temp + "img").html("");
+                $("#" + temp + "queue").html("");
+                $("#" + temp + "picurl").val("");
+            }
+
             $('#editForm').ajaxForm({
                 dataType: 'json',
                 beforeSubmit: function (arr, form, options) {
@@ -89,4 +279,3 @@ layout("/layouts/platform.html"){
             });
         });
     </script>
-    <%}%>

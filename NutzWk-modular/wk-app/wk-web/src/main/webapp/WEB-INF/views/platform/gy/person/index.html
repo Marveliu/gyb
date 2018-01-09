@@ -42,7 +42,11 @@ layout("/layouts/platform.html"){
                                                 </li>
                                                 <li >
                                                     <i class="fa fa-institution mr5"></i>
-                                                    <a href="javascript:;">管理学院信息管理专业</a>
+                                                    <a href="javascript:;">${gy.school!}</a>
+                                                </li>
+                                                <li >
+                                                    <i class="fa fa-institution mr5"></i>
+                                                    <a href="javascript:;">${gy.major!}</a>
                                                 </li>
                                                 <li >
                                                     <i class="fa fa-cube mr5"></i>
@@ -71,8 +75,11 @@ layout("/layouts/platform.html"){
 
 
                                         <div class="mt10 mb10">
-                                            <a href="${base}/platform/gy/person/inf" class="btn btn-social btn-xs btn-facebook mr5" data-toggle="modal" data-target="#dialogDeal"><i class="fa fa-facebook"></i>修改个人信息 </a>
+                                            <a href="${base}/platform/gy/person/infedit" class="btn btn-social btn-xs btn-facebook mr5" data-toggle="modal" data-target="#dialogDeal"><i class="fa fa-facebook"></i>修改个人信息 </a>
+                                            <!--<a href="${base}/platform/gy/person/payedit" class="btn btn-social btn-xs btn-facebook mr5" data-toggle="modal" data-target="#dialogPayDeal"><i class="fa fa-facebook"></i>交易方式 </a>-->
+                                            <a href="${base}/platform/gy/person/payedit" class="btn btn-social btn-xs btn-facebook mr5" ><i class="fa fa-facebook"></i>交易方式 </a>
                                             <a id="emailchecked" class="btn btn-social btn-xs btn-twitter mr5" v-if="!emailchecked" v-on:click="askActiviEmail('${obj.id}')"><i class="fa fa-twitter"></i>发送激活邮件 </a>
+
                                         </div>
                                     </div>
                                     <div class="col-xs-12 col-sm-4 text-center">
@@ -136,14 +143,14 @@ layout("/layouts/platform.html"){
                         <div class="panel-body no-p">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div class="chat-user">
-                                        <a href="javascript:;" class="user-avatar">
+                                    <div class="chat-user" id="gyauth"  @click="gyauthedit" >
+                                        <a class="user-avatar" >
                                             <img src="/assets/img/face5.jpg" class="avatar avatar-sm img-circle" alt="">
                                             <div class="status bg-danger"></div>
                                         </a>
                                         <div class="user-details">
                                             <p>身份认证</p>
-                                            <small class="user-department">正在审核！</small>
+                                            <small class="user-department">${@status.bind( 'gyauth'+ gyauth.status!)}</small>
                                         </div>
                                     </div>
                                 </div>
@@ -229,13 +236,29 @@ layout("/layouts/platform.html"){
         </div>
     </div>
 
+    <div id="dialogAuthDeal" class="modal fade " tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+
+    <div id="dialogPayDeal" class="modal fade " tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+
 </section>
 
 <script type="text/javascript" src="${base!}/assets/plugins/vue/vue.js"></script>
 <script>
 
-    // vue
-    var app1 = new Vue({
+    var gyinfModify = ${gyinfModify};
+
+    // 邮箱校验
+    var emailcheck = new Vue({
         el: '#emailchecked',
         data: {
             emailchecked: ${obj.emailChecked}
@@ -248,6 +271,35 @@ layout("/layouts/platform.html"){
                 $.post(url,function(data){
                     console.log("vueajax:"+data);
                 })
+            }
+        }
+    });
+
+
+    // 身份验证
+    var gyauth = new Vue({
+        el: '#gyauth',
+        data: {
+            ifgyauth: ${ifgyauth}
+        },
+        // 在 `methods` 对象中定义方法
+        methods: {
+            gyauthedit: function () {
+
+                if( ${gyauth.status} == 1 || ${gyauth.status} == 2 ){
+                    Toast.warning("当前状态无法修改身份信息！")
+                    return null;
+                }
+
+                console.log("modal remote");
+                if(!this.ifgyauth){
+                    $("#dialogAuthDeal").modal({
+                        remote: "${base}/platform/gy/person/authedit"
+                    });
+                    $("#dialogAuthDeal").show();
+                }else{
+                    Toast.warning("身份已经验证！")
+                }
             }
         }
     });
@@ -269,7 +321,6 @@ layout("/layouts/platform.html"){
         // 加入home房间
         ws.send(JSON.stringify({room:'home',"action":"join"}));
     };
-
 
     // 收到服务器发来的信息时触发的回调
     ws.onmessage = function(event) {
@@ -296,6 +347,15 @@ layout("/layouts/platform.html"){
         }
     }
     setInterval("ws_ping()", 25000); // 25秒一次就可以了
+
+    $(document).ready(function () {
+//        $("#dialogDeal").on("hidden.bs.modal", function() {
+//            console.log("弹窗关闭消息清除")
+//            $(this).removeData("bs.modal");
+//            //$(this).empty();
+//        });
+    });
+
 </script>
 
 

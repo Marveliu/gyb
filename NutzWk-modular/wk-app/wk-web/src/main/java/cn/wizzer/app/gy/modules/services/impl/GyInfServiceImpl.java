@@ -70,4 +70,5 @@ public class GyInfServiceImpl extends BaseServiceImpl<gy_inf> implements GyInfSe
         return user.isEmailChecked();
     }
 
+
 }

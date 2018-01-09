@@ -161,7 +161,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
     public boolean setEmail(String userid,String email){
         Chain chain = Chain.make("email",email);
         Cnd cnd = Cnd.where("id","=",userid);
-        this.dao().update(Sys_user.class,chain,cnd);
+        if(this.dao().update(Sys_user.class,chain,cnd)!=0){
+            return true;
+        }
         return  false;
     }
 

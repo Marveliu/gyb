@@ -1,5 +1,6 @@
 package cn.wizzer.app.web.commons.services.gy;
 
+import cn.wizzer.app.gy.modules.models.gy_auth;
 import cn.wizzer.app.gy.modules.models.gy_inf;
 import cn.wizzer.app.gy.modules.models.gy_skill;
 import cn.wizzer.app.gy.modules.services.GyAuthService;
@@ -146,10 +147,6 @@ public class GyService {
     public boolean changeEmail(String gyid, String email){
         gy_inf gy =  gyInfService.fetch(gyid);
 
-        // 验证邮箱是否修改
-        if(email.equals(gy.getEmail())){
-            return true;
-        }
 
         // 邮箱修改之后，会重新激活
         if(gyInfService.ifEmailChecked(gyid)){
@@ -166,5 +163,17 @@ public class GyService {
         return false;
     }
 
+    public boolean ifGyAuth(String gyid){
+        return  gyAuthService.ifAuth(gyid);
+    }
 
+
+    //  用户信息是否可以修改
+    public boolean infCheckable(String gyid){
+        gy_auth gyAuth = gyAuthService.getGyAuthByGyid(gyid);
+        if(gyAuth.getStatus() != 1 && gyAuth.getStatus() != 2){
+            return  true;
+        }
+        return false;
+    }
 }

@@ -112,19 +112,6 @@ public class gy_inf extends BaseModel implements Serializable {
     @Readonly
     private String email;
 
-    @Column("gyid")
-    @Readonly
-    private String gyid;
-
-
-    public String getGyid() {
-        return gyid;
-    }
-
-    public void setGyid(String gyid) {
-        this.gyid = gyid;
-    }
-
     public String getEmail() {
         return email;
     }

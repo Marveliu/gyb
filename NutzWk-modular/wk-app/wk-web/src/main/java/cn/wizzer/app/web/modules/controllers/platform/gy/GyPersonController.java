@@ -32,6 +32,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.nutz.mvc.Mvcs;
 import org.nutz.mvc.adaptor.WhaleAdaptor;
 import org.nutz.mvc.annotation.*;
 import org.nutz.trans.Atom;
@@ -77,9 +78,7 @@ public class GyPersonController {
 
 
     /**
-     *
      * 雇员等级分发
-     *
      * @param req
      */
     @At("")
@@ -89,7 +88,7 @@ public class GyPersonController {
         //获得当前登录用户
         Cnd cnd = Cnd.NEW();
 
-        // TODO: 2018/1/9 0009 shiro info从数据库中加载 
+        // TODO: 2018/1/9 0009 shiro info从数据库中加载
         Sys_user user = userInfUtil.getCurrentUser(req);
         req.setAttribute("obj", user);
         // 查询角色
@@ -98,6 +97,12 @@ public class GyPersonController {
             Matcher match = gypattern.matcher(item);
             if(match.lookingAt()){
                 gy_inf gy = gyInfService.getGyByUserId(user.getId());
+                gy_auth auth = gyAuthService.getGyAuthByGyid(gy.getId());
+                HttpServletRequest request = Mvcs.getReq();
+                req.getSession().setAttribute("gyid",gy.getId());
+                req.setAttribute("gyauth", auth);
+                req.setAttribute("gyinfModify", gyService.infCheckable(gy.getId()));
+                req.setAttribute("ifgyauth",gyService.ifGyAuth(gy.getId()));
                 req.setAttribute("gy", gy);
             }
             switch (item){
@@ -128,7 +133,6 @@ public class GyPersonController {
                         HttpServletRequest req) {
         try {
 
-
             if(gyService.checkGyRegByUsrid(userid)){
                 return Result.error("你注册了雇员信息！");
             }
@@ -138,7 +142,6 @@ public class GyPersonController {
             int birthdayat = (int) (sdf.parse(birthday).getTime() / 1000);
             int regyearat = (int) (sdf.parse(regyear).getTime() / 1000);
             int now =  (int) (sdf.parse(DateUtil.getDateTime()).getTime() / 1000);
-            gyinf.setRegYear(regyearat);
             gyinf.setRegYear(regyearat);
             gyinf.setBirthday(birthdayat);
             gyauth.setReAuthTime(now);
@@ -172,50 +175,59 @@ public class GyPersonController {
     }
 
 
-    //  个人信息修改
-    @At("/inf")
-    @Ok("beetl:/platform/gy/person/infedit.html")
-    @RequiresPermissions("gy.person")
-    public void inf(HttpServletRequest req) {
-        Cnd cnd = Cnd.NEW();
-        Subject currentUser = SecurityUtils.getSubject();
-        Sys_user user = (Sys_user) currentUser.getPrincipal();
-        String id = user.getId();
-        Object gy = gyInfService.fetch(cnd.and("userid","=",id));
-        req.setAttribute("gy", gy);
-    }
 
     //  个人信息修改
     @At("/infedit")
+    @Ok("beetl:/platform/gy/person/infedit.html")
+    @RequiresPermissions("gy.person")
+    public void infedit(HttpServletRequest req) {
+        Cnd cnd = Cnd.NEW();
+        String userid =  StringUtil.getUid();
+        Object gy = gyInfService.fetch(cnd.and("userid","=",userid));
+        req.setAttribute("gy", gy);
+        req.setAttribute("email",sysuserService.fetch(userid).getEmail());
+    }
+
+    //  提交个人信息修改
+    @At("/infeditDo")
     @Ok("json")
     @RequiresPermissions("gy.person")
     @SLog(tag = "雇员信息修改", msg = "${args[0].id}")
     public Object infeditDo(
             @Param("..") gy_inf gyInf,
+            @Param("email") String email,
             @Param("birthdayat") String birthday,
             @Param("regYearat") String regyear,
             HttpServletRequest req) {
         try {
 
-            String userid = gyInf.getUserid();
+            if(!gyService.infCheckable(StringUtil.getGyid())){
+                return Result.error("在身份审核及审核完成阶段，无法修改个人信息");
+            }
+            // 邮箱修改
+            String userid = StringUtil.getUid();
             Sys_user user = sysuserService.fetch(userid);
 
-            //修改邮箱
-            gyService.changeEmail(gyInf.gyid(),gyInf.getEmail());
-            user.setEmail(gyInf.getEmail());
-            user.setOpBy(StringUtil.getUid());
-            user.setOpAt((int) (System.currentTimeMillis() / 1000));
-            sysuserService.updateIgnoreNull(user);
+            // 验证邮箱是否修改
+            if(email == user.getEmail()){
+                gyService.changeEmail(gyInf.getId(),gyInf.getEmail());
+                user = new Sys_user();
+                user.setId(userid);
+                user.setOpBy(StringUtil.getUid());
+                user.setOpAt((int) (System.currentTimeMillis() / 1000));
+                sysuserService.updateIgnoreNull(user);
+            }
+
 
             // 检验身份认证
-            if( !gyService.checkGyAuthByUsrid(gyInf.gyid())){
+            if( !gyService.checkGyAuthByUsrid(gyInf.getId())){
                 //修改雇员信息
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 int birthdayat = (int) (sdf.parse(birthday).getTime() / 1000);
                 int regyearat = (int) (sdf.parse(regyear).getTime() / 1000);
                 gyInf.setRegYear(regyearat);
-                gyInf.setRegYear(regyearat);
-                gyInf.setOpBy(StringUtil.getUid());
+                gyInf.setBirthday(birthdayat);
+                gyInf.setOpBy(StringUtil.getGyid());
                 gyInf.setOpAt((int) (System.currentTimeMillis() / 1000));
                 gyInfService.updateIgnoreNull(gyInf);
                 return Result.success("system.success");
@@ -227,21 +239,36 @@ public class GyPersonController {
             return Result.success(msg+"system.success");
 
         } catch (Exception e) {
+            log.debug(e);
             return Result.error("system.error");
         }
     }
 
-    //个人验证信息修改
-    @At("/auth")
+
+    // 身份信息修改
+    @At("/authedit")
     @Ok("beetl:/platform/gy/person/authedit.html")
     @RequiresPermissions("gy.person")
-    public void auth(HttpServletRequest req) {
-        Cnd cnd = Cnd.NEW();
-        Subject currentUser = SecurityUtils.getSubject();
-        Sys_user user = (Sys_user) currentUser.getPrincipal();
-        String id = user.getId();
-        Object test = gyAuthService.fetch(cnd.and("userid","=",id));
-        req.setAttribute("obj", test);
+    public void authedit(HttpServletRequest req) {
+        Object auth = gyAuthService.getGyAuthByGyid(userInfUtil.getCurrentGyid());
+        req.setAttribute("obj", auth);
+    }
+
+    // 提交身份信息修改
+    @At("/autheditDo")
+    @Ok("json")
+    @RequiresPermissions("gy.person")
+    @SLog(tag = "雇员身份信息修改", msg = "${args[0].id}")
+    public Object autheditDo(@Param("..")gy_auth gyAuth, HttpServletRequest req) {
+        try {
+            gyAuth.setStatus(1);
+            gyAuth.setOpBy(StringUtil.getUid());
+            gyAuth.setOpAt((int) (System.currentTimeMillis() / 1000));
+            gyAuthService.updateIgnoreNull(gyAuth);
+            return Result.success("system.success");
+        } catch (Exception e) {
+            return Result.error("system.error");
+        }
     }
 
 
@@ -252,6 +279,7 @@ public class GyPersonController {
     public void payindex(HttpServletRequest req){
     }
 
+    // 支付方式列表
     @At("/paydata")
     @Ok("json")
     @RequiresPermissions("gy.person")
@@ -261,10 +289,11 @@ public class GyPersonController {
         Subject currentUser = SecurityUtils.getSubject();
         Sys_user user = (Sys_user) currentUser.getPrincipal();
         gy_inf gy = gyInfService.fetch(Cnd.where("userid","=",user.getId()));
-        cnd.and("gyid","=",gy.getGyid());
+        cnd.and("gyid","=",gy.getId());
         return gyPayService.data(length, start, draw, order, columns, cnd, null);
     }
 
+    // 支付方式添加界面
     @At("/payadd")
     @Ok("beetl:/platform/gy/person/payadd.html")
     @RequiresPermissions("gy.person")
@@ -272,6 +301,7 @@ public class GyPersonController {
 
     }
 
+    // 添加支付方式
     @At("/payaddDo")
     @Ok("json")
     @RequiresPermissions("gy.person")
@@ -284,7 +314,7 @@ public class GyPersonController {
             gy_inf gy = gyInfService.fetch(cnd.and("userid","=",user.getId()));
 
             //检查是否已经添加了
-            if(null != gyPayService.fetch(Cnd.where("gyid","=",gy.getGyid())
+            if(null != gyPayService.fetch(Cnd.where("gyid","=",gy.getId())
                     .and("type","=",gyPay.getType())
                     .and("payid","=",gyPay.getPayid()))){
                 return Result.error("支付方式已经存在，请勿重复提交");
@@ -294,10 +324,10 @@ public class GyPersonController {
             //检查是否未首要支付方式
             if(gyPay.isFirst()){
                 //取消其他首要支付
-                gyPayService.update(Chain.make("first", false), Cnd.where("gyid", "=", gy.getGyid()).and("first", "=", true));
+                gyPayService.update(Chain.make("first", false), Cnd.where("gyid", "=", gy.getId()).and("first", "=", true));
             }
 
-            gyPay.setGyid(gy.getGyid());
+            gyPay.setGyid(gy.getId());
             gyPayService.insert(gyPay);
 
 
@@ -307,11 +337,14 @@ public class GyPersonController {
         }
     }
 
-    @At("/payedit/?")
+    @At("/payedit")
     @Ok("beetl:/platform/gy/person/payedit.html")
     @RequiresPermissions("gy.person")
-    public void payedit(String id,HttpServletRequest req) {
-        req.setAttribute("obj", gyPayService.fetch(id));
+    public void payedit(HttpServletRequest req) {
+
+        gy_inf gy = gyInfService.getGyByUserId(StringUtil.getUid());
+        req.setAttribute("gy", gy);
+        //req.setAttribute("obj", g(StringUtil.getGyid()));
     }
 
     @At("/payeditDo")
@@ -363,4 +396,7 @@ public class GyPersonController {
             req.setAttribute("obj", null);
         }
     }
+
+
+
 }

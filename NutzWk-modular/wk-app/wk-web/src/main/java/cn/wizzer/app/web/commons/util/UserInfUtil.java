@@ -132,7 +132,7 @@ public class UserInfUtil {
         Subject currentUser = SecurityUtils.getSubject();
         Sys_user user = (Sys_user) currentUser.getPrincipal();
         gy_inf gy = getIoc().get(Dao.class).fetch(gy_inf.class,Cnd.where("userid","=",user.getId()));
-        return gy.getGyid();
+        return gy.getId();
     }
 
 
