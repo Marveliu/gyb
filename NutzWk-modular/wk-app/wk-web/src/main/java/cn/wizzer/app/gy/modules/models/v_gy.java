@@ -13,34 +13,37 @@ import java.io.Serializable;
 @View("v_gy")
 public class v_gy extends BaseModel implements Serializable {
 
-    //id信息
-    @Column("gyid")
-    @Readonly
-    private String gyid;
 
     @Column("userid")
     @Readonly
     private String userid;
 
-    @Column("authid")
-    @Readonly
-    private String authid;
-
-    //account
-    @Column("loginname")
-    @Readonly
-    private int loginname;
-
     @Column("username")
     @Readonly
-    private int username;
+    private String username;
 
     @Column("realname")
     @Readonly
     private String realname;
 
+    @Column("avator")
+    @Readonly
+    private String avator;
 
-    //contact
+    @Column("gyid")
+    @Readonly
+    private String gyid;
+
+    @Column("isOnline")
+    @Readonly
+    private String isOnline;
+
+
+    @Column("LoginIp")
+    @Readonly
+    private String LoginIp;
+
+
     @Column("phone")
     @Readonly
     private String phone;
@@ -49,12 +52,19 @@ public class v_gy extends BaseModel implements Serializable {
     @Readonly
     private String email;
 
+
+    @Column("email_checked")
+    @Readonly
+    private String email_checked;
+
+    @Column("wsid")
+    @Readonly
+    private String wsid;
+
+
     @Column("qq")
     @Readonly
     private String qq;
-
-
-    //inf
 
     @Column("sex")
     @Readonly
@@ -89,8 +99,6 @@ public class v_gy extends BaseModel implements Serializable {
     @Readonly
     private int regYear;
 
-
-    //auth
     @Column("idcradF")
     @Readonly
     private String idcardF;
@@ -111,31 +119,9 @@ public class v_gy extends BaseModel implements Serializable {
     @Readonly
     private int reAuthTime;
 
-
-    //first pay
-    @Column("payid")
-    @Readonly
-    private String payid;
-
-    @Column("payname")
-    @Readonly
-    private String payname;
-
-    @Column("type")
-    @Readonly
-    private int type;
-
     @Column("status")
     @Readonly
     private int status;
-
-    public String getGyid() {
-        return gyid;
-    }
-
-    public void setGyid(String gyid) {
-        this.gyid = gyid;
-    }
 
     public String getUserid() {
         return userid;
@@ -145,36 +131,44 @@ public class v_gy extends BaseModel implements Serializable {
         this.userid = userid;
     }
 
-    public String getAuthid() {
-        return authid;
-    }
-
-    public void setAuthid(String authid) {
-        this.authid = authid;
-    }
-
-    public int getLoginname() {
-        return loginname;
-    }
-
-    public void setLoginname(int loginname) {
-        this.loginname = loginname;
-    }
-
-    public int getUsername() {
+    public String getUsername() {
         return username;
     }
 
-    public void setUsername(int username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
-    public String getRealname() {
-        return realname;
+    public String getAvator() {
+        return avator;
     }
 
-    public void setRealname(String realname) {
-        this.realname = realname;
+    public void setAvator(String avator) {
+        this.avator = avator;
+    }
+
+    public String getGyid() {
+        return gyid;
+    }
+
+    public void setGyid(String gyid) {
+        this.gyid = gyid;
+    }
+
+    public String getIsOnline() {
+        return isOnline;
+    }
+
+    public void setIsOnline(String isOnline) {
+        this.isOnline = isOnline;
+    }
+
+    public String getLoginIp() {
+        return LoginIp;
+    }
+
+    public void setLoginIp(String loginIp) {
+        LoginIp = loginIp;
     }
 
     public String getPhone() {
@@ -191,6 +185,22 @@ public class v_gy extends BaseModel implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getEmail_checked() {
+        return email_checked;
+    }
+
+    public void setEmail_checked(String email_checked) {
+        this.email_checked = email_checked;
+    }
+
+    public String getWsid() {
+        return wsid;
+    }
+
+    public void setWsid(String wsid) {
+        this.wsid = wsid;
     }
 
     public String getQq() {
@@ -305,35 +315,19 @@ public class v_gy extends BaseModel implements Serializable {
         this.reAuthTime = reAuthTime;
     }
 
+    public String getRealname() {
+        return realname;
+    }
+
+    public void setRealname(String realname) {
+        this.realname = realname;
+    }
+
     public int getStatus() {
         return status;
     }
 
     public void setStatus(int status) {
         this.status = status;
-    }
-
-    public String getPayid() {
-        return payid;
-    }
-
-    public void setPayid(String payid) {
-        this.payid = payid;
-    }
-
-    public String getPayname() {
-        return payname;
-    }
-
-    public void setPayname(String payname) {
-        this.payname = payname;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
     }
 }

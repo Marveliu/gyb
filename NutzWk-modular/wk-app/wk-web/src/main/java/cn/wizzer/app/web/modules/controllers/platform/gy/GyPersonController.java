@@ -210,7 +210,7 @@ public class GyPersonController {
 
             // 验证邮箱是否修改
             if(email == user.getEmail()){
-                gyService.changeEmail(gyInf.getId(),gyInf.getEmail());
+                gyService.changeEmail(gyInf.getId(),user.getEmail());
                 user = new Sys_user();
                 user.setId(userid);
                 user.setOpBy(StringUtil.getUid());

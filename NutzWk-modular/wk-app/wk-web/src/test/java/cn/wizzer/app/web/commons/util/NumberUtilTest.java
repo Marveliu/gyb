@@ -33,7 +33,7 @@ public class NumberUtilTest extends TestBase {
 
     @Test
     public void gyidGeneraotr() throws Exception {
-        String id = ioc.get(NumberUtil.class).GyIdGeneraotr(10,"11490","0","0");
+        String id = ioc.get(NumberUtil.class).GyIdGeneraotr(10,"11490",0,"0");
         log.debug("生成id:"+id);
     }
 

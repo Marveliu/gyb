@@ -96,6 +96,9 @@ public class gy_inf extends BaseModel implements Serializable {
     @ColDefine(type = ColType.INT)
     private int status;
 
+
+    private String email;
+
     //参照
     @ManyMany(relation = "xm_apply", from = "gyid", to = "xmtaskid")
     private List<xm_task> xmtasks;
@@ -106,19 +109,6 @@ public class gy_inf extends BaseModel implements Serializable {
     @Many(field = "id")
     private List<gy_pay> gypays;
 
-
-    //视图字段
-    @Column("email")
-    @Readonly
-    private String email;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getId() {
         return id;
@@ -216,7 +206,7 @@ public class gy_inf extends BaseModel implements Serializable {
         this.regYear = regYear;
     }
 
-    public Integer getStuLevel() {
+    public int getStuLevel() {
         return stuLevel;
     }
 
@@ -232,14 +222,6 @@ public class gy_inf extends BaseModel implements Serializable {
         this.status = status;
     }
 
-    public List<gy_skill> getGyskills() {
-        return gyskills;
-    }
-
-    public void setGyskills(List<gy_skill> gyskills) {
-        this.gyskills = gyskills;
-    }
-
     public List<xm_task> getXmtasks() {
         return xmtasks;
     }
@@ -248,6 +230,13 @@ public class gy_inf extends BaseModel implements Serializable {
         this.xmtasks = xmtasks;
     }
 
+    public List<gy_skill> getGyskills() {
+        return gyskills;
+    }
+
+    public void setGyskills(List<gy_skill> gyskills) {
+        this.gyskills = gyskills;
+    }
 
     public List<gy_pay> getGypays() {
         return gypays;
@@ -255,6 +244,15 @@ public class gy_inf extends BaseModel implements Serializable {
 
     public void setGypays(List<gy_pay> gypays) {
         this.gypays = gypays;
+    }
+
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     /**
@@ -267,7 +265,7 @@ public class gy_inf extends BaseModel implements Serializable {
         String id = new String();
         try {
             int count = Mvcs.getIoc().get(GyInfServiceImpl.class).count();
-            id =  Mvcs.getIoc().get(NumberUtil.class).GyIdGeneraotr(count,this.getCollege(),this.getStuLevel().toString(),this.getSex().toString());
+            id =  Mvcs.getIoc().get(NumberUtil.class).GyIdGeneraotr(count,this.getCollege(),this.getStuLevel(),this.getSex().toString());
         }catch (Exception e){
             Logs.get().debug(e);
         }

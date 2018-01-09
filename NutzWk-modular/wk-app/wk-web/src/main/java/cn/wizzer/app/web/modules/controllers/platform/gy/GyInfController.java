@@ -1,7 +1,9 @@
 package cn.wizzer.app.web.modules.controllers.platform.gy;
 
 import cn.wizzer.app.gy.modules.models.gy_inf;
+import cn.wizzer.app.gy.modules.models.v_gy;
 import cn.wizzer.app.gy.modules.services.GyInfService;
+import cn.wizzer.app.gy.modules.services.VGyService;
 import cn.wizzer.app.sys.modules.models.Sys_user;
 import cn.wizzer.app.sys.modules.services.SysUserService;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
@@ -30,6 +32,8 @@ public class GyInfController{
     @Inject
     private GyInfService gyInfService;
     @Inject
+    private VGyService vGyService;
+    @Inject
     private SysUserService userService;
 
     @At("")
@@ -43,7 +47,7 @@ public class GyInfController{
     @RequiresPermissions("platform.gy.inf")
     public Object data(@Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
 		Cnd cnd = Cnd.NEW();
-    	return gyInfService.data(length, start, draw, order, columns, cnd, null);
+    	return vGyService.data(length, start, draw, order, columns, cnd, null);
     }
 
     @At("/add")
@@ -85,7 +89,6 @@ public class GyInfController{
             @Param("regYearat") String regyear,
       HttpServletRequest req) {
         try {
-
             String userid = gyInf.getUserid();
             Sys_user user = userService.fetch(userid);
             //修改邮箱
@@ -135,8 +138,8 @@ public class GyInfController{
 	public void detail(String id, HttpServletRequest req) {
 		if (!Strings.isBlank(id)) {
             Cnd cnd = Cnd.NEW();
-            Object test = gyInfService.fetch(cnd.and("gyid","=",id));
-            req.setAttribute("obj", test);
+            v_gy v_gy = vGyService.fetch(cnd.and("gyid","=",id));
+            req.setAttribute("obj", v_gy);
 		}else{
             req.setAttribute("obj", null);
         }

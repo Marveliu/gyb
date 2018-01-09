@@ -38,13 +38,7 @@
                             <tr>
                                 <td>${msg['gy.inf.column.sex']}</td>
                                 <td>
-                                    <%if(obj.sex == 0 ){%>
-                                        男
-                                        <%}%>
-                                            <%else{%>
-                                                女
-                                                <%}%>
-
+                                    ${@status.bind("sex"+obj.sex)}
                                 </td>
                             </tr>
                             <tr>
@@ -53,7 +47,7 @@
                             </tr>
                             <tr>
                                 <td>${msg['gy.inf.column.college']}</td>
-                                <td>${obj.college}</td>
+                                <td> ${@status.bind(obj.college)}</td>
                             </tr>
                             <tr>
                                 <td>${msg['gy.inf.column.school']}</td>
@@ -69,11 +63,11 @@
                             </tr>
                             <tr>
                                 <td>${msg['gy.inf.column.stuLevel']}</td>
-                                <td>${obj.stuLevel}</td>
+                                <td>${@status.bind("stulevel"+obj.stuLevel)}</td>
                             </tr>
                             <tr>
                                 <td>${msg['gy.inf.column.status']}</td>
-                                <td>${obj.status}</td>
+                                <td>${@status.bind("gyauth"+obj.status)}</td>
                             </tr>
                         </tbody>
                     </table>

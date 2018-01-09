@@ -25,7 +25,7 @@ public class NumberUtil {
      * @param sex
      * @return
      */
-    public String GyIdGeneraotr(int num,String schoolcode,String stulevel,String sex){
+    public String GyIdGeneraotr(int num,String schoolcode,int stulevel,String sex){
         StringBuilder str = new StringBuilder();
 
         str.append("gy");
