@@ -13,6 +13,6 @@ import org.nutz.log.Logs;
  */
 public interface EmailService {
 
-    public boolean send(String to, String subject, String html);
+    public boolean send(String to, String subject, String html) ;
 
 }

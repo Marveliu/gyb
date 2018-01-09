@@ -72,7 +72,7 @@ layout("/layouts/platform.html"){
 
                                         <div class="mt10 mb10">
                                             <a href="${base}/platform/gy/person/inf" class="btn btn-social btn-xs btn-facebook mr5" data-toggle="modal" data-target="#dialogDeal"><i class="fa fa-facebook"></i>修改个人信息 </a>
-                                            <a id="emailchecked" class="btn btn-social btn-xs btn-twitter mr5" v-if="!emailchecked"><i class="fa fa-twitter"></i>发送激活邮件 </a>
+                                            <a id="emailchecked" class="btn btn-social btn-xs btn-twitter mr5" v-if="!emailchecked" v-on:click="askActiviEmail('${obj.id}')"><i class="fa fa-twitter"></i>发送激活邮件 </a>
                                         </div>
                                     </div>
                                     <div class="col-xs-12 col-sm-4 text-center">
@@ -239,6 +239,16 @@ layout("/layouts/platform.html"){
         el: '#emailchecked',
         data: {
             emailchecked: ${obj.emailChecked}
+        },
+        // 在 `methods` 对象中定义方法
+        methods: {
+            askActiviEmail: function (id) {
+                console.log("vue ajax begin");
+                var url= "${base}/open/api/email/mail/activeMail?userid="+id;
+                $.post(url,function(data){
+                    console.log("vueajax:"+data);
+                })
+            }
         }
     });
 

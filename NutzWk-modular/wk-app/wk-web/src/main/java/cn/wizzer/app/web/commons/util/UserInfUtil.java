@@ -10,6 +10,9 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Lang;
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
 
 import static org.nutz.mvc.Mvcs.getIoc;
 
@@ -21,6 +24,8 @@ import static org.nutz.mvc.Mvcs.getIoc;
 public class UserInfUtil {
 
 
+    private  final static Log log = Logs.get();
+
     @Inject
     private SysUserService sysUserService;
 
@@ -31,9 +36,9 @@ public class UserInfUtil {
      * @return
      */
     public  Sys_user getCurrentUser(){
+
         Subject currentUser = SecurityUtils.getSubject();
         Sys_user user = (Sys_user) currentUser.getPrincipal();
-        user = sysUserService.fetchLinks(user,"roles");
         return  user;
     }
 

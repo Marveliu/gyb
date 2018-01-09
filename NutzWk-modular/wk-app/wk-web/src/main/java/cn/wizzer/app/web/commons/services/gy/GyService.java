@@ -123,6 +123,18 @@ public class GyService {
         return  wsService.sendMsgByWsid(wsid,msg);
     }
 
+    /**
+     * 通过websocket用户发消息
+     * @param userid
+     * @param msg
+     * @return
+     */
+    public boolean sendMsgByUid(String userid,String msg){
+        Sys_user user = sysUserService.fetch(userid);
+        String wsid = user.getWsid();
+        return  wsService.sendMsgByWsid(wsid,msg);
+    }
+
 
     /**
      * 邮箱更改

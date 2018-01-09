@@ -10,6 +10,17 @@ import static org.junit.Assert.*;
  * @Create 2018/1/5 0005.
  */
 public class GyServiceTest extends TestBase{
+
+    @Test
+    public void sendMsgByGyid() throws Exception {
+        // TODO: 2018/1/8 0008 api测试可以，但是junit不行
+        ioc.get(GyService.class).sendMsgByGyid("gy201811946000","hello");
+    }
+
+    @Test
+    public void sendMsgByUid() throws Exception {
+    }
+
     @Test
     public void checkGyRegByUsrid() throws Exception {
         ioc.get(GyService.class).checkGyRegByUsrid("171001");

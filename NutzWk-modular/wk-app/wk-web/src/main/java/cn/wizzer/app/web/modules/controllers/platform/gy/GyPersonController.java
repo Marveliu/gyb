@@ -10,6 +10,7 @@ import cn.wizzer.app.sys.modules.services.SysRoleService;
 import cn.wizzer.app.sys.modules.services.SysUserService;
 import cn.wizzer.app.web.commons.services.gy.GyService;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
+import cn.wizzer.app.web.commons.util.Toolkit;
 import cn.wizzer.app.web.commons.util.UserInfUtil;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.page.datatable.DataTableColumn;
@@ -37,6 +38,7 @@ import org.nutz.trans.Atom;
 import org.nutz.trans.Trans;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -87,6 +89,12 @@ public class GyPersonController {
         //获得当前登录用户
         Cnd cnd = Cnd.NEW();
         Sys_user user = userInfUtil.getCurrentUser();
+
+        // 如果从shiro里面拿，会出现和数据不一致的情况
+        // HttpSession session = req.getSession();
+        // Toolkit.showHttpSessitonAttr(session);
+        // String uid = session.getAttribute("uid").toString();
+        // Sys_user user  = sysuserService.fetch(uid);
         req.setAttribute("obj", user);
 
         // 查询角色

@@ -4,18 +4,26 @@ import cn.wizzer.app.sys.modules.models.Sys_user;
 import cn.wizzer.app.sys.modules.services.SysUserService;
 import cn.wizzer.app.web.commons.base.Globals;
 import cn.wizzer.app.web.commons.services.email.EmailService;
-import cn.wizzer.app.web.commons.services.email.EmailThreadService;
+import cn.wizzer.app.web.commons.services.email.EmailServiceImpl.EmailServiceImpl;
+import cn.wizzer.app.web.commons.services.email.EmailTask;
+import cn.wizzer.app.web.commons.services.email.EmailThreadPool;
+import cn.wizzer.app.web.commons.services.gy.GyService;
 import cn.wizzer.app.web.commons.util.Toolkit;
+import cn.wizzer.app.web.modules.controllers.open.api.websocket.ApiWebsocketController;
+import cn.wizzer.app.web.modules.controllers.open.websocket.WebsocketController;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
-import org.nutz.lang.meta.Email;
 import org.nutz.lang.util.NutMap;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.Param;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * 邮箱内部api
@@ -30,39 +38,46 @@ public class EmailController {
     private static  final Log log = Logs.get();
 
     @Inject
-    private EmailThreadService emailThreadService;
-    @Inject
     private SysUserService sysUserService;
     @Inject
+    private GyService gyService;
+    @Inject
     private EmailService emailService;
+    @Inject
+    private EmailThreadPool emailThreadPool;
+    @Inject
+    private WebsocketController websocketController;
     @Inject
     private Dao dao;
 
 
     /**
-     * 给userid发送激活邮件
+     * 多线程给userid发送激活邮件
      * @param userId
      * @return
      */
-    public Object activeMail(String  userId) {
+    public Object activeMail(String userId) {
         NutMap re = new NutMap();
         Sys_user user = sysUserService.fetch(userId);
 
         String token = String.format("%s,%s", user.getEmail(), System.currentTimeMillis());
         token = Toolkit._3DES_encode(user.getSalt().getBytes(), token.getBytes());
 
-        //String url = req.getRequestURL() + "?token=" + token;
-
+        //String url = req.getRequestURL() + "?token=" + token+ "&userId=" + userId;
         String url = Globals.AppRoot + "?token=" + token +"&userId=" + userId;
         String html = "<div>如果无法点击,请拷贝一下链接到浏览器中打开<p/>验证链接 %s</div>";
         html = String.format(html, url, url);
 
         try {
             // 直接传递函数
-            boolean ok = emailThreadService.run(emailService,"send");
+            // EmailTask task = new EmailTask(user.getEmail(),"测试",html,emailService);
+            // boolean ok = emailThreadPool.send(task);
+            // TODO: 2018/1/8 0008 采用线程
+            boolean ok = emailService.send(user.getEmail(),"测试",html);
             if (!ok) {
                 return re.setv("ok", false).setv("msg", "发送失败");
             }
+            log.debug("toke:"+token);
         } catch (Throwable e) {
             log.debug("发送邮件失败", e);
             re.setv("ok", false).setv("msg", "发送失败");
@@ -95,8 +110,10 @@ public class EmailController {
             if (System.currentTimeMillis() - time > 10 * 60 * 1000) {
                 return "该验证链接已经超时";
             }
-            Cnd cnd = Cnd.where("id", "=", userId).and("email", "=", tmp[1]);
+            Cnd cnd = Cnd.where("id", "=", userId);
+            // 注意和shiro不一致的问题
             int re = dao.update(Sys_user.class, org.nutz.dao.Chain.make("emailChecked", true), cnd);
+            websocketController.sendUserMsgByWsid("hello",userId);
             if (re == 1) {
                 return "验证成功";
             }
@@ -105,7 +122,6 @@ public class EmailController {
             log.debug("检查token时出错", e);
             return "非法token";
         }
-
     }
 
 

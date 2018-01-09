@@ -42,22 +42,24 @@ public class ApiEmailController {
 
     /**
      * 发送激活邮件
-     * @param userId
+     * @param userId,req
      * @return
      */
     @At("/mail/activeMail")
     @POST
-    public Object activeMail(String  userId) {
+    public Object activeMail(
+           @Param("userid") String  userId,HttpServletRequest req) {
         NutMap re = new NutMap();
         Sys_user user = sysUserService.fetch(userId);
         String token = String.format("%s,%s", user.getEmail(), System.currentTimeMillis());
         token = Toolkit._3DES_encode(user.getSalt().getBytes(), token.getBytes());
-        //String url = req.getRequestURL() + "?token=" + token;
-        String url = Globals.AppRoot + "?token=" + token +"&userId=" + userId;
+        String url = req.getRequestURL() + "?token=" + token+"&"+"userId=" + userId;
+        // String url = Globals.AppRoot + "?token=" + token +"&userId=" + userId;
         String html = "<div>如果无法点击,请拷贝一下链接到浏览器中打开<p/>验证链接 %s</div>";
         html = String.format(html, url, url);
         try {
-            boolean ok = emailService.send(user.getEmail(), "XXX 验证邮件 by 雇佣帮", html.toString());
+            boolean ok = emailService.send(
+                    user.getEmail(), "卢本伟牛逼", html.toString());
             if (!ok) {
                 return re.setv("ok", false).setv("msg", "发送失败");
             }
@@ -75,7 +77,7 @@ public class ApiEmailController {
      * @return
      */
     @Filters
-    @At("/active/mail")
+    @At("/mail/activeMail")
     @GET
     @Ok("raw")
     public String activeMailCallback(@Param("token") String token,
@@ -97,7 +99,7 @@ public class ApiEmailController {
             if (System.currentTimeMillis() - time > 10 * 60 * 1000) {
                 return "该验证链接已经超时";
             }
-            Cnd cnd = Cnd.where("id", "=", userId).and("email", "=", tmp[1]);
+            Cnd cnd = Cnd.where("id", "=", userId);
             int re = dao.update(Sys_user.class, org.nutz.dao.Chain.make("emailChecked", true), cnd);
             if (re == 1) {
                 return "验证成功";

@@ -102,7 +102,7 @@ public class Toolkit {
         return re;
     }
 
-    public void showHttpSessitonAttr(HttpSession session){
+    public static void showHttpSessitonAttr(HttpSession session){
         //获取session中所有的键值
         Enumeration enumeration = session.getAttributeNames();
         //遍历enumeration中的
