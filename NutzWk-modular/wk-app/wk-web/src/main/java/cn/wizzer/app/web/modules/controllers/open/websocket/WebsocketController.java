@@ -5,6 +5,7 @@ import cn.wizzer.app.web.commons.services.websocket.WsService;
 import cn.wizzer.framework.base.Result;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.util.NutMap;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.At;
@@ -45,8 +46,9 @@ public class WebsocketController {
     }
 
     public Object sendUserMsgByWsid(
-            String msg,
-            String userid) {
+            String userid,
+            NutMap msg
+            ) {
         try {
             log.debug("私发msg::"+msg );
             gyService.sendMsgByUid(userid,msg);

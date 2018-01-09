@@ -54,8 +54,9 @@ public class ApiWebsocketController {
     @Ok("json")
     @POST
     public Object sendMsgByWsid(
-            @Param("msg") String msg,
+
             @Param("gyid") String gyid,
+            @Param("msg") NutMap msg,
             HttpServletRequest req) {
         try {
             log.debug("私发msg::"+msg );

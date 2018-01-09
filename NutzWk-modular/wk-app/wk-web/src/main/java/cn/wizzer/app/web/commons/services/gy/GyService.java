@@ -19,6 +19,7 @@ import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
+import org.nutz.lang.util.NutMap;
 import org.nutz.log.Logs;
 import org.nutz.trans.Trans;
 import sun.rmi.runtime.Log;
@@ -117,7 +118,7 @@ public class GyService {
      * @param msg
      * @return
      */
-    public boolean sendMsgByGyid(String gyid,String msg){
+    public boolean sendMsgByGyid(String gyid,NutMap msg){
         Sys_user user = gyInfService.getUserByGyid(gyid);
         String wsid = user.getWsid();
         return  wsService.sendMsgByWsid(wsid,msg);
@@ -129,7 +130,7 @@ public class GyService {
      * @param msg
      * @return
      */
-    public boolean sendMsgByUid(String userid,String msg){
+    public boolean sendMsgByUid(String userid,NutMap msg){
         Sys_user user = sysUserService.fetch(userid);
         String wsid = user.getWsid();
         return  wsService.sendMsgByWsid(wsid,msg);

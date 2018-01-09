@@ -88,15 +88,10 @@ public class GyPersonController {
     public String index(HttpServletRequest req) {
         //获得当前登录用户
         Cnd cnd = Cnd.NEW();
-        Sys_user user = userInfUtil.getCurrentUser();
 
-        // 如果从shiro里面拿，会出现和数据不一致的情况
-        // HttpSession session = req.getSession();
-        // Toolkit.showHttpSessitonAttr(session);
-        // String uid = session.getAttribute("uid").toString();
-        // Sys_user user  = sysuserService.fetch(uid);
+        // TODO: 2018/1/9 0009 shiro info从数据库中加载 
+        Sys_user user = userInfUtil.getCurrentUser(req);
         req.setAttribute("obj", user);
-
         // 查询角色
         Pattern gypattern = Pattern.compile("^gy");               // 雇员匹配正则表达式
         for(String item :sysuserService.getRoleCodeList(user)){

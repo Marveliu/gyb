@@ -113,7 +113,7 @@ public class EmailController {
             Cnd cnd = Cnd.where("id", "=", userId);
             // 注意和shiro不一致的问题
             int re = dao.update(Sys_user.class, org.nutz.dao.Chain.make("emailChecked", true), cnd);
-            websocketController.sendUserMsgByWsid("hello",userId);
+            websocketController.sendUserMsgByWsid(userId,new NutMap().setv("msg","hello"));
             if (re == 1) {
                 return "验证成功";
             }

@@ -89,7 +89,6 @@ public class PlatformAuthorizingRealm extends AuthorizingRealm {
         SecurityUtils.getSubject().getSession(true).setAttribute("uid", user.getId());
         SecurityUtils.getSubject().getSession(true).setAttribute("username", user.getUsername());
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, user.getPassword(), getName());
-
         info.setCredentialsSalt(ByteSource.Util.bytes(user.getSalt()));
         return info;
     }

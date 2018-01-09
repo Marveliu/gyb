@@ -62,7 +62,7 @@ public class WsService {
     }
 
 
-    public boolean sendMsgByWsid(final String wsid,final String msg) {
+    public boolean sendMsgByWsid(final String wsid,final NutMap msg) {
         return gybWebsocket.sendJson(wsid,msg);
     }
 

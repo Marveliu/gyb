@@ -60,11 +60,12 @@ public class ApiEmailController {
         token = Toolkit._3DES_encode(user.getSalt().getBytes(), token.getBytes());
         String url = req.getRequestURL() + "?token=" + token+"&"+"userId=" + userId;
         // String url = Globals.AppRoot + "?token=" + token +"&userId=" + userId;
-        String html = "<div>如果无法点击,请拷贝一下链接到浏览器中打开<p/>验证链接 %s</div>";
+         String html = "<div>如果无法点击,请拷贝一下链接到浏览器中打开<p/>验证链接 %s</div>";
+        // String html = "你好";
         html = String.format(html, url, url);
         try {
             boolean ok = emailService.send(
-                    user.getEmail(), "卢本伟牛逼", html.toString());
+                    user.getEmail(), "雇佣帮", html.toString());
             if (!ok) {
                 return re.setv("ok", false).setv("msg", "发送失败");
             }
@@ -107,7 +108,8 @@ public class ApiEmailController {
             Cnd cnd = Cnd.where("id", "=", userId);
             int re = dao.update(Sys_user.class, org.nutz.dao.Chain.make("emailChecked", true), cnd);
             if (re == 1) {
-                gyService.sendMsgByUid(userId,"邮箱已经激活");
+                NutMap msg = new NutMap("action", "refresh").setv("notify", "邮件已经激活");
+                gyService.sendMsgByUid(userId,msg);
                 return "验证成功";
             }
             return "验证失败!!请重新验证!!";
