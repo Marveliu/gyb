@@ -39,19 +39,6 @@ public class NumberUtil {
     }
 
 
-    /**
-     * 员工id
-     * @param num
-     * @return
-     */
-    public String GybIdGeneraotr(int num){
-        StringBuilder str = new StringBuilder();
-        str.append("gyb");
-        str.append(DateUtil.format(new Date(),"yyyyMMdd"));
-        str.append(num);
-        return str.toString();
-    }
-
 
     /**
      * 雇员验证id
@@ -66,6 +53,36 @@ public class NumberUtil {
     }
 
 
+    /**
+     * 根据时间生成唯一员工编号
+     * @param num
+     * @param sex
+     * @return
+     */
+    public String GyberIdGeneraotr(int num,String sex){
+        StringBuilder str = new StringBuilder();
+        str.append("gyb");
+        str.append(DateUtil.format(new Date(),"yyyy").substring(0,4));
+        str.append(sex);
+        str.append(num);
+        return str.toString();
+    }
+
+
+    /**
+     * 根据时间生成唯一员工编号
+     * @param num
+     * @param sex
+     * @return
+     */
+    public String GzIdGeneraotr(int num,String sex){
+        StringBuilder str = new StringBuilder();
+        str.append("gz");
+        str.append(DateUtil.format(new Date(),"yyyy").substring(0,4));
+        str.append(sex);
+        str.append(num);
+        return str.toString();
+    }
 
 
 

@@ -1,11 +1,14 @@
 package cn.wizzer.app.gz.modules.models;
 
+import cn.wizzer.app.gy.modules.services.impl.GyInfServiceImpl;
 import cn.wizzer.app.gz.modules.services.GzInfService;
 import cn.wizzer.app.gz.modules.services.impl.GzInfServiceImpl;
+import cn.wizzer.app.web.commons.util.NumberUtil;
 import cn.wizzer.framework.base.model.BaseModel;
 import cn.wizzer.framework.util.DateUtil;
 import org.nutz.dao.Dao;
 import org.nutz.dao.entity.annotation.*;
+import org.nutz.log.Logs;
 import org.nutz.mvc.Mvcs;
 
 import java.io.Serializable;
@@ -65,7 +68,6 @@ public class gz_inf extends BaseModel implements Serializable {
     @Comment("状态")
     @ColDefine(type = ColType.INT)
     private int status;
-
 
 
     public String getId() {
@@ -147,17 +149,15 @@ public class gz_inf extends BaseModel implements Serializable {
      * @note:
      */
     public String gzid() {
-        StringBuilder str = new StringBuilder();
-        str.append("gz");
-        //年份
-        str.append(DateUtil.format(new Date(),"yyyy").substring(2,4));
-        //性别
-        str.append(this.sex);
-        //顺序码
-        Dao dao =  Mvcs.getIoc().get((Dao.class));
-        GzInfService gzInfService = new GzInfServiceImpl(dao);
-        str.append(gzInfService.count());
-        return str.toString();
+        String id = new String();
+        try {
+            int count = Mvcs.getIoc().get(GyInfServiceImpl.class).count();
+            id =  Mvcs.getIoc().get(NumberUtil.class).GzIdGeneraotr(count,this.getSex().toString());
+        }catch (Exception e){
+            Logs.get().debug(e);
+        }
+
+        return id;
     }
 
 }

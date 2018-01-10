@@ -19,13 +19,6 @@ import static org.junit.Assert.*;
 public class NumberUtilTest extends TestBase {
 
 
-
-    @Test
-    public void gybIdGeneraotr() throws Exception {
-        String id = ioc.get(NumberUtil.class).GybIdGeneraotr(10);
-        log.debug("生成id:"+id);
-    }
-
     @Test
     public void gyAuthIdGeneraotr() throws Exception {
     }

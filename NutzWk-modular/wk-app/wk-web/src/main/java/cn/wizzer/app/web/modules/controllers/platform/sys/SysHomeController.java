@@ -49,11 +49,9 @@ public class SysHomeController {
     /**
      *
      * 分发登录控制：登录角色校验，并且根据不同角色，调用不同角色的登录接口
-     * 管理员，雇员
+     * 管理员，雇员，雇主
      *
      */
-
-
     @At(" ")
     @Ok("re:beetl:/platform/sys/home.html")
     @RequiresAuthentication
@@ -63,17 +61,27 @@ public class SysHomeController {
         Sys_user user =  userInfUtil.getCurrentUser();
         List<Sys_role> roles= user.getRoles();
         StringBuilder msg = new StringBuilder("系统账号登录");      // 登录日志信息
-        Pattern gypattern = Pattern.compile("^gy");               // 雇员匹配正则表达式
+        Pattern gypattern = Pattern.compile("^gy");                 // 雇员匹配正则表达式
+        Pattern gzpattern = Pattern.compile("^gz");                 // 雇主匹配正则表达式
 
         // TODO: 2018/1/5 0005 角色关系，一个人是否只是有一个角色
         // 角色匹配
         for(Sys_role role : roles){
             String code = role.getCode();
-            Matcher match = gypattern.matcher(code);
-            if(match.lookingAt()){
+            Matcher match1 = gypattern.matcher(code);
+            Matcher match2 = gzpattern.matcher(code);
+            if(match1.lookingAt()){
                 msg.delete(0,msg.length());
                 msg.append("雇员模块");
                 roleFlag = 1;                                       // 修改为雇员
+                break;
+            }
+
+            if(match2.lookingAt()){
+                msg.delete(0,msg.length());
+                msg.append("雇主模块");
+                roleFlag = 2;                                       // 修改为雇主
+                break;
             }
         }
 
@@ -92,7 +100,9 @@ public class SysHomeController {
         // 登录分发
         switch (roleFlag){
             case 1:
-                return "forward:/platform/gy/person";           // 雇员控制器
+                return "forward:/platform/gy/person";           // 雇员
+            case 2:
+                return "forward:/platform/gz/person";           // 雇主
             default:
                 break;
         }

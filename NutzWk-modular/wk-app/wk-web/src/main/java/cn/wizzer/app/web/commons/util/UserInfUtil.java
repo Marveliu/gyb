@@ -45,7 +45,6 @@ public class UserInfUtil {
      */
     public  Sys_user getCurrentUser(){
         Subject currentUser = SecurityUtils.getSubject();
-
         Sys_user user = (Sys_user) currentUser.getPrincipal();
         return  user;
     }

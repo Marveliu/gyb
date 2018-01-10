@@ -1,69 +1,77 @@
 package cn.wizzer.app.sys.modules.models;
 
-import cn.wizzer.app.gy.modules.services.impl.GyInfServiceImpl;
-import cn.wizzer.app.gz.modules.services.GzInfService;
-import cn.wizzer.app.gz.modules.services.impl.GzInfServiceImpl;
-import cn.wizzer.app.sys.modules.services.impl.SysDictServiceImpl;
-import cn.wizzer.app.web.commons.util.NumberUtil;
 import cn.wizzer.framework.base.model.BaseModel;
-import cn.wizzer.framework.util.DateUtil;
-import org.nutz.dao.Dao;
 import org.nutz.dao.entity.annotation.*;
-import org.nutz.log.Logs;
-import org.nutz.mvc.Mvcs;
+import org.nutz.json.JsonField;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Created by 89792 on 2017/11/10 0010.
  */
 
-//系统员工
-@Table("sys_userinf")
-public class Sys_userinf extends BaseModel implements Serializable {
+//产品经理等
+@View("v_sysuser")
+public class v_sysuser extends BaseModel implements Serializable {
 
     @Column
-    @Name
-    @Comment("员工编号")
-    @ColDefine(type = ColType.VARCHAR, width = 32)
-    @Prev(els = {@EL("$me.userinfid()")})
+    @Readonly
     private String id;
 
     @Column
-    @Comment("登陆名")
-    @ColDefine(type = ColType.VARCHAR, width = 32)
+    @Readonly
     private String userid;
 
     @Column
-    @Comment("真实姓名")
-    @ColDefine(type = ColType.VARCHAR, width = 20)
+    @Readonly
     private String realname;
 
+
     @Column
-    @Comment("qq")
-    @ColDefine(type = ColType.VARCHAR, width = 20)
+    @Readonly
+    private String username;
+
+    @Column
+    @Readonly
     private String qq;
 
     @Column
-    @Comment("电话")
-    @ColDefine(type = ColType.VARCHAR, width = 20)
+    @Readonly
     private String phone;
 
     @Column
-    @Comment("出生日期")
-    @ColDefine(type = ColType.INT)
+    @Readonly
     private Integer birthday;
 
     @Column
-    @Comment("性别")
-    @ColDefine(type = ColType.INT)
+    @Readonly
     private Integer sex;
 
+
     @Column
-    @Comment("状态")
-    @ColDefine(type = ColType.INT)
+    @Readonly
     private int status;
+
+    @Column
+    @Readonly
+    private boolean isOnline;
+
+    @Column
+    @Readonly
+    private String email;
+
+    @Column
+    @Readonly
+    protected byte[] avatar;
+
+    @Column
+    @Readonly
+    private String wsid;
+
+
+    @Column
+    @Readonly
+    private String loginIp;
 
 
     public String getId() {
@@ -88,6 +96,14 @@ public class Sys_userinf extends BaseModel implements Serializable {
 
     public void setRealname(String realname) {
         this.realname = realname;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getQq() {
@@ -130,22 +146,43 @@ public class Sys_userinf extends BaseModel implements Serializable {
         this.status = status;
     }
 
-    /**
-     * @function: 雇主编号
-     * @param:
-     * @return:
-     * @note:
-     */
-    public String userinfid() {
-        String id = new String();
-        try {
-            int count = Mvcs.getIoc().get(SysDictServiceImpl.class).count();
-            id =  Mvcs.getIoc().get(NumberUtil.class).GyberIdGeneraotr(count,this.getSex().toString());
-        }catch (Exception e){
-            Logs.get().debug(e);
-        }
-
-        return id;
+    public boolean isOnline() {
+        return isOnline;
     }
 
+    public void setOnline(boolean online) {
+        isOnline = online;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public byte[] getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(byte[] avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getWsid() {
+        return wsid;
+    }
+
+    public void setWsid(String wsid) {
+        this.wsid = wsid;
+    }
+
+    public String getLoginIp() {
+        return loginIp;
+    }
+
+    public void setLoginIp(String loginIp) {
+        this.loginIp = loginIp;
+    }
 }
