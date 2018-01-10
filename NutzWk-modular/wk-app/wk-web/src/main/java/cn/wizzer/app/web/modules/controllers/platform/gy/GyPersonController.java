@@ -3,15 +3,18 @@ package cn.wizzer.app.web.modules.controllers.platform.gy;
 import cn.wizzer.app.gy.modules.models.gy_auth;
 import cn.wizzer.app.gy.modules.models.gy_inf;
 import cn.wizzer.app.gy.modules.models.gy_pay;
+import cn.wizzer.app.gy.modules.models.v_gy;
 import cn.wizzer.app.gy.modules.services.*;
 import cn.wizzer.app.sys.modules.models.Sys_role;
 import cn.wizzer.app.sys.modules.models.Sys_user;
 import cn.wizzer.app.sys.modules.services.SysRoleService;
 import cn.wizzer.app.sys.modules.services.SysUserService;
+import cn.wizzer.app.web.commons.services.email.EmailService;
 import cn.wizzer.app.web.commons.services.gy.GyService;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
 import cn.wizzer.app.web.commons.util.Toolkit;
 import cn.wizzer.app.web.commons.util.UserInfUtil;
+import cn.wizzer.app.web.modules.controllers.open.email.EmailController;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
@@ -30,6 +33,7 @@ import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
+import org.nutz.lang.util.NutMap;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.Mvcs;
@@ -41,7 +45,10 @@ import org.nutz.trans.Trans;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -70,11 +77,15 @@ public class GyPersonController {
     @Inject
     private UserInfUtil userInfUtil;
     @Inject
+    private EmailController emailController;
+    @Inject
     private Dao dao;
     @Inject
     private SysRoleService sysRoleService;
     @Inject
     private GyService gyService;
+    @Inject
+    private VGyService vGyService;
 
 
     /**
@@ -91,25 +102,23 @@ public class GyPersonController {
         // TODO: 2018/1/9 0009 shiro info从数据库中加载
         Sys_user user = userInfUtil.getCurrentUser(req);
         req.setAttribute("obj", user);
+
+
         // 查询角色
-        Pattern gypattern = Pattern.compile("^gy");               // 雇员匹配正则表达式
+        // Pattern gypattern = Pattern.compile("^gy");               // 雇员匹配正则表达式
         for(String item :sysuserService.getRoleCodeList(user)){
-            Matcher match = gypattern.matcher(item);
-            if(match.lookingAt()){
-                gy_inf gy = gyInfService.getGyByUserId(user.getId());
-                gy_auth auth = gyAuthService.getGyAuthByGyid(gy.getId());
-                HttpServletRequest request = Mvcs.getReq();
-                req.getSession().setAttribute("gyid",gy.getId());
-                req.setAttribute("gyauth", auth);
-                req.setAttribute("gyinfModify", gyService.infCheckable(gy.getId()));
-                req.setAttribute("ifgyauth",gyService.ifGyAuth(gy.getId()));
-                req.setAttribute("gy", gy);
-            }
-            switch (item){
-                case("gy1"): return "beetl:/platform/gy/person/reginfo.html";
-                default: break;
+            if (item.equals("gy1")){
+                return "beetl:/platform/gy/person/reginfo.html";
             }
         }
+        gy_inf gy = gyInfService.getGyByUserId(user.getId());
+        gy_auth auth = gyAuthService.getGyAuthByGyid(gy.getId());
+        HttpServletRequest request = Mvcs.getReq();
+        req.getSession().setAttribute("gyid",gy.getId());
+        req.setAttribute("gyauth", auth);
+        req.setAttribute("gyinfModify", gyService.infCheckable(gy.getId()));
+        req.setAttribute("ifgyauth",gyService.ifGyAuth(gy.getId()));
+        req.setAttribute("gy", gy);
         return null;
     }
 
@@ -139,9 +148,10 @@ public class GyPersonController {
 
             //日期登记
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdfn = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             int birthdayat = (int) (sdf.parse(birthday).getTime() / 1000);
             int regyearat = (int) (sdf.parse(regyear).getTime() / 1000);
-            int now =  (int) (sdf.parse(DateUtil.getDateTime()).getTime() / 1000);
+            int now =  (int) (sdfn.parse(DateUtil.getDateTime()).getTime() / 1000);
             gyinf.setRegYear(regyearat);
             gyinf.setBirthday(birthdayat);
             gyauth.setReAuthTime(now);
@@ -163,8 +173,16 @@ public class GyPersonController {
                     // TODO: 2018/1/7 0007 重复login，应该会创造两个session 
                         currentUser.login(token);
 
+                    // 发送邮件
+                    Thread t = new Thread(new Runnable(){
+                        public void run(){
+                            emailController.activeMail(StringUtil.getUid());
+                        }
+                    });
+                    t.start();
                 }
             });
+
             }catch (Exception e){
                 log.debug(e);
             }
@@ -182,10 +200,12 @@ public class GyPersonController {
     @RequiresPermissions("gy.person")
     public void infedit(HttpServletRequest req) {
         Cnd cnd = Cnd.NEW();
-        String userid =  StringUtil.getUid();
-        Object gy = gyInfService.fetch(cnd.and("userid","=",userid));
+
+        String gyid =  StringUtil.getGyid();
+        gy_inf  gy = gyInfService.fetch(gyid);
+
         req.setAttribute("gy", gy);
-        req.setAttribute("email",sysuserService.fetch(userid).getEmail());
+        req.setAttribute("email",gyInfService.getUserByGyid(gyid).getEmail());
     }
 
     //  提交个人信息修改
@@ -204,6 +224,7 @@ public class GyPersonController {
             if(!gyService.infCheckable(StringUtil.getGyid())){
                 return Result.error("在身份审核及审核完成阶段，无法修改个人信息");
             }
+
             // 邮箱修改
             String userid = StringUtil.getUid();
             Sys_user user = sysuserService.fetch(userid);
@@ -258,13 +279,23 @@ public class GyPersonController {
     @At("/autheditDo")
     @Ok("json")
     @RequiresPermissions("gy.person")
-    @SLog(tag = "雇员身份信息修改", msg = "${args[0].id}")
-    public Object autheditDo(@Param("..")gy_auth gyAuth, HttpServletRequest req) {
+    @AdaptBy(type = WhaleAdaptor.class)
+    @SLog(tag = "雇员身份信息修改", msg = "")
+    public Object autheditDo(
+            @Param("..") gy_auth gyauth ,
+            HttpServletRequest req) {
         try {
-            gyAuth.setStatus(1);
-            gyAuth.setOpBy(StringUtil.getUid());
-            gyAuth.setOpAt((int) (System.currentTimeMillis() / 1000));
-            gyAuthService.updateIgnoreNull(gyAuth);
+            gyauth.setStatus(1);
+            gyauth.setOpBy(StringUtil.getUid());
+            gyauth.setOpAt((int) (System.currentTimeMillis() / 1000));
+            gyAuthService.updateIgnoreNull(gyauth);
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    gyService.refreshGy(StringUtil.getGyid());
+                }
+            });
+            t.run();
             return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");

@@ -37,9 +37,7 @@
                             </tr>
                             <tr>
                                 <td>${msg['gy.inf.column.sex']}</td>
-                                <td>
-                                    ${@status.bind("sex"+obj.sex)}
-                                </td>
+                                <td>${obj.sex}</td>
                             </tr>
                             <tr>
                                 <td>${msg['gy.inf.column.idcard']}</td>
@@ -47,7 +45,7 @@
                             </tr>
                             <tr>
                                 <td>${msg['gy.inf.column.college']}</td>
-                                <td> ${@status.bind(obj.college)}</td>
+                                <td>${obj.college}</td>
                             </tr>
                             <tr>
                                 <td>${msg['gy.inf.column.school']}</td>
@@ -63,11 +61,11 @@
                             </tr>
                             <tr>
                                 <td>${msg['gy.inf.column.stuLevel']}</td>
-                                <td>${@status.bind("stulevel"+obj.stuLevel)}</td>
+                                <td>${obj.stuLevel}</td>
                             </tr>
                             <tr>
                                 <td>${msg['gy.inf.column.status']}</td>
-                                <td>${@status.bind("gyauth"+obj.status)}</td>
+                                <td>${obj.status}</td>
                             </tr>
                         </tbody>
                     </table>

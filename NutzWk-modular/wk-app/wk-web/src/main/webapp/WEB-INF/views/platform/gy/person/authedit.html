@@ -11,23 +11,11 @@
                     <!--form-->
                      <form id="editForm" role="form" class="form-horizontal parsley-form" data-parsley-validate action="${base}/platform/gy/person/autheditDo"
                     method="post">
+
                     <input name="id" type="hidden" value="${obj.id}">
+
                     <div class="row mb10">
                         <div class="col-lg-12">
-                            <div class="form-group">
-                                <label for="gyid" class="col-sm-2 control-label">${msg['gy.auth.column.gyid']}</label>
-                                <div class="col-sm-9">
-                                    <input disabled="true" type="text" id="gyid" class="form-control" name="gyid" data-parsley-required="true" placeholder="${msg['gy.auth.column.gyid']}"
-                                        value="${obj.gyid}">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="reAuthTime" class="col-sm-2 control-label">${msg['gy.auth.column.reAuthTime']}</label>
-                                <div class="col-sm-9">
-                                    <input disabled="true" type="text" id="reAuthTime" class="form-control" name="reAuthTime" data-parsley-required="true" placeholder="${msg['gy.auth.column.reAuthTime']}"
-                                        value="${@date.getDate(obj.reAuthTime)}">
-                                </div>
-                            </div>
 
                             <!--证件上传-->
                             <!--证件-->
@@ -36,11 +24,12 @@
                                 <div class="col-sm-9">
                                     <div id="idcardFqueue"></div>
                                     <div>
-                                        <input id="idcardF_upload" name="file_upload" type="file" multiple="false">
+                                        <input id="idcardF_upload"  type="file" multiple="false">
                                     </div>
                                     <div id="idcardFimg" style="padding: 5px;">
+                                        <img src="${obj.idcardF}" style="max-width: 300px;max-height: 200px;">
                                     </div>
-                                    <input type="hidden" id="idcardF" name="idcardF" value="">
+                                    <input type="hidden" id="idcardF" name="idcardF" value="${obj.idcardF}">
                                 </div>
                             </div>
 
@@ -49,11 +38,12 @@
                                 <div class="col-sm-9">
                                     <div id="idcardBqueue"></div>
                                     <div>
-                                        <input id="idcardB_upload" name="file_upload" type="file" multiple="false">
+                                        <input id="idcardB_upload" type="file" multiple="false">
                                     </div>
                                     <div id="idcardBimg" style="padding: 5px;">
+                                        <img src="${obj.idcardB}" style="max-width: 300px;max-height: 200px;">
                                     </div>
-                                    <input type="hidden" id="idcardB" name="idcardB" value="">
+                                    <input type="hidden" id="idcardB" name="idcardB" value="${obj.idcardB}">
                                 </div>
                             </div>
 
@@ -62,11 +52,12 @@
                                 <div class="col-sm-9">
                                     <div id="stuCardFqueue"></div>
                                     <div>
-                                        <input id="stuCardF_upload" name="file_upload" type="file" multiple="false">
+                                        <input id="stuCardF_upload"  type="file" multiple="false">
                                     </div>
                                     <div id="stuCardFimg" style="padding: 5px;">
+                                        <img src="${obj.stuCardF}" style="max-width: 300px;max-height: 200px;">
                                     </div>
-                                    <input type="hidden" id="stuCardF" name="stuCardF" value="">
+                                    <input type="hidden" id="stuCardF" name="stuCardF" value="${obj.stuCardF}">
                                 </div>
                             </div>
 
@@ -75,11 +66,12 @@
                                 <div class="col-sm-9">
                                     <div id="stuCardBqueue"></div>
                                     <div>
-                                        <input id="stuCardB_upload" name="file_upload" type="file" multiple="false">
+                                        <input id="stuCardB_upload" type="file" multiple="false">
                                     </div>
                                     <div id="stuCardBimg" style="padding: 5px;">
+                                        <img src="${obj.stuCardB}" style="max-width: 300px;max-height: 200px;">
                                     </div>
-                                    <input type="hidden" id="stuCardB" name="stuCardB" value="">
+                                    <input type="hidden" id="stuCardB" name="stuCardB" value="${obj.stuCardB}">
                                 </div>
                             </div>
 
@@ -91,6 +83,8 @@
                                         value="${@status.bind( 'gyauth'+ obj.status!)}">
                                 </div>
                             </div>
+
+
                             <div class="form-group">
                                 <label class="col-sm-2 control-label"></label>
                                 <div class="col-sm-9">
@@ -268,14 +262,17 @@
                 success: function (data, statusText, xhr, form) {
                     if (data.code == 0) {
                         Toast.success(data.msg);
-                        setTimeout(function () {
-                            $("#goBack").trigger("click");
-                        }, 1000);
+//                        setTimeout(function () {
+//                            $("#goBack").trigger("click");
+//                        }, 1000);
                     } else {
                         Toast.error(data.msg);
                     }
                     form.find("button:submit").button("reset");
                 }
             });
+
+
+
         });
     </script>

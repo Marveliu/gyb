@@ -47,7 +47,6 @@ public class SysConfController {
     public void add() {
 
     }
-
     @At
     @Ok("json")
     @RequiresPermissions("sys.manager.conf.add")
@@ -70,7 +69,7 @@ public class SysConfController {
     }
 
     @At("/edit/?")
-    @Ok("beetl:/platform/sys/conf/infedit.html")
+    @Ok("beetl:/platform/sys/conf/edit.html")
     @RequiresPermissions("sys.manager.conf")
     public Object edit(String id) {
         return configService.fetch(id);

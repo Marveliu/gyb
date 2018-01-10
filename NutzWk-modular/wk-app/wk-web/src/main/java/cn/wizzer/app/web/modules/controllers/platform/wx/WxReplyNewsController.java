@@ -59,7 +59,7 @@ public class WxReplyNewsController {
     }
 
     @At("/edit/?")
-    @Ok("beetl:/platform/wx/reply/news/infedit.html")
+    @Ok("beetl:/platform/wx/reply/news/edit.html")
     @RequiresPermissions("wx.reply")
     public Object edit(String id) {
         return wxReplyNewsService.fetch(id);

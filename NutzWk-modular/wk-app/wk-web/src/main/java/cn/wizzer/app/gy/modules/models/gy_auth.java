@@ -59,76 +59,13 @@ public class gy_auth extends BaseModel implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 255)
     private String note;
 
-    public String getNote() {
-        return note;
-    }
 
-    public void setNote(String note) {
-        this.note = note;
-    }
 
     @Column
     @Comment("状态")
     @ColDefine(type = ColType.INT)
     private int status;
 
-
-
-    //视图字段
-    @Column("realname")    // 其实可以不用声明数据库字段名 "taskcount"，因为多数数据库忽略大小写
-    @Readonly                 // <- 这里声明了只读字段，即视图里增加的字段
-    private String realname;
-
-    @Column("phone")
-    @Readonly
-    private String phone;
-
-    @Column("qq")
-    @Readonly
-    private String qq;
-
-
-    @Column("idcard")
-    @Readonly
-    private String idcard;
-
-
-
-    @Column("email")
-    @Readonly
-    private String email;
-
-    @Column("auid")
-    @Readonly
-    private String auid;
-
-    public String getAuid() {
-        return auid;
-    }
-
-    public String getRealname() {
-        return realname;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getQq() {
-        return qq;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getIdcard() {
-        return idcard;
-    }
-
-    public void setIdcard(String idcard) {
-        this.idcard = idcard;
-    }
 
     public String getId() {
         return id;
@@ -192,6 +129,14 @@ public class gy_auth extends BaseModel implements Serializable {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
 

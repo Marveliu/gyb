@@ -98,7 +98,7 @@ public class WxReplyController {
     }
 
     @At("/?/edit/?")
-    @Ok("beetl:/platform/wx/reply/conf/infedit.html")
+    @Ok("beetl:/platform/wx/reply/conf/edit.html")
     @RequiresPermissions("wx.reply")
     public Object edit(String type, String id, HttpServletRequest req) {
         Wx_reply reply = wxReplyService.fetch(id);

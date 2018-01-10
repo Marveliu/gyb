@@ -137,7 +137,7 @@ public class WxMenuController {
     }
 
     @At("/edit/?")
-    @Ok("beetl:/platform/wx/menu/infedit.html")
+    @Ok("beetl:/platform/wx/menu/edit.html")
     @RequiresPermissions("wx.conf.menu")
     public Object edit(String id, HttpServletRequest req) {
         Wx_menu menu = wxMenuService.fetch(id);

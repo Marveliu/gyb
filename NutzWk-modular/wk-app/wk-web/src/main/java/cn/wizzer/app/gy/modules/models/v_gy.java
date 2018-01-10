@@ -68,7 +68,7 @@ public class v_gy extends BaseModel implements Serializable {
 
     @Column("sex")
     @Readonly
-    private int sex;
+    private String sex;
 
     @Column("idcard")
     @Readonly
@@ -99,11 +99,11 @@ public class v_gy extends BaseModel implements Serializable {
     @Readonly
     private int regYear;
 
-    @Column("idcradF")
+    @Column("idcardF")
     @Readonly
     private String idcardF;
 
-    @Column("idcradB")
+    @Column("idcardB")
     @Readonly
     private String idcardB;
 
@@ -121,7 +121,16 @@ public class v_gy extends BaseModel implements Serializable {
 
     @Column("status")
     @Readonly
-    private int status;
+    private String status;
+
+
+    @Column("gyauthstatus")
+    @Readonly
+    private int gyauthstatus;
+
+    @Column("disabled")
+    @Readonly
+    private String disabled;
 
     public String getUserid() {
         return userid;
@@ -211,11 +220,12 @@ public class v_gy extends BaseModel implements Serializable {
         this.qq = qq;
     }
 
-    public int getSex() {
+
+    public String getSex() {
         return sex;
     }
 
-    public void setSex(int sex) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 
@@ -323,11 +333,27 @@ public class v_gy extends BaseModel implements Serializable {
         this.realname = realname;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(String disabled) {
+        this.disabled = disabled;
+    }
+
+    public int getGyauthstatus() {
+        return gyauthstatus;
+    }
+
+    public void setGyauthstatus(int gyauthstatus) {
+        this.gyauthstatus = gyauthstatus;
     }
 }

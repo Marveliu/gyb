@@ -3,6 +3,7 @@ package cn.wizzer.app.gy.modules.services.impl;
 import cn.wizzer.framework.base.service.BaseServiceImpl;
 import cn.wizzer.app.gy.modules.models.gy_auth;
 import cn.wizzer.app.gy.modules.services.GyAuthService;
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -31,5 +32,22 @@ public class GyAuthServiceImpl extends BaseServiceImpl<gy_auth> implements GyAut
         }else {
             return false;
         }
+    }
+
+    public boolean enable(String gyid,String note){
+
+        if(this.dao().update(gy_auth.class, Chain.make("status", 2).add("note",note), Cnd.where("gyid", "=", gyid))!=0){
+            return true;
+
+        }
+        return false;
+    }
+
+    public boolean disable(String gyid,String note){
+        if(this.dao().update(gy_auth.class, Chain.make("status", 3).add("note",note), Cnd.where("gyid", "=", gyid))!=0){
+            return true;
+
+        }
+        return false;
     }
 }

@@ -137,6 +137,11 @@ public class GyService {
         return  wsService.sendMsgByWsid(wsid,msg);
     }
 
+    public boolean refreshGy(String gyid){
+        NutMap msg = new NutMap("action", "refresh").setv("notify", "雇员状态刷新");
+        return this.sendMsgByUid(gyInfService.getUserByGyid(gyid).getId(),msg);
+    }
+
 
     /**
      * 邮箱更改

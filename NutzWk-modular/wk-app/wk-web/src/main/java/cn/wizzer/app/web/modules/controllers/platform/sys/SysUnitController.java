@@ -83,7 +83,7 @@ public class SysUnitController {
     }
 
     @At("/edit/?")
-    @Ok("beetl:/platform/sys/unit/infedit.html")
+    @Ok("beetl:/platform/sys/unit/edit.html")
     @RequiresPermissions("sys.manager.unit")
     public Object edit(String id, HttpServletRequest req) {
         Sys_unit unit = sysUnitService.fetch(id);

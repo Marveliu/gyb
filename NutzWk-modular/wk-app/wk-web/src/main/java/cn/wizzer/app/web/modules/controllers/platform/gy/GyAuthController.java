@@ -2,7 +2,9 @@ package cn.wizzer.app.web.modules.controllers.platform.gy;
 
 import cn.wizzer.app.gy.modules.models.gy_auth;
 import cn.wizzer.app.gy.modules.services.GyAuthService;
+import cn.wizzer.app.gy.modules.services.VGyService;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
+import cn.wizzer.app.web.commons.util.StatusCodeUtil;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
@@ -11,6 +13,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
@@ -26,6 +29,9 @@ public class GyAuthController{
     @Inject
     private GyAuthService gyAuthService;
 
+    @Inject
+    private VGyService vGyService;
+
     @At("")
     @Ok("beetl:/platform/gy/auth/index.html")
     @RequiresPermissions("platform.gy.auth")
@@ -40,15 +46,15 @@ public class GyAuthController{
             @Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
 		Cnd cnd = Cnd.NEW();
         if("3".equals(status)){
-            return gyAuthService.data(length, start, draw, order, columns, cnd, null);
+            return vGyService.data(length, start, draw, order, columns, cnd, null);
         }
         if (!Strings.isBlank(gyid))
-            cnd.and("loginname", "like", "%" + gyid + "%");
+            cnd.and("gyid", "=", gyid);
         if (!Strings.isBlank(realname))
             cnd.and("realname", "like", "%" + realname + "%");
         if (!Strings.isBlank(status))
-            cnd.and("status", "=", status);
-    	return gyAuthService.data(length, start, draw, order, columns, cnd, null);
+            cnd.and("status", "=", StatusCodeUtil.bind("gyauth"+status) );
+    	return vGyService.data(length, start, draw, order, columns, cnd, null);
     }
 
 
@@ -122,19 +128,25 @@ public class GyAuthController{
         Cnd cnd = Cnd.NEW();
         cnd.and("gyid","=",id);
 		if (!Strings.isBlank(id)) {
-            req.setAttribute("obj", gyAuthService.fetch(cnd));
+            req.setAttribute("obj", vGyService.fetch(cnd));
 		}else{
             req.setAttribute("obj", null);
         }
     }
 
-    @At("/enable/?")
+    @At("/enable")
     @Ok("json")
     @RequiresPermissions("platform.gy.auth")
     @SLog(tag = "认证通过", msg = "雇员编号:${args[1].getAttribute('id')}")
-    public Object enable(String id, HttpServletRequest req) {
+    public Object enable(
+            @Param("gyid") String id,
+            @Param("note") String note,
+            HttpServletRequest req) {
         try {
-            gyAuthService.update(org.nutz.dao.Chain.make("status", 1), Cnd.where("gyid", "=", id));
+            if(null == note || note.isEmpty()){
+                note = "恭喜你审核通过！";
+            }
+            gyAuthService.enable(id,note);
             return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");
@@ -145,10 +157,15 @@ public class GyAuthController{
     @Ok("json")
     @RequiresPermissions("platform.gy.auth")
     @SLog(tag = "认证不通过", msg = "雇员编号:${args[1].getAttribute('id')}")
-    public Object disable(String id, HttpServletRequest req) {
+    public Object disable(
+            @Param("gyid") String id,
+            @Param("note") String note,
+            HttpServletRequest req) {
         try {
-            // 所有的查询都是针对视图进行的操作
-            gyAuthService.update(org.nutz.dao.Chain.make("status", 2), Cnd.where("gyid", "=", id));
+            if(null == note || note.isEmpty()){
+                note = "您的身份信息有误，不一致请注意审核！";
+            }
+            gyAuthService.disable(id,note);
             return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");

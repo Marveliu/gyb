@@ -61,7 +61,7 @@ public class WxConfigController {
     }
 
     @At("/edit/?")
-    @Ok("beetl:/platform/wx/account/infedit.html")
+    @Ok("beetl:/platform/wx/account/edit.html")
     @RequiresPermissions("wx.conf.account")
     public Object edit(String id) {
         return wxConfigService.fetch(id);

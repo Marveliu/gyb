@@ -131,7 +131,7 @@ layout("/layouts/platform.html"){
                     { "data": "major", "bSortable": true },
                     { "data": "regYear", "bSortable": true },
                     { "data": "stuLevel", "bSortable": true },
-                    { "data": "status", "bSortable": true },
+                    { "data": "disabled", "bSortable": true },
                 ],
                 "columnDefs": [
                     {
@@ -147,7 +147,7 @@ layout("/layouts/platform.html"){
                     },
                     {
                         "render": function (data, type, row) {
-                            if (1 == data) {
+                            if (data) {
                                 return '<i id="status' + row.gyid + '" class="fa fa-circle text-success ml5"></i>';
                             } else {
                                 return '<i id="status' + row.gyid + '" class="fa fa-circle text-danger ml5"></i>';
@@ -163,28 +163,6 @@ layout("/layouts/platform.html"){
                             return '';
                         },
                         "targets": [4,10]
-                    },
-                    {
-                        "render": function (data, type, row) {
-                            if (0 == data) {
-                                return '男';
-                            } else {
-                                return '女';
-                            }
-                        },
-                        "targets": 5
-                    },
-                    {
-                        "render": function (data, type, row) {
-                            if (0 == data) {
-                                return '本科生';
-                            } else {if (1 == data) {
-                                return '研究生';
-                            }else {
-                                return '博士生';
-                            }}
-                        },
-                        "targets": -2
                     },
                 ]
             });

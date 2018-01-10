@@ -80,7 +80,7 @@ public class SysTaskController {
     }
 
     @At("/edit/?")
-    @Ok("beetl:/platform/sys/task/infedit.html")
+    @Ok("beetl:/platform/sys/task/edit.html")
     @RequiresPermissions("sys.manager.task")
     public Object edit(String id) {
         return taskService.fetch(id);

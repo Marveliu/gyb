@@ -56,7 +56,7 @@ public class WxReplyTxtController {
     }
 
     @At("/edit/?")
-    @Ok("beetl:/platform/wx/reply/txt/infedit.html")
+    @Ok("beetl:/platform/wx/reply/txt/.html")
     @RequiresPermissions("wx.reply")
     public Object edit(String id) {
         return wxReplyTxtService.fetch(id);
