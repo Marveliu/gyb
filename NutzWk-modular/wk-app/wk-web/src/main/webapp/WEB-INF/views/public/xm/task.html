@@ -16,7 +16,7 @@ layout("/layouts/platform.html"){
                 </div>
             </header>
 
-            <div class="content-wrap no-p">
+            <div class="content-wrap">
 
                 <div class="wrapper">
 
@@ -42,6 +42,12 @@ layout("/layouts/platform.html"){
                                 </li>
                                 <li>
                                     <a href="javascript:;">
+                                        <span class="badge pull-right bg-primary">${@date.getDate(obj.applyendtime)}</span>
+                                        <i class="ti-pin-alt mr5"></i>申报
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;">
                                         <span class="badge pull-right bg-warning">${@date.getDate(obj.firstcommit)}</span>
                                         <i class="ti-pin-alt mr5"></i>初稿
                                     </a>
@@ -49,7 +55,7 @@ layout("/layouts/platform.html"){
                                 <li>
                                     <a href="javascript:;">
                                         <span class="badge pull-right bg-danger">${@date.getDate(obj.endtime)}</span>
-                                        <i class="ti-share mr5"></i>终止
+                                        <i class="ti-share mr5"></i>完成
                                     </a>
                                 </li>
                             </ul>
@@ -60,21 +66,19 @@ layout("/layouts/platform.html"){
                                         <b>技能限制</b>
                                     </a>
                                 </li>
-                                <li>
+
+                                <%
+                                for(limit in obj.xmlimits){
+                                %>
+                                <li class="item">
                                     <a href="javascript:;">
-                                        <i class="ti-control-record text-warning pull-right"></i> Home
+                                        <i class="ti-control-record text-warning pull-right"></i> ${@status.getSkillNameById(limit.skillid)}:${limit.skilllevel}
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="javascript:;">
-                                        <i class="ti-control-record text-success pull-right"></i> Work
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:;">
-                                        <i class="ti-control-record text-danger pull-right"></i> Family
-                                    </a>
-                                </li>
+
+                                <%
+                                }
+                                %>
                             </ul>
                         </div>
                     </nav>
@@ -88,12 +92,15 @@ layout("/layouts/platform.html"){
             <header class="header navbar clearfix bb bg-default pl0">
                 <p class="navbar-text">任务书详情</p>
                 <div class="btn-group pull-right">
-                    <button type="button" class="btn btn-default navbar-btn btn-sm">
-                        <i class="fa fa-mail-reply"></i>
+                    <button type="button" class="btn btn-default navbar-btn btn-sm" onclick="window.history.back()">
+                    <i class="fa fa-mail-reply"></i>
                     </button>
-                    <button type="button" class="btn btn-default navbar-btn btn-sm">
-                        <i class="fa fa-mail-forward"></i>
-                    </button>
+                    <!--<button type="button" class="btn btn-default navbar-btn btn-sm">-->
+                        <!--<i class="fa fa-mail-reply"></i>-->
+                    <!--</button>-->
+                    <!--<button type="button" class="btn btn-default navbar-btn btn-sm">-->
+                        <!--<i class="fa fa-mail-forward"></i>-->
+                    <!--</button>-->
                     <button type="button" class="btn btn-default  navbar-btn btn-sm" onclick="location='${obj.fileurl}'" >附件下载
                     </button>
                 </div>
@@ -126,11 +133,10 @@ layout("/layouts/platform.html"){
                 <p class="pull-right">All rights reserved
                 </p>
             </footer>
-
             <a class="exit-offscreen"></a>
         </section>
 
-
+<script type="text/javascript" src="${base!}/assets/plugins/vue/vue.js"></script>
 <script>
     function xmapply(id) {
             $("#xmapply").button("loading");

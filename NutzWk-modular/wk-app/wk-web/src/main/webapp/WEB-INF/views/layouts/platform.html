@@ -128,10 +128,8 @@
             <%
             var secondMenus=@shiro.getPrincipalProperty('secondMenus');
             for(firstMenu in @shiro.getPrincipalProperty('firstMenus')){
-
             %>
             <li class="dropdown">
-
                     <% if(!isEmpty(@secondMenus.get(firstMenu.path))){%>
                 <a href="javascript:;" data-toggle="dropdown">
                     <% if(has(firstMenu.icon)){ %>
@@ -139,8 +137,7 @@
                     <% } %>
                     <span>
                         <%if(lang=="zh_CN"){%>${firstMenu.name}<%}else{%>${firstMenu.aliasName}<%}%></span>
-                    <b class="caret"></b
-                            >
+                    <b class="caret"></b>
                 </a>
                 <%}else{%>
                     <a href="<% if(!isEmpty(firstMenu.href)){ %><%if(@string.startWith(firstMenu.href,'/')){%>${base}${firstMenu.href!}<%}else{%>${firstMenu.href!}<%}%> <% }else{ %>javascript:;<% } %>" <%if(@string.startWith(firstMenu.target,'_')){%>target="${firstMenu.target!}"<%}else{%>${firstMenu.target!}<%}%>>

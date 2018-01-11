@@ -1,5 +1,7 @@
 package cn.wizzer.app.web.commons.util;
 
+import cn.wizzer.app.library.modules.models.lib_skill;
+import cn.wizzer.app.library.modules.services.LibSkillService;
 import cn.wizzer.app.sys.modules.services.SysDictService;
 import cn.wizzer.app.sys.modules.services.impl.SysDictServiceImpl;
 import com.sun.xml.internal.ws.commons.xmlutil.Converter;
@@ -21,6 +23,9 @@ public class StatusCodeUtil
 
     @Inject
     private SysDictService sysDictService;
+
+    @Inject
+    private LibSkillService libSkillService;
 
     public static String bind(String code){
         return Mvcs.getIoc().get(SysDictServiceImpl.class).getNameByCode(code);
@@ -57,6 +62,11 @@ public class StatusCodeUtil
         return  sysDictService.getNameByCode(code);
     }
 
+
+    public String getSkillNameById(String id){
+        lib_skill skill = libSkillService.fetch(id);
+        return skill.getName();
+    }
 
 
 }

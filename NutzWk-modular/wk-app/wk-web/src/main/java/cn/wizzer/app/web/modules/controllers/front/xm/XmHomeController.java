@@ -51,16 +51,19 @@ public class XmHomeController {
     */
     @At("")
     @Ok("beetl:/public/xm/home.html")
-    public void home() {
+    public void home(HttpServletRequest req) {
+        req.setAttribute("count",xmTaskService.count(Cnd.where("disabled","=","false")));
     }
 
 
     /**
-    * @function:
-    * @param: start 当前页 页数大小
-    * @return:
-    * @note: 支持筛选: 最近时间发布,金额最高,技能匹配,任务类别,名称匹配
-    */
+     * 项目广场分页
+     * @param category
+     * @param searchfilter
+     * @param taskname
+     * @param start
+     * @return
+     */
     @At
     @Ok("json:full")
     public Object data(
@@ -71,11 +74,11 @@ public class XmHomeController {
     ) {
 
         Cnd cnd = Cnd.NEW();
+        cnd.and("disabled","=","false");
         int length = 16;                //当前页大小
-        String linkName = null;   //linksname
+        String linkName = null;         //linksname
         NutMap re = new NutMap();
         Pager pager = new OffsetPager(start, length);
-
         //查询名称
         if (!Strings.isBlank(taskname)) {
             cnd.and("taskName", "like", "%" + taskname + "%");
@@ -109,7 +112,10 @@ public class XmHomeController {
     @At("/task/?")
     @Ok("beetl:/public/xm/task.html")
     public Object task(String id, HttpServletRequest req) {
+
+
         xm_task task = xmTaskService.fetchLinks(xmTaskService.fetch(id),"xmlimits");
         return task;
+
     }
 }
