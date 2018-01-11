@@ -5,6 +5,7 @@ import cn.wizzer.app.sys.modules.models.Sys_menu;
 import cn.wizzer.app.sys.modules.models.Sys_role;
 import cn.wizzer.app.sys.modules.models.Sys_user;
 import cn.wizzer.app.sys.modules.services.SysMenuService;
+import cn.wizzer.app.sys.modules.services.impl.VUserinfServiceImpl;
 import cn.wizzer.app.web.commons.base.Globals;
 import cn.wizzer.app.web.commons.slog.SLogService;
 import cn.wizzer.app.web.commons.util.UserInfUtil;
@@ -40,6 +41,9 @@ public class SysHomeController {
     private UserInfUtil userInfUtil;
 
     @Inject
+    private VUserinfServiceImpl vUserinfService;
+
+    @Inject
     private SLogService sLogService;
 
     @Inject
@@ -52,6 +56,8 @@ public class SysHomeController {
      * 管理员，雇员，雇主
      *
      */
+
+
     @At(" ")
     @Ok("re:beetl:/platform/sys/home.html")
     @RequiresAuthentication
@@ -106,6 +112,8 @@ public class SysHomeController {
             default:
                 break;
         }
+        String sysuserid = vUserinfService.fetch(Cnd.where("userid","=",user.getId())).getId();
+        req.getSession().setAttribute("sysuserid",sysuserid);
         return null;
     }
 

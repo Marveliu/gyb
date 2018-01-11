@@ -51,6 +51,18 @@ public class StringUtil {
         return "";
     }
 
+    public static String getSysuserid() {
+        try {
+            HttpServletRequest request = Mvcs.getReq();
+            if (request != null) {
+                return Strings.sNull(request.getSession(true).getAttribute("sysuserid"));
+            }
+        } catch (Exception e) {
+
+        }
+        return "";
+    }
+
     /**
      * 从seesion获取用户名
      *

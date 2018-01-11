@@ -1,13 +1,16 @@
 package cn.wizzer.app.xm.modules.models;
 
+import cn.wizzer.app.gy.modules.services.impl.GyInfServiceImpl;
 import cn.wizzer.app.gz.modules.models.gz_inf;
 import cn.wizzer.app.library.modules.models.lib_task;
+import cn.wizzer.app.web.commons.util.NumberUtil;
 import cn.wizzer.app.xm.modules.services.Impl.XmTaskServiceImpl;
 import cn.wizzer.framework.base.model.BaseModel;
 import cn.wizzer.framework.util.DateUtil;
 import org.nutz.dao.DB;
 import org.nutz.dao.Dao;
 import org.nutz.dao.entity.annotation.*;
+import org.nutz.log.Logs;
 import org.nutz.mvc.Mvcs;
 
 import java.io.Serializable;
@@ -62,6 +65,11 @@ public class xm_task extends BaseModel implements Serializable {
     @Comment("初稿时间")
     @ColDefine(type = ColType.INT)
     private Integer firstcommit;
+
+    @Column
+    @Comment("申报截止时间")
+    @ColDefine(type = ColType.INT)
+    private Integer applyendtime;
 
     @Column
     @Comment("任务书摘要")
@@ -176,6 +184,14 @@ public class xm_task extends BaseModel implements Serializable {
         this.firstcommit = firstcommit;
     }
 
+    public Integer getApplyendtime() {
+        return applyendtime;
+    }
+
+    public void setApplyendtime(Integer applyendtime) {
+        this.applyendtime = applyendtime;
+    }
+
     public String getInfo() {
         return info;
     }
@@ -224,6 +240,14 @@ public class xm_task extends BaseModel implements Serializable {
         this.fileurl = fileurl;
     }
 
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+
     public lib_task getLibtask() {
         return libtask;
     }
@@ -248,14 +272,6 @@ public class xm_task extends BaseModel implements Serializable {
         this.xmlimits = xmlimits;
     }
 
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
-    }
-
     /**
      * @function: 雇员编号
      * @param:
@@ -263,15 +279,18 @@ public class xm_task extends BaseModel implements Serializable {
      * @note: 编号说明:17年份,10497学校代码,0学历:(0本科1研究生2博士),0性别 (0女生 ,1男生),010顺序码
      */
     public String taskid() {
-        Dao dao =  Mvcs.getIoc().get((Dao.class));
-        StringBuilder str = new StringBuilder();
-        //年份
-        str.append(DateUtil.format(new Date(),"yyyy").substring(2,4));
-        //项目类型
-        str.append(dao.fetch(lib_task.class,this.category).getUnitcode());
+
+        String id = new String();
         //顺序码
+        Dao dao =  Mvcs.getIoc().get((Dao.class));
         XmTaskServiceImpl xmTaskService = new XmTaskServiceImpl(dao);
-        str.append(xmTaskService.count());
-        return str.toString();
+        try {
+            int count = Mvcs.getIoc().get(XmTaskServiceImpl.class).count();
+             return  id =  Mvcs.getIoc().get(NumberUtil.class).XmtaskidGenerator(count,dao.fetch(lib_task.class,this.category).getUnitcode());
+        }catch (Exception e){
+            Logs.get().debug(e);
+        }
+
+        return id;
     }
 }

@@ -67,7 +67,7 @@ public class SysDictController {
     }
 
     @At("/edit/?")
-    @Ok("beetl:/platform/sys/dict/infedit.html")
+    @Ok("beetl:/platform/sys/dict/edit.html")
     @RequiresPermissions("sys.manager.dict")
     public Object edit(String id, HttpServletRequest req) {
         Sys_dict dict = dictService.fetch(id);

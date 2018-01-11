@@ -1,18 +1,17 @@
 package cn.wizzer.app.web.modules.controllers.platform.xm;
 
-import cn.wizzer.app.gz.modules.models.gz_inf;
-import cn.wizzer.app.gz.modules.services.GzInfService;
 import cn.wizzer.app.library.modules.models.lib_task;
 import cn.wizzer.app.library.modules.services.LibSkillService;
 import cn.wizzer.app.library.modules.services.LibTaskService;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
-import cn.wizzer.app.web.commons.util.UserInfUtil;
 import cn.wizzer.app.xm.modules.models.xm_limit;
 import cn.wizzer.app.xm.modules.models.xm_task;
 import cn.wizzer.app.xm.modules.services.XmTaskService;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
+import cn.wizzer.framework.util.ShiroUtil;
+import cn.wizzer.framework.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
@@ -31,7 +30,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static cn.wizzer.app.web.commons.util.UserInfUtil.getCurrentGz;
 
 /**
  * Created by wizzer on 2016/6/28.
@@ -42,15 +40,12 @@ public class XmTaskController {
     private static final Log log = Logs.get();
     @Inject
     private XmTaskService xmTaskService;
-
     @Inject
     private LibTaskService libTaskService;
-
     @Inject
     private LibSkillService libSkillService;
-
     @Inject
-    private GzInfService gzInfService;
+    private ShiroUtil shiroUtil;
 
     @At("")
     @Ok("beetl:/platform/xm/task/index.html")
@@ -64,7 +59,6 @@ public class XmTaskController {
     public Object tree(@Param("pid") String pid) {
         List<lib_task> list = libTaskService.query(Cnd.where("parentId", "=", Strings.sBlank(pid)).asc("location").asc("path"));
         List<Map<String, Object>> tree = new ArrayList<>();
-
         if (Strings.isBlank(pid)) {
             Map<String, Object> obj = new HashMap<>();
             obj.put("id", "0");
@@ -93,16 +87,16 @@ public class XmTaskController {
     @Ok("json:full")
     @RequiresPermissions("platform.xm.task")
     public Object data(@Param("libtaskId") String libtaskid,@Param("title") String title, @Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
+
         Cnd cnd = Cnd.NEW();
-        gz_inf gz= getCurrentGz();
 
-        //todo:需要判定是否为产品经理级别及其以上，用shiro有没有啥字段
-        cnd.and("author","=",gz.getId());
-
+        // 超级管理员
+        if(!shiroUtil.hasAnyPermissions("platform.xm.task.add.manager")){
+            cnd.and("author","=", StringUtil.getSysuserid());
+        }
         if (!Strings.isBlank(libtaskid) && !"0".equals(libtaskid)) {
             cnd.and("category", "like", "%" + libtaskid + "%");
         }
-
         if (!Strings.isBlank(title)) {
             cnd.and("title", "like", "%" + title + "%");
         }
@@ -134,31 +128,35 @@ public class XmTaskController {
             @Param("::") xm_task xmtask,
             @Param("firstcommitat") String firstcommit,
             @Param("endtimeat") String endtime,
+            @Param("applyendtimeat") String applyendtime,
             @Param("at") String at,
             HttpServletRequest req) {
         try {
 
             //获取当前用户信息
-            gz_inf gz = UserInfUtil.getCurrentGz();
-
-
+            String sysuserid = StringUtil.getSysuserid();
 
             //设置时间
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
             int publishAt = (int) (sdf.parse(at).getTime() / 1000);
             int firstcommitAt = (int) (sdf.parse(firstcommit).getTime() / 1000);
             int endtimeAt = (int) (sdf.parse(endtime).getTime() / 1000);
+            int applyendtimeAt = (int) (sdf.parse(applyendtime).getTime() / 1000);
+
+
             xmtask.setPublishAt(publishAt);
             xmtask.setFirstcommit(firstcommitAt);
             xmtask.setEndtime(endtimeAt);
+            xmtask.setApplyendtime(applyendtimeAt);
 
             //初始编辑者和阅读数量
-            xmtask.setAuthor(gz.getId());
+            xmtask.setAuthor(sysuserid);
             xmtask.setReadnum(0);
+            xmtask.setDisabled(true);
 
             //插入任务书，和任务书的技能要求
             xmTaskService.insertWith(xmtask,"xmlimits");
-
             return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");
@@ -172,9 +170,7 @@ public class XmTaskController {
         xm_task task = xmTaskService.fetchLinks(xmTaskService.fetch(id),null);
         req.setAttribute("libtask", task.getLibtask());
         List<xm_limit>  limits = task.getXmlimits();
-
         List<xm_limit>  xmlimits = new ArrayList<>();
-
         for( xm_limit limit :limits){
             limit = libSkillService.fetchLinks(limit,"skill");
             xmlimits.add(limit);
@@ -192,28 +188,24 @@ public class XmTaskController {
             @Param("::") xm_task xmtask,
             @Param("firstcommitat") String firstcommit,
             @Param("endtimeat") String endtime,
+            @Param("applyendtimeat") String applyendtime,
             @Param("at") String at,
             HttpServletRequest req) {
         try {
-
-
-            //获取当前用户信息
-            gz_inf gz = UserInfUtil.getCurrentGz();
 
             //设置时间
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             int publishAt = (int) (sdf.parse(at).getTime() / 1000);
             int firstcommitAt = (int) (sdf.parse(firstcommit).getTime() / 1000);
             int endtimeAt = (int) (sdf.parse(endtime).getTime() / 1000);
+            int applyendtimeAt = (int) (sdf.parse(applyendtime).getTime() / 1000);
+
             xmtask.setPublishAt(publishAt);
             xmtask.setFirstcommit(firstcommitAt);
             xmtask.setEndtime(endtimeAt);
-
-            //初始编辑者和阅读数量
-            xmtask.setAuthor(gz.getId());
+            xmtask.setApplyendtime(applyendtimeAt);
 
 
-            //
             Trans.exec(new Atom() {
                 @Override
                 public void run() {
@@ -222,7 +214,6 @@ public class XmTaskController {
                     Dao dao = Mvcs.getIoc().get(Dao.class);
                     dao.deleteLinks(oldxmtask,"xmlimits");
                     xmTaskService.insertLinks(xmtask,"xmlimits");
-
                     //更新
                     xmTaskService.update(xmtask);
                 }
@@ -238,10 +229,12 @@ public class XmTaskController {
 
     @At("/enable/?")
     @Ok("json")
-    @RequiresPermissions("platform.xm.task.edit")
+    @RequiresPermissions("platform.xm.task.add.manager")
     @SLog(tag = "发布任务书", msg = "任务书标题:${args[1].getAttribute('title')}")
     public Object enable(String id, HttpServletRequest req) {
         try {
+
+            // TODO: 2018/1/11 0011 新的任务书发布，并且附上链接进行推送
             req.setAttribute("title", xmTaskService.fetch(id).getTaskname());
             xmTaskService.update(org.nutz.dao.Chain.make("disabled", false), Cnd.where("id", "=", id));
             return Result.success("system.success");
@@ -252,7 +245,7 @@ public class XmTaskController {
 
     @At("/disable/?")
     @Ok("json")
-    @RequiresPermissions("platform.xm.task")
+    @RequiresPermissions("platform.xm.task.add.manager")
     @SLog(tag = "取消发布任务书", msg = "任务书标题:${args[1].getAttribute('title')}")
     public Object disable(String id, HttpServletRequest req) {
         try {
@@ -271,7 +264,6 @@ public class XmTaskController {
     public Object delete(String oneId, @Param("ids") String[] ids, HttpServletRequest req) {
         try {
             if (ids != null && ids.length > 0) {
-
                 //todo:采取事务，同时也要删除对应的技能限制信息
                 xmTaskService.delete(ids);
                 req.setAttribute("id", org.apache.shiro.util.StringUtils.toString(ids));

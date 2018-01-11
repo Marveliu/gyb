@@ -85,6 +85,22 @@ public class NumberUtil {
     }
 
 
+    /**
+     * 项目任务书编号试生成
+     * @param num
+     * @param category
+     * @return
+     */
+    public String XmtaskidGenerator(int num,String category){
+        StringBuilder str = new StringBuilder();
+        str.append("xm_");
+        str.append(category);
+        str.append(DateUtil.format(new Date(),"yyyyMMdd").substring(0,8));
+        str.append(num);
+        return str.toString();
+    }
+
+
 
 
 }
