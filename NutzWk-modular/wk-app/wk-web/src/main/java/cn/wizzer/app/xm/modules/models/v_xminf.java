@@ -125,6 +125,11 @@ public class v_xminf extends BaseModel implements Serializable {
     private int paytype;
 
 
+    @Column
+    @Readonly
+    private String authorname;
+
+
 
     public String getId() {
         return id;
@@ -340,5 +345,13 @@ public class v_xminf extends BaseModel implements Serializable {
 
     public void setPayid(String payid) {
         this.payid = payid;
+    }
+
+    public String getAuthorname() {
+        return authorname;
+    }
+
+    public void setAuthorname(String authorname) {
+        this.authorname = authorname;
     }
 }

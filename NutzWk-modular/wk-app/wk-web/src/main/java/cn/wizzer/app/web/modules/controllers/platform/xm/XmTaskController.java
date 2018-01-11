@@ -1,5 +1,6 @@
 package cn.wizzer.app.web.modules.controllers.platform.xm;
 
+import cn.wizzer.app.gy.modules.models.v_gy;
 import cn.wizzer.app.library.modules.models.lib_task;
 import cn.wizzer.app.library.modules.services.LibSkillService;
 import cn.wizzer.app.library.modules.services.LibTaskService;
@@ -89,7 +90,6 @@ public class XmTaskController {
     public Object data(@Param("libtaskId") String libtaskid,@Param("title") String title, @Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
 
         Cnd cnd = Cnd.NEW();
-
         // 超级管理员
         if(!shiroUtil.hasAnyPermissions("platform.xm.task.add.manager")){
             cnd.and("author","=", StringUtil.getSysuserid());
@@ -290,6 +290,20 @@ public class XmTaskController {
         lib_task libtask = libTaskService.fetch(libtaskid);
         libtask = libTaskService.fetchLinks(libtask,"skills");
         return libtask.getSkills();
+    }
+
+
+    @At("/detail/?")
+    @Ok("beetl:/platform/gy/inf/detail.html")
+    @RequiresPermissions("platform.xm.task")
+    public void detail(String id, HttpServletRequest req) {
+        if (!Strings.isBlank(id)) {
+            Cnd cnd = Cnd.NEW();
+            xm_task xm_task = xmTaskService.fetch(id);
+            req.setAttribute("obj", xm_task);
+        }else{
+            req.setAttribute("obj", null);
+        }
     }
 
 

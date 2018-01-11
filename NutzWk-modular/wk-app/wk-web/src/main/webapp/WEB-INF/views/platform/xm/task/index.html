@@ -137,6 +137,7 @@ layout("/layouts/platform.html"){
                                 ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
                                 '<li><a href="${base}/platform/xm/task/edit/' + row.id + '" data-pjax>修改</a></li>' +
                                 '<li><a href="javascript:;" onclick="del(\'' + row.id + '\')">删除</a></li>' +
+                                '<li><a href="${base}/platform/xm/task/detail/' + row.id + '"  data-toggle="modal" data-target="#dialogDetail" data-pjax>查看任务书</a></li>' +
                                 '<li class="divider"></li>' +
                                 '<li><a href="javascript:;" onclick="enable(\'' + row.id + '\')">发布</a></li>' +
                                 '<li><a href="javascript:;" onclick="disable(\'' + row.id + '\')">取消发布</a></li>' +
