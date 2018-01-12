@@ -133,9 +133,9 @@ public class XmInfController{
     @Ok("json")
     @RequiresPermissions("platform.xm.inf")
     public Object xminflist(){
-        String gzid = UserInfUtil.getCurrentGzid();
+        String sysuserid = StringUtil.getSysuserid();
         //查询视图
-        List<v_xminf> vxminfs = v_xmInfService.query(Cnd.where("author","=",gzid));
+        List<v_xminf> vxminfs = v_xmInfService.query(Cnd.where("author","=",sysuserid));
         Map<String, String> obj = new HashMap<>();
         for(v_xminf inf:vxminfs){
             String taskname = inf.getTaskname();

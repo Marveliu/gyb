@@ -59,11 +59,11 @@ public class XmFeedbackController{
             @Param("xmid") String xminfid,
             @Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
 		Cnd cnd = Cnd.NEW();
-        String gzid = UserInfUtil.getCurrentGzid();
+        String sysuserid = StringUtil.getSysuserid();
 
         if("".equals(xminfid)){
             //默认查看该雇员经理下面所有的项目反馈
-            cnd.and("author","=",gzid);
+            cnd.and("author","=",sysuserid);
         }else{
             //查看指定id
             cnd.and("xminfid","=",xminfid);

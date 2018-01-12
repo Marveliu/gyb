@@ -1,21 +1,66 @@
 <%
 layout("/layouts/platform.html"){
 %>
+
+
+<aside class="sidebar-250 canvas-right bg-default ">
+    <header class="header navbar clearfix bb bg-default pl0 pr0">
+        <p class="navbar-text"><i class="fa fa-sitemap mr5"></i> 任务申请表</p>
+    </header>
+
+    <div class="content-wrap no-p">
+        <div class="wrapper2">
+            <div class="m5">
+                <nav role="navigation">
+                    <div class="no-padding">
+                        <div class="input-group mb15">
+                            <input id="searchTaskname" type="text" class="form-control" placeholder="查询任务书">
+                            <span class="input-group-btn"><button class="btn btn-default" type="button" onclick="initxmtask()">Go!</button></span>
+                        </div>
+
+                        <ul class="nav nav-stacked" >
+                            <li>
+                                <!--弹窗支持通过任务类别进行查询-->
+                                <button class="dropdown-toggle form-control" data-toggle="dropdown" aria-expanded="true" value="0" >
+                                    <i class="ti-arrow-down text-success pull-right"></i>查询条件
+                                </button>
+                            </li>
+                        </ul>
+
+                        <!--项目列表-->
+                        <ul class="nav nav-stacked" id="xmtasklist">
+                        </ul>
+
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</aside>
+
 <section class="content-wrap bg-white">
     <header class="header navbar bg-white shadow">
         <div class="btn-group tool-button">
             <a id="add" class="btn btn-primary navbar-btn" href="${base}/platform/xm/apply/add" data-pjax><i class="ti-plus"></i> ${msg['globals.button.add']}</a>
             <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> ${msg['globals.button.delete.more']}</button>
         </div>
+
+        <div class="btn-group pull-right">
+            <button id="currentxmtaskname" class="btn btn-primary navbar-btn" ></i> 全部申请</button>
+        </div>
     </header>
     <div class=panel-body style="padding-top: 50px;">
         <div class="table-responsive no-border">
             <table class="table table-bordered table-striped mg-t datatable">
+
+                <input type="text" id="xmtaskid" hidden>
                 <thead>
                     <tr>
                             <th>${msg['xm.apply.column.gyid']}</th>
                             <th>${msg['xm.apply.column.xmtaskid']}</th>
                             <th>${msg['xm.apply.column.at']}</th>
+                            <th>任务书名称</th>
+                            <th>雇员名称</th>
                             <th>${msg['xm.apply.column.status']}</th>
                             <th>${msg['globals.table.column.operation']}</th>
                     </tr>
@@ -74,6 +119,12 @@ layout("/layouts/platform.html"){
 </div>
 <script language="JavaScript">
     var datatable;
+    function xmapplyset(id,name) {
+        $('#xmtaskid').val(id);
+        $('#currentxmtaskname').text(name);
+        datatable.ajax.reload();
+    }
+
     function initDatatable() {
         datatable = $('.datatable').DataTable({
             "dom": '<"toolbar">frtip',
@@ -95,7 +146,7 @@ layout("/layouts/platform.html"){
                 "url": "${base}/platform/xm/apply/data",
                 "type": "post",
                 "data": function (d) {
-
+                    d.xmtaskid = $('#xmtaskid').val();
                 }
             },
             "order": [[0, "desc"]],
@@ -103,7 +154,9 @@ layout("/layouts/platform.html"){
                     {"data": "gyid", "bSortable": true},
                     {"data": "xmtaskid", "bSortable": true},
                     {"data": "at", "bSortable": true},
-                    {"data": "status", "bSortable": true}
+                    {"data": "taskname", "bSortable": true},
+                    {"data": "gyrealname", "bSortable": true},
+                    {"data": "applystatus", "bSortable": true}
             ],
             "columnDefs": [
                 {
@@ -111,13 +164,12 @@ layout("/layouts/platform.html"){
                         return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
                                 ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
                                 '<li><a href="${base}/platform/xm/apply/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
-                                '<li><a href="${base}/platform/xm/apply/edit/' + row.id + '" data-pjax>${msg["globals.button.update"]}</a></li>' +
                                 '<li class="divider"></li>' +
                                 '<li><a href="javascript:;" onclick="del(\'' + row.id + '\')">${msg["globals.button.delete"]}</a></li>' +
                                 '<li><a href="javascript:;" onclick="dealwith(\'' + row.id + '\',\'' + row.gyid+ '\')">接受申请</a></li>' +
                                 '</ul></div>';
                     },
-                    "targets": 4
+                    "targets": 6
                 },
                 {
                     "render": function (data, type, row) {
@@ -128,20 +180,7 @@ layout("/layouts/platform.html"){
                     },
                     "targets": 2
                 },
-                {
-                    "render": function (data, type, row) {
-                        if (1 == data) {
-                            return '<i id="status' + row.id + '" class="fa fa-circle text-success ml5"></i>';
-                        } else {
-                            return '<i id="status' + row.id + '" class="fa fa-circle text-danger ml5"></i>';
-                        }
-                    },
-                    "targets": 3,
-                },
             ]
-
-
-
         });
         datatable.on('click', 'tr', function () {
             $(this).toggleClass('selected');
@@ -168,7 +207,6 @@ layout("/layouts/platform.html"){
             }, "json");
         });
     }
-
     function dealwith(id,gyid) {
         var dialog = $("#dialogDeal");
         dialog.modal("show");
@@ -187,7 +225,6 @@ layout("/layouts/platform.html"){
             }, "json");
         });
     }
-
     function delCheck() {
         var chks = datatable.rows('.selected').data();
         if (chks.length > 0) {
@@ -215,7 +252,45 @@ layout("/layouts/platform.html"){
             Toast.warning("${msg['globals.button.delete.select']}");
         }
     }
+
+    function initxmtask() {
+        var xmtaskname = $('#searchTaskname').val();
+        $('#xmtasklist').empty();
+        $.ajax({
+            url: "/platform/xm/task/xmtasklist?xmtaskname="+xmtaskname,
+            type: "get",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                var resultitem = '<li>' +
+                    '<a onclick="xmapplyset(' + ')">' +
+                    '<i class="ti-control-record text-success pull-right"></i>' + '查看全部' +
+                    '</a>' +
+                    '</li>';
+                $('#xmtasklist').append(resultitem);
+                //i表示在data中的索引位置，n表示包含的信息的对象
+                for (var key in data) {
+                    console.log(key, data[key]);
+                    var xmname = key;
+                    var xmid = data[key];
+                    var item =
+                        '<li>' +
+                        '<a onclick="xmapplyset(' + "'" + xmid + "'"+",'"+xmname+"'" + ')">' +
+                        '<i class="ti-control-record text-success pull-right"></i>' + xmname +
+                        '</a>' +
+                        '</li>';
+                    $('#xmtasklist').append(item);
+                }
+            },
+            error: function () {
+                Toast.error("加载出错！")
+            }
+        });
+    }
+
     $(function () {
+        initxmtask();
         initDatatable();
         $("#dialogDetail").on("hidden.bs.modal", function () {
             $(this).removeData("bs.modal");

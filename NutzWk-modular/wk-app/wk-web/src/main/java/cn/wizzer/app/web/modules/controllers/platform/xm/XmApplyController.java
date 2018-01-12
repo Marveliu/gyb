@@ -1,6 +1,7 @@
 package cn.wizzer.app.web.modules.controllers.platform.xm;
 
 import cn.wizzer.app.gz.modules.models.gz_inf;
+import cn.wizzer.app.web.commons.services.xm.XmService;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
 import cn.wizzer.app.web.commons.util.UserInfUtil;
 import cn.wizzer.app.xm.modules.models.*;
@@ -13,6 +14,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.*;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
@@ -36,6 +38,8 @@ public class XmApplyController{
     @Inject
     private XmBillService xmBillService;
     @Inject
+    private XmService xmService;
+    @Inject
     private Dao dao;
 
     @At("")
@@ -46,7 +50,7 @@ public class XmApplyController{
 
     /**
      *
-     * 处理项目申请
+     * 后台处理项目申请
      *
      * @param id
      * @param gyid
@@ -56,51 +60,14 @@ public class XmApplyController{
     @At({"/deal"})
     @Ok("json")
     @RequiresPermissions("platform.xm.apply.deal")
-    @SLog(tag = "xm_apply", msg = "受理项目申请")
+    @SLog(tag = "xm_apply", msg = "后台受理项目申请")
     public Object deal(
             @Param("applyid") String id,
             @Param("gyid") String gyid,
             HttpServletRequest req) {
         try {
-            gz_inf gz = UserInfUtil.getCurrentGz();
-            xm_apply apply =  xmApplyService.fetch(id);
-            xm_task task = xmTaskService.fetch(apply.getXmtaskid());
-            String opBy = gz.getId();
-            int opAt = (int) (System.currentTimeMillis() / 1000);
-
-            Trans.exec(new Atom() {
-                @Override
-                public void run() {
-                    //更新其他列表
-                    dao.execute(Sqls.create("update xm_apply set status = @status,opBy = @opBy,opAt = @opAt where xmtaskid = @xmtaskid")
-                            .setParam("status",2)
-                            .setParam("opBy",opBy)
-                            .setParam("opAt",opAt)
-                            .setParam("xmtaskid",id)
-                    );
-
-                    apply.setStatus(1);
-                    apply.setOpBy(opBy);
-                    apply.setOpAt(opAt);
-                    xmApplyService.update(apply);
-
-                    //立项 账单
-                    xm_inf xf = new  xm_inf();
-                    xm_bill bill = new xm_bill();
-                    xf.setGyid(gyid);
-                    xf.setXmtaskid(task.getId());
-                    xf.setAt(opAt);
-                    xf.setOpBy(opBy);
-                    xf.setStatus(0);
-                    xf = xmInfService.insert(xf);
-
-                    bill.setXminfid(xf.getId());
-                    bill.setOpBy(opBy);
-                    bill.setOpAt(opAt);
-                    bill.setPaysum(task.getAward());
-                    xmBillService.insert(bill);
-                }
-            });
+            xm_task task = xmApplyService.getTaskByAppyid(id);
+            xmService.regXminf(task.getId(),gyid);
             return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");
@@ -110,9 +77,16 @@ public class XmApplyController{
     @At("/data")
     @Ok("json")
     @RequiresPermissions("platform.xm.apply")
-    public Object data(@Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
-		Cnd cnd = Cnd.NEW();
-    	return xmApplyService.data(length, start, draw, order, columns, cnd, null);
+    public Object data(
+            @Param("xmtaskid") String xmtaskid,
+            @Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
+
+        Cnd cnd = Cnd.NEW();
+        // xmtaskid不为空
+        if( xmtaskid != null && !xmtaskid.isEmpty()){
+            cnd.and("xmtaskid","=",xmtaskid);
+        }
+        return xmApplyService.data(length, start, draw, order, columns, cnd, null);
     }
 
     @At("/add")

@@ -17,6 +17,11 @@ import static org.junit.Assert.*;
  * @Create 2018/1/6 0006.
  */
 public class NumberUtilTest extends TestBase {
+    @Test
+    public void xminfidGenerator() throws Exception {
+        String id = ioc.get(NumberUtil.class).XminfidGenerator(10,"xmtask_asdfasd201801123");
+        log.debug("生成id:"+id);
+    }
 
 
     @Test

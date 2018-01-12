@@ -5,6 +5,7 @@ import cn.wizzer.app.library.modules.models.lib_task;
 import cn.wizzer.app.library.modules.services.LibSkillService;
 import cn.wizzer.app.library.modules.services.LibTaskService;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
+import cn.wizzer.app.xm.modules.models.v_xminf;
 import cn.wizzer.app.xm.modules.models.xm_limit;
 import cn.wizzer.app.xm.modules.models.xm_task;
 import cn.wizzer.app.xm.modules.services.XmTaskService;
@@ -306,6 +307,38 @@ public class XmTaskController {
         }
     }
 
+
+    /**
+     * @function: 查询当前雇员经理负责的所有项目
+     * @param:
+     * @return:
+     * @note:
+     */
+    @At("/xmtasklist")
+    @Ok("json")
+    @RequiresPermissions("platform.xm.task")
+    public Object xmtasklist(
+            @Param("xmtaskname") String xmtaskname,
+            HttpServletRequest req
+    ){
+        String sysuserid = StringUtil.getSysuserid();
+        Cnd cnd = Cnd.NEW();
+
+        if(xmtaskname == null || xmtaskname.isEmpty()){
+            cnd.and("author","=",sysuserid);
+            cnd.and("disabled","=","false");
+        }else {
+            cnd.and("taskname","like","%"+xmtaskname+"%");
+        }
+
+        List<xm_task> tasks = xmTaskService.query(cnd);
+        Map<String, String> obj = new HashMap<>();
+        for(xm_task task:tasks){
+            String taskname = task.getTaskname();
+            obj.put(taskname,task.getId());
+        }
+        return obj;
+    }
 
 
 

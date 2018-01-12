@@ -1,7 +1,14 @@
 package cn.wizzer.app.xm.modules.models;
 
+import cn.wizzer.app.library.modules.models.lib_task;
+import cn.wizzer.app.web.commons.util.NumberUtil;
+import cn.wizzer.app.xm.modules.services.Impl.XmInfServiceImpl;
+import cn.wizzer.app.xm.modules.services.Impl.XmTaskServiceImpl;
 import cn.wizzer.framework.base.model.BaseModel;
+import org.nutz.dao.Dao;
 import org.nutz.dao.entity.annotation.*;
+import org.nutz.log.Logs;
+import org.nutz.mvc.Mvcs;
 
 import java.io.Serializable;
 
@@ -14,8 +21,8 @@ public class xm_inf extends BaseModel implements Serializable {
     @Column
     @Name
     @Comment("项目编号")
-    @ColDefine(type = ColType.VARCHAR, width = 32)
-    @Prev(els = {@EL("uuid()")})
+    @ColDefine(type = ColType.VARCHAR, width = 50)
+    @Prev(els = {@EL("$me.xminfid()")})
     private String id;
 
     @Column
@@ -94,5 +101,26 @@ public class xm_inf extends BaseModel implements Serializable {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    /**
+     * @function: 立项编号
+     * @param:
+     * @return:
+     * @note:
+     */
+    public String xminfid() {
+
+        String id = new String();
+        //顺序码
+        Dao dao =  Mvcs.getIoc().get((Dao.class));
+        try {
+            int count = Mvcs.getIoc().get(XmTaskServiceImpl.class).count();
+            return  id =  Mvcs.getIoc().get(NumberUtil.class).XminfidGenerator(count,dao.fetch(xm_task.class,this.xmtaskid).getId());
+        }catch (Exception e){
+            Logs.get().debug(e);
+        }
+
+        return id;
     }
 }

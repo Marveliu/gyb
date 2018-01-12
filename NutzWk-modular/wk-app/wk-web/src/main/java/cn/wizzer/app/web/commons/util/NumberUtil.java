@@ -86,17 +86,62 @@ public class NumberUtil {
 
 
     /**
-     * 项目任务书编号试生成
+     * 任务书编号生成
      * @param num
      * @param category
      * @return
      */
     public String XmtaskidGenerator(int num,String category){
         StringBuilder str = new StringBuilder();
-        str.append("xm_");
+        str.append("xmtask_");
         str.append(category);
         str.append(DateUtil.format(new Date(),"yyyyMMdd").substring(0,8));
         str.append(num);
+        return str.toString();
+    }
+
+
+    /**
+     * 申请单编号生成
+     * @param num
+     * @param task
+     * @return
+     */
+    public String XmapplyidGenerator(int num,String task){
+        StringBuilder str = new StringBuilder();
+        str.append("apply");
+        String[] arr = task.split("_");
+        str.append(arr[1]);
+        str.append(num);
+        return str.toString();
+    }
+
+
+    /**
+     * 立项编号生成
+     * @param num
+     * @param task
+     * @return
+     */
+    public String XminfidGenerator(int num,String task){
+        StringBuilder str = new StringBuilder();
+        str.append("xminf_");
+        String[] arr = task.split("_");
+        str.append(arr[1]);
+        str.append(num);
+        return str.toString();
+    }
+
+    /**
+     * 账单生成编号
+     * @param infid
+     * @return
+     */
+    public String XmbillidGenerator(String infid){
+        StringBuilder str = new StringBuilder();
+        String[] arr = infid.split("_");
+        str.append("bill_");
+        str.append(arr[1]);
         return str.toString();
     }
 
