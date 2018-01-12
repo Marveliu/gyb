@@ -96,8 +96,8 @@ public class XmFeedbackController{
     @RequiresPermissions("platform.xm.feedback")
     public View edit(int id, HttpServletRequest req) {
         String author = v_xmFeedbackService.fetch(Cnd.where("id","=",id)).getAuthor();
-        String gzid = UserInfUtil.getCurrentGzid();
-        if(author.equals(gzid)){
+        String sysuserid = StringUtil.getSysuserid();
+        if(author.equals(sysuserid)){
             req.setAttribute("obj", xmFeedbackService.fetch(id));
         }else {
             return new ViewWrapper(new UTF8JsonView(), "It is not your bussiness!");
@@ -172,10 +172,10 @@ public class XmFeedbackController{
     @RequiresPermissions("platform.xm.feedback")
     public Object xminflist(){
 
-        String gzid = UserInfUtil.getCurrentGzid();
+        String sysuserid = StringUtil.getSysuserid();
 
         //查询视图
-        List<v_xminf> vxminfs = v_xmInfService.query(Cnd.where("author","=",gzid));
+        List<v_xminf> vxminfs = v_xmInfService.query(Cnd.where("author","=",sysuserid));
         Map<String, String> obj = new HashMap<>();
 
         for(v_xminf inf:vxminfs){

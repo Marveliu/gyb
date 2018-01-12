@@ -22,6 +22,7 @@ import java.util.List;
  */
 
 @Table("xm_task")
+@View("v_xmtask")
 public class xm_task extends BaseModel implements Serializable {
 
     @Column
@@ -108,6 +109,20 @@ public class xm_task extends BaseModel implements Serializable {
     @Comment("是否禁用")
     @ColDefine(type = ColType.BOOLEAN)
     private boolean disabled;
+
+    @Column
+    @Comment("状态")
+    @ColDefine(type = ColType.INT)
+    private int status;
+
+    // 试图
+    @Column
+    @Readonly
+    private String xmtaskstatus;
+
+    @Column
+    @Readonly
+    private String authorrealname;
 
     //参照
     @One(field = "category")
@@ -270,6 +285,30 @@ public class xm_task extends BaseModel implements Serializable {
 
     public void setXmlimits(List<xm_limit> xmlimits) {
         this.xmlimits = xmlimits;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getXmtaskstatus() {
+        return xmtaskstatus;
+    }
+
+    public void setXmtaskstatus(String xmtaskstatus) {
+        this.xmtaskstatus = xmtaskstatus;
+    }
+
+    public String getAuthorrealname() {
+        return authorrealname;
+    }
+
+    public void setAuthorrealname(String authorrealname) {
+        this.authorrealname = authorrealname;
     }
 
     /**

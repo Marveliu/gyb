@@ -292,41 +292,33 @@
                                 <div class="no-padding">
 
 
-
                                     <div class="input-group mb15">
-                                        <input type="text" class="form-control" placeholder="查询任务书名称">
-                                        <span class="input-group-btn"><button class="btn btn-default" type="button">Go!</button></span>
+                                        <input id="searchXmname" type="text" class="form-control" placeholder="请输入要查询的项目">
+                                        <span class="input-group-btn"><button class="btn btn-default" type="button" onclick="initxmlist()">Go!</button></span>
                                     </div>
 
                                     <!--项目列表-->
-                                    <ul class="nav nav-stacked" id="xminflist">
+                                    <ul class="nav nav-stacked">
                                         <li>
                                             <button class="dropdown-toggle form-control" data-toggle="dropdown" aria-expanded="true" value="0" >
                                                 <i class="ti-arrow-down text-success pull-right"></i>查询条件
                                             </button>
-                                                <!--<i class="dropdown-toggle form-control" data-toggle="dropdown" aria-expanded="true" value="0">-->
-                                                    <!--<span id="xmsearch">条件</span>-->
-                                                    <!--<span class="ti-angle-down ml10"></span>-->
-                                                <!--</i>-->
-                                                <ul class="dropdown-menu" style="width:100%; text-align: center; cursor: pointer" >
-                                                    <li>
-                                                        <a id="type0"  onclick="setSearchFilter(0)">全部项目</a>
-                                                    </li>
-                                                    <li>
-                                                        <a id="type1" onclick="setSearchFilter(1)">进行中</a>
-                                                    </li>
-                                                    <li>
-                                                        <a id="type2" onclick="setSearchFilter(2)">待结算</a>
-                                                    </li>
-                                                    <li>
-                                                        <a id="type3" onclick="setSearchFilter(3)">已结算</a>
-                                                    </li>
-                                                </ul>
+                                            <ul class="dropdown-menu" style="width:100%; text-align: center; cursor: pointer" >
+                                                <li>
+                                                    <a id="type1" onclick="setSearchFilter(1)">进行中</a>
+                                                </li>
+                                                <li>
+                                                    <a id="type2" onclick="setSearchFilter(2)">待结算</a>
+                                                </li>
+                                                <li>
+                                                    <a id="type3" onclick="setSearchFilter(3)">已结算</a>
+                                                </li>
+                                            </ul>
                                         </li>
+                                    </ul>
 
-                                        <li><a onclick="xminfset('b4141d0d18a1498e9df15b76901f6ef2')">
-                                            <i class="ti-control-record text-success pull-right"></i>詹天佑门户网站设计</a>
-                                        </li>
+
+                                    <ul class="nav nav-stacked" id="xminflist">
 
                                     </ul>
 
@@ -462,25 +454,32 @@
     });
 
     function initxmlist() {
-        $('#xminflist').html();
+        var xmname = $('#searchXmname').val();
+        $('#xminflist').empty();
         $.ajax({
-            url: "/platform/xm/inf/xminflist",
+            url: "/platform/xm/inf/xminflist?xmname="+xmname,
             type: "get",
             contentType: "application/json;charset=utf-8",
             dataType: "json",
             success: function (data) {
                 console.log(data);
+                var resultitem = '<li>' +
+                    '<a onclick="xminfset()">' +
+                    '<i class="ti-control-record text-success pull-right"></i>' + '查看全部' +
+                    '</a>' +
+                    '</li>';
+                $('#xminflist').append(resultitem);
                 //i表示在data中的索引位置，n表示包含的信息的对象
                 for (var key in data) {
                     console.log(key, data[key]);
                     var xmname = key;
                     var xmid = data[key];
-                    var resultitem = '<li>' +
-                            '<a onclick="xminfset(' + "'" + xmid + "'" + ')">' +
+                    var item = '<li>' +
+                        '<a onclick="xminfset(' + "'" + xmid + "'"+",'"+xmname+"'" + ')">' +
                             '<i class="ti-control-record text-success pull-right"></i>' + xmname +
                             '</a>' +
                             '</li>';
-                    $('#xminflist').append(resultitem);
+                    $('#xminflist').append(item);
                 }
             },
             error: function () {

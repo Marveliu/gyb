@@ -66,6 +66,7 @@ public class XmService {
                     );
                     // 受理用户
                     dao.update(xm_apply.class,Chain.make("status",1),Cnd.where("xmtaskid","=",taskid).and("gyid","=",gyid));
+                    dao.update(xm_task.class,Chain.make("status",2),Cnd.where("xmtaskid","=",taskid).and("gyid","=",gyid));
             // 项目
             xm_inf xf = new  xm_inf();
             xf.setGyid(gyid);

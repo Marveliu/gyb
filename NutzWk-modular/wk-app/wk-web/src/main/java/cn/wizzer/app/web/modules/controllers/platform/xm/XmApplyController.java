@@ -66,6 +66,10 @@ public class XmApplyController{
             @Param("gyid") String gyid,
             HttpServletRequest req) {
         try {
+
+            if(xmApplyService.fetch(id).getStatus() != 0){
+                return Result.error("任务书已经认领");
+            }
             xm_task task = xmApplyService.getTaskByAppyid(id);
             xmService.regXminf(task.getId(),gyid);
             return Result.success("system.success");

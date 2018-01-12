@@ -1,7 +1,6 @@
 package cn.wizzer.app.web.modules.controllers.platform.xm;
 
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
-import cn.wizzer.app.web.commons.util.UserInfUtil;
 import cn.wizzer.app.xm.modules.models.v_xminf;
 import cn.wizzer.app.xm.modules.models.xm_inf;
 import cn.wizzer.app.xm.modules.services.V_XmInfService;
@@ -10,6 +9,7 @@ import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
 import cn.wizzer.framework.util.StringUtil;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -19,6 +19,7 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.*;
 
+import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -132,10 +133,24 @@ public class XmInfController{
     @At("/xminflist")
     @Ok("json")
     @RequiresPermissions("platform.xm.inf")
-    public Object xminflist(){
+    public Object xminflist(
+            @Param("xmname") String xminfname,
+            HttpServletRequest req
+    ){
+        Cnd cnd = Cnd.NEW();
         String sysuserid = StringUtil.getSysuserid();
+
+        org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
+        if(!subject.isPermitted("platform.xm.inf.manager")){
+            cnd.and("author","=",sysuserid);
+        }
+
+        if(null !=xminfname && !xminfname.isEmpty()){
+            cnd.and("taskname","like","%"+xminfname+"%");
+        }
+
         //查询视图
-        List<v_xminf> vxminfs = v_xmInfService.query(Cnd.where("author","=",sysuserid));
+        List<v_xminf> vxminfs = v_xmInfService.query(cnd);
         Map<String, String> obj = new HashMap<>();
         for(v_xminf inf:vxminfs){
             String taskname = inf.getTaskname();

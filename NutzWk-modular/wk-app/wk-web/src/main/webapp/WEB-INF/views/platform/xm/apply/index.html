@@ -24,6 +24,14 @@ layout("/layouts/platform.html"){
                                 <button class="dropdown-toggle form-control" data-toggle="dropdown" aria-expanded="true" value="0" >
                                     <i class="ti-arrow-down text-success pull-right"></i>查询条件
                                 </button>
+                                <ul class="dropdown-menu" style="width:100%; text-align: center; cursor: pointer" >
+                                    <li>
+                                        <a id="type1" onclick="setSearchFilter(1)">申请中</a>
+                                    </li>
+                                    <li>
+                                        <a id="type2" onclick="setSearchFilter(2)">已认领</a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
 
@@ -272,12 +280,12 @@ layout("/layouts/platform.html"){
                 //i表示在data中的索引位置，n表示包含的信息的对象
                 for (var key in data) {
                     console.log(key, data[key]);
-                    var xmname = key;
-                    var xmid = data[key];
+                    var taskname = key;
+                    var taskid = data[key];
                     var item =
                         '<li>' +
-                        '<a onclick="xmapplyset(' + "'" + xmid + "'"+",'"+xmname+"'" + ')">' +
-                        '<i class="ti-control-record text-success pull-right"></i>' + xmname +
+                        '<a onclick="xmapplyset(' + "'" + taskid + "'"+",'"+taskname+"'" + ')">' +
+                        '<i class="ti-control-record text-success pull-right"></i>' + taskname +
                         '</a>' +
                         '</li>';
                     $('#xmtasklist').append(item);

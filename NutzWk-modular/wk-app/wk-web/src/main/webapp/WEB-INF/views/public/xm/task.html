@@ -21,9 +21,13 @@ layout("/layouts/platform.html"){
                 <div class="wrapper">
 
                     <div class="m15">
+                        <%
+                         if(obj.status == 1){
+                        %>
                         <button id="xmapply" onclick="xmapply('${obj.id}')" class="btn btn-primary btn-block navbar-btn">
                             报名
                         </button>
+                        <% }%>
                     </div>
 
                     <nav role="navigation">

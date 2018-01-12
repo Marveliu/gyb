@@ -15,6 +15,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.nutz.mvc.adaptor.WhaleAdaptor;
 import org.nutz.mvc.annotation.*;
 import org.nutz.trans.Atom;
 import org.nutz.trans.Trans;
@@ -95,7 +96,7 @@ public class XmPersonController {
     }
 
     /**
-    * @function: 查看各人项目申请的记录
+    * @function: 查看个人项目申请的记录
     * @param:
     * @return:
     * @note:
@@ -144,13 +145,11 @@ public class XmPersonController {
             @Param("::columns") List<DataTableColumn> columns) {
 
         Cnd cnd = Cnd.NEW();
-        String gyid = UserInfUtil.getCurrentGyid();
+        String gyid = StringUtil.getGyid();
 
         if("".equals(xminfid)){
-            //默认查看该雇员经理下面所有的项目反馈
             cnd.and("gyid","=",gyid);
         }else{
-            //查看指定id
             cnd.and("xminfid","=",xminfid);
         }
         cnd.desc("at");
@@ -194,19 +193,20 @@ public class XmPersonController {
     }
 
     /**
-    * @function: 添加反馈
-    * @param:
-    * @return:
-    * @note:
-    */
+     * 添加反馈操作
+     * @param xmFeedback
+     * @param req
+     * @return
+     */
     @At("/feedbackaddDo")
     @Ok("json")
     @RequiresPermissions("platform.xm.person")
     @SLog(tag = "xm_feedback", msg = "")
+    @AdaptBy(type = WhaleAdaptor.class)
     public Object feedbackaddDo(@Param("..")xm_feedback xmFeedback, HttpServletRequest req) {
         try {
-            xmFeedback.setGyid(UserInfUtil.getCurrentGyid());
-            xmFeedback.setOpBy(StringUtil.getUid());
+            xmFeedback.setGyid(StringUtil.getGyid());
+            xmFeedback.setOpBy(StringUtil.getGyid());
             xmFeedback.setOpAt((int) (System.currentTimeMillis() / 1000));
             xmFeedback.setReply(" ");
             xmFeedback.setAt((int) (System.currentTimeMillis() / 1000));
@@ -283,12 +283,12 @@ public class XmPersonController {
         return Result.error("当前反馈状态不允许修改哦！");
     }
 
+
     /**
-    * @function: 修改页面
-    * @param:
-    * @return:
-    * @note:
-    */
+     * 项目跟踪修改界面
+     * @param id
+     * @param req
+     */
     @At("/feedbackedit/?")
     @Ok("beetl:/platform/xm/person/xmfeedbackedit.html")
     @RequiresPermissions("platform.xm.person")
@@ -298,7 +298,7 @@ public class XmPersonController {
     }
 
     /**
-    * @function: 修改
+    * @function: 项目跟踪修改操作
     * @param:
     * @return:
     * @note:
@@ -307,6 +307,7 @@ public class XmPersonController {
     @Ok("json")
     @RequiresPermissions("platform.xm.person")
     @SLog(tag = "xm_feedback", msg = "")
+    @AdaptBy(type = WhaleAdaptor.class)
     public Object feedbackeditDo(@Param("..")xm_feedback xmFeedback, HttpServletRequest req) {
         try {
             xmFeedback.setOpBy(StringUtil.getUid());

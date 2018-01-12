@@ -234,10 +234,9 @@ public class XmTaskController {
     @SLog(tag = "发布任务书", msg = "任务书标题:${args[1].getAttribute('title')}")
     public Object enable(String id, HttpServletRequest req) {
         try {
-
             // TODO: 2018/1/11 0011 新的任务书发布，并且附上链接进行推送
             req.setAttribute("title", xmTaskService.fetch(id).getTaskname());
-            xmTaskService.update(org.nutz.dao.Chain.make("disabled", false), Cnd.where("id", "=", id));
+            xmTaskService.update(org.nutz.dao.Chain.make("disabled", false).add("status","1"), Cnd.where("id", "=", id));
             return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");
@@ -251,7 +250,7 @@ public class XmTaskController {
     public Object disable(String id, HttpServletRequest req) {
         try {
             req.setAttribute("title", xmTaskService.fetch(id).getTaskname());
-            xmTaskService.update(org.nutz.dao.Chain.make("disabled", true), Cnd.where("id", "=", id));
+            xmTaskService.update(org.nutz.dao.Chain.make("disabled", true).add("status","0"), Cnd.where("id", "=", id));
             return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");
@@ -322,6 +321,7 @@ public class XmTaskController {
             HttpServletRequest req
     ){
         String sysuserid = StringUtil.getSysuserid();
+
         Cnd cnd = Cnd.NEW();
 
         if(xmtaskname == null || xmtaskname.isEmpty()){
