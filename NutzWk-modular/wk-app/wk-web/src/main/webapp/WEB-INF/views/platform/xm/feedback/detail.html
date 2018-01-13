@@ -11,43 +11,65 @@
                 <div class="list-group">
                     <table class="table table-bordered table-striped mg-t datatable">
                         <tbody>
-                                                        <tr>
-                                <td>${msg['xm.feedback.column.parentid']}</td><td>${obj.parentid}</td>
-                            </tr>
-                                                        <tr>
-                                <td>${msg['xm.feedback.column.xminfid']}</td><td>${obj.xminfid}</td>
-                            </tr>
-                                                        <tr>
-                                <td>${msg['xm.feedback.column.at']}</td><td>${@date.getDate(obj.at)}</td>
-                            </tr>
-                                                        <tr>
-                                <td>${msg['xm.feedback.column.fileurl']}</td><td><a href="${obj.fileurl}" class="btn btn-default btn-sm mr5">附件下载</a></td>
-                            </tr>
-                                                        <tr>
-                                <td>${msg['xm.feedback.column.note']}</td><td>${obj.note}</td>
-                            </tr>
-                                                        <tr>
-                                <td>${msg['xm.feedback.column.gyid']}</td><td>${obj.gyid}</td>
-                            </tr>
-                            <tr>
-                                <td>雇员姓名</td><td>${obj.realname}</td>
-                            </tr>
-                                                        <tr>
-                                                            <td>审核人编号</td><td>${obj.author}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>审核人名称</td><td>${obj.authorrealname}</td>
-                                                        </tr>
-                                                        <tr>
-                                <td>${msg['xm.feedback.column.nextcommit']}</td><td>${@date.getDate(obj.nextcommit)}</td>
-                            </tr>
-                                                        <tr>
-                                <td>${msg['xm.feedback.column.reply']}</td><td>${obj.reply}</td>
-                            </tr>
-                                                        <tr>
-                                                            <td>当前状态</td><td>${obj.xmfeedbackstatus}</td>
-                                                        </tr>
-                                                    </tbody>
+                        <tr>
+                            <td>${msg['xm.feedback.column.parentid']}</td>
+                            <td>${obj.parentid}</td>
+                        </tr>
+                        <tr>
+                            <td>${msg['xm.feedback.column.xminfid']}</td>
+                            <td>${obj.xminfid}</td>
+                        </tr>
+                        <tr>
+                            <td>${msg['xm.feedback.column.at']}</td>
+                            <td>${@date.getDate(obj.at)}</td>
+                        </tr>
+                        <tr>
+                            <td>${msg['xm.feedback.column.fileurl']}</td>
+                            <td>
+                                <% if( null == obj.fileurl || "" == obj.fileurl){ %>
+                                    <p>暂无附件</p>
+                                <% }else{ %>
+                                    <a href="${obj.fileurl}" class="btn btn-default btn-sm mr5">附件下载</a>
+                                <% }%>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>${msg['xm.feedback.column.note']}</td>
+                            <td>${obj.note}</td>
+                        </tr>
+                        <tr>
+                            <td>${msg['xm.feedback.column.gyid']}</td>
+                            <td>${obj.gyid}</td>
+                        </tr>
+                        <tr>
+                            <td>雇员姓名</td>
+                            <td>${obj.realname}</td>
+                        </tr>
+                        <tr>
+                            <td>审核人编号</td>
+                            <td>${obj.author}</td>
+                        </tr>
+                        <tr>
+                            <td>审核人名称</td>
+                            <td>${obj.authorrealname}</td>
+                        </tr>
+                        <tr>
+                            <td>${msg['xm.feedback.column.nextcommit']}</td>
+                            <% if(obj.nextcommit == 0){%>
+                            <td>暂无下次提交时间要求</td>
+                            <% }else{%>
+                            <td>${@date.getDate(obj.nextcommit)}</td>
+                            <% }%>
+                        </tr>
+                        <tr>
+                            <td>${msg['xm.feedback.column.reply']}</td>
+                            <td>${obj.reply}</td>
+                        </tr>
+                        <tr>
+                            <td>当前状态</td>
+                            <td>${obj.xmfeedbackstatus}</td>
+                        </tr>
+                        </tbody>
                     </table>
                 </div>
             </section>

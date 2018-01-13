@@ -20,6 +20,8 @@ import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.View;
+import org.nutz.mvc.WhaleFilter;
+import org.nutz.mvc.adaptor.WhaleAdaptor;
 import org.nutz.mvc.annotation.*;
 import org.nutz.mvc.view.UTF8JsonView;
 import org.nutz.mvc.view.ViewWrapper;
@@ -105,30 +107,31 @@ public class XmFeedbackController{
         return null;
     }
 
+    // 项目审核
     @At("/editDo")
     @Ok("json")
     @RequiresPermissions("platform.xm.feedback.edit")
     @SLog(tag = "xm_feedback", msg = "")
+    @AdaptBy(type = WhaleAdaptor.class)
     public Object editDo(
             @Param("final") boolean iffinal,
             @Param("nextcommitat") String nextcommit,
             @Param("..")xm_feedback xmFeedback, HttpServletRequest req) {
 		try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            xm_feedback xfd = xmFeedbackService.fetch(xmFeedback.getId());
+            xfd.setStatus(2);
             if(iffinal){
                 //反馈完结
-                xmFeedback.setStatus(4);
-            }else{
-                //正在审核
-                xmFeedback.setStatus(3);
+                xfd.setStatus(4);
             }
             int nextcommitat = (int) (sdf.parse(nextcommit).getTime() / 1000);
-            xmFeedback.setOpBy(StringUtil.getUid());
-			xmFeedback.setOpAt((int) (System.currentTimeMillis() / 1000));
-
-            xmFeedback.setNextcommit(nextcommitat);
-			xmFeedbackService.updateIgnoreNull(xmFeedback);
-
+            xfd.setReply(xmFeedback.getReply());
+            xfd.setOpBy(StringUtil.getSysuserid());
+            xfd.setOpAt((int) (System.currentTimeMillis() / 1000));
+            xfd.setNextcommit(nextcommitat);
+			xmFeedbackService.updateIgnoreNull(xfd);
 			return Result.success("system.success");
 		} catch (Exception e) {
 			return Result.error("system.error");
@@ -198,24 +201,24 @@ public class XmFeedbackController{
         return obj;
     }
 
+
     /**
-     * @function: 确认终稿
-     * @param:
-     * @return:
-     * @note:
+     * 审核提交
+     * @param id
+     * @return
      */
     @At("/feedbackcommit/?")
     @Ok("json")
     @RequiresPermissions("platform.xm.feedback.edit")
     @SLog(tag = "xm_feedback", msg = "")
     public Object feedbackcommit(
-            @Param("id") String id) {
+            @Param("id") int id) {
         try {
             Trans.exec(new Atom() {
                 @Override
                 public void run() {
                     //修改feedback
-                    xmFeedbackService.update(org.nutz.dao.Chain.make("Status",4),Cnd.where("id","=",id));
+                    xmFeedbackService.update(org.nutz.dao.Chain.make("Status",3),Cnd.where("id","=",id));
                     //更新项目信息
                     xmInfService.update(org.nutz.dao.Chain.make("Status",4),Cnd.where("id","=",xmFeedbackService.fetch(id).getXminfid()));
                 }

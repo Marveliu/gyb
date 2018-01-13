@@ -6,8 +6,21 @@ layout("/layouts/platform.html"){
 <script src="${base!}/assets/plugins/ueditor/ueditor.all.min.js"></script>
 
 <header class="header navbar bg-white shadow">
-    <div class="btn-group tool-button">
-        <a class="btn btn-primary navbar-btn" href="${base}/platform/xm/person/personxm" id="goBack" data-pjax><i class="ti-angle-left"></i>${msg['globals.button.back']}</a>
+
+    <div class="row">
+        <div class="col-md-6 bg-none">
+            <ol class="breadcrumb mt5" style="margin-bottom: 0px;">
+                <li>
+                    <a href="javascript:;">项目跟踪</a>
+                </li>
+                <li class="active">${obj.taskname}</li>
+            </ol>
+        </div>
+        <div class="col-md-6">
+            <div class="btn-group tool-button pull-right">
+                <a class="btn btn-primary navbar-btn" href="${base}/platform/xm/person/personxm" id="goBack" data-pjax><i class="ti-angle-left"></i>${msg['globals.button.back']}</a>
+            </div>
+        </div>
     </div>
 </header>
 
@@ -30,9 +43,9 @@ layout("/layouts/platform.html"){
                                     <div class="col-sm-8">
                                         <input type="text" id="parentid" class="form-control"
                                         <%if(obj.parentid == 0){ %>
-                                        value="初次提交反馈" disabled="disabled" >
+                                            value="初次提交反馈" disabled="disabled" >
                                         <%}else{%>
-                                        value="${obj.parentid}" >
+                                            value="${obj.parentid}" >
                                         <%}%>
                                     </div>
                                 </div>

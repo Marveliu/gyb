@@ -5,4 +5,5 @@ import cn.wizzer.framework.base.service.BaseService;
 
 public interface XmFeedbackService extends BaseService<xm_feedback>{
 
+    public int getXfdCount(String xminfid);
 }

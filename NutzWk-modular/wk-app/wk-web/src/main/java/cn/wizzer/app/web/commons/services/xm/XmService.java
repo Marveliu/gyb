@@ -100,7 +100,7 @@ public class XmService {
      * @return
      */
     public boolean checkGyForXm(String xminfid,String gyid){
-        if(gyid.equals(xmInfService.fetch(xminfid))){
+        if(gyid.equals(xmInfService.fetch(xminfid).getGyid())){
             return true;
         }else {
             return false;

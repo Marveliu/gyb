@@ -2,6 +2,7 @@ package cn.wizzer.app.web.modules.controllers.platform.xm;
 
 import cn.wizzer.app.web.commons.services.xm.XmService;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
+import cn.wizzer.app.web.commons.util.NumberUtil;
 import cn.wizzer.app.web.commons.util.UserInfUtil;
 import cn.wizzer.app.xm.modules.models.*;
 import cn.wizzer.app.xm.modules.services.*;
@@ -30,24 +31,21 @@ public class XmPersonController {
     private static final Log log = Logs.get();
     @Inject
     private XmApplyService xmApplyService;
-
     @Inject
     private XmFeedbackService xmFeedbackService;
-
     @Inject
     private XmInfService xmInfService;
-
     @Inject
     private XmTaskService xmTaskService;
-
     @Inject
     private XmService xmService;
-
     @Inject
     private XmBillService xmBillService;
-
     @Inject
-    private  V_XmInfService v_xmInfService;
+    private NumberUtil numberUtil;
+
+    // @Inject
+    // private  V_XmInfService v_xmInfService;
 
 
     /**
@@ -162,11 +160,15 @@ public class XmPersonController {
     @At("/feedbackdetail/?")
     @Ok("beetl:/platform/xm/feedback/detail.html")
     @RequiresPermissions("platform.xm.person")
-    public void detail(int id, HttpServletRequest req) {
-        if (id != 0) {
-            req.setAttribute("obj", xmFeedbackService.fetch(Cnd.where("id","=",id)));
-        }else{
-            req.setAttribute("obj", null);
+    public void feedbackdetail(int id, HttpServletRequest req) {
+        xm_feedback xfd = xmFeedbackService.fetch(id);
+        String gyid = StringUtil.getGyid();
+        if(xmService.checkGyForXm(xfd.getXminfid(),gyid)){
+            if (id != 0) {
+                req.setAttribute("obj", xmFeedbackService.fetch(Cnd.where("id","=",id)));
+            }else{
+                req.setAttribute("obj", null);
+            }
         }
     }
 
@@ -184,7 +186,6 @@ public class XmPersonController {
         String gyid = StringUtil.getGyid();
         Cnd cnd = Cnd.NEW();
         cnd.and("xminfid","=",id).and("gyid","=",gyid);
-
         // 验证当前用户是否为该项目雇佣人
         // TODO: 2018/1/13 0013 统一验证权限，并且设置权限访问错误界面
         if(xmService.checkGyForXm(id,gyid)){
@@ -199,7 +200,6 @@ public class XmPersonController {
             req.setAttribute("xmid",id);
             req.setAttribute("taskname",  xmInfService.fetch(id).getTaskname());
         }
-
     }
 
     /**
@@ -214,17 +214,23 @@ public class XmPersonController {
     @SLog(tag = "xm_feedback", msg = "")
     @AdaptBy(type = WhaleAdaptor.class)
     public Object feedbackaddDo(@Param("..")xm_feedback xmFeedback, HttpServletRequest req) {
-        try {
-            xmFeedback.setGyid(StringUtil.getGyid());
-            xmFeedback.setOpBy(StringUtil.getGyid());
-            xmFeedback.setOpAt((int) (System.currentTimeMillis() / 1000));
-            xmFeedback.setReply(" ");
-            xmFeedback.setAt((int) (System.currentTimeMillis() / 1000));
-            xmFeedbackService.insert(xmFeedback);
-            return Result.success("system.success");
-        } catch (Exception e) {
-            return Result.error("system.error");
+        String gyid = StringUtil.getGyid();
+        if(xmService.checkGyForXm(xmFeedback.getXminfid(),gyid)) {
+            try {
+                xmFeedback.setCode(numberUtil.XfdIdGenerator(xmFeedbackService.getXfdCount(xmFeedback.getXminfid()), xmFeedback.getXminfid()));
+                xmFeedback.setGyid(StringUtil.getGyid());
+                xmFeedback.setOpBy(StringUtil.getGyid());
+                xmFeedback.setOpAt((int) (System.currentTimeMillis() / 1000));
+                xmFeedback.setReply(" ");
+                xmFeedback.setAt((int) (System.currentTimeMillis() / 1000));
+                xmFeedbackService.insert(xmFeedback);
+                return Result.success("system.success");
+            } catch (Exception e) {
+                log.debug(e);
+                return Result.error("system.error");
+            }
         }
+        return Result.error("system.error");
     }
     /**
     * @function: 添加反馈检查
@@ -303,8 +309,12 @@ public class XmPersonController {
     @Ok("beetl:/platform/xm/person/xmfeedbackedit.html")
     @RequiresPermissions("platform.xm.person")
     public void edit(int id,HttpServletRequest req) {
-        req.setAttribute("obj", xmFeedbackService.fetch(id)
-        );
+        xm_feedback xfd = xmFeedbackService.fetch(id);
+        String gyid = StringUtil.getGyid();
+        if(xmService.checkGyForXm(xfd.getXminfid(),gyid)){
+            req.setAttribute("obj",xfd);
+        }
+        return;
     }
 
     /**
@@ -344,7 +354,7 @@ public class XmPersonController {
         cnd.and("status","=",2);
         cnd.and("gyid","=",gyid);
 
-        return v_xmInfService.data(length, start, draw, order, columns, cnd, null);
+        return xmInfService.data(length, start, draw, order, columns, cnd, null);
     }
 
     @At("/xmcompleteddetail/?")
@@ -352,7 +362,7 @@ public class XmPersonController {
     @RequiresPermissions("platform.xm.person")
     public void xmcompleteddetail(String id, HttpServletRequest req) {
         if (!Strings.isBlank(id)) {
-            req.setAttribute("obj", v_xmInfService.fetch(Cnd.where("id","=",id)));
+            req.setAttribute("obj", xmInfService.fetch(Cnd.where("id","=",id)));
         }else{
             req.setAttribute("obj", null);
         }
@@ -363,7 +373,7 @@ public class XmPersonController {
     @RequiresPermissions("platform.xm.final")
     public void xminfdetail(String id, HttpServletRequest req) {
         if (!Strings.isBlank(id)) {
-            req.setAttribute("obj", v_xmInfService.fetch(Cnd.where("id","=",id)));
+            req.setAttribute("obj", xmInfService.fetch(Cnd.where("id","=",id)));
         }else{
             req.setAttribute("obj", null);
         }

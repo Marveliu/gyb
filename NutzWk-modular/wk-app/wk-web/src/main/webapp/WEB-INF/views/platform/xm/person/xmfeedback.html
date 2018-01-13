@@ -29,13 +29,13 @@ layout("/layouts/platform.html"){
 <section class="content-wrap bg-white">
     <header class="header navbar bg-white shadow">
         <div class="btn-group tool-button">
-            <button id="add" class="btn btn-primary navbar-btn"  onclick="addfeedback()" ><i class="ti-plus"></i> ${msg['globals.button.add']}</button>
-            <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> ${msg['globals.button.delete.more']}</button>
+            <button id="add" class="btn btn-primary navbar-btn"  onclick="addfeedback()" ><i class="ti-plus"></i> 进行反馈</button>
+            <!--<button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> ${msg['globals.button.delete.more']}</button>-->
         </div>
         <div class="pull-right offscreen-right">
-            <button class="btn btn-primary navbar-btn" onclick="sublime.toggleFilter('.cd-panel')"><i
-                    class="fa fa-sliders"></i> 筛选
-            </button>
+            <!--<button class="btn btn-primary navbar-btn" onclick="sublime.toggleFilter('.cd-panel')"><i-->
+                    <!--class="fa fa-sliders"></i> 筛选-->
+            <!--</button>-->
             <button id="currentxmname" class="btn btn-primary navbar-btn" ></i> 全部跟踪项目</button>
         </div>
 
@@ -227,7 +227,12 @@ layout("/layouts/platform.html"){
                 },
                 {
                     "render": function (data, type, row) {
-                        return '<a href="'+data+'" class="btn btn-default btn-sm mr5">附件下载</a>'
+                        if(data){
+                            return '<a href="'+data+'" class="btn btn-default btn-sm mr5">附件下载</a>'
+                        }else {
+                            return "暂无附件";
+                        }
+
                     },
                     "targets": 3
                 },

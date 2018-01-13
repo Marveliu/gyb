@@ -132,6 +132,22 @@ public class NumberUtil {
         return str.toString();
     }
 
+
+    /**
+     * 反馈编号生成
+     * @param num
+     * @param xminfid
+     * @return
+     */
+    public String XfdIdGenerator(int num,String xminfid){
+        StringBuilder str = new StringBuilder();
+        str.append("xfd_");
+        String[] arr = xminfid.split("_");
+        str.append(arr[1]);
+        str.append("_"+num);
+        return str.toString();
+    }
+
     /**
      * 账单生成编号
      * @param infid
