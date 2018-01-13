@@ -114,6 +114,14 @@ public class xm_inf extends BaseModel implements Serializable {
     @Readonly
     private String fileurl;
 
+    @Column
+    @Readonly
+    private String xminfstatus;
+
+    @Column
+    @Readonly
+    private String xmbillid;
+
 
     //参照
     @One(field = "xmtaskid")
@@ -294,6 +302,22 @@ public class xm_inf extends BaseModel implements Serializable {
 
     public void setXmtask(xm_task xmtask) {
         this.xmtask = xmtask;
+    }
+
+    public String getXminfstatus() {
+        return xminfstatus;
+    }
+
+    public void setXminfstatus(String xminfstatus) {
+        this.xminfstatus = xminfstatus;
+    }
+
+    public String getXmbillid() {
+        return xmbillid;
+    }
+
+    public void setXmbillid(String xmbillid) {
+        this.xmbillid = xmbillid;
     }
 
     /**

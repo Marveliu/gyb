@@ -4,6 +4,7 @@ import cn.wizzer.app.web.commons.slog.annotation.SLog;
 import cn.wizzer.app.web.commons.util.UserInfUtil;
 import cn.wizzer.app.xm.modules.models.v_xminf;
 import cn.wizzer.app.xm.modules.models.xm_feedback;
+import cn.wizzer.app.xm.modules.models.xm_inf;
 import cn.wizzer.app.xm.modules.models.xm_task;
 import cn.wizzer.app.xm.modules.services.*;
 import cn.wizzer.framework.base.Result;
@@ -13,7 +14,8 @@ import cn.wizzer.framework.util.StringUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
-import org.nutz.dao.Cnd;
+import org.nutz.dao.*;
+import org.nutz.dao.Chain;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
@@ -45,6 +47,9 @@ public class XmFeedbackController{
 
     @Inject
     private XmInfService xmInfService;
+
+    @Inject
+    private Dao dao;
 
     @Inject
     private V_XmInfService v_xmInfService;
@@ -125,6 +130,7 @@ public class XmFeedbackController{
             if(iffinal){
                 //反馈完结
                 xfd.setStatus(4);
+                dao.update(xm_inf.class, Chain.make("status",1),Cnd.where("id","=",xfd.getXminfid()));
             }
             int nextcommitat = (int) (sdf.parse(nextcommit).getTime() / 1000);
             xfd.setReply(xmFeedback.getReply());

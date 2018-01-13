@@ -4,7 +4,7 @@
             <section class="panel panel-primary no-b">
                 <header class="panel-heading clearfix brtl brtr">
                     <div class="overflow-hidden">
-                        <a href="javascript:;" class="h4 show no-m pt5">xm_inf</a>
+                        <a href="javascript:;" class="h4 show no-m pt5">项目详情</a>
                         <small>${obj.id}</small>
                     </div>
                 </header>
@@ -23,10 +23,6 @@
                         </tr>
 
                         <tr>
-                            <td>项目内容</td><td>${obj.content}</td>
-                        </tr>
-
-                        <tr>
                             <td>${msg['xm.feedback.column.gyid']}</td><td>${obj.gyid}</td>
                         </tr>
 
@@ -39,15 +35,15 @@
                         </tr>
 
                         <tr>
-                            <td>项目简介</td><td>${obj.info}</td>
+                            <td>项目简介</td><td>${obj.taskinfo}</td>
                         </tr>
 
                         <tr>
-                            <td>项目内容</td><td>${obj.content}</td>
+                            <td>项目内容</td><td>${obj.taskcontent}</td>
                         </tr>
 
                         <tr>
-                            <td>项目状态</td><td>${@view.bindFeedbackStatus(obj.status)}</td>
+                            <td>项目状态</td><td>${obj.xminfstatus}</td>
                         </tr>
                                                     </tbody>
                     </table>

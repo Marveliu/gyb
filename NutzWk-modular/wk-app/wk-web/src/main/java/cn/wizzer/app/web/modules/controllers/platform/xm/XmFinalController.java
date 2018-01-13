@@ -78,7 +78,7 @@ public class XmFinalController {
     @RequiresPermissions("platform.xm.final")
     public void detail(String id, HttpServletRequest req) {
         if (!Strings.isBlank(id)) {
-            req.setAttribute("obj", v_xmInfService.fetch(Cnd.where("id","=",id)));
+            req.setAttribute("obj", xmInfService.fetch(Cnd.where("id","=",id)));
         }else{
             req.setAttribute("obj", null);
         }

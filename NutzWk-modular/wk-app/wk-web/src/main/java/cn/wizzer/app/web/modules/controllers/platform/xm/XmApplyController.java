@@ -66,7 +66,6 @@ public class XmApplyController{
             @Param("gyid") String gyid,
             HttpServletRequest req) {
         try {
-
             if(xmApplyService.fetch(id).getStatus() != 0){
                 return Result.error("任务书已经认领");
             }

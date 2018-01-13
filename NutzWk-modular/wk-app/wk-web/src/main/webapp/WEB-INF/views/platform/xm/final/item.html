@@ -1,175 +1,152 @@
 <%
-layout("/layouts/platform-xm.html"){
+layout("/layouts/platform.html"){
 %>
 
-<div class="content-wrap bg-white">
-    <div class="row">
-        <div class="col-md-8">
-            <section class="panel no-m">
-                <div class="panel-body">
-                    <div class="mb25 clearfix">
-                        <div class="">
-                            <!--<i class="ti-microphone fa-5x"></i>-->
+<header class="header navbar bg-white shadow">
+    <div class="btn-group tool-button">
+        <a class="btn btn-primary navbar-btn" href="${base}/platform/xm/apply" id="goBack" data-pjax><i
+                class="ti-angle-left"></i>${msg['globals.button.back']}</a>
+    </div>
+</header>
 
-                            <h3 class="text-uppercase">${obj.taskname!}</h3>
-                            项目编号:${obj.id!}<br>
-                            ${@date.getDateTime()}
+
+<div class="row content-wrap">
+
+    <div class="col-md-6">
+        <div class="wrapper" style="min-height:500px;">
+            <section class="panel panel-form">
+                <div class="content-wrap">
+                    <section class="panel no-m">
+                        <div class="panel-body">
+                            <div class="mb25 clearfix">
+                                <div class="">
+                                    <!--<i class="ti-microphone fa-5x"></i>-->
+
+                                    <h3 class="text-uppercase">${obj.taskname!}</h3>
+                                    项目编号:${obj.id!}<br>
+                                    ${@date.getDateTime()}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <address>
+                                        <strong>付款人信息:</strong><br>
+                                        <br>
+                                        武汉哎嘀信息科技有限公司<br>
+                                        付款单号:${obj.billid!}<br>
+                                    </address>
+                                </div>
+                                <div class="col-xs-6 text-right">
+                                    <address>
+                                        <strong>收款人信息:</strong><br>
+                                        <br>
+                                        ${obj.gyname!}<br>
+                                        雇员编号: ${obj.gyid!}<br>
+                                    </address>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <address>
+                                        <strong>说明:</strong><br>
+                                        <br>
+                                        <p>&nbsp ${obj.billnote!}</p><br>
+                                        <p>&nbsp ${obj.evanote!}</p><br>
+                                    </address>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <p>
+                                        <button type="button" class="btn btn-danger btn-sm no-print"
+                                                onclick="window.print();">
+                                            <i class="ti-printer mr5"></i>Print
+                                        </button>
+                                    </p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <p class="pull-right">
+                                        <button type="button" class="btn btn-primary btn-sm no-print">Pay With PayPal
+                                        </button>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
+                    </section>
+                </div>
+
+            </section>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="wrapper" style="min-height:500px;">
+            <section class="panel panel-form">
+                <div class="content-wrap">
+                    <div class="p15 clearfix">
+                        <section class="panel">
+                                <h3>结算信息</h3>
+                            <div class="panel-body">
+                                <form role="form" id="fianlForm" method="post" class="form-horizontal parsley-form"
+                                      action="${base}/platform/xm/final/commit">
+                                    <input name="id" type="hidden" value="${obj.id!}">
+
+                                    <div class="form-group">
+                                        <label for="grade">评分</label>
+                                        <input type="number" id="grade" class="form-control" name="grade"
+                                               data-parsley-type="number" data-parsley-required="true"
+                                               value="" placeholder="请输入评分！">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="evanote">评价意见</label>
+                                        <textarea id="evanote" name="evanote" style="width:100%;" rows="5"
+                                                  data-parsley-required="true" placeholder="请输入200以内的评价！"></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="paysum">结算金额</label>
+                                        <input type="number" id="paysum" class="form-control" name="paysum"
+                                               data-parsley-type="number" data-parsley-required="true"
+                                               value="" placeholder="请输入最终结算金额！">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="billnote">付款补充说明</label>
+                                        <textarea id="billnote" name="billnote" style="width:100%;" rows="5"
+                                                  data-parsley-required="true" placeholder="请输入200以内的评价！"></textarea>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <p>
+                                                <button type="button" class="btn btn-success btn-sm no-print" onclick="">
+                                                    <i class="ti-printer mr5"></i>预览账单
+                                                </button>
+                                            </p>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <p class="pull-right">
+                                                <button type="button" id="save" class="btn btn-primary">提交结算单</button>
+                                            </p>
+                                        </div>
+                                    </div>
+
+
+                                </form>
+                            </div>
+                        </section>
                     </div>
 
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <address>
-                                <strong>付款人信息:</strong><br>
-                                <br>
-                                武汉哎嘀信息科技有限公司<br>
-                                付款单号:${obj.billid!}<br>
-                            </address>
-                        </div>
-                        <div class="col-xs-6 text-right">
-                            <address>
-                                <strong>收款人信息:</strong><br>
-                                <br>
-                                ${obj.gyname!}<br>
-                                雇员编号: ${obj.gyid!}<br>
-                            </address>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <address>
-                                <strong>说明:</strong><br>
-                                <br>
-                                <p>&nbsp ${obj.billnote!}</p><br>
-                                <p>&nbsp ${obj.evanote!}</p><br>
-                            </address>
-                        </div>
-                    </div>
-
-
-                    <div class="table-responsive">
-                        <strong>其他付款信息:</strong>
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>付款编号</th>
-                                <th>付款说明</th>
-                                <th>付款时间</th>
-                                <th>付款方式</th>
-                                <th>收款人</th>
-                                <th>付款总额</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>
-                                    Web Updates
-                                </td>
-                                <td>
-                                    Monthly web updates for http://www.themeforest.net
-                                </td>
-                                <td>
-                                    $250.00
-                                </td>
-                                <td>
-                                    1
-                                </td>
-                                <td>
-                                    $250.00
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="5" class="text-right">
-                                    <b>其他付款总额</b>
-                                </td>
-                                <td class="text-left">¥${obj.prepaysum!}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="5" class="text-right no-b">
-                                    <b>项目总酬金</b>
-                                </td>
-                                <td>¥${obj.award!}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="5" class="text-right no-b">
-                                    <b>最终支付金额</b>
-                                </td>
-                                <td>¥${obj.paysum!}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <p>
-                                <button type="button" class="btn btn-danger btn-sm no-print" onclick="window.print();">
-                                    <i class="ti-printer mr5"></i>Print</button>
-                            </p>
-                        </div>
-                        <div class="col-sm-6">
-                            <p class="pull-right">
-                                <button type="button" class="btn btn-primary btn-sm no-print">Pay With PayPal</button>
-                                <button type="button" class="btn btn-default btn-sm no-print">Pay With Credit Card</button>
-                            </p>
-                        </div>
-                    </div>
                 </div>
             </section>
         </div>
-        <div class="col-md-4 mb25 bg-white">
-            <div class="p15 clearfix">
-                <div class="h3 text-uppercase mb25">结算信息</div>
-                <form role="form" id="fianlForm"  method="post" class="form-horizontal parsley-form" action="${base}/platform/xm/final/commit">
-                    <input name="id" type="hidden" value="${obj.id!}">
-
-                    <div class="form-group">
-                        <label for="grade">评分</label>
-                        <input type="number" id="grade" class="form-control" name="grade" data-parsley-type="number" data-parsley-required="true"
-                               value="" placeholder="请输入评分！">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="evanote">评价意见</label>
-                        <textarea id="evanote" name="evanote" style="width:100%;" rows="5" data-parsley-required="true" placeholder="请输入200以内的评价！"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="paysum">结算金额</label>
-                        <input type="number" id="paysum" class="form-control" name="paysum" data-parsley-type="number" data-parsley-required="true"
-                               value="" placeholder="请输入最终结算金额！">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="billnote">付款补充说明</label>
-                        <textarea id="billnote" name="billnote" style="width:100%;" rows="5" data-parsley-required="true" placeholder="请输入200以内的评价！"></textarea>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <p>
-                                <button type="button"   class="btn btn-success btn-sm no-print" onclick="">
-                                    <i  class="ti-printer mr5"></i>预览账单</button>
-                            </p>
-                        </div>
-                        <div class="col-sm-6">
-                            <p class="pull-right">
-                                <button  type="button" id="save"  class="btn btn-primary">保存反馈</button>
-                            </p>
-                        </div>
-                    </div>
-
-
-                </form>
-
-
-            </div>
-
-        </div>
     </div>
-</div>
 
+</div>
 <div id="dialogCommit" class="modal fade bs-modal-sm" tabindex="-2" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -185,22 +162,24 @@ layout("/layouts/platform-xm.html"){
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">${msg['globals.button.cancel']}</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">${msg['globals.button.cancel']}
+                </button>
                 <button id="doCommit" type="button" class="btn btn-primary" data-loading-text="正在提交">确认提交</button>
             </div>
         </div>
     </div>
 </div>
 
+
 <script language="JavaScript">
     $(function () {
         myForm.init();
 
-        $("#save").on("click",function(){
+        $("#save").on("click", function () {
             $("#dialogCommit").modal("show");
         });
 
-        $("#doCommit").on("click",function(){
+        $("#doCommit").on("click", function () {
             var btn = $(this);
             btn.button("loading");
 

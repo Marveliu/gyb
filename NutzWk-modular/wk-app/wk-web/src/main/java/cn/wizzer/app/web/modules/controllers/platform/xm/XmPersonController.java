@@ -243,7 +243,7 @@ public class XmPersonController {
     @RequiresPermissions("platform.xm.person")
     public Object addcheck(String id,HttpServletRequest req) {
         //检查最新的反馈提交状态，如果未完结则不允许提交反馈
-        String gyid = UserInfUtil.getCurrentGyid();
+        String gyid = StringUtil.getGyid();
 
         //初次提交
         int count = xmFeedbackService.count(Cnd.where("xminfid","=",id));
@@ -251,10 +251,11 @@ public class XmPersonController {
             return Result.success("action permmit!");
         }
         //检查上一次提交状态
-
         List<xm_feedback> xfd = xmFeedbackService.query(Cnd.where("xminfid","=",id).desc("at"));
         if(xfd.get(0).getStatus()<3){
             return Result.error("上次反馈未完结");
+        }else if(xfd.get(0).getStatus() == 4){
+            return Result.error("项目已经完结，无法添加反馈！");
         }else{
             return  Result.success("允许添加");
         }
