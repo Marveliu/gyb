@@ -14,7 +14,9 @@ import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
 import cn.wizzer.framework.util.ShiroUtil;
 import cn.wizzer.framework.util.StringUtil;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -299,7 +301,13 @@ public class XmTaskController {
     public void detail(String id, HttpServletRequest req) {
         if (!Strings.isBlank(id)) {
             Cnd cnd = Cnd.NEW();
-            xm_task xm_task = xmTaskService.fetch(id);
+            cnd.and("id","=",id);
+            String sysuserid = StringUtil.getSysuserid();
+            Subject subject = SecurityUtils.getSubject();
+            if(!subject.isPermitted("platform.xm.task.manager")){
+                cnd.and("author","=",sysuserid);
+            }
+            xm_task xm_task = xmTaskService.fetch(cnd);
             req.setAttribute("obj", xm_task);
         }else{
             req.setAttribute("obj", null);

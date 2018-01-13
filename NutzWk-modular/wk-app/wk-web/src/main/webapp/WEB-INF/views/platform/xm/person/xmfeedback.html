@@ -4,7 +4,7 @@ layout("/layouts/platform.html"){
 
 <aside class="sidebar-250 canvas-right bg-default ">
     <header class="header navbar clearfix bb bg-default pl0 pr0">
-        <p class="navbar-text"><i class="fa fa-sitemap mr5"></i> 平台项目表</p>
+        <p class="navbar-text"><i class="fa fa-sitemap mr5"></i> 跟踪项目列表</p>
     </header>
     <div class="content-wrap no-p">
         <div class="wrapper2">
@@ -13,8 +13,8 @@ layout("/layouts/platform.html"){
                         <div class="no-padding">
                             <ul class="nav nav-stacked" id="xminflist">
                                 <li>
-                                    <a onclick="xmfeedback()">
-                                    <i class="ti-control-record text-success pull-right"></i> 全部项目
+                                    <a onclick="xmfeedback(null,'全部跟踪项目')">
+                                    <i class="ti-control-record text-success pull-right"></i> 全部跟踪项目
                                 </a>
                                 </li>
                             </ul>
@@ -36,6 +36,7 @@ layout("/layouts/platform.html"){
             <button class="btn btn-primary navbar-btn" onclick="sublime.toggleFilter('.cd-panel')"><i
                     class="fa fa-sliders"></i> 筛选
             </button>
+            <button id="currentxmname" class="btn btn-primary navbar-btn" ></i> 全部跟踪项目</button>
         </div>
 
     </header>
@@ -46,7 +47,7 @@ layout("/layouts/platform.html"){
             <table class="table table-bordered table-striped mg-t datatable">
                 <thead>
                 <tr>
-                    <th>${msg['xm.feedback.column.parentid']}</th>
+                    <th>反馈编号</th>
                     <th>项目名称</th>
                     <th>${msg['xm.feedback.column.at']}</th>
                     <th>${msg['xm.feedback.column.fileurl']}</th>
@@ -177,7 +178,7 @@ layout("/layouts/platform.html"){
             },
             "order": [[0, "desc"]],
             "columns": [
-                {"data": "parentid", "bSortable": true},
+                {"data": "code", "bSortable": true},
                 {"data": "taskname", "bSortable": true},
                 {"data": "at", "bSortable": true},
                 {"data": "fileurl", "bSortable": true},
@@ -185,7 +186,7 @@ layout("/layouts/platform.html"){
                 {"data": "gyid", "bSortable": true},
                 {"data": "nextcommit", "bSortable": true},
                 {"data": "reply", "bSortable": true},
-                {"data": "status", "bSortable": true},
+                {"data": "xmfeedbackstatus", "bSortable": true},
             ],
             "columnDefs": [
                 {
@@ -213,19 +214,16 @@ layout("/layouts/platform.html"){
                         }
                         return '';
                     },
-                    "targets": 6
+                    "targets": [2,6]
                 },
                 {
                     "render": function (data, type, row) {
-                        switch(data){
-                            case 0: return '雇员编辑中';
-                            case 1: return '雇员已提交';
-                            case 2: return '正在审核';
-                            case 3: return '审核完成';
-                            case 4: return '最终反馈';
+                        if (data) {
+                            return moment(parseInt(data*1000)).format("YYYY-MM-DD HH:mm:ss");
                         }
+                        return '';
                     },
-                    "targets": -1
+                    "targets": 6
                 },
                 {
                     "render": function (data, type, row) {
@@ -257,7 +255,7 @@ layout("/layouts/platform.html"){
                     var xmname = key;
                     var xmid = data[key];
                     var resultitem = '<li>' +
-                            '<a onclick="xmfeedback(' + "'"+ xmid +"'"+')">' +
+                            '<a onclick="xmfeedback(' + "'" + xmid + "'"+",'"+xmname+"'" + ')">' +
                             '<i class="ti-control-record text-success pull-right"></i>' + xmname +
                             '</a>' +
                             '</li>';
@@ -324,8 +322,12 @@ layout("/layouts/platform.html"){
     });
 
 
-    function xmfeedback(id) {
+    function xmfeedback(id,xmname) {
+        if(name == "" || name == null){
+            name ="全部跟踪项目";
+        }
         $('#xmid').val(id);
+        $('#currentxmname').text(xmname);
         datatable.ajax.reload();
     }
 

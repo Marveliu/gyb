@@ -1,5 +1,6 @@
 package cn.wizzer.app.web.modules.controllers.platform.xm;
 
+import cn.wizzer.app.web.commons.services.xm.XmService;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
 import cn.wizzer.app.web.commons.util.UserInfUtil;
 import cn.wizzer.app.xm.modules.models.*;
@@ -34,13 +35,13 @@ public class XmPersonController {
     private XmFeedbackService xmFeedbackService;
 
     @Inject
-    private V_XmFeedbackService v_xmFeedbackService;
-
-    @Inject
     private XmInfService xmInfService;
 
     @Inject
     private XmTaskService xmTaskService;
+
+    @Inject
+    private XmService xmService;
 
     @Inject
     private XmBillService xmBillService;
@@ -154,7 +155,7 @@ public class XmPersonController {
         }
         cnd.desc("at");
 
-        return v_xmFeedbackService.data(length, start, draw, order, columns, cnd, null);
+        return xmFeedbackService.data(length, start, draw, order, columns, cnd, null);
     }
 
 
@@ -163,7 +164,7 @@ public class XmPersonController {
     @RequiresPermissions("platform.xm.person")
     public void detail(int id, HttpServletRequest req) {
         if (id != 0) {
-            req.setAttribute("obj", v_xmFeedbackService.fetch(Cnd.where("id","=",id)));
+            req.setAttribute("obj", xmFeedbackService.fetch(Cnd.where("id","=",id)));
         }else{
             req.setAttribute("obj", null);
         }
@@ -180,16 +181,25 @@ public class XmPersonController {
     @Ok("beetl:/platform/xm/person/xmfeedbackadd.html")
     @RequiresPermissions("platform.xm.person")
     public void feedbackadd(String id,HttpServletRequest req) {
+        String gyid = StringUtil.getGyid();
+        Cnd cnd = Cnd.NEW();
+        cnd.and("xminfid","=",id).and("gyid","=",gyid);
 
-        String gyid = UserInfUtil.getCurrentGyid();
-        int count = xmFeedbackService.count(Cnd.where("xminfid","=",id));
-        if(count != 0){
+        // 验证当前用户是否为该项目雇佣人
+        // TODO: 2018/1/13 0013 统一验证权限，并且设置权限访问错误界面
+        if(xmService.checkGyForXm(id,gyid)){
+            // 当前项目的反馈次数
+            int count = xmFeedbackService.count(cnd);
             //设置父id
-            List<xm_feedback> xfd = xmFeedbackService.query(Cnd.where("gyid","=",gyid).desc("at"));
-            req.setAttribute("parentid",xfd.get(0).getId());
+            if(count != 0){
+                List<xm_feedback> xfd = xmFeedbackService.query(cnd.desc("at"));
+                req.setAttribute("xmfeedbackparentid",xfd.get(0).getId());
+            }
+            req.setAttribute("count",count);
+            req.setAttribute("xmid",id);
+            req.setAttribute("taskname",  xmInfService.fetch(id).getTaskname());
         }
-        req.setAttribute("count",count);
-        req.setAttribute("xmid",id);
+
     }
 
     /**

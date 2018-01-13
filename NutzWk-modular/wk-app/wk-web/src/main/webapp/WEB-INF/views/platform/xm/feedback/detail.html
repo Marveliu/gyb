@@ -5,7 +5,7 @@
                 <header class="panel-heading clearfix brtl brtr">
                     <div class="overflow-hidden">
                         <a href="javascript:;" class="h4 show no-m pt5">项目反馈信息</a>
-                        <small>${obj.taskname}--${obj.id}</small>
+                        <small>${obj.taskname}--${obj.code}</small>
                     </div>
                 </header>
                 <div class="list-group">
@@ -29,6 +29,15 @@
                                                         <tr>
                                 <td>${msg['xm.feedback.column.gyid']}</td><td>${obj.gyid}</td>
                             </tr>
+                            <tr>
+                                <td>雇员姓名</td><td>${obj.realname}</td>
+                            </tr>
+                                                        <tr>
+                                                            <td>审核人编号</td><td>${obj.author}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>审核人名称</td><td>${obj.authorrealname}</td>
+                                                        </tr>
                                                         <tr>
                                 <td>${msg['xm.feedback.column.nextcommit']}</td><td>${@date.getDate(obj.nextcommit)}</td>
                             </tr>
@@ -36,8 +45,8 @@
                                 <td>${msg['xm.feedback.column.reply']}</td><td>${obj.reply}</td>
                             </tr>
                                                         <tr>
-                                <td>${msg['xm.feedback.column.status']}</td><td>${@view.bindFeedbackStatus(obj.status)}</td>
-                            </tr>
+                                                            <td>当前状态</td><td>${obj.xmfeedbackstatus}</td>
+                                                        </tr>
                                                     </tbody>
                     </table>
                 </div>

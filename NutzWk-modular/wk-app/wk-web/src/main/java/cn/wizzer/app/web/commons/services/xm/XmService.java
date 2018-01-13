@@ -93,4 +93,19 @@ public class XmService {
         return null;
     }
 
+    /**
+     * 检查雇员是否为项目的拥有者
+     * @param xminfid
+     * @param gyid
+     * @return
+     */
+    public boolean checkGyForXm(String xminfid,String gyid){
+        if(gyid.equals(xmInfService.fetch(xminfid))){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+
 }

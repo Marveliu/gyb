@@ -16,6 +16,7 @@ import java.io.Serializable;
  * Created by 89792 on 2017/11/28 0028.
  */
 @Table("xm_inf")
+@View("v_xminf")
 public class xm_inf extends BaseModel implements Serializable {
 
     @Column
@@ -49,6 +50,70 @@ public class xm_inf extends BaseModel implements Serializable {
     @Comment("说明")
     @ColDefine(type = ColType.VARCHAR,width = 200)
     private String note;
+
+    @Column
+    @Readonly
+    private String taskname;
+
+    // 视图
+
+    @Column
+    @Readonly
+    private String author;
+
+    @Column
+    @Readonly
+    private String authorrealname;
+
+    @Column
+    @Readonly
+    private String category;
+
+    @Column
+    @Readonly
+    private String award;
+
+
+    @Column
+    @Readonly
+    private int designnum;
+
+    @Column
+    @Readonly
+    private int endtime;
+
+    @Column
+    @Readonly
+    private int firstcommit;
+
+    @Column
+    @Readonly
+    private int applyendtime;
+
+    @Column
+    @Readonly
+    private String taskinfo;
+
+    @Column
+    @Readonly
+    private String taskcontent;
+
+    @Column
+    @Readonly
+    private int publishAt;
+
+    @Column
+    @Readonly
+    private int readnum;
+
+    @Column
+    @Readonly
+    private Integer location;
+
+    @Column
+    @Readonly
+    private String fileurl;
+
 
     //参照
     @One(field = "xmtaskid")
@@ -101,6 +166,134 @@ public class xm_inf extends BaseModel implements Serializable {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getTaskname() {
+        return taskname;
+    }
+
+    public void setTaskname(String taskname) {
+        this.taskname = taskname;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getAuthorrealname() {
+        return authorrealname;
+    }
+
+    public void setAuthorrealname(String authorrealname) {
+        this.authorrealname = authorrealname;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getAward() {
+        return award;
+    }
+
+    public void setAward(String award) {
+        this.award = award;
+    }
+
+    public int getDesignnum() {
+        return designnum;
+    }
+
+    public void setDesignnum(int designnum) {
+        this.designnum = designnum;
+    }
+
+    public int getEndtime() {
+        return endtime;
+    }
+
+    public void setEndtime(int endtime) {
+        this.endtime = endtime;
+    }
+
+    public int getFirstcommit() {
+        return firstcommit;
+    }
+
+    public void setFirstcommit(int firstcommit) {
+        this.firstcommit = firstcommit;
+    }
+
+    public int getApplyendtime() {
+        return applyendtime;
+    }
+
+    public void setApplyendtime(int applyendtime) {
+        this.applyendtime = applyendtime;
+    }
+
+    public String getTaskinfo() {
+        return taskinfo;
+    }
+
+    public void setTaskinfo(String taskinfo) {
+        this.taskinfo = taskinfo;
+    }
+
+    public String getTaskcontent() {
+        return taskcontent;
+    }
+
+    public void setTaskcontent(String taskcontent) {
+        this.taskcontent = taskcontent;
+    }
+
+    public int getPublishAt() {
+        return publishAt;
+    }
+
+    public void setPublishAt(int publishAt) {
+        this.publishAt = publishAt;
+    }
+
+    public int getReadnum() {
+        return readnum;
+    }
+
+    public void setReadnum(int readnum) {
+        this.readnum = readnum;
+    }
+
+    public Integer getLocation() {
+        return location;
+    }
+
+    public void setLocation(Integer location) {
+        this.location = location;
+    }
+
+    public String getFileurl() {
+        return fileurl;
+    }
+
+    public void setFileurl(String fileurl) {
+        this.fileurl = fileurl;
+    }
+
+    public xm_task getXmtask() {
+        return xmtask;
+    }
+
+    public void setXmtask(xm_task xmtask) {
+        this.xmtask = xmtask;
     }
 
     /**

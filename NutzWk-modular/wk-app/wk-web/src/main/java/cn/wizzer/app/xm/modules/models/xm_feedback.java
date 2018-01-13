@@ -1,7 +1,10 @@
 package cn.wizzer.app.xm.modules.models;
 
 import cn.wizzer.framework.base.model.BaseModel;
+import org.nutz.dao.Cnd;
+import org.nutz.dao.Dao;
 import org.nutz.dao.entity.annotation.*;
+import org.nutz.mvc.Mvcs;
 
 import java.io.Serializable;
 
@@ -10,6 +13,7 @@ import java.io.Serializable;
  */
 
 @Table("xm_feedback")
+@View("v_xmfeedback")
 public class xm_feedback extends BaseModel implements Serializable {
 
     //版本信息
@@ -22,6 +26,11 @@ public class xm_feedback extends BaseModel implements Serializable {
     @Comment("父反馈编号")
     @ColDefine(type = ColType.INT)
     private long parentid;
+
+    @Column
+    @Comment("反馈编号")
+    @ColDefine(type = ColType.VARCHAR,width = 32)
+    private String code;
 
     @Column
     @Comment("项目编号")
@@ -65,6 +74,37 @@ public class xm_feedback extends BaseModel implements Serializable {
     private int status;
 
 
+    // 视图
+
+    @Column
+    @Readonly
+    private String  phone;
+
+    @Column
+    @Readonly
+    private String  realname;
+
+    @Column
+    @Readonly
+    private String  author;
+
+    @Column
+    @Readonly
+    private String  authorrealname;
+
+    @Column
+    @Readonly
+    private String  xmfeedbackstatus;
+
+    @Column
+    @Readonly
+    private String  taskname;
+
+    // 参照
+    @One(field = "xminfid")
+    public xm_inf xmInf;
+
+
     public long getId() {
         return id;
     }
@@ -79,6 +119,14 @@ public class xm_feedback extends BaseModel implements Serializable {
 
     public void setParentid(long parentid) {
         this.parentid = parentid;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getXminfid() {
@@ -143,5 +191,61 @@ public class xm_feedback extends BaseModel implements Serializable {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getRealname() {
+        return realname;
+    }
+
+    public void setRealname(String realname) {
+        this.realname = realname;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getAuthorrealname() {
+        return authorrealname;
+    }
+
+    public void setAuthorrealname(String authorrealname) {
+        this.authorrealname = authorrealname;
+    }
+
+    public String getXmfeedbackstatus() {
+        return xmfeedbackstatus;
+    }
+
+    public void setXmfeedbackstatus(String xmfeedbackstatus) {
+        this.xmfeedbackstatus = xmfeedbackstatus;
+    }
+
+    public String getTaskname() {
+        return taskname;
+    }
+
+    public void setTaskname(String taskname) {
+        this.taskname = taskname;
+    }
+
+    public xm_inf getXmInf() {
+        return xmInf;
+    }
+
+    public void setXmInf(xm_inf xmInf) {
+        this.xmInf = xmInf;
     }
 }

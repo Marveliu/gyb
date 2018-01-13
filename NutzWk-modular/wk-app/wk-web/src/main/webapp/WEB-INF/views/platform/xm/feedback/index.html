@@ -22,7 +22,7 @@ layout("/layouts/platform-xm.html"){
             <table class="table table-bordered table-striped mg-t datatable">
                 <thead>
                     <tr>
-                            <th>${msg['xm.feedback.column.parentid']}</th>
+                            <th>反馈编号</th>
                             <th>项目名称</th>
                             <th>${msg['xm.feedback.column.at']}</th>
                             <th>${msg['xm.feedback.column.fileurl']}</th>
@@ -30,6 +30,7 @@ layout("/layouts/platform-xm.html"){
                             <th>雇员真实姓名</th>
                             <th>${msg['xm.feedback.column.nextcommit']}</th>
                             <th>${msg['xm.feedback.column.reply']}</th>
+                            <th>项目经理名称</th>
                             <th>${msg['xm.feedback.column.status']}</th>
                             <th>${msg['globals.table.column.operation']}</th>
                     </tr>
@@ -129,7 +130,7 @@ layout("/layouts/platform-xm.html"){
             },
             "order": [[0, "desc"]],
             "columns": [
-                    {"data": "parentid", "bSortable": true},
+                    {"data": "code", "bSortable": true},
                     {"data": "taskname", "bSortable": true},
                     {"data": "at", "bSortable": true},
                     {"data": "fileurl", "bSortable": true},
@@ -137,7 +138,8 @@ layout("/layouts/platform-xm.html"){
                     {"data": "realname", "bSortable": true},
                     {"data": "nextcommit", "bSortable": true},
                     {"data": "reply", "bSortable": true},
-                    {"data": "status", "bSortable": true},
+                    {"data": "authorrealname", "bSortable": true},
+                    {"data": "xmfeedbackstatus", "bSortable": true},
             ],
             "columnDefs": [
                 {
@@ -145,18 +147,18 @@ layout("/layouts/platform-xm.html"){
                         if(row.status != 2 && row.status != 1){
                             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
                                     ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-                                    '<li><a href="${base}/platform/xm/feedback/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
+                                    '<li><a href="${base}/platform/xm/feedback/detail/' + row.code + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
                                     '</ul></div>';
                         }
                         return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
                                 ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-                                '<li><a href="${base}/platform/xm/feedback/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
+                                '<li><a href="${base}/platform/xm/feedback/detail/' + row.code + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
                                 '<li><a href="${base}/platform/xm/feedback/edit/' + row.id + '" data-pjax>${msg["globals.button.update"]}</a></li>' +
                                 '<li class="divider"></li>' +
                                 '<li><a href="javascript:;" onclick="commit(\'' + row.id + '\')">提 交</a></li>' +
                                 '</ul></div>';
                     },
-                    "targets": 9
+                    "targets": 10
                 },
                 {
                     "render": function (data, type, row) {
@@ -166,18 +168,6 @@ layout("/layouts/platform-xm.html"){
                         return '';
                     },
                     "targets": [2,6]
-                },
-                {
-                    "render": function (data, type, row) {
-                        switch(data){
-                            case 0: return '雇员编辑中';
-                            case 1: return '雇员已提交';
-                            case 2: return '正在审核';
-                            case 3: return '审核完成';
-                            case 4: return '最终反馈';
-                        }
-                    },
-                    "targets": -1
                 },
                 {
                     "render": function (data, type, row) {

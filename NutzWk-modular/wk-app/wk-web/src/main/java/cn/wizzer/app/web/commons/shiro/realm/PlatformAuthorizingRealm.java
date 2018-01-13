@@ -84,7 +84,6 @@ public class PlatformAuthorizingRealm extends AuthorizingRealm {
         }
         getUserService().fetchLinks(user, null);
         getUserService().fillMenu(user);
-
         SecurityUtils.getSubject().getSession(true).setAttribute("platformErrCount", 0);
         SecurityUtils.getSubject().getSession(true).setAttribute("uid", user.getId());
         SecurityUtils.getSubject().getSession(true).setAttribute("username", user.getUsername());

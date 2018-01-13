@@ -10,7 +10,6 @@ import java.io.Serializable;
  * 查询项目信息的视图
  */
 
-@View("v_xminf")
 public class v_xminf extends BaseModel implements Serializable {
 
     @Column("id")
