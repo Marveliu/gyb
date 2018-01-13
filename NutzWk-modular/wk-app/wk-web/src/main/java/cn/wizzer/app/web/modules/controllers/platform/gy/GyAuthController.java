@@ -137,7 +137,7 @@ public class GyAuthController{
     @At("/enable")
     @Ok("json")
     @RequiresPermissions("platform.gy.auth")
-    @SLog(tag = "认证通过", msg = "雇员编号:${args[1].getAttribute('id')}")
+    @SLog(tag = "认证通过", msg = "雇员编号")
     public Object enable(
             @Param("gyid") String id,
             @Param("note") String note,

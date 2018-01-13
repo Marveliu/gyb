@@ -27,11 +27,28 @@ layout("/layouts/platform.html"){
                         <div class="row mb25">
                             <div class="col-sm-12">
                                 <div class="row">
+                                    <div class="col-xs-12 col-sm-4 text-center">
+                                        <figure>
+                                            <img src="/assets/img/avatar.jpg" alt="" class="avatar avatar-lg img-circle avatar-bordered">
+                                            <div class="small mt10">信息完成度</div>
+                                            <div class="progress progress-xs mt5 mb5">
+                                                <div class="progress-bar done" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                                </div>
+                                            </div>
+                                            <small>234 / 879</small>
+                                        </figure>
+
+                                        <div class="mt10 mb10">
+                                            <a href="${base}/platform/gy/person/infedit" class="btn btn-social btn-xs btn-facebook mr5" data-toggle="modal" data-target="#dialogDeal"><i class="fa fa-info"></i>个人信息 </a>
+                                            <!--<a href="${base}/platform/gy/person/payindex" class="btn btn-social btn-xs btn-facebook mr5" data-toggle="modal" data-target="#dialogPayDeal"><i class="fa fa-facebook"></i>交易方式 </a>-->
+                                            <a href="${base}/platform/gy/person/payindex" class="btn btn-social btn-xs btn-google-plus mr5" ><i class="fa fa-rmb"></i>交易方式 </a>
+                                            <a id="emailchecked" class="btn btn-social btn-xs btn-twitter mr5" v-if="!emailchecked" v-on:click="askActiviEmail('${obj.id}')"><i class="fa fa-mail-forward"></i>发送激活邮件 </a>
+
+                                        </div>
+                                    </div>
                                     <div class="col-xs-12 col-sm-8">
                                         <h4 class="mb5"> <b>${gy.realname!}</b> ${@status.bind( 'sex'+gy.sex!)}，你好！ </h4>
                                         <h6 class="mt15 mb15">雇员编号：${gy.id!}</h6>
-
-
                                     <div class="row">
                                         <div class="col-md-6">
                                             <h6 class="mt15">基本信息</h6>
@@ -72,26 +89,17 @@ layout("/layouts/platform.html"){
                                             </ul>
                                         </div>
                                     </div>
-
-
-                                        <div class="mt10 mb10">
-                                            <a href="${base}/platform/gy/person/infedit" class="btn btn-social btn-xs btn-facebook mr5" data-toggle="modal" data-target="#dialogDeal"><i class="fa fa-facebook"></i>个人信息 </a>
-                                            <!--<a href="${base}/platform/gy/person/payedit" class="btn btn-social btn-xs btn-facebook mr5" data-toggle="modal" data-target="#dialogPayDeal"><i class="fa fa-facebook"></i>交易方式 </a>-->
-                                            <a href="${base}/platform/gy/person/payedit" class="btn btn-social btn-xs btn-facebook mr5" ><i class="fa fa-facebook"></i>交易方式 </a>
-                                            <a id="emailchecked" class="btn btn-social btn-xs btn-twitter mr5" v-if="!emailchecked" v-on:click="askActiviEmail('${obj.id}')"><i class="fa fa-twitter"></i>发送激活邮件 </a>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-4 text-center">
-                                        <figure>
-                                            <img src="/assets/img/avatar.jpg" alt="" class="avatar avatar-lg img-circle avatar-bordered">
-                                            <div class="small mt10">信息完成度</div>
-                                            <div class="progress progress-xs mt5 mb5">
-                                                <div class="progress-bar done" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                                </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h6 class="mt15">平台信息</h6>
+                                                <ul class="user-meta ">
+                                                    <li >
+                                                        <i class="fa fa-graduation-cap mr5"></i>
+                                                        <a href="javascript:;">${role.name}</a>
+                                                    </li>
+                                                </ul>
                                             </div>
-                                            <small>234 / 879</small>
-                                        </figure>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -286,6 +294,7 @@ layout("/layouts/platform.html"){
         methods: {
             gyauthedit: function () {
 
+//                服务端验证
                 if( ${gyauth.status} == 1 || ${gyauth.status} == 2 ){
                     Toast.warning("当前状态无法修改身份信息！")
                     return null;

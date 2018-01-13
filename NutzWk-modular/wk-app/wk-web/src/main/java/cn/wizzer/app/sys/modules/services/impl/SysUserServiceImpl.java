@@ -53,6 +53,21 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
     }
 
     /**
+     * 获得rolelist
+     * @param user
+     * @return
+     */
+    public List<Sys_role> getRoleList(Sys_user user) {
+        dao().fetchLinks(user, "roles");
+        List<Sys_role> roleNameList = new ArrayList<Sys_role>();
+        for (Sys_role role : user.getRoles()) {
+            if (!role.isDisabled())
+                roleNameList.add(role);
+        }
+        return roleNameList;
+    }
+
+    /**
      * 获取用户菜单
      * @param user
      */

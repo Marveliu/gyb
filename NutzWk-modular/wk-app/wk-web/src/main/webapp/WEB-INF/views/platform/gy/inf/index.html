@@ -3,9 +3,11 @@ layout("/layouts/platform.html"){
 %>
     <section class="content-wrap bg-white">
         <header class="header navbar bg-white shadow">
+            <button class="btn btn-danger navbar-btn" onclick="setGy4()">
+                <i class="fa fa-save"></i>设置正式会员
+            </button>
             <!-- <div class="btn-group tool-button">
             <a id="add" class="btn btn-primary navbar-btn" href="${base}/platform/gy/inf/add" data-pjax><i class="ti-plus"></i> ${msg['globals.button.add']}</a>
-            <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> ${msg['globals.button.delete.more']}</button>
         </div> -->
             <div class="pull-right offscreen-right">
                 <button class="btn btn-primary navbar-btn" onclick="sublime.toggleFilter('.cd-panel')">
@@ -131,7 +133,7 @@ layout("/layouts/platform.html"){
                     { "data": "major", "bSortable": true },
                     { "data": "regYear", "bSortable": true },
                     { "data": "stuLevel", "bSortable": true },
-                    { "data": "disabled", "bSortable": true },
+                    { "data": "isOnline", "bSortable": true },
                 ],
                 "columnDefs": [
                     {
@@ -173,6 +175,26 @@ layout("/layouts/platform.html"){
                 datatable.ajax.reload();
             });
         }
+
+        function setGy4() {
+            var chks = datatable.rows('.selected').data();
+            console.log(chks);
+            if (chks.length == 1) {
+                $.post("${base}/platform/gy/inf/setGy4/"+chks[0].userid, { }, function (data) {
+                        if (data.code == 0) {
+                            datatable.ajax.reload(null, false);
+                        } else {
+                            Toast.error(data.msg);
+                        }
+                    }, "json");
+            } else if (chks.length >1) {
+                Toast.warning("只能选择一个雇员");
+            } else {
+                Toast.warning("你必须选择一个雇员");
+            }
+        }
+
+
         function del(id) {
             var dialog = $("#dialogDelete");
             dialog.modal("show");

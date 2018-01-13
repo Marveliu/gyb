@@ -6,6 +6,7 @@ import cn.wizzer.app.gy.modules.services.GyInfService;
 import cn.wizzer.app.gy.modules.services.VGyService;
 import cn.wizzer.app.sys.modules.models.Sys_user;
 import cn.wizzer.app.sys.modules.services.SysUserService;
+import cn.wizzer.app.web.commons.services.gy.GyService;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.page.datatable.DataTableColumn;
@@ -33,6 +34,8 @@ public class GyInfController{
     private GyInfService gyInfService;
     @Inject
     private VGyService vGyService;
+    @Inject
+    private GyService gyService;
     @Inject
     private SysUserService userService;
 
@@ -144,5 +147,25 @@ public class GyInfController{
             req.setAttribute("obj", null);
         }
     }
+
+
+    @At("/setGy4/?")
+    @Ok("json")
+    @RequiresPermissions("platform.gy.inf.delete")
+    @SLog(tag = "通过正式雇员", msg = "${req.getAttribute('id')}")
+    public Object setGy4(String id, HttpServletRequest req) {
+        try {
+                if(gyService.updateGyRole(id,"gy4")){
+                    req.setAttribute("id", id);
+                    return Result.success("system.success");
+                }else {
+                    return Result.error("system.error");
+                }
+        } catch (Exception e) {
+            return Result.error("system.error");
+        }
+    }
+
+
 
 }

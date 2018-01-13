@@ -453,41 +453,6 @@
         });
     });
 
-    function initxmlist() {
-        var xmname = $('#searchXmname').val();
-        $('#xminflist').empty();
-        $.ajax({
-            url: "/platform/xm/inf/xminflist?xmname="+xmname,
-            type: "get",
-            contentType: "application/json;charset=utf-8",
-            dataType: "json",
-            success: function (data) {
-                console.log(data);
-                var resultitem = '<li>' +
-                    '<a onclick="xminfset()">' +
-                    '<i class="ti-control-record text-success pull-right"></i>' + '查看全部' +
-                    '</a>' +
-                    '</li>';
-                $('#xminflist').append(resultitem);
-                //i表示在data中的索引位置，n表示包含的信息的对象
-                for (var key in data) {
-                    console.log(key, data[key]);
-                    var xmname = key;
-                    var xmid = data[key];
-                    var item = '<li>' +
-                        '<a onclick="xminfset(' + "'" + xmid + "'"+",'"+xmname+"'" + ')">' +
-                            '<i class="ti-control-record text-success pull-right"></i>' + xmname +
-                            '</a>' +
-                            '</li>';
-                    $('#xminflist').append(item);
-                }
-            },
-            error: function () {
-                Toast.error("加载出错！")
-            }
-        });
-    }
-
 </script>
 <!--script-->
 </body>

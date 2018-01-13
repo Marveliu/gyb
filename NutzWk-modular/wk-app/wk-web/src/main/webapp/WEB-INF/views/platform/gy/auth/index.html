@@ -188,6 +188,7 @@ layout("/layouts/platform.html"){
             $.post("${base}/platform/gy/auth/delete/" + id, {}, function (data) {
                 if (data.code == 0) {
                     datatable.ajax.reload(null, false);
+                    Toast.success(data.msg);
                 } else {
                     Toast.error(data.msg);
                 }
@@ -232,7 +233,7 @@ layout("/layouts/platform.html"){
 
 
     function enable(id) {
-        $.post("${base}/platform/gy/auth/enable/" + id, {}, function (data) {
+        $.post("${base}/platform/gy/auth/enable?gyid=" + id, {}, function (data) {
             if (data.code == 0) {
                 $("#status" + id).attr("class", "fa fa-circle text-success ml5");
                 Toast.success(data.msg);
@@ -243,7 +244,7 @@ layout("/layouts/platform.html"){
     }
 
     function disable(id) {
-        $.post("${base}/platform/gy/auth/disable/" + id, {}, function (data) {
+        $.post("${base}/platform/gy/auth/disable?gyid=" + id, {}, function (data) {
             if (data.code == 0) {
                 $("#status" + id).attr("class", "fa fa-circle text-danger ml5");
                 Toast.success(data.msg);

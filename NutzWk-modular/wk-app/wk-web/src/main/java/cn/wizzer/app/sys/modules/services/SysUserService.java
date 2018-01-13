@@ -1,6 +1,7 @@
 package cn.wizzer.app.sys.modules.services;
 
 import cn.wizzer.app.sys.modules.models.Sys_menu;
+import cn.wizzer.app.sys.modules.models.Sys_role;
 import cn.wizzer.app.sys.modules.models.Sys_user;
 import cn.wizzer.framework.base.service.BaseService;
 
@@ -12,6 +13,8 @@ import java.util.List;
 public interface SysUserService extends BaseService<Sys_user> {
 
     List<String> getRoleCodeList(Sys_user user);
+
+    public List<Sys_role> getRoleList(Sys_user user);
 
     List<Sys_menu> getMenusAndButtons(String userId);
 

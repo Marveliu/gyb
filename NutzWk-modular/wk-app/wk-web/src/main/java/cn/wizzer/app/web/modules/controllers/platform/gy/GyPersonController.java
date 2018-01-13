@@ -102,18 +102,18 @@ public class GyPersonController {
         // TODO: 2018/1/9 0009 shiro info从数据库中加载
         Sys_user user = userInfUtil.getCurrentUser(req);
         req.setAttribute("obj", user);
-
-
         // 查询角色
         // Pattern gypattern = Pattern.compile("^gy");               // 雇员匹配正则表达式
-        for(String item :sysuserService.getRoleCodeList(user)){
+        for(Sys_role item :sysuserService.getRoleList(user)){
             if (item.equals("gy1")){
                 return "beetl:/platform/gy/person/reginfo.html";
             }
+            req.setAttribute("role", item);
         }
         gy_inf gy = gyInfService.getGyByUserId(user.getId());
         gy_auth auth = gyAuthService.getGyAuthByGyid(gy.getId());
         HttpServletRequest request = Mvcs.getReq();
+
         req.getSession().setAttribute("gyid",gy.getId());
         req.setAttribute("gyauth", auth);
         req.setAttribute("gyinfModify", gyService.infCheckable(gy.getId()));

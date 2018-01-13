@@ -1,13 +1,8 @@
 package cn.wizzer.app.web.commons.services.xm;
 
-import cn.wizzer.app.xm.modules.models.xm_apply;
-import cn.wizzer.app.xm.modules.models.xm_bill;
-import cn.wizzer.app.xm.modules.models.xm_inf;
-import cn.wizzer.app.xm.modules.models.xm_task;
-import cn.wizzer.app.xm.modules.services.XmApplyService;
-import cn.wizzer.app.xm.modules.services.XmBillService;
-import cn.wizzer.app.xm.modules.services.XmInfService;
-import cn.wizzer.app.xm.modules.services.XmTaskService;
+import cn.wizzer.app.gy.modules.models.gy_pay;
+import cn.wizzer.app.xm.modules.models.*;
+import cn.wizzer.app.xm.modules.services.*;
 import cn.wizzer.framework.util.StringUtil;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
@@ -40,6 +35,8 @@ public class XmService {
     private XmInfService xmInfService;
     @Inject
     private XmBillService xmBillService;
+    @Inject
+    private XmEvaluationService xmEvaluationService;
 
     /**
      * 任务书立项
@@ -91,6 +88,43 @@ public class XmService {
             log.debug("项目建立出错："+e);
         }
         return null;
+    }
+
+
+    /**
+     * 项目结算
+     * @param id
+     * @return
+     */
+    public boolean initXmFinal(String id){
+        String sysuserid = StringUtil.getSysuserid();
+        int at =  (int) (System.currentTimeMillis() / 1000);
+
+        // xm_inf xmInf = xmInfService.fetch(id);
+        //
+        //
+        // Trans.exec(new Atom() {
+        //     @Override
+        //     public void run() {
+        //         //评价
+        //         xm_evaluation eva = new xm_evaluation();
+        //         eva.setOpBy(sysuserid);
+        //         eva.setOpAt(at);
+        //         eva.setXminfid(id);
+        //         eva.setGrade(xmInf.);
+        //         eva.setNote(evanote);
+        //         xmEvaluationService.insert(eva);
+        //
+        //         //账单
+        //         gy_pay pay = gyPayService.getFirstPay(xmf.getGyid());
+        //         xmBillService.update(org.nutz.dao.Chain.make("status",1).add("gypayid",pay.getId()).add("note",billnote).add("at",at),Cnd.where("xminfid","=",id));
+        //
+        //         //项目状态
+        //         xmInfService.update(org.nutz.dao.Chain.make("status",2),Cnd.where("id","=",id));
+        //     }
+        // });
+
+        return false;
     }
 
     /**
