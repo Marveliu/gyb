@@ -1,5 +1,7 @@
 package cn.wizzer.app.web.modules.controllers.platform.xm;
 
+import cn.wizzer.app.gy.modules.models.gy_inf;
+import cn.wizzer.app.gy.modules.services.GyInfService;
 import cn.wizzer.app.web.commons.services.xm.XmService;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
 import cn.wizzer.app.web.commons.util.NumberUtil;
@@ -43,6 +45,8 @@ public class XmPersonController {
     private XmBillService xmBillService;
     @Inject
     private NumberUtil numberUtil;
+    @Inject
+    private GyInfService gyInfService;
 
     // @Inject
     // private  V_XmInfService v_xmInfService;
@@ -60,9 +64,16 @@ public class XmPersonController {
     @SLog(tag = "xm_apply", msg = "")
     public Object apply(
             @Param("xmtaskid") String xmtaskid) {
-        try {
-            String gyid = UserInfUtil.getCurrentGyid();
 
+        // 检查是否设置了支付方式
+        String gyid = StringUtil.getGyid();
+        gy_inf gy = gyInfService.fetch(gyid);
+        gy = gyInfService.fetchLinks(gy,"gypays");
+        if(null == gy.getGypays()){
+            return Result.error("请先设置您的收款方式！");
+        }
+
+        try {
             if(null == xmtaskid){
                 return Result.error("请选择申请的项目");
             }

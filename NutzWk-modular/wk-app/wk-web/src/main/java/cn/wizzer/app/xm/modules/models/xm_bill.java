@@ -16,6 +16,7 @@ import java.util.List;
  * Created by 89792 on 2017/11/17 0017.
  */
 @Table("xm_bill")
+@View("v_xmbill")
 public class xm_bill extends BaseModel implements Serializable {
 
     @Column
@@ -75,6 +76,42 @@ public class xm_bill extends BaseModel implements Serializable {
     @One(field = "gypayid")
     private gy_pay gypay;
 
+    //参照
+    @One(field = "realgypayid")
+    private gy_pay realgypay;
+
+    // 视图
+
+    @Column
+    @Readonly
+    private Float award;
+
+    @Column
+    @Readonly
+    private String sysuserid;
+
+    @Column
+    @Readonly
+    private String paybyname;
+
+
+    @Column
+    @Readonly
+    private String taskname;
+
+    @Column
+    @Readonly
+    private String author;
+
+
+    @Column
+    @Readonly
+    private String authorrealname;
+
+
+    @Column
+    @Readonly
+    private String xmbillstatus;
 
 
     public String getId() {
@@ -163,6 +200,70 @@ public class xm_bill extends BaseModel implements Serializable {
 
     public void setGypay(gy_pay gypay) {
         this.gypay = gypay;
+    }
+
+    public Float getAward() {
+        return award;
+    }
+
+    public void setAward(Float award) {
+        this.award = award;
+    }
+
+    public String getSysuserid() {
+        return sysuserid;
+    }
+
+    public void setSysuserid(String sysuserid) {
+        this.sysuserid = sysuserid;
+    }
+
+    public String getPaybyname() {
+        return paybyname;
+    }
+
+    public void setPaybyname(String paybyname) {
+        this.paybyname = paybyname;
+    }
+
+    public String getTaskname() {
+        return taskname;
+    }
+
+    public void setTaskname(String taskname) {
+        this.taskname = taskname;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getAuthorrealname() {
+        return authorrealname;
+    }
+
+    public void setAuthorrealname(String authorrealname) {
+        this.authorrealname = authorrealname;
+    }
+
+    public String getXmbillstatus() {
+        return xmbillstatus;
+    }
+
+    public void setXmbillstatus(String xmbillstatus) {
+        this.xmbillstatus = xmbillstatus;
+    }
+
+    public gy_pay getRealgypay() {
+        return realgypay;
+    }
+
+    public void setRealgypay(gy_pay realgypay) {
+        this.realgypay = realgypay;
     }
 
     /**

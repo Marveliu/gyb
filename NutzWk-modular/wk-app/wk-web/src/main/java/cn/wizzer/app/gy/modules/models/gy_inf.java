@@ -28,7 +28,7 @@ public class gy_inf extends BaseModel implements Serializable {
     @Name
     @Comment("雇员编号")
     @ColDefine(type = ColType.VARCHAR, width = 32)
-    @Prev(els = {@EL("$me.gyid()")})  //todo: 雇员编号的生成方式
+    @Prev(els = {@EL("$me.gyid()")})
     private String id;
 
     @Column

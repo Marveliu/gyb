@@ -163,7 +163,7 @@ public class NumberUtil {
 
 
     /**
-     * 账单生成编号
+     * 项目评价单生成编号
      * @param infid
      * @return
      */
@@ -172,6 +172,20 @@ public class NumberUtil {
         String[] arr = infid.split("_");
         str.append("eva_");
         str.append(arr[1]);
+        return str.toString();
+    }
+
+
+    /**
+     * 雇员支付方式编码
+     * @param gyid
+     * @param num
+     * @return
+     */
+    public String GyPayidGenerator(String gyid,int num){
+        StringBuilder str = new StringBuilder();
+        str.append("pay"+num);
+        str.append(gyid);
         return str.toString();
     }
 

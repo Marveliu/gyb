@@ -1,7 +1,12 @@
 package cn.wizzer.app.gy.modules.models;
 
+import cn.wizzer.app.gy.modules.services.impl.GyInfServiceImpl;
+import cn.wizzer.app.web.commons.util.NumberUtil;
 import cn.wizzer.framework.base.model.BaseModel;
+import org.nutz.dao.Cnd;
 import org.nutz.dao.entity.annotation.*;
+import org.nutz.log.Logs;
+import org.nutz.mvc.Mvcs;
 
 import java.io.Serializable;
 
@@ -18,7 +23,7 @@ public class gy_pay extends BaseModel implements Serializable {
     @Comment("id")
     @Name
     @ColDefine(type = ColType.VARCHAR, width = 32)
-    @Prev(els = {@EL("uuid()")})
+    @Prev(els = {@EL("$me.gypayid()")})
     private String id;
 
     @Column
@@ -144,5 +149,18 @@ public class gy_pay extends BaseModel implements Serializable {
 
     public void setRealname(String realname) {
         this.realname = realname;
+    }
+
+
+    public String gypayid() {
+        String id = new String();
+        try {
+            int count = Mvcs.getIoc().get(GyInfServiceImpl.class).count(Cnd.where("gyid","=",gyid));
+            id =  Mvcs.getIoc().get(NumberUtil.class).GyPayidGenerator(this.gyid,count);
+        }catch (Exception e){
+            Logs.get().debug(e);
+        }
+
+        return id;
     }
 }

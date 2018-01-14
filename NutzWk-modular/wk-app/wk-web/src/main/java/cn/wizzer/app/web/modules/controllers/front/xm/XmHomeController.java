@@ -52,7 +52,7 @@ public class XmHomeController {
     @At("")
     @Ok("beetl:/public/xm/home.html")
     public void home(HttpServletRequest req) {
-        req.setAttribute("count",xmTaskService.count(Cnd.where("disabled","=","false")));
+        req.setAttribute("count",xmTaskService.count(Cnd.where("disabled","=","false").and("status","=",1)));
     }
 
 
@@ -74,11 +74,14 @@ public class XmHomeController {
     ) {
 
         Cnd cnd = Cnd.NEW();
-        cnd.and("disabled","=","false");
+        // 处于申请阶段并且发布的任务书
+        cnd.and("disabled","=","false").and("status","=",1);
+
         int length = 16;                //当前页大小
         String linkName = null;         //linksname
         NutMap re = new NutMap();
         Pager pager = new OffsetPager(start, length);
+
         //查询名称
         if (!Strings.isBlank(taskname)) {
             cnd.and("taskName", "like", "%" + taskname + "%");

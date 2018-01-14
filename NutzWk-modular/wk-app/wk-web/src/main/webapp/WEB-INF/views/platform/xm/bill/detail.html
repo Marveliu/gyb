@@ -4,35 +4,58 @@
             <section class="panel panel-primary no-b">
                 <header class="panel-heading clearfix brtl brtr">
                     <div class="overflow-hidden">
-                        <a href="javascript:;" class="h4 show no-m pt5">xm_bill</a>
-                        <small>${obj.id}</small>
+                        <a href="javascript:;" class="h4 show no-m pt5">项目账单</a>
+                        <small>${obj.taskname}:${obj.id}</small>
                     </div>
                 </header>
                 <div class="list-group">
                     <table class="table table-bordered table-striped mg-t datatable">
                         <tbody>
-                                                        <tr>
-                                <td>${msg['xm.bill.column.gypayid']}</td><td>${obj.gypayid}</td>
-                            </tr>
-                                                        <tr>
-                                <td>${msg['xm.bill.column.realgypayid']}</td><td>${obj.realgypayid}</td>
-                            </tr>
-                                                        <tr>
-                                <td>${msg['xm.bill.column.prepaysum']}</td><td>${obj.prepaysum}</td>
-                            </tr>
-                                                        <tr>
-                                <td>${msg['xm.bill.column.paysum']}</td><td>${obj.paysum}</td>
-                            </tr>
-                                                        <tr>
-                                <td>${msg['xm.bill.column.note']}</td><td>${obj.note}</td>
-                            </tr>
-                                                        <tr>
-                                <td>${msg['xm.bill.column.payby']}</td><td>${obj.payby}</td>
-                            </tr>
-                                                        <tr>
-                                <td>${msg['xm.bill.column.at']}</td><td>${obj.at}</td>
-                            </tr>
-                                                    </tbody>
+                        <tr>
+                            <td>${msg['xm.bill.column.realgypayid']}</td>
+                            <td>${obj.realgypayid}</td>
+                        </tr>
+                        <tr>
+                            <td>支付详情</td>
+                            <td>${obj.realgypay.typename}-${obj.realgypay.payname}-${obj.realgypay.payid}</td>
+                        </tr>
+                        <tr>
+                            <td>账单雇员</td>
+                            <td>${obj.realgypay.realname}-${obj.realgypay.gyid}</td>
+                        </tr>
+                        <tr>
+                            <td>项目总酬金</td>
+                            <td>${obj.prepaysum}</td>
+                        </tr>
+                        <tr>
+                            <td>项目经理</td>
+                            <td>${obj.author}-${obj.authorrealname}</td>
+                        </tr>
+                        <tr>
+                            <td>${msg['xm.bill.column.prepaysum']}</td>
+                            <td>${obj.prepaysum}</td>
+                        </tr>
+                        <tr>
+                            <td>${msg['xm.bill.column.paysum']}</td>
+                            <td>${obj.paysum}</td>
+                        </tr>
+                        <tr>
+                            <td>${msg['xm.bill.column.note']}</td>
+                            <td>${obj.note}</td>
+                        </tr>
+                        <tr>
+                            <td>${msg['xm.bill.column.payby']}</td>
+                            <td>${obj.payby}</td>
+                        </tr>
+                        <tr>
+                            <td>账单状态</td>
+                            <td>${obj.xmbillstatus}</td>
+                        </tr>
+                        <tr>
+                            <td>${msg['xm.bill.column.at']}</td>
+                            <td>${@date.getDate(obj.at)}</td>
+                        </tr>
+                        </tbody>
                     </table>
                 </div>
             </section>

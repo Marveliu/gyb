@@ -55,7 +55,7 @@ public class XmFinalController {
         total =  xmInfService.count();
         doing = xmInfService.count(Cnd.where("status","=",0));
         done = xmInfService.count(Cnd.where("status","=",1));
-        finish = xmInfService.count(Cnd.where("status","=",2));
+        finish = xmInfService.count(Cnd.where("status",">",1));
 
         req.setAttribute("total",total);
         req.setAttribute("doing", doing);

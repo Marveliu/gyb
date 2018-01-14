@@ -8,7 +8,7 @@ import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
 import cn.wizzer.framework.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.nutz.dao.Cnd;
+import org.nutz.dao.*;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
@@ -37,7 +37,7 @@ public class XmBillController{
     @RequiresPermissions("platform.xm.bill")
     public Object data(@Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
 		Cnd cnd = Cnd.NEW();
-        cnd.and("status","=",2);
+        // cnd.and("status","=",2);
     	return xmBillService.data(length, start, draw, order, columns, cnd, null);
     }
 
@@ -107,10 +107,38 @@ public class XmBillController{
     @RequiresPermissions("platform.xm.bill")
 	public void detail(String id, HttpServletRequest req) {
 		if (!Strings.isBlank(id)) {
-            req.setAttribute("obj", xmBillService.fetch(id));
+		    xm_bill bill = xmBillService.fetch(id);
+		    bill = xmBillService.fetchLinks(bill,"realgypay");
+            req.setAttribute("obj", bill);
 		}else{
             req.setAttribute("obj", null);
         }
     }
+
+    @At("/check/?")
+    @Ok("json")
+    @RequiresPermissions("platform.xm.bill")
+    @SLog(tag = "xm_bill", msg = "${req.getAttribute('id')}")
+    public Object check(String id, HttpServletRequest req) {
+        try {
+            String sysuerid = StringUtil.getSysuserid();
+            if(!Strings.isBlank(id)){
+                int flag = xmBillService.update(
+                        org.nutz.dao.Chain.make("status",3)
+                                .add("payby",sysuerid),
+                        Cnd.where("id","=",id));
+                if(flag!=0)
+                {
+                    req.setAttribute("id",id);
+                    return Result.success("system.success");
+                }
+            }
+            return Result.error("system.error");
+        } catch (Exception e) {
+            return Result.error("system.error");
+        }
+    }
+
+
 
 }
