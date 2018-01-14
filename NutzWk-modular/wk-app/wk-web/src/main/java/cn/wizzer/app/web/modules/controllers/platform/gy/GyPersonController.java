@@ -15,6 +15,8 @@ import cn.wizzer.app.web.commons.slog.annotation.SLog;
 import cn.wizzer.app.web.commons.util.Toolkit;
 import cn.wizzer.app.web.commons.util.UserInfUtil;
 import cn.wizzer.app.web.modules.controllers.open.email.EmailController;
+import cn.wizzer.app.xm.modules.services.XmApplyService;
+import cn.wizzer.app.xm.modules.services.XmInfService;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
@@ -85,7 +87,9 @@ public class GyPersonController {
     @Inject
     private GyService gyService;
     @Inject
-    private VGyService vGyService;
+    private XmInfService xmInfService;
+    @Inject
+    private XmApplyService xmApplyService;
 
 
     /**
@@ -119,6 +123,23 @@ public class GyPersonController {
         req.setAttribute("gyinfModify", gyService.infCheckable(gy.getId()));
         req.setAttribute("ifgyauth",gyService.ifGyAuth(gy.getId()));
         req.setAttribute("gy", gy);
+
+
+        int apply = 0;
+        int doing = 0;
+        int done = 0;
+        int finish = 0;
+
+        apply = xmApplyService.count(Cnd.where("gyid","=",gy.getId()));
+        doing = xmInfService.count(Cnd.where("status","=",0).and("gyid","=",gy.getId()));
+        done = xmInfService.count(Cnd.where("status","=",1).and("gyid","=",gy.getId()));
+        finish = xmInfService.count(Cnd.where("status",">",1).and("gyid","=",gy.getId()));
+
+        req.setAttribute("apply", apply);
+        req.setAttribute("doing", doing);
+        req.setAttribute("final", done);
+        req.setAttribute("finish", finish);
+
         return null;
     }
 

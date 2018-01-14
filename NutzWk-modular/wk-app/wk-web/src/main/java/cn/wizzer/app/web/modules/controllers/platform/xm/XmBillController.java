@@ -125,7 +125,8 @@ public class XmBillController{
             if(!Strings.isBlank(id)){
                 int flag = xmBillService.update(
                         org.nutz.dao.Chain.make("status",3)
-                                .add("payby",sysuerid),
+                                .add("payby",sysuerid)
+                                .add("at",(int) (System.currentTimeMillis() / 1000)),
                         Cnd.where("id","=",id));
                 if(flag!=0)
                 {

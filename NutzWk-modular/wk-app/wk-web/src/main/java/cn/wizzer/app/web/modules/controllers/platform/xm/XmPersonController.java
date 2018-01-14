@@ -169,7 +169,7 @@ public class XmPersonController {
 
 
     @At("/feedbackdetail/?")
-    @Ok("beetl:/platform/xm/feedback/detail.html")
+    @Ok("beetl:/platform/xm/person/xmfeedbackdetail.html")
     @RequiresPermissions("platform.xm.person")
     public void feedbackdetail(int id, HttpServletRequest req) {
         xm_feedback xfd = xmFeedbackService.fetch(id);

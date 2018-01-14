@@ -30,21 +30,31 @@ layout("/layouts/platform.html"){
                                     <div class="col-xs-12 col-sm-4 text-center">
                                         <figure>
                                             <img src="/assets/img/avatar.jpg" alt="" class="avatar avatar-lg img-circle avatar-bordered">
-                                            <div class="small mt10">信息完成度</div>
-                                            <div class="progress progress-xs mt5 mb5">
-                                                <div class="progress-bar done" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                                </div>
-                                            </div>
-                                            <small>234 / 879</small>
+                                            <!--<div class="small mt10">信息完成度</div>-->
+                                            <!--<div class="progress progress-xs mt5 mb5">-->
+                                                <!--<div class="progress-bar done" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                            <!--<small>234 / 879</small>-->
                                         </figure>
+
+                                        <div class="row">
+                                                <!--<h6 class="mt15">平台信息</h6>-->
+                                                <ul class="user-meta ">
+                                                    <li >
+                                                        <i class="fa fa-beer mr5"></i>
+                                                        <a href="javascript:;">${role.name}</a>
+                                                    </li>
+                                                </ul>
+                                        </div>
 
                                         <div class="mt10 mb10">
                                             <a href="${base}/platform/gy/person/infedit" class="btn btn-social btn-xs btn-facebook mr5" data-toggle="modal" data-target="#dialogDeal"><i class="fa fa-info"></i>个人信息 </a>
                                             <!--<a href="${base}/platform/gy/person/payindex" class="btn btn-social btn-xs btn-facebook mr5" data-toggle="modal" data-target="#dialogPayDeal"><i class="fa fa-facebook"></i>交易方式 </a>-->
                                             <a href="${base}/platform/gy/person/payindex" class="btn btn-social btn-xs btn-google-plus mr5" ><i class="fa fa-rmb"></i>交易方式 </a>
                                             <a id="emailchecked" class="btn btn-social btn-xs btn-twitter mr5" v-if="!emailchecked" v-on:click="askActiviEmail('${obj.id}')"><i class="fa fa-mail-forward"></i>发送激活邮件 </a>
-
                                         </div>
+
                                     </div>
                                     <div class="col-xs-12 col-sm-8">
                                         <h4 class="mb5"> <b>${gy.realname!}</b> ${@status.bind( 'sex'+gy.sex!)}，你好！ </h4>
@@ -89,17 +99,6 @@ layout("/layouts/platform.html"){
                                             </ul>
                                         </div>
                                     </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <h6 class="mt15">平台信息</h6>
-                                                <ul class="user-meta ">
-                                                    <li >
-                                                        <i class="fa fa-graduation-cap mr5"></i>
-                                                        <a href="javascript:;">${role.name}</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -121,12 +120,12 @@ layout("/layouts/platform.html"){
                     </section>
 
                     <!--vue测试-->
-                    <section class="panel panel-primary">
-                        <h5>vue 测试</h5>
-                        <div id="app1">
-                            {{message}}
-                        </div>
-                    </section>
+                    <!--<section class="panel panel-primary">-->
+                        <!--<h5>vue 测试</h5>-->
+                        <!--<div id="app1">-->
+                            <!--{{message}}-->
+                        <!--</div>-->
+                    <!--</section>-->
 
                     <!-- /profile information sidebar -->
                 </div>
@@ -181,26 +180,26 @@ layout("/layouts/platform.html"){
                         </div>
                     </section>
 
+                    <!--消息中心-->
+                    <!--<section class="panel panel-primary no-b">-->
+                        <!--<header class="panel-heading clearfix brtl brtr">-->
+                            <!--<div class="overflow-hidden">-->
+                                <!--<a href="javascript:;" class="h4 show no-m pt10">待处理消息</a>-->
+                            <!--</div>-->
+                        <!--</header>-->
 
-                    <section class="panel panel-primary no-b">
-                        <header class="panel-heading clearfix brtl brtr">
-                            <div class="overflow-hidden">
-                                <a href="javascript:;" class="h4 show no-m pt10">待处理消息</a>
-                            </div>
-                        </header>
+                        <!--<div class="list-group">-->
+                            <!--<a href="javascript:;" class="list-group-item">-->
+                                <!--<span class="badge bg-info pull-right">89</span>-->
+                                <!--<i class="ti-calendar mr10 text-muted"></i>项目消息-->
+                            <!--</a>-->
+                            <!--<a href="javascript:;" class="list-group-item">-->
+                                <!--<span class="badge bg-danger pull-right">8</span>-->
+                                <!--<i class="ti-bell mr10 text-muted"></i>系统通知-->
+                            <!--</a>-->
+                        <!--</div>-->
 
-                        <div class="list-group">
-                            <a href="javascript:;" class="list-group-item">
-                                <span class="badge bg-info pull-right">89</span>
-                                <i class="ti-calendar mr10 text-muted"></i>项目消息
-                            </a>
-                            <a href="javascript:;" class="list-group-item">
-                                <span class="badge bg-danger pull-right">8</span>
-                                <i class="ti-bell mr10 text-muted"></i>系统通知
-                            </a>
-                        </div>
-
-                    </section>
+                    <!--</section>-->
 
                     <section class="panel panel-primary no-b">
                         <header class="panel-heading clearfix brtl brtr">
@@ -211,16 +210,20 @@ layout("/layouts/platform.html"){
 
                         <div class="list-group">
                             <a href="javascript:;" class="list-group-item">
-                                <span class="badge bg-info pull-right">89</span>
-                                <i class="ti-calendar mr10 text-muted"></i>申请项目
+                                <span class="badge bg-info pull-right">${apply}</span>
+                                <i class="ti-calendar mr10 text-muted"></i>成功申请项目
                             </a>
                             <a href="javascript:;" class="list-group-item">
-                                <span class="badge bg-danger pull-right">8</span>
+                                <span class="badge bg-primary pull-right">${doing}</span>
                                 <i class="ti-bell mr10 text-muted"></i>进行项目
                             </a>
                             <a href="javascript:;" class="list-group-item">
-                                <span class="badge bg-danger pull-right">8</span>
+                                <span class="badge bg-default pull-right">${final}</span>
                                 <i class="ti-bell mr10 text-muted"></i>结算项目
+                            </a>
+                            <a href="javascript:;" class="list-group-item">
+                                <span class="badge bg-success pull-right">${finish}</span>
+                                <i class="ti-bell mr10 text-muted"></i>历史项目
                             </a>
                         </div>
 
