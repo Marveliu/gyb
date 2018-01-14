@@ -162,6 +162,20 @@ public class NumberUtil {
     }
 
 
+    /**
+     * 账单生成编号
+     * @param infid
+     * @return
+     */
+    public String XmEvaidGenerator(String infid){
+        StringBuilder str = new StringBuilder();
+        String[] arr = infid.split("_");
+        str.append("eva_");
+        str.append(arr[1]);
+        return str.toString();
+    }
+
+
 
 
 }

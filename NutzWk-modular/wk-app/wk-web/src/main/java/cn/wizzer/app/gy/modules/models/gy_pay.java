@@ -11,6 +11,7 @@ import java.io.Serializable;
 
 
 @Table("gy_pay")
+@View("v_gypay")
 public class gy_pay extends BaseModel implements Serializable {
 
     @Column
@@ -50,6 +51,14 @@ public class gy_pay extends BaseModel implements Serializable {
     @ColDefine(type = ColType.BOOLEAN)
     private boolean disabled;
 
+
+    @Column
+    @Readonly
+    public String typename;
+
+    @Column
+    @Readonly
+    public String realname;
 
     // 参照
 
@@ -119,5 +128,21 @@ public class gy_pay extends BaseModel implements Serializable {
 
     public void setGy(gy_inf gy) {
         this.gy = gy;
+    }
+
+    public String getTypename() {
+        return typename;
+    }
+
+    public void setTypename(String typename) {
+        this.typename = typename;
+    }
+
+    public String getRealname() {
+        return realname;
+    }
+
+    public void setRealname(String realname) {
+        this.realname = realname;
     }
 }

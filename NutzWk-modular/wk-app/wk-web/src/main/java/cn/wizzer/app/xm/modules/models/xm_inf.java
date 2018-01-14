@@ -63,6 +63,10 @@ public class xm_inf extends BaseModel implements Serializable {
 
     @Column
     @Readonly
+    private String realname;
+
+    @Column
+    @Readonly
     private String authorrealname;
 
     @Column
@@ -121,6 +125,28 @@ public class xm_inf extends BaseModel implements Serializable {
     @Column
     @Readonly
     private String xmbillid;
+
+    @Column
+    @Readonly
+    private String xmbillnote;
+
+    @Column
+    @Readonly
+    private String xmevaid;
+
+
+    @Column
+    @Readonly
+    private float xmevagrade;
+
+
+    @Column
+    @Readonly
+    private String xmevanote;
+
+    @Column
+    @Readonly
+    private float paysum;
 
 
     //参照
@@ -190,6 +216,14 @@ public class xm_inf extends BaseModel implements Serializable {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getRealname() {
+        return realname;
+    }
+
+    public void setRealname(String realname) {
+        this.realname = realname;
     }
 
     public String getAuthorrealname() {
@@ -318,6 +352,46 @@ public class xm_inf extends BaseModel implements Serializable {
 
     public void setXmbillid(String xmbillid) {
         this.xmbillid = xmbillid;
+    }
+
+    public String getXmevaid() {
+        return xmevaid;
+    }
+
+    public void setXmevaid(String xmevaid) {
+        this.xmevaid = xmevaid;
+    }
+
+    public float getXmevagrade() {
+        return xmevagrade;
+    }
+
+    public void setXmevagrade(float xmevagrade) {
+        this.xmevagrade = xmevagrade;
+    }
+
+    public String getXmevanote() {
+        return xmevanote;
+    }
+
+    public void setXmevanote(String xmevanote) {
+        this.xmevanote = xmevanote;
+    }
+
+    public String getXmbillnote() {
+        return xmbillnote;
+    }
+
+    public void setXmbillnote(String xmbillnote) {
+        this.xmbillnote = xmbillnote;
+    }
+
+    public float getPaysum() {
+        return paysum;
+    }
+
+    public void setPaysum(float paysum) {
+        this.paysum = paysum;
     }
 
     /**

@@ -34,14 +34,14 @@ layout("/layouts/platform.html"){
                                         <strong>付款人信息:</strong><br>
                                         <br>
                                         武汉哎嘀信息科技有限公司<br>
-                                        付款单号:${obj.billid!}<br>
+                                        付款单号:${obj.xmbillid!}<br>
                                     </address>
                                 </div>
                                 <div class="col-xs-6 text-right">
                                     <address>
                                         <strong>收款人信息:</strong><br>
                                         <br>
-                                        ${obj.gyname!}<br>
+                                        ${obj.realname!}<br>
                                         雇员编号: ${obj.gyid!}<br>
                                     </address>
                                 </div>
@@ -52,8 +52,6 @@ layout("/layouts/platform.html"){
                                     <address>
                                         <strong>说明:</strong><br>
                                         <br>
-                                        <p>&nbsp ${obj.billnote!}</p><br>
-                                        <p>&nbsp ${obj.evanote!}</p><br>
                                     </address>
                                 </div>
                             </div>
@@ -69,8 +67,8 @@ layout("/layouts/platform.html"){
                                 </div>
                                 <div class="col-sm-6">
                                     <p class="pull-right">
-                                        <button type="button" class="btn btn-primary btn-sm no-print">Pay With PayPal
-                                        </button>
+                                        <!--<button type="button" class="btn btn-primary btn-sm no-print">Pay With PayPal-->
+                                        <!--</button>-->
                                     </p>
                                 </div>
                             </div>
@@ -152,12 +150,12 @@ layout("/layouts/platform.html"){
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">提交反馈 </h4>
+                <h4 class="modal-title">项目结算</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12">
-                        提交您的项目反馈之后，原来的项目反馈将不能进行修改，请确认！
+                        一旦提交项目结算之后，结算单将无法修改，请谨慎操作！
                     </div>
                 </div>
             </div>
@@ -184,12 +182,6 @@ layout("/layouts/platform.html"){
             btn.button("loading");
 
             $('#fianlForm').submit();
-//            $('#fianlForm').submit(function () {
-//                $(this).ajaxSubmit(function () {
-//
-//                })
-//                return false; //阻止表单默认提交
-//            });
         });
 
         $("#dialogDetail").on("hidden.bs.modal", function () {

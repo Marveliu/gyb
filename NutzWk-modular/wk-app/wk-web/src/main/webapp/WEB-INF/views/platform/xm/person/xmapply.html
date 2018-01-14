@@ -3,9 +3,13 @@ layout("/layouts/platform.html"){
 %>
 <section class="content-wrap bg-white">
     <header class="header navbar bg-white shadow">
-        <div class="btn-group tool-button">
-            <a id="add" class="btn btn-primary navbar-btn" href="${base}/platform/xm/apply/add" data-pjax><i class="ti-plus"></i> ${msg['globals.button.add']}</a>
-            <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> ${msg['globals.button.delete.more']}</button>
+        <div class="col-md-6 bg-none">
+            <ol class="breadcrumb mt10" style="margin-bottom: 0px;">
+                <li>
+                    <a href="javascript:;">雇佣项目</a>
+                </li>
+                <li class="active">项目申请</li>
+            </ol>
         </div>
     </header>
     <div class=panel-body style="padding-top: 50px;">

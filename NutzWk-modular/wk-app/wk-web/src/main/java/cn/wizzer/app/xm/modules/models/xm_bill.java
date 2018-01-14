@@ -1,5 +1,6 @@
 package cn.wizzer.app.xm.modules.models;
 
+import cn.wizzer.app.gy.modules.models.gy_pay;
 import cn.wizzer.app.web.commons.util.NumberUtil;
 import cn.wizzer.app.xm.modules.services.Impl.XmTaskServiceImpl;
 import cn.wizzer.framework.base.model.BaseModel;
@@ -9,6 +10,7 @@ import org.nutz.log.Logs;
 import org.nutz.mvc.Mvcs;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by 89792 on 2017/11/17 0017.
@@ -70,6 +72,9 @@ public class xm_bill extends BaseModel implements Serializable {
     private int at;
 
     //参照
+    @One(field = "gypayid")
+    private gy_pay gypay;
+
 
 
     public String getId() {
@@ -152,6 +157,13 @@ public class xm_bill extends BaseModel implements Serializable {
         this.status = status;
     }
 
+    public gy_pay getGypay() {
+        return gypay;
+    }
+
+    public void setGypay(gy_pay gypay) {
+        this.gypay = gypay;
+    }
 
     /**
      * @function: 账单编号

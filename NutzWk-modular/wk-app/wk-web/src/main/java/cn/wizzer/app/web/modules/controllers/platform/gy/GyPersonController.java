@@ -428,6 +428,11 @@ public class GyPersonController {
         }
     }
 
+    @At("/payselect")
+    @Ok("beetl:/platform/gy/pay/payselect.html")
+    @RequiresPermissions("gy.person")
+    public void payselect() {}
+
 
 
 }

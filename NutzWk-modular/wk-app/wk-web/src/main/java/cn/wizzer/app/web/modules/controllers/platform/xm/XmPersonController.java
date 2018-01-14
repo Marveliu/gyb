@@ -343,14 +343,16 @@ public class XmPersonController {
     @At
     @Ok("beetl:/platform//xm/person/xmcompleted.html")
     @RequiresPermissions("platform.xm.person")
-    public void xmcompleted() {}
+    public void xmcompleted() {
+
+    }
 
     @At
     @Ok("json")
     @RequiresPermissions("platform.xm.person")
     public Object xmcompleteddata(@Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
         Cnd cnd = Cnd.NEW();
-        String gyid = UserInfUtil.getCurrentGyid();
+        String gyid = StringUtil.getGyid();
 
         cnd.and("status","=",2);
         cnd.and("gyid","=",gyid);
@@ -363,7 +365,12 @@ public class XmPersonController {
     @RequiresPermissions("platform.xm.person")
     public void xmcompleteddetail(String id, HttpServletRequest req) {
         if (!Strings.isBlank(id)) {
-            req.setAttribute("obj", xmInfService.fetch(Cnd.where("id","=",id)));
+            Cnd cnd = Cnd.where("xminfid","=",id);
+            xm_bill bill = xmBillService.fetch(cnd);
+            xm_inf  xf = xmInfService.fetch(id);
+            bill = xmBillService.fetchLinks(bill,"gypay");
+            req.setAttribute("obj", xf);
+            req.setAttribute("bill",bill);
         }else{
             req.setAttribute("obj", null);
         }
@@ -371,7 +378,7 @@ public class XmPersonController {
 
     @At("/xminfdetail/?")
     @Ok("beetl:/platform/xm/person/xminfdetail.html")
-    @RequiresPermissions("platform.xm.final")
+    @RequiresPermissions("platform.xm.person")
     public void xminfdetail(String id, HttpServletRequest req) {
         if (!Strings.isBlank(id)) {
             req.setAttribute("obj", xmInfService.fetch(Cnd.where("id","=",id)));
@@ -390,7 +397,6 @@ public class XmPersonController {
             HttpServletRequest req) {
         try {
             int at =  (int) (System.currentTimeMillis() / 1000);
-
             Trans.exec(new Atom() {
                 @Override
                 public void run() {

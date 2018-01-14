@@ -4,7 +4,7 @@ layout("/layouts/platform.html"){
 
 <header class="header navbar bg-white shadow">
     <div class="btn-group tool-button">
-        <a class="btn btn-primary navbar-btn" href="${base}/platform/xm/task" data-pjax><i class="ti-angle-left"></i> 返回</a>
+        <a class="btn btn-primary navbar-btn" href="${base}/platform/xm/person/xmcompleted" data-pjax><i class="ti-angle-left"></i> 返回</a>
     </div>
     <div class="pull-right">
         <div class="btn-group tool-button">
@@ -24,7 +24,10 @@ layout("/layouts/platform.html"){
                             <!--<i class="ti-microphone fa-5x"></i>-->
 
                             <h3 class="text-uppercase">${obj.taskname!}</h3>
-                            项目编号:${obj.id!}<br>
+                            <span>项目编号:${obj.id!}</span>
+                            <span>项目经理:${obj.authorrealname!}</span>
+                            <span>经理编号:${obj.author!}</span>
+                            <br>
                             ${@date.getDateTime()}
                         </div>
                     </div>
@@ -35,16 +38,15 @@ layout("/layouts/platform.html"){
                                 <strong>付款人信息:</strong><br>
                                 <br>
                                 武汉哎嘀信息科技有限公司<br>
-                                付款单号:${obj.billid!}<br>
+                                付款单号:${obj.xmbillid!}<br>
                             </address>
                         </div>
                         <div class="col-xs-6 text-right">
                             <address>
                                 <strong>收款人信息:</strong><br>
                                 <br>
-                                ${obj.gyname!}<br>
+                                ${obj.realname!}<br>
                                 雇员编号: ${obj.gyid!}<br>
-
                             </address>
                         </div>
                     </div>
@@ -52,81 +54,28 @@ layout("/layouts/platform.html"){
                     <div class="row">
                         <div class="col-xs-12">
                             <address>
-                                <strong>账单说明:</strong><br>
-                                <br>
-                                <p>&nbsp ${obj.billnote!}</p><br>
-                                <strong>项目评分: ${obj.grade!}</strong><br>
-                                <br>
-                                <p>${obj.evanote!}</p><br>
+                                <h5><strong>账单</strong></h5>
+                                <span>项目支付金额:${obj.award!}</span>
+                                <span>实际支付金额:<strong>${bill.paysum!}</strong></span>
+                                <p>${obj.xmbillnote!}</p><br>
+                                <h5><strong>评价得分:${obj.xmevagrade!}</strong></h5>
+                                <p>${obj.xmevanote!}</p><br>
                             </address>
                         </div>
                     </div>
 
 
-                    <div class="table-responsive">
-                        <strong>其他付款信息:</strong>
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>付款编号</th>
-                                <th>付款说明</th>
-                                <th>付款时间</th>
-                                <th>付款方式</th>
-                                <th>收款人</th>
-                                <th>付款总额</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>
-                                    Web Updates
-                                </td>
-                                <td>
-                                    Monthly web updates for http://www.themeforest.net
-                                </td>
-                                <td>
-                                    $250.00
-                                </td>
-                                <td>
-                                    1
-                                </td>
-                                <td>
-                                    $250.00
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="5" class="text-right">
-                                    <b>其他付款总额</b>
-                                </td>
-                                <td class="text-left">¥${obj.prepaysum!}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="5" class="text-right no-b">
-                                    <b>项目总酬金</b>
-                                </td>
-                                <td>¥${obj.award!}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="5" class="text-right no-b">
-                                    <b>最终支付金额</b>
-                                </td>
-                                <td>¥${obj.paysum!}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
                     <div class="row">
+                        <!--<div class="col-sm-6">-->
+                            <!--<p>-->
+                                <!--<button type="button" class="btn btn-danger btn-sm no-print" onclick="window.print();">-->
+                                    <!--<i class="ti-printer mr5"></i>Print-->
+                                <!--</button>-->
+                            <!--</p>-->
+                        <!--</div>-->
                         <div class="col-sm-6">
-                            <p>
-                                <button type="button" class="btn btn-danger btn-sm no-print" onclick="window.print();">
-                                    <i class="ti-printer mr5"></i>Print
-                                </button>
-                            </p>
-                        </div>
-                        <div class="col-sm-6">
-                            <p class="pull-right">
-                                <a class="btn btn-primary btn-sm" href="/platform/gy/pay/payselect" data-toggle="modal"
+                            <p class="">
+                                <a class="btn btn-primary btn-sm" href="/platform/gy/person/payselect" data-toggle="modal"
                                    data-target="#dialogPaySelect"><i class="ti-plus"></i> 修改收款信息</a>
                             </p>
                         </div>
@@ -141,7 +90,7 @@ layout("/layouts/platform.html"){
                       action="${base}/platform/xm/person/xmcompletedcommit" method="post">
 
                     <input name="id" type="hidden" value="${obj.id}">
-                    <input  id="gypayid" name="gypayid" type="hidden" value="${obj.gypayid}">
+                    <input  id="gypayid" name="gypayid" type="hidden" value="${bill.gypayid}">
 
                     <div class="row mb10">
                         <div class="col-lg-12">
@@ -149,17 +98,17 @@ layout("/layouts/platform.html"){
                             <div class="form-group">
                                 <label for="payid" class="control-label">收款账户</label>
                                     <input type="text" id="payid" class="form-control" name="payid" data-parsley-required="true"
-                                           placeholder="${msg['gy.pay.column.payname']}" value="${obj.payid}" readonly >
+                                           placeholder="${msg['gy.pay.column.payname']}" value="${bill.gypay.payid}" readonly >
                             </div>
                             <div class="form-group">
                                 <label for="payname" class="control-label">收款人</label>
                                     <input type="text" id="payname" class="form-control" name="payname" data-parsley-required="true"
-                                           placeholder="${msg['gy.pay.column.payname']}" value="${obj.payname}" readonly >
+                                           placeholder="${msg['gy.pay.column.payname']}" value="${bill.gypay.payname}" readonly >
                             </div>
                             <div class="form-group">
                                 <label for="paytype" class="control-label">支付方式</label>
                                     <input type="text" id="paytype" class="form-control" name="type" data-parsley-required="true"
-                                           placeholder="${msg['gy.pay.column.payname']}" value="${obj.paytype}"  readonly>
+                                           placeholder="${msg['gy.pay.column.payname']}" value="${@status.bind('pay'+ bill.gypay.type)}"  readonly>
                             </div>
                         </div>
                     </div>
@@ -190,9 +139,9 @@ layout("/layouts/platform.html"){
                 <div class="row">
                     <div id="commitmessage" class="col-xs-12">
                         提交您的确认之后，您的支付信息将无法修改，请您确认您的支付信息是否正确！<br>
-                        收款方式：${obj.paytype}<br>
-                        收款人名称：${obj.payname}<br>
-                        收款人账户：${obj.payid}<br>
+                        收款方式：${@status.bind("pay"+ bill.gypay.type)}<br>
+                        收款人名称：${bill.gypay.payname}<br>
+                        收款人账户：${bill.gypay.payid}<br>
                     </div>
                 </div>
             </div>
@@ -239,26 +188,25 @@ layout("/layouts/platform.html"){
             var payid = pay.data()[0]["payid"];
             var payname = pay.data()[0]["payname"];
             var gypayid = pay.data()[0]["id"];
-            var paytype = pay.data()[0]["type"];
+            var paytypename = pay.data()[0]["typename"];
 
             $("#payid ").val(payid);
             $("#payname ").val(payname);
             $("#gypayid ").val(gypayid);
-            $("#paytype ").val(paytype);
+            $("#paytype ").val(paytypename);
 
             $("#dialogPaySelect").modal("hide");
             $("#payway").show();
 
             $("#commitmessage").html("");
-
             $("#commitmessage").append(
                     '提交您的确认之后，您的支付信息将无法修改，请您确认您的支付信息是否正确！'+
-                    '<br>收款方式：' + paytype +
+                    '<br>收款方式：' + paytypename +
                     '<br>收款人名称：' + payname +
                     '<br>收款账号：' + payid
             );
 
-            Toast.success("添加用户编号：" + pay.data()[0]["id"])
+            Toast.success("更改支付方式为：" + pay.data()[0]["id"])
         } else {
             Toast.warning("请先选择您的收款方式！");
         }

@@ -2,11 +2,22 @@
 layout("/layouts/platform.html"){
 %>
 
-<section class="content-wrap" >
-    <div class=panel-body style="padding-top: 15px;">
+<section class="content-wrap bg-white">
+    <header class="header navbar bg-white shadow">
+            <div class="col-md-6 bg-none">
+                <ol class="breadcrumb mt10" style="margin-bottom: 0px;">
+                    <li>
+                        <a href="javascript:;">雇佣项目</a>
+                    </li>
+                    <li class="active">待结算项目</li>
+                </ol>
+            </div>
+    </header>
+    <div class=panel-body style="padding-top: 50px;">
         <div class="table-responsive no-border">
             <table class="table table-bordered table-striped mg-t datatable">
                 <thead>
+                <tr>
                 <tr>
                     <th>${msg['xm.evaluation.column.xminfid']}</th>
                     <th>项目名称</th>
@@ -14,11 +25,13 @@ layout("/layouts/platform.html"){
                     <th>雇员名称</th>
                     <th>${msg['globals.table.column.operation']}</th>
                 </tr>
+                </tr>
                 </thead>
             </table>
         </div>
     </div>
 </section>
+
 
 <div id="dialogDetail" class="modal fade bs-modal-sm" tabindex="-3" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
@@ -66,8 +79,8 @@ layout("/layouts/platform.html"){
                     "render": function (data, type, row) {
                         return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
                                 ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-                                '<li><a href="${base}/platform/xm/preson/xminfdetail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">查 看</a></li>' +
-                                '<li><a href="${base}/platform/xm/person/xmcompleteddetail/' + row.id + '">确 认</a></li>' +
+                                '<li><a href="${base}/platform/xm/person/xminfdetail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">查 看</a></li>' +
+                                '<li><a href="${base}/platform/xm/person/xmcompleteddetail/' + row.id + '">结 算</a></li>' +
                                 '</ul></div>';
                     },
                     "targets": 4

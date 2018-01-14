@@ -6,10 +6,12 @@ import cn.wizzer.app.web.commons.slog.annotation.SLog;
 import cn.wizzer.app.web.commons.util.UserInfUtil;
 import cn.wizzer.app.xm.modules.models.v_xminf;
 import cn.wizzer.app.xm.modules.models.xm_evaluation;
+import cn.wizzer.app.xm.modules.models.xm_inf;
 import cn.wizzer.app.xm.modules.services.*;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
+import cn.wizzer.framework.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.*;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -41,9 +43,6 @@ public class XmFinalController {
     @Inject
     private GyPayService gyPayService;
 
-    @Inject
-    private V_XmInfService v_xmInfService;
-
     @At("")
     @Ok("beetl:/platform//xm/final/index.html")
     @RequiresPermissions("platform.xm.final")
@@ -70,7 +69,7 @@ public class XmFinalController {
     public Object data(@Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
         Cnd cnd = Cnd.NEW();
         cnd.and("status","=",1);
-        return v_xmInfService.data(length, start, draw, order, columns, cnd, null);
+        return xmInfService.data(length, start, draw, order, columns, cnd, null);
     }
 
     @At("/detail/?")
@@ -89,7 +88,7 @@ public class XmFinalController {
     @RequiresPermissions("platform.xm.final")
     public void item(String id, HttpServletRequest req) {
         if (!Strings.isBlank(id)) {
-            req.setAttribute("obj", v_xmInfService.fetch(Cnd.where("id","=",id)));
+            req.setAttribute("obj", xmInfService.fetch(id));
         }else{
             req.setAttribute("obj", null);
         }
@@ -107,25 +106,24 @@ public class XmFinalController {
             @Param("billnote")String billnote,
             HttpServletRequest req) {
         try {
-            String gzid = UserInfUtil.getCurrentGzid();
-            v_xminf xmf = v_xmInfService.fetch(Cnd.where("id","=",id));
+            String sysuserid = StringUtil.getSysuserid();
+            xm_inf xmf = xmInfService.fetch(id);
             int at =  (int) (System.currentTimeMillis() / 1000);
                     Trans.exec(new Atom() {
                 @Override
                 public void run() {
                     //评价
                     xm_evaluation eva = new xm_evaluation();
-                    eva.setOpBy(gzid);
+                    eva.setOpBy(sysuserid);
                     eva.setOpAt(at);
+                    eva.setAt(at);
                     eva.setXminfid(id);
                     eva.setGrade(grade);
                     eva.setNote(evanote);
                     xmEvaluationService.insert(eva);
-
                     //账单
                     gy_pay pay = gyPayService.getFirstPay(xmf.getGyid());
                     xmBillService.update(org.nutz.dao.Chain.make("status",1).add("gypayid",pay.getId()).add("note",billnote).add("at",at),Cnd.where("xminfid","=",id));
-
                     //项目状态
                     xmInfService.update(org.nutz.dao.Chain.make("status",2),Cnd.where("id","=",id));
                 }
