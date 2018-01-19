@@ -80,7 +80,7 @@ layout("/layouts/platform.html"){
                 <div class="form-group">
                     <label for="school" class="col-sm-3 control-label">${msg['gy.inf.column.school']}</label>
                     <div class="col-sm-8">
-                        <input type="text" id="school" class="form-control" name="gyinf.school" data-parsley-required="true" placeholder="${msg['gy.inf.column.college']}">
+                        <input type="text" id="school" class="form-control" name="gyinf.school" data-parsley-required="true" placeholder="请填写你所在的学院！">
                     </div>
                 </div>
 
@@ -256,7 +256,7 @@ layout("/layouts/platform.html"){
         initSysDictTreeView("school");
         myForm.init();
 
-        // 时间选择器
+        // 年份选择器
         $('.form_datetime').datetimepicker({
             language: 'zh-CN',
             format: 'yyyy-mm-dd',
@@ -264,9 +264,13 @@ layout("/layouts/platform.html"){
             todayBtn: 1,
             autoclose: 1,
             todayHighlight: 1,
-            startView: 2,
+            startView: 4,
             forceParse: 0,
-            showMeridian: 1
+            showMeridian: 1,
+            pickerPosition: "bottom-left",
+            minView:2,
+            Boolean:true
+
         });
 
         //        上传文件

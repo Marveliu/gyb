@@ -3,6 +3,7 @@ package cn.wizzer.app.web.modules.controllers.open.file;
 import cn.wizzer.app.web.commons.base.Globals;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.util.DateUtil;
+import cn.wizzer.framework.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Files;
@@ -53,11 +54,11 @@ public class UploadController {
     }
 
 
+
     @AdaptBy(type = UploadAdaptor.class, args = {"ioc:imageUpload"})
     @POST
     @At
     @Ok("json")
-    //AdaptorErrorContext必须是最后一个参数
     public Object gyauimage(@Param("Filedata") TempFile tf, HttpServletRequest req, AdaptorErrorContext err) {
         try {
             if (err != null && err.getAdaptorErr() != null) {
@@ -66,7 +67,9 @@ public class UploadController {
                 return Result.error("空文件");
             } else {
                 String p = Globals.AppRoot;
-                String f = Globals.AppUploadPath + "/image/" + DateUtil.format(new Date(), "yyyyMMdd") + "/" + R.UU32() + tf.getSubmittedFileName().substring(tf.getSubmittedFileName().indexOf("."));
+                String test = tf.getSubmittedFileName().substring(tf.getSubmittedFileName().indexOf("."));
+                log.debug(test);
+                String f = Globals.AppUploadPath + "/image/gy/"+ StringUtil.getGyid() + DateUtil.format(new Date(), "yyyyMMdd") + "/" + R.UU32() + tf.getSubmittedFileName().substring(tf.getSubmittedFileName().indexOf("."));
                 Files.write(new File(p + f), tf.getInputStream());
                 return Result.success("上传成功", Globals.AppBase+f);
             }

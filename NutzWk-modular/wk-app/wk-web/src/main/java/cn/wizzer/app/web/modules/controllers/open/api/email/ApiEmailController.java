@@ -8,9 +8,11 @@ import cn.wizzer.app.web.commons.services.email.EmailService;
 import cn.wizzer.app.web.commons.services.gy.GyService;
 import cn.wizzer.app.web.commons.services.websocket.WsService;
 import cn.wizzer.framework.base.Result;
+import cn.wizzer.framework.util.StringUtil;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
@@ -51,6 +53,7 @@ public class ApiEmailController {
      * @return
      */
     @At("/mail/activeMail")
+    @Ok("json")
     @POST
     public Object activeMail(
            @Param("userid") String  userId,HttpServletRequest req) {
@@ -60,20 +63,23 @@ public class ApiEmailController {
         token = Toolkit._3DES_encode(user.getSalt().getBytes(), token.getBytes());
         String url = req.getRequestURL() + "?token=" + token+"&"+"userId=" + userId;
         // String url = Globals.AppRoot + "?token=" + token +"&userId=" + userId;
-         String html = "<div>如果无法点击,请拷贝一下链接到浏览器中打开<p/>验证链接 %s</div>";
-        // String html = "你好";
+
+        // TODO: 2018/1/19 0019 从模板里面读出html
+        String html = "您好！" + StringUtil.getUsername()+",请访问链接激活邮箱！"+
+                "<br>" +
+                "<div>如果无法点击,请拷贝一下链接到浏览器中打开<p/>验证链接 %s</div>";
+
         html = String.format(html, url, url);
         try {
             boolean ok = emailService.send(
-                    user.getEmail(), "雇佣帮", html.toString());
-            if (!ok) {
-                return re.setv("ok", false).setv("msg", "发送失败");
+                    user.getEmail(), "雇佣帮账号邮箱激活", html.toString());
+            if (ok) {
+                return Result.success("邮件发送成功，请注意查收！");
             }
         } catch (Throwable e) {
             log.debug("发送邮件失败", e);
-            re.setv("ok", false).setv("msg", "发送失败");
         }
-        return re.setv("ok", true);
+        return Result.error("邮件发送失败，请稍后再试！");
     }
 
     /**

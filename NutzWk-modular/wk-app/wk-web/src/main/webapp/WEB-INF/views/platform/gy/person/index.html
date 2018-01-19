@@ -280,7 +280,11 @@ layout("/layouts/platform.html"){
                 console.log("vue ajax begin");
                 var url= "${base}/open/api/email/mail/activeMail?userid="+id;
                 $.post(url,function(data){
-                    console.log("vueajax:"+data);
+                    if (data.code == 0) {
+                        Toast.success(data.msg);
+                    } else {
+                        Toast.error(data.msg);
+                    }
                 })
             }
         }

@@ -5,8 +5,11 @@ import org.nutz.json.JsonFormat;
 import org.nutz.lang.Strings;
 import org.nutz.mvc.Mvcs;
 
+
 /**
- * Created by wizzer on 2016/12/21.
+ * json返回后台结果
+ * 状态码[0:success,1:error,2:warning]
+ * // TODO: 2018/1/19 0019  
  */
 public class Result {
 

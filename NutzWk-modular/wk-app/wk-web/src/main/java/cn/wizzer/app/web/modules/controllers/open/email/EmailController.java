@@ -63,8 +63,8 @@ public class EmailController {
         String token = String.format("%s,%s", user.getEmail(), System.currentTimeMillis());
         token = Toolkit._3DES_encode(user.getSalt().getBytes(), token.getBytes());
 
-        //String url = req.getRequestURL() + "?token=" + token+ "&userId=" + userId;
-        String url = Globals.AppRoot + "?token=" + token +"&userId=" + userId;
+//        String url = req.getRequestURL() + "?token=" + token+ "&userId=" + userId;
+        String url = Globals.AppDomain + "?token=" + token +"&userId=" + userId;
         String html = "<div>如果无法点击,请拷贝一下链接到浏览器中打开<p/>验证链接 %s</div>";
         html = String.format(html, url, url);
 

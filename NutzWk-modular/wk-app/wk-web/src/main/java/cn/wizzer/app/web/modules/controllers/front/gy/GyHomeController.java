@@ -109,15 +109,15 @@ public class GyHomeController {
             HttpServletRequest req
     ) {
 
-        //验证用户名，邮箱是否被注册
+        // 验证用户名，邮箱是否被注册
         if (null != userService.fetch(Cnd.where("email", "=", email).and("emailChecked","=",true))) {
             return Result.error("邮箱存在！");
         }
 
+        // 验证账号
         if (null != userService.fetch(Cnd.where("username", "=", username).and("disabled", "=", false))) {
             return Result.error("账号存在！");
         }
-
 
         //初始化用户注册信息
         Sys_user user = new Sys_user();
