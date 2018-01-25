@@ -68,7 +68,7 @@ public class XmFinalController {
     @RequiresPermissions("platform.xm.final")
     public Object data(@Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
         Cnd cnd = Cnd.NEW();
-        cnd.and("status","=",1);
+        cnd.and("status",">=",1);
         return xmInfService.data(length, start, draw, order, columns, cnd, null);
     }
 
@@ -123,7 +123,7 @@ public class XmFinalController {
                     xmEvaluationService.insert(eva);
                     //账单
                     gy_pay pay = gyPayService.getFirstPay(xmf.getGyid());
-                    xmBillService.update(org.nutz.dao.Chain.make("status",1).add("gypayid",pay.getId()).add("note",billnote).add("at",at),Cnd.where("xminfid","=",id));
+                    xmBillService.update(org.nutz.dao.Chain.make("status",1).add("gypayid",pay.getId()).add("paysum",paysum).add("note",billnote).add("at",at),Cnd.where("xminfid","=",id));
                     //项目状态
                     xmInfService.update(org.nutz.dao.Chain.make("status",2),Cnd.where("id","=",id));
                 }

@@ -1,6 +1,7 @@
 package cn.wizzer.app.web.modules.controllers.platform.xm;
 
 import cn.wizzer.app.gy.modules.models.gy_inf;
+import cn.wizzer.app.gy.modules.models.gy_pay;
 import cn.wizzer.app.gy.modules.services.GyInfService;
 import cn.wizzer.app.web.commons.services.xm.XmService;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
@@ -69,7 +70,12 @@ public class XmPersonController {
         String gyid = StringUtil.getGyid();
         gy_inf gy = gyInfService.fetch(gyid);
         gy = gyInfService.fetchLinks(gy,"gypays");
-        if(null == gy.getGypays()){
+
+
+//        List<gy_pay> gy_pays = gy.getGypays();
+//        gy_pays.toArray();
+
+        if(0 == gy.getGypays().size()){
             return Result.error("请先设置您的收款方式！");
         }
 
@@ -234,7 +240,7 @@ public class XmPersonController {
                 xmFeedback.setOpAt((int) (System.currentTimeMillis() / 1000));
                 xmFeedback.setReply(" ");
                 xmFeedback.setAt((int) (System.currentTimeMillis() / 1000));
-                xmFeedbackService.insert(xmFeedback);
+                xmFeedbackService.insertOrUpdate(xmFeedback);
                 return Result.success("system.success");
             } catch (Exception e) {
                 log.debug(e);

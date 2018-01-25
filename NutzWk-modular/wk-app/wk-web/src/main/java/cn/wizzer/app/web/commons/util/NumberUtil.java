@@ -4,6 +4,7 @@ import cn.wizzer.framework.util.DateUtil;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import java.util.Date;
+import java.util.Random;
 
 
 /**
@@ -184,7 +185,7 @@ public class NumberUtil {
      */
     public String GyPayidGenerator(String gyid,int num){
         StringBuilder str = new StringBuilder();
-        str.append("pay"+num);
+        str.append("pay"+num+"_");
         str.append(gyid);
         return str.toString();
     }

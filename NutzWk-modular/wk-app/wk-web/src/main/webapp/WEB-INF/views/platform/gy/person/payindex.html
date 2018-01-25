@@ -102,12 +102,12 @@ layout("/layouts/platform.html"){
                 {
                     "render": function (data, type, row) {
                         if (0 == data) {
-                            return '银行卡';
+                            return '支付宝';
                         }
                         else if(1 == data){
-                            return '支付宝';
+                            return '微信';
                         }else{
-                            return  '微信';
+                            return  '银行卡';
                         }
                     },
                     "targets": 2

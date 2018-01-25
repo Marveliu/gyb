@@ -84,7 +84,7 @@ layout("/layouts/platform.html"){
                                                 <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                                                 <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                                             </div>
-                                            <input type="hidden" id="firstcommit" name="firstcommitat" value="" />
+                                            <input type="hidden" id="firstcommit" name="firstcommitat" value="${@date.getDateTime()}" />
                                         </div>
 
                                         <div class="form-group">
@@ -276,7 +276,42 @@ layout("/layouts/platform.html"){
             forceParse: 0,
             showMeridian: 1
         });
+
         initTreeView();
+
+
+         <%if(!isEmpty(libtask)) {%>
+
+            //初始化技能限制
+            $.ajax({
+                url:"${base}/platform/xm/task/limitdata?libtaskid=${libtask.id}",
+                success:function(result){
+                    console.log(result);
+
+                    $.each(result,function (i,n) {
+                        console.log("索引："+i+",值："+n.toString())
+                        $("#skilllimit").append(
+                            '<div class="form-group">'+
+                            '<label for="libskillid' +i+
+                            '" class="col-sm-2 control-label">' + n.name+
+                            '</label>' +
+                            '<div class="col-sm-8">' +
+                            '<input id="libskillid' + i+
+                            '" type="number"  class="form-control" data-parsley-type="integer" data-parsley-required="true" placeholder="请输入要求等级1-5" name="xmlimits:' +i+
+                            '.skilllevel" value="">' +
+                            '<input type="hidden" name="xmlimits:' +i +
+                            '.skillid" value="' + n.id +
+                            '" >'+
+                            '</div> '+
+                            '</div>'
+                        )
+                    })
+                }
+            });
+
+
+        <%}%>
+
 
         $('#file_upload').uploadifive({
             'auto': true,
@@ -324,6 +359,7 @@ layout("/layouts/platform.html"){
             success: function (data, statusText, xhr, form) {
                 if (data.code == 0) {
                     Toast.success(data.msg);
+                    window.history.go(-1);
                 } else {
                     Toast.error(data.msg);
                 }

@@ -162,14 +162,25 @@ layout("/layouts/platform.html"){
             var btn = $(this);
             btn.button("loading");
 
-            $('#fianlForm').submit();
-//            $('#fianlForm').submit(function () {
-//                $(this).ajaxSubmit(function () {
-//
-//                })
-//                return false; //阻止表单默认提交
-//            });
+
+            $.ajax({
+                type:'post',
+                url:'${base}/platform/xm/person/xmcompletedcommit',
+                data:$("#fianlForm").serialize(),
+                cache:false,
+                dataType:'json',
+                success:function(data){
+                    if (data.code == 0) {
+                        Toast.success(data.msg);
+                        setTimeout("window.history.go(-1);",1000)
+                    } else {
+                        Toast.error(data.msg);
+                    }
+                }
+            });
+
         });
+
         $("#dialogDetail").on("hidden.bs.modal", function () {
             $(this).removeData("bs.modal");
         });
@@ -203,7 +214,7 @@ layout("/layouts/platform.html"){
                     '<br>收款账号：' + payid
             );
 
-            Toast.success("更改支付方式为：" + pay.data()[0]["id"])
+            Toast.success("支付方式已修改！")
         } else {
             Toast.warning("请先选择您的收款方式！");
         }

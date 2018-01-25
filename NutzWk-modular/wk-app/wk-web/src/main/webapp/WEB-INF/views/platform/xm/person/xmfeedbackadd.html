@@ -17,9 +17,9 @@ layout("/layouts/platform.html"){
             </ol>
         </div>
         <div class="col-md-6">
-            <!--<div class="btn-group tool-button pull-right">-->
-                <!--<a class="btn btn-primary navbar-btn" href="${base}/platform/xm/person/personxm" id="goBack" data-pjax><i class="ti-angle-left"></i>${msg['globals.button.back']}</a>-->
-            <!--</div>-->
+            <div class="btn-group tool-button pull-right">
+                <a class="btn btn-primary navbar-btn" href="${base}/platform/xm/person/personxm" id="goBack" data-pjax><i class="ti-angle-left"></i>${msg['globals.button.back']}</a>
+            </div>
         </div>
     </div>
 </header>
@@ -104,9 +104,9 @@ layout("/layouts/platform.html"){
             'multi': false,
             'width': '100%',
             'height': '35',
-            'buttonText': '请上传附件',
+            'buttonText': '推荐使用压缩rar等格式，最大可上传10M，超过限制请在下面给出资源链接！',
             'fileType': 'application/zip,application/rar',
-            'fileSizeLimit': 2048,
+            'fileSizeLimit': 10240,
             'queueSizeLimit': 1,
             'formData': {},
             'queueID': 'queue',

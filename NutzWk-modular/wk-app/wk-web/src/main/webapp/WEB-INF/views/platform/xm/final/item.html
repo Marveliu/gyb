@@ -48,6 +48,17 @@ layout("/layouts/platform.html"){
                             </div>
 
                             <div class="row">
+                                <div class="col-xs-6">
+                                    <address>
+                                        <strong>任务内容:</strong><br>
+                                        <br>
+                                        任务酬金:${obj.award!}<br>
+                                        任务简介:${obj.taskinfo!}<br>
+                                    </address>
+                                </div>
+                            </div>
+
+                            <div class="row">
                                 <div class="col-xs-12">
                                     <address>
                                         <strong>说明:</strong><br>
@@ -177,12 +188,38 @@ layout("/layouts/platform.html"){
             $("#dialogCommit").modal("show");
         });
 
+
+
         $("#doCommit").on("click", function () {
             var btn = $(this);
             btn.button("loading");
 
-            $('#fianlForm').submit();
+            $.ajax({
+                type:'post',
+                url:'${base}/platform/xm/final/commit',
+                data:$("#fianlForm").serialize(),
+                cache:false,
+                dataType:'json',
+                success:function(data){
+                    if (data.code == 0) {
+                        Toast.success(data.msg);
+                        setTimeout("window.history.go(-1);",1000)
+
+                    } else {
+                        Toast.error(data.msg);
+                    }
+                }
+            });
+
+
+
+
         });
+
+
+
+
+
 
         $("#dialogDetail").on("hidden.bs.modal", function () {
             $(this).removeData("bs.modal");

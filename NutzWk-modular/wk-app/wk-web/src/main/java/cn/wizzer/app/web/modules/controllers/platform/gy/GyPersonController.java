@@ -193,7 +193,6 @@ public class GyPersonController {
                         CaptchaToken token = (CaptchaToken) req.getSession().getAttribute("sysUserToken");
                     // TODO: 2018/1/7 0007 重复login，应该会创造两个session 
                         currentUser.login(token);
-
                     // 发送邮件
                     Thread t = new Thread(new Runnable(){
                         public void run(){
@@ -389,13 +388,15 @@ public class GyPersonController {
         }
     }
 
-    @At("/payedit")
+    @At("/payedit/?")
     @Ok("beetl:/platform/gy/person/payedit.html")
     @RequiresPermissions("gy.person")
-    public void payedit(HttpServletRequest req) {
-
+    public void payedit(
+            String payid,
+            HttpServletRequest req) {
         gy_inf gy = gyInfService.getGyByUserId(StringUtil.getUid());
         req.setAttribute("gy", gy);
+        req.setAttribute("obj", gyPayService.fetch(payid));
         //req.setAttribute("obj", g(StringUtil.getGyid()));
     }
 
