@@ -135,6 +135,7 @@ public class GyHomeController {
         user.setLoginAt(0);
         user.setEmail(email);
         user.setDisabled(false);
+        user.setUnitid("fd02b028caed459590b68dde6d47f115");
         user.setEmailChecked(false);//邮箱未验证
 
         // 注册用户并发送激活邮件

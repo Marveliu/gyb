@@ -44,13 +44,13 @@ public class SysUserinfController {
 
     @At("")
     @Ok("beetl:/platform/sys/userinf/index.html")
-    @RequiresPermissions("platform.sys.userinf")
+    @RequiresPermissions("platform.sys.userinf.list")
     public void index() {
     }
 
     @At("/data")
     @Ok("json")
-    @RequiresPermissions("platform.sys.userinf")
+    @RequiresPermissions("platform.sys.userinf.list")
     public Object data(@Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
 		Cnd cnd = Cnd.NEW();
         Object test = vSysuserService.data(length, start, draw, order, columns, cnd, null);
@@ -59,7 +59,7 @@ public class SysUserinfController {
 
     @At("/add")
     @Ok("beetl:/platform/sys/userinf/add.html")
-    @RequiresPermissions("platform.sys.userinf")
+    @RequiresPermissions("platform.sys.userinf.add")
     public void add() {
 
     }
@@ -68,7 +68,9 @@ public class SysUserinfController {
     @Ok("json")
     @RequiresPermissions("platform.sys.userinf.add")
     @SLog(tag = "gz_inf", msg = "${args[0].id}")
-    public Object addDo(@Param("..")Sys_userinf userinf, @Param("birthdayat") String birthday, HttpServletRequest req) {
+    public Object addDo(
+            @Param("..")Sys_userinf userinf,
+            @Param("birthdayat") String birthday, HttpServletRequest req) {
 		try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             int birthdayat = (int) (sdf.parse(birthday).getTime() / 1000);
@@ -80,11 +82,40 @@ public class SysUserinfController {
 		}
     }
 
+
+    @At("/person")
+    @Ok("beetl:/platform/sys/userinf/person.html")
+    @RequiresPermissions("platform.sys.userinf.person")
+    public void person(String id,HttpServletRequest req) {
+        String userid =  StringUtil.getSysuserid();
+        req.setAttribute("obj", sysUserinfService.fetch(userid));
+    }
+
+
+    @At("/personeditDo")
+    @Ok("beetl:/platform/sys/userinf/person.html")
+    @RequiresPermissions("platform.sys.userinf.person")
+    public Object personeditDo(@Param("..")Sys_userinf userinf, @Param("birthdayat") String birthday, HttpServletRequest req) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            int birthdayat = (int) (sdf.parse(birthday).getTime() / 1000);
+            userinf.setBirthday(birthdayat);
+            userinf.setOpBy(StringUtil.getUid());
+            userinf.setOpAt((int) (System.currentTimeMillis() / 1000));
+            sysUserinfService.updateIgnoreNull(userinf);
+            return Result.success("system.success");
+        } catch (Exception e) {
+            return Result.error("system.error");
+        }
+    }
+
+
     @At("/edit/?")
     @Ok("beetl:/platform/sys/userinf/edit.html")
-    @RequiresPermissions("platform.sys.userinf")
+    @RequiresPermissions("platform.sys.userinf.edit")
     public void edit(String id,HttpServletRequest req) {
-		req.setAttribute("obj", sysUserinfService.fetch(id));
+        req.setAttribute("obj", sysUserinfService.fetch(id));
+
     }
 
     @At("/editDo")
@@ -96,7 +127,6 @@ public class SysUserinfController {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             int birthdayat = (int) (sdf.parse(birthday).getTime() / 1000);
             userinf.setBirthday(birthdayat);
-
             userinf.setOpBy(StringUtil.getUid());
             userinf.setOpAt((int) (System.currentTimeMillis() / 1000));
             sysUserinfService.updateIgnoreNull(userinf);
