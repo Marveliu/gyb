@@ -4,6 +4,7 @@ import cn.wizzer.app.gy.modules.services.impl.GyInfServiceImpl;
 import cn.wizzer.app.gz.modules.services.GzInfService;
 import cn.wizzer.app.gz.modules.services.impl.GzInfServiceImpl;
 import cn.wizzer.app.sys.modules.services.impl.SysDictServiceImpl;
+import cn.wizzer.app.sys.modules.services.impl.SysUserinfServiceImpl;
 import cn.wizzer.app.web.commons.util.NumberUtil;
 import cn.wizzer.framework.base.model.BaseModel;
 import cn.wizzer.framework.util.DateUtil;
@@ -139,7 +140,7 @@ public class Sys_userinf extends BaseModel implements Serializable {
     public String userinfid() {
         String id = new String();
         try {
-            int count = Mvcs.getIoc().get(SysDictServiceImpl.class).count();
+            int count = Mvcs.getIoc().get(SysUserinfServiceImpl.class).count();
             id =  Mvcs.getIoc().get(NumberUtil.class).GyberIdGeneraotr(count,this.getSex().toString());
         }catch (Exception e){
             Logs.get().debug(e);
