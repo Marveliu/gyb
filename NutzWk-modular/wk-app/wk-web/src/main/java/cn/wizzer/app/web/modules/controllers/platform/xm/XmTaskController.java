@@ -218,7 +218,7 @@ public class XmTaskController {
                     dao.deleteLinks(oldxmtask,"xmlimits");
                     xmTaskService.insertLinks(xmtask,"xmlimits");
                     //更新
-                    xmTaskService.update(xmtask);
+                    xmTaskService.updateIgnoreNull(xmtask);
                 }
             });
 

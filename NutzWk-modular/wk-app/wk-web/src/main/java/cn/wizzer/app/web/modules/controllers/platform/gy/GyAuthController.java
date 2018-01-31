@@ -153,10 +153,10 @@ public class GyAuthController{
         }
     }
 
-    @At("/disable/?")
+    @At("/disable")
     @Ok("json")
     @RequiresPermissions("platform.gy.auth")
-    @SLog(tag = "认证不通过", msg = "雇员编号:${args[1].getAttribute('id')}")
+    @SLog(tag = "认证不通过", msg = "雇员编号:${args[1].getAttribute('gyid')}")
     public Object disable(
             @Param("gyid") String id,
             @Param("note") String note,

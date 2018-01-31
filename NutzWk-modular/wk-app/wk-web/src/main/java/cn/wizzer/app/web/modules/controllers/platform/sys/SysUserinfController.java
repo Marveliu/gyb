@@ -86,14 +86,14 @@ public class SysUserinfController {
     @At("/person")
     @Ok("beetl:/platform/sys/userinf/person.html")
     @RequiresPermissions("platform.sys.userinf.person")
-    public void person(String id,HttpServletRequest req) {
+    public void person(HttpServletRequest req) {
         String userid =  StringUtil.getSysuserid();
         req.setAttribute("obj", sysUserinfService.fetch(userid));
     }
 
 
     @At("/personeditDo")
-    @Ok("beetl:/platform/sys/userinf/person.html")
+    @Ok("json")
     @RequiresPermissions("platform.sys.userinf.person")
     public Object personeditDo(@Param("..")Sys_userinf userinf, @Param("birthdayat") String birthday, HttpServletRequest req) {
         try {

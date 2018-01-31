@@ -46,7 +46,6 @@ public class GyAuthServiceImpl extends BaseServiceImpl<gy_auth> implements GyAut
     public boolean disable(String gyid,String note){
         if(this.dao().update(gy_auth.class, Chain.make("status", 3).add("note",note), Cnd.where("gyid", "=", gyid))!=0){
             return true;
-
         }
         return false;
     }
