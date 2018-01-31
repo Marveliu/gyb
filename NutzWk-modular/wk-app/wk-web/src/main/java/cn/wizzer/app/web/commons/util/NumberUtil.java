@@ -28,14 +28,12 @@ public class NumberUtil {
      */
     public String GyIdGeneraotr(int num,String schoolcode,int stulevel,String sex){
         StringBuilder str = new StringBuilder();
-
         str.append("gy");
-        str.append(DateUtil.format(new Date(),"yyyy").substring(0,4));
-        str.append(schoolcode);
-        str.append(stulevel);
-        str.append(sex);
+        str.append(DateUtil.format(new Date(),"yyyyMMdd").substring(2,6));
+//        str.append(schoolcode);
+//        str.append(stulevel);
+//        str.append(sex);
         str.append(num);
-
         return str.toString();
     }
 

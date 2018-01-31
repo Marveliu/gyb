@@ -198,7 +198,7 @@ layout("/layouts/platform.html"){
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">选择上级菜单</h4>
+                <h4 class="modal-title">选择学校</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -208,9 +208,6 @@ layout("/layouts/platform.html"){
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="pull-left">
-                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="selectFirstMenu()">设为顶级菜单</button>
-                </div>
                 <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
                 <button type="button" class="btn btn-primary" onclick="selectParentMenu()">确认选择</button>
             </div>
@@ -221,14 +218,14 @@ layout("/layouts/platform.html"){
 <script type="text/javascript">
 
     // 学校选择
-    function initSysDictTreeView(code) {
+    function initSysDictTreeView(pid) {
         $("#jsTreeParentUnit").jstree({
             plugins: ["wholerow", "json_data"],
             core: {
                 data: {
                     dataType: "json",
                     url: function (node) {
-                        return node.id === "#" ? "${base}/platform/sys/dict/opentree?code="+ code: "${base}/platform/sys/dict/opentree?pid=" + node.id
+                        return "${base}/platform/sys/dict/opentree?pid=" + pid
                     }
                 },
                 multiple: false
@@ -255,7 +252,7 @@ layout("/layouts/platform.html"){
 
 
     $(document).ready(function () {
-        initSysDictTreeView("school");
+        initSysDictTreeView("85ea1fe85f5449cd86cbae0c1354f523");
         myForm.init();
 
         // 年份选择器
