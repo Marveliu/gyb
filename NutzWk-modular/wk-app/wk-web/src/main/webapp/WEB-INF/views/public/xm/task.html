@@ -94,7 +94,7 @@ layout("/layouts/platform.html"){
         <section class="main-content bg-white ">
 
             <header class="header navbar clearfix bb bg-default pl0">
-                <p class="navbar-text">任务书详情</p>
+                <p class="navbar-text">任务书编号:${obj.id!}</p>
                 <div class="btn-group pull-right">
                     <button type="button" class="btn btn-default navbar-btn btn-sm" onclick="window.history.back()">
                     <i class="fa fa-mail-reply"></i>
@@ -116,11 +116,15 @@ layout("/layouts/platform.html"){
                 <!-- inner content wrapper -->
                 <div class="wrapper" style="bottom: 50px;">
 
-                    <div class="lead"> ${obj.taskname!}</div>
-                    <div class="">
-                        <em id="post-date" class="">${@date.getDate(obj.publishAt,"yyyy-MM-dd")}</em>
-                        <em class="">${obj.author!}</em>
+                    <h3> ${obj.taskname!}</h3>
+
+
+                    <div class="mb15">
+                        <em id="post-date" class="">发布时间:${@date.getDate(obj.publishAt,"yyyy-MM-dd")}</em>
+                        <em class="">项目经理:${obj.authorrealname!}</em>
                     </div>
+
+                    <hr>
 
                     <div class="rich_media_content " id="js_content">
                         ${obj.content!}
@@ -128,6 +132,7 @@ layout("/layouts/platform.html"){
 
                 </div>
                 <!-- /inner content wrapper -->
+
 
             </div>
             <!-- /content wrapper -->

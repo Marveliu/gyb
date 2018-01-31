@@ -6,6 +6,7 @@ import cn.wizzer.app.sys.modules.models.Sys_user;
 import cn.wizzer.app.sys.modules.services.*;
 import cn.wizzer.app.web.commons.services.email.EmailService;
 import cn.wizzer.app.web.commons.slog.SLogService;
+import cn.wizzer.app.web.modules.controllers.open.api.email.ApiEmailController;
 import cn.wizzer.app.web.modules.controllers.open.email.EmailController;
 import cn.wizzer.framework.base.Result;
 import org.apache.shiro.crypto.RandomNumberGenerator;
@@ -58,6 +59,9 @@ public class GyHomeController {
     private EmailService emailService;
     @Inject
     private EmailController emailController;
+
+    @Inject
+    private ApiEmailController apiEmailController;
 
     private String loginname = "public";        //
     private String rolecode = "gy1";            //注册雇员绑定角色类型
@@ -146,7 +150,7 @@ public class GyHomeController {
                     Sys_user result = userService.insert(user);
                     dao.insert("sys_user_role", org.nutz.dao.Chain.make("userId", result.getId()).add("roleId", roleService.fetch(Cnd.where("code", "=", rolecode)).getId()));
                     if (null != result) {
-                        emailController.activeMail(user.getId());
+                        apiEmailController.activeMail(user.getId(),req);
                     }
                 }
             });

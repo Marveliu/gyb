@@ -11,6 +11,7 @@ import org.apache.shiro.crypto.hash.Sha256Hash;
 
 import org.junit.Test;
 import org.nutz.dao.Dao;
+import org.nutz.mvc.Mvcs;
 
 /**
  * Created by wizzer on 2017/5/19.
@@ -20,8 +21,9 @@ public class SysUserTest extends TestBase {
     @Test
     public void testInsert() {
 
-        GyInfService test = this.ioc.get(GyInfServiceImpl.class);
-        log.debug(test.getPaysByGyid("fuck"));
+//        GyInfService test = this.ioc.get(GyInfServiceImpl.class);
+
+        //log.debug(test.getPaysByGyid("fuck"));
 
        // Sys_user user = new Sys_user();
        // user.setLoginname("test");

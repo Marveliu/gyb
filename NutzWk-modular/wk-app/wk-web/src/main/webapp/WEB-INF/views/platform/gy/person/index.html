@@ -52,7 +52,7 @@ layout("/layouts/platform.html"){
                                             <a href="${base}/platform/gy/person/infedit" class="btn btn-social btn-xs btn-facebook mr5" data-toggle="modal" data-target="#dialogDeal"><i class="fa fa-info"></i>个人信息 </a>
                                             <!--<a href="${base}/platform/gy/person/payindex" class="btn btn-social btn-xs btn-facebook mr5" data-toggle="modal" data-target="#dialogPayDeal"><i class="fa fa-facebook"></i>交易方式 </a>-->
                                             <a href="${base}/platform/gy/person/payindex" class="btn btn-social btn-xs btn-google-plus mr5" ><i class="fa fa-rmb"></i>交易方式 </a>
-                                            <a id="emailchecked" class="btn btn-social btn-xs btn-twitter mr5" v-if="!emailchecked" v-on:click="askActiviEmail('${obj.id}')"><i class="fa fa-mail-forward"></i>发送激活邮件 </a>
+                                            <a id="emailchecked" class="btn btn-social btn-xs btn-twitter mr5" v-if="!emailchecked" v-on:click="askActiviEmail('${obj.id}')"><i class="fa fa-mail-forward"></i>邮箱未激活，发送激活邮件 </a>
                                         </div>
 
                                     </div>

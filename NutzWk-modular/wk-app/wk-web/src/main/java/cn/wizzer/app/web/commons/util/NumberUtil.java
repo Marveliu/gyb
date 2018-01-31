@@ -92,7 +92,7 @@ public class NumberUtil {
      */
     public String XmtaskidGenerator(int num,String category){
         StringBuilder str = new StringBuilder();
-        str.append("xmtask_");
+        str.append("rws_");
         str.append(category);
         str.append(DateUtil.format(new Date(),"yyyyMMdd").substring(0,8));
         str.append(num);
@@ -101,7 +101,7 @@ public class NumberUtil {
 
 
     /**
-     * 申请单编号生成
+     * 任务申请单编号生成
      * @param num
      * @param task
      * @return
@@ -117,14 +117,14 @@ public class NumberUtil {
 
 
     /**
-     * 立项编号生成
+     * 任务编号生成
      * @param num
      * @param task
      * @return
      */
     public String XminfidGenerator(int num,String task){
         StringBuilder str = new StringBuilder();
-        str.append("xminf_");
+        str.append("rw_");
         String[] arr = task.split("_");
         str.append(arr[1]);
         str.append(num);
@@ -133,14 +133,14 @@ public class NumberUtil {
 
 
     /**
-     * 反馈编号生成
+     * 任务反馈编号生成
      * @param num
      * @param xminfid
      * @return
      */
     public String XfdIdGenerator(int num,String xminfid){
         StringBuilder str = new StringBuilder();
-        str.append("xfd_");
+        str.append("fk_");
         String[] arr = xminfid.split("_");
         str.append(arr[1]);
         str.append("_"+num);
@@ -162,7 +162,7 @@ public class NumberUtil {
 
 
     /**
-     * 项目评价单生成编号
+     * 任务评价单生成编号
      * @param infid
      * @return
      */

@@ -6,6 +6,7 @@ import cn.wizzer.app.sys.modules.models.Sys_user;
 import cn.wizzer.app.sys.modules.services.SysUserService;
 import cn.wizzer.app.web.commons.shiro.filter.PlatformAuthenticationFilter;
 import cn.wizzer.app.web.commons.slog.SLogService;
+import cn.wizzer.app.web.modules.controllers.open.api.email.ApiEmailController;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.shiro.exception.CaptchaEmptyException;
 import cn.wizzer.framework.shiro.exception.CaptchaIncorrectException;
