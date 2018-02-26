@@ -106,7 +106,8 @@ public class gy_inf extends BaseModel implements Serializable {
     @ManyMany(relation = "gy_skill", from = "gyid", to = "skillid")
     private List<gy_skill> gyskills;
 
-    @Many(field = "id")
+    // gy_pay查询是通过视图，所以此处是gyid
+    @Many(field = "gyid")
     private List<gy_pay> gypays;
 
 
