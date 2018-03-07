@@ -38,11 +38,7 @@ public class NumberUtil {
 //        str.append(schoolcode);
 //        str.append(stulevel);
 //        str.append(sex);
-        str.append(num);
-<<<<<<< HEAD
-=======
         str.append(number);
->>>>>>> origin/yangfan
         return str.toString();
     }
 
