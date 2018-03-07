@@ -1,4 +1,4 @@
-﻿# Compiled class file
+# Compiled class file
 *.class
 *.iml
 *.idea
@@ -30,3 +30,4 @@ NutzWk 模板
 temphub
 NutzWk-modular/wk-app/wk-web/logs/
 NutzWk-modular/wk-app/wk-web/src/main/java/cn/wizzer/app/web/commons/services/theard/
+NutzWk-modular/wk-app/wk-web/ehcache.disk.store.dir
