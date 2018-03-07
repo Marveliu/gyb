@@ -4,15 +4,18 @@ import cn.wizzer.framework.util.DateUtil;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import java.util.Date;
-import java.util.Random;
 
 
+
+//单例用户模式参考链接
+// http://blog.csdn.net/csdn759322423/article/details/70230076
 /**
  * 自用编号生产器
  *
  * @Author Marveliu
  * @Create 2018/1/6 0006.
  */
+
 
 @IocBean
 public class NumberUtil {
@@ -26,7 +29,9 @@ public class NumberUtil {
      * @param sex
      * @return
      */
+
     public String GyIdGeneraotr(int num,String schoolcode,int stulevel,String sex){
+        int number=10+(int)(Math.random()*90);
         StringBuilder str = new StringBuilder();
         str.append("gy");
         str.append(DateUtil.format(new Date(),"yyyyMMdd").substring(2,6));
@@ -34,6 +39,10 @@ public class NumberUtil {
 //        str.append(stulevel);
 //        str.append(sex);
         str.append(num);
+<<<<<<< HEAD
+=======
+        str.append(number);
+>>>>>>> origin/yangfan
         return str.toString();
     }
 
