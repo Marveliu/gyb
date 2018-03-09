@@ -13,6 +13,7 @@ import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
 import cn.wizzer.framework.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -157,6 +158,9 @@ public class GyInfController{
         try {
                 if(gyService.updateGyRole(id,"gy4")){
                     req.setAttribute("id", id);
+
+                    //todo: 当前status仅仅是作为标记
+                    gyInfService.update(Chain.make("status",1),Cnd.where("userid","=",id));
                     return Result.success("system.success");
                 }else {
                     return Result.error("system.error");

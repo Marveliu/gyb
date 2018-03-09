@@ -99,6 +99,9 @@ public class gy_inf extends BaseModel implements Serializable {
 
     private String email;
 
+
+
+
     //参照
     @ManyMany(relation = "xm_apply", from = "gyid", to = "xmtaskid")
     private List<xm_task> xmtasks;
@@ -109,6 +112,9 @@ public class gy_inf extends BaseModel implements Serializable {
     // gy_pay查询是通过视图，所以此处是gyid
     @Many(field = "gyid")
     private List<gy_pay> gypays;
+
+
+
 
 
     public String getId() {

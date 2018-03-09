@@ -184,4 +184,14 @@ public class GyService {
     }
 
 
+    //  通过用户编号获得雇员第
+    public String getGyidById(String id){
+
+        Sys_user user =  sysUserService.fetch(id);
+        if(!Lang.isEmpty(user)){
+            return gyInfService.fetch(id).getId();
+        }
+        return null;
+    }
+
 }

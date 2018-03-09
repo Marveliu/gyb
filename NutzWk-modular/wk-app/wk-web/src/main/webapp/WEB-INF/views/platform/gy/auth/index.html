@@ -176,6 +176,11 @@ layout("/layouts/platform.html"){
         });
         $("#searchBtn").on('click', function () {
             datatable.ajax.reload();
+            //清除
+            $('#gyid').val();
+            $('#realname').val();
+            $('#status').val();
+
         });
     }
     function del(id) {
@@ -235,8 +240,8 @@ layout("/layouts/platform.html"){
     function enable(id) {
         $.post("${base}/platform/gy/auth/enable?gyid=" + id, {}, function (data) {
             if (data.code == 0) {
-                $("#status" + id).attr("class", "fa fa-circle text-success ml5");
                 Toast.success(data.msg);
+                setTimeout('location.reload()',500);
             } else {
                 Toast.error(data.msg);
             }
@@ -246,8 +251,8 @@ layout("/layouts/platform.html"){
     function disable(id) {
         $.post("${base}/platform/gy/auth/disable?gyid=" + id, {}, function (data) {
             if (data.code == 0) {
-                $("#status" + id).attr("class", "fa fa-circle text-danger ml5");
                 Toast.success(data.msg);
+                setTimeout('location.reload()',500);
             } else {
                 Toast.error(data.msg);
             }

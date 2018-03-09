@@ -128,6 +128,11 @@ public class v_gy extends BaseModel implements Serializable {
     @Readonly
     private int gyauthstatus;
 
+
+    @Column("gyauthstatusname")
+    @Readonly
+    private String gyauthstatusname;
+
     @Column("disabled")
     @Readonly
     private String disabled;
@@ -355,5 +360,13 @@ public class v_gy extends BaseModel implements Serializable {
 
     public void setGyauthstatus(int gyauthstatus) {
         this.gyauthstatus = gyauthstatus;
+    }
+
+    public String getGyauthstatusname() {
+        return gyauthstatusname;
+    }
+
+    public void setGyauthstatusname(String gyauthstatusname) {
+        this.gyauthstatusname = gyauthstatusname;
     }
 }

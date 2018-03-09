@@ -4,7 +4,7 @@ layout("/layouts/platform.html"){
     <section class="content-wrap bg-white">
         <header class="header navbar bg-white shadow">
             <button class="btn btn-danger navbar-btn" onclick="setGy4()">
-                <i class="fa fa-save"></i>设置正式会员
+                <i class="fa fa-save"></i> 设置正式会员
             </button>
             <!-- <div class="btn-group tool-button">
             <a id="add" class="btn btn-primary navbar-btn" href="${base}/platform/gy/inf/add" data-pjax><i class="ti-plus"></i> ${msg['globals.button.add']}</a>
@@ -32,7 +32,7 @@ layout("/layouts/platform.html"){
                             <th>${msg['gy.inf.column.major']}</th>
                             <th>${msg['gy.inf.column.regYear']}</th>
                             <th>${msg['gy.inf.column.stuLevel']}</th>
-                            <th>${msg['gy.inf.column.status']}</th>
+                            <th>可否接单</th>
                             <th>${msg['globals.table.column.operation']}</th>
                         </tr>
                     </thead>
@@ -133,7 +133,7 @@ layout("/layouts/platform.html"){
                     { "data": "major", "bSortable": true },
                     { "data": "regYear", "bSortable": true },
                     { "data": "stuLevel", "bSortable": true },
-                    { "data": "isOnline", "bSortable": true },
+                    { "data": "status", "bSortable": true },
                 ],
                 "columnDefs": [
                     {
@@ -149,7 +149,7 @@ layout("/layouts/platform.html"){
                     },
                     {
                         "render": function (data, type, row) {
-                            if (data) {
+                            if (data == 1) {
                                 return '<i id="status' + row.gyid + '" class="fa fa-circle text-success ml5"></i>';
                             } else {
                                 return '<i id="status' + row.gyid + '" class="fa fa-circle text-danger ml5"></i>';

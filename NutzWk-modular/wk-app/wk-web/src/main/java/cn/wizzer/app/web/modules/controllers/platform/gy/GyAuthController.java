@@ -42,18 +42,23 @@ public class GyAuthController{
     @Ok("json")
     @RequiresPermissions("platform.gy.auth")
     public Object data(
-            @Param("gyid") String gyid, @Param("realname") String realname, @Param("status") String status,
+            @Param("gyid") String gyid,
+            @Param("realname") String realname,
+            @Param("status") String status,
             @Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
 		Cnd cnd = Cnd.NEW();
-        if("3".equals(status)){
-            return vGyService.data(length, start, draw, order, columns, cnd, null);
-        }
-        if (!Strings.isBlank(gyid))
+
+        if(!Strings.isBlank(gyid)){
             cnd.and("gyid", "=", gyid);
-        if (!Strings.isBlank(realname))
+        }
+
+        if(!Strings.isBlank(realname)){
             cnd.and("realname", "like", "%" + realname + "%");
-        if (!Strings.isBlank(status))
+        }
+
+        if(!Strings.isBlank(status) && !"3".equals(status) && Strings.isBlank(realname) && Strings.isBlank(gyid)){
             cnd.and("status", "=", StatusCodeUtil.bind("gyauth"+status) );
+        }
     	return vGyService.data(length, start, draw, order, columns, cnd, null);
     }
 
@@ -137,7 +142,7 @@ public class GyAuthController{
     @At("/enable")
     @Ok("json")
     @RequiresPermissions("platform.gy.auth")
-    @SLog(tag = "认证通过", msg = "雇员编号")
+    @SLog(tag = "认证通过", msg = "雇员编号:${req.getAttribute('gyid')}")
     public Object enable(
             @Param("gyid") String id,
             @Param("note") String note,
@@ -156,7 +161,7 @@ public class GyAuthController{
     @At("/disable")
     @Ok("json")
     @RequiresPermissions("platform.gy.auth")
-    @SLog(tag = "认证不通过", msg = "雇员编号:${args[1].getAttribute('gyid')}")
+    @SLog(tag = "认证不通过", msg = "雇员编号:${req.getAttribute('gyid')}")
     public Object disable(
             @Param("gyid") String id,
             @Param("note") String note,
