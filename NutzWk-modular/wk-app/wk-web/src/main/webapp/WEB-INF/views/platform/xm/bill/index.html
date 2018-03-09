@@ -57,11 +57,25 @@ layout("/layouts/platform.html"){
         </div>
     </div>
 </div>
-<div id="dialogCheck" class="modal fade bs-modal-sm" tabindex="-3" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+<div id="dialogCheck" class="modal fade bs-modal-sm" tabindex="-3" role="dialog" aria-hidden="true">    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">${msg['globals.button.check']}</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-xs-12">
+                    ${msg['globals.button.check.notice']}
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">${msg['globals.button.cancel']}</button>
+            <button id="okDel" type="button" class="btn btn-primary" data-loading-text="${msg['globals.button.delete.tip']}">${msg['globals.button.confirm']}</button>
         </div>
     </div>
+</div>
 </div>
 <script language="JavaScript">
     var datatable;
@@ -131,7 +145,7 @@ layout("/layouts/platform.html"){
     }
 
     function check(id) {
-        var dialog = $("#dialogDelete");
+        var dialog = $("#dialogCheck");
         dialog.modal("show");
         dialog.find("#okDel").unbind("click");
         dialog.find("#okDel").bind("click", function (event) {
