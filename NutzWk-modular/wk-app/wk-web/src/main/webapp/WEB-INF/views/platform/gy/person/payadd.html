@@ -56,6 +56,12 @@ layout("/layouts/platform.html"){
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-6 switcha">
+                                <a href="${base}/platform/gy/person/infedit" class="btn btn-social btn-sm btn-facebook mr5" data-toggle="modal" data-target="#dialogCheck"><i class="fa fa-info"></i>因雇员设置支付方式的相关信息错误导致财产损失的，雇佣帮概不负责，请谨慎操作，仔细核对！ </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-3"></div>
@@ -72,6 +78,30 @@ layout("/layouts/platform.html"){
         </section>
     </div>
 </div>
+
+
+<!--todo:添加用户协议文本-->
+<!--<div id="dialogCheck" class="modal fade bs-modal-sm" tabindex="-3" role="dialog" aria-hidden="true">    <div class="modal-dialog">-->
+    <!--<div class="modal-content">-->
+        <!--<div class="modal-header">-->
+            <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>-->
+            <!--<h4 class="modal-title">${msg['globals.button.check']}</h4>-->
+        <!--</div>-->
+        <!--<div class="modal-body">-->
+            <!--<div class="row">-->
+                <!--<div class="col-xs-12">-->
+                    <!--${msg['globals.button.check.notice']}-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="modal-footer">-->
+            <!--<button type="button" class="btn btn-default" data-dismiss="modal">${msg['globals.button.cancel']}</button>-->
+            <!--<button id="okDel" type="button" class="btn btn-primary" data-loading-text="${msg['globals.button.delete.tip']}">${msg['globals.button.confirm']}</button>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+<!--</div>-->
+
 <script language="JavaScript">
     $(document).ready(function () {
         myForm.init();
