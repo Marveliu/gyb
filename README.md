@@ -19,6 +19,20 @@ dev：开发分支，开发者进行开发的分支。
 
 > 标签说明，使用tags标记当前版本
 
+### 缺陷管理
+
+> TAPD和Github通过webhooks进行绑定，通过commit message传递消息
+
+commit message template：100018为bug编号，Marveliu为TAPD昵称。
+
+```
+--bug=1000018 --user=Marveliu
+add:*
+update:*
+fix:*
+upgrade:*
+```
+
 推送到master的分支上记录详细的主版本，例如`v1.2.3`，协作进行协作的时候请标记`v1.2.3.*`，`*`具体由你而定。
 
 
