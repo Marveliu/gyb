@@ -12,8 +12,8 @@
         <module>wk-app</module>
     </modules>
     <packaging>pom</packaging>
-    <name>NutzWk</name>
-    <url>http://www.wizzer.cn</url>
+    <name>gyb</name>
+    <url>http://www.guyongbang.cn</url>
 
 
     <properties>
