@@ -14,11 +14,15 @@
     <packaging>pom</packaging>
     <name>NutzWk</name>
     <url>http://www.wizzer.cn</url>
+
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jetty-version>9.4.2.v20170220</jetty-version>
         <nutz-version>1.r.63-SNAPSHOT</nutz-version>
     </properties>
+
+
     <developers>
         <developer>
             <id>wizzercn</id>
