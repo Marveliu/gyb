@@ -26,5 +26,7 @@ public interface GyInfService extends BaseService<gy_inf>{
     //  获得用户id
     public boolean ifEmailChecked(String gyid);
 
+    public boolean setQq(String gyid , String qq);
+
 
 }

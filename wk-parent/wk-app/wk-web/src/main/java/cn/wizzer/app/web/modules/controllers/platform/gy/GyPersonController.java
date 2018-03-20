@@ -237,17 +237,25 @@ public class GyPersonController {
             @Param("..") gy_inf gyInf,
             @Param("email") String email,
             @Param("birthdayat") String birthday,
+            @Param("qq") String qq,
             @Param("regYearat") String regyear,
             HttpServletRequest req) {
+        String userid = StringUtil.getUid();
+        gy_inf gy = gyInfService.getGyByUserId(userid);
+        Sys_user user = sysuserService.fetch(userid);
         try {
 
             if(!gyService.infCheckable(StringUtil.getGyid())){
-                return Result.error("在身份审核及审核完成阶段，无法修改个人信息");
+                if(!gy.getQq().equals(qq))
+                {
+                    gyService.changeQq(gyInf.getQq(),qq);
+                    return Result.success("你的qq已经成功修改为" + qq);
+                }
+                return Result.error("在身份审核及审核完成阶段，只可以修改个人qq");
             }
 
             // 邮箱修改
-            String userid = StringUtil.getUid();
-            Sys_user user = sysuserService.fetch(userid);
+
 
             // 验证邮箱是否修改
             if(email == user.getEmail()){

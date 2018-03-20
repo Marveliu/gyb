@@ -64,13 +64,14 @@ public class XmFeedbackController{
     @Ok("json")
     @RequiresPermissions("platform.xm.feedback")
     public Object data(
+            @Param("authorname") String authorname,
             @Param("xmid") String xminfid,
             @Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
 		Cnd cnd = Cnd.NEW();
         String sysuserid = StringUtil.getSysuserid();
         if("".equals(xminfid)){
             //默认查看该雇员经理下面所有的项目反馈
-            cnd.and("author","=",sysuserid);
+            cnd.and("authorrealname","like","%" + authorname + "%");
         }else{
             //查看指定id
             cnd.and("xminfid","=",xminfid);
@@ -170,11 +171,11 @@ public class XmFeedbackController{
         if (!Strings.isBlank(id)) {
             Cnd cnd = Cnd.NEW();
             cnd.and("code","=",id);
-            String sysuserid = StringUtil.getSysuserid();
-            Subject subject = SecurityUtils.getSubject();
-            if(!subject.isPermitted("platform.xm.feedback.manager")){
-                cnd.and("author","=",sysuserid);
-            }
+//            String sysuserid = StringUtil.getSysuserid();
+//            Subject subject = SecurityUtils.getSubject();
+//            if(!subject.isPermitted("platform.xm.feedback.manager")){
+//                cnd.and("author","=",sysuserid);
+//            }
             xm_feedback feedback = xmFeedbackService.fetch(cnd);
             req.setAttribute("obj", feedback);
         }else{
