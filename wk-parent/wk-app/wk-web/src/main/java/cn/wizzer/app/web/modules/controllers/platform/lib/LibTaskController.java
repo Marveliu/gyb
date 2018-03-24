@@ -53,10 +53,13 @@ public class LibTaskController {
         return new ArrayList<>();
     }
 
+
+
     @At
     @Ok("beetl:/platform/lib/task/add.html")
     @RequiresPermissions("lib.task")
     public Object add(@Param("pid") String pid) {
+
         return Strings.isBlank(pid) ? null : libTaskService.fetch(pid);
     }
 
