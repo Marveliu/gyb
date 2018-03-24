@@ -169,6 +169,20 @@ public class GyService {
         return false;
     }
 
+    /**
+     * QQ更改
+     * @param gyid
+     * @param qq
+     * @return
+     */
+    public boolean changeQq(String gyid,String qq)
+    {
+        gy_inf gy =gyInfService.fetch(gyid);
+        String id =gyInfService.getUserByGyid(gyid).getId();
+        gyInfService.setQq(id,qq);
+        return true;
+    }
+
     public boolean ifGyAuth(String gyid){
         return  gyAuthService.ifAuth(gyid);
     }

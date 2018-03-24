@@ -91,7 +91,21 @@ layout("/layouts/platform-xm.html"){
         </div>
     </div>
 </div>
-
+<div class="cd-panel from-right">
+    <header class="cd-panel-header">
+        <h4>高级筛选</h4>
+        <a href="javascript:;" class="cd-panel-close text-center"><i class="ti-close"></i> </a>
+    </header>
+    <div class="cd-panel-container">
+        <div class="cd-panel-content shadow">
+            <div class="form-group">
+                <label for="authorname">项目经理名称</label>
+                <input type="text" id="authorname" name="authorname" class="form-control" placeholder="请输入要查询的项目经理名称" autofocus>
+            </div>
+            <button id="searchBtn" type="button" class="btn btn-default">查询</button>
+        </div>
+    </div>
+</div>
 <script language="JavaScript">
     var datatable;
 
