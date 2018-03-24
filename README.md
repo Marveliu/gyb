@@ -1,7 +1,8 @@
 ### 协作须知
 
-1. 在dev分支上进行修改，pr到dev分支，master分支由我合并。
-2. 具体查看gitflow的协作模式。
+1. checkout 分支
+2. pr 分支到master
+3. 具体查看gitflow的协作模式。
 
 ### 分支说明
 
