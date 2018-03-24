@@ -7,6 +7,7 @@ import cn.wizzer.app.sys.modules.services.SysUserService;
 import cn.wizzer.framework.base.service.BaseServiceImpl;
 import cn.wizzer.app.gy.modules.models.gy_inf;
 import cn.wizzer.app.gy.modules.services.GyInfService;
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -70,5 +71,15 @@ public class GyInfServiceImpl extends BaseServiceImpl<gy_inf> implements GyInfSe
         return user.isEmailChecked();
     }
 
+    public boolean setQq(String userid ,String qq)
+    {
+        Chain chain = Chain.make("qq",qq);
+        Cnd cnd =Cnd.where("userid","=",userid);
+        if(this.dao().update(gy_inf.class,chain,cnd)!=0)
+        {
+            return true;
+        }
+        return false;
+    }
 
 }

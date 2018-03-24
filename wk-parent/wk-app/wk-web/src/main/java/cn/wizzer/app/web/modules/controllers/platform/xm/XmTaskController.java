@@ -97,11 +97,15 @@ public class XmTaskController {
         if(!shiroUtil.hasAnyPermissions("platform.xm.task.add.manager")){
             cnd.and("author","=", StringUtil.getSysuserid());
         }
+        String sysuserid=StringUtil.getSysuserid();
+        if(!sysuserid.equals("gyb201800")){
+            cnd.and("author","=", sysuserid);
+        }
         if (!Strings.isBlank(libtaskid) && !"0".equals(libtaskid)) {
             cnd.and("category", "like", "%" + libtaskid + "%");
         }
         if (!Strings.isBlank(title)) {
-            cnd.and("title", "like", "%" + title + "%");
+            cnd.and("taskname", "like", "%" + title + "%");
         }
         return xmTaskService.data(length, start, draw, order, columns, cnd, null);
     }
