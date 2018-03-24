@@ -16,9 +16,9 @@ layout("/layouts/platform.html"){
 
                 <div class="pull-left offscreen-left" style="padding-top:15px;">
                     <div class="input-group mb15">
-                        <input type="text" class="form-control" placeholder="请输入任务书名称">
+                        <input id="searchtaskname" type="text" class="form-control" placeholder="请输入任务书名称">
                         <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">Go!</button>
+                                <button class="btn btn-default" type="button" onclick="searchTaskByName()">Go!</button>
                             </span>
                     </div>
 
@@ -37,8 +37,9 @@ layout("/layouts/platform.html"){
                     <ul class="dropdown-menu text-left" >
                         <li>
                             <a id="type0" onclick="setSearchFilter(0)">全部</a>
-                            <a id="type1" onclick="setSearchFilter(1)">最近发布</a>
-                            <a id="type2" onclick="setSearchFilter(2)">限制匹配</a>
+                            <a id="type1" onclick="setSearchFilter(1)">申报截止</a>
+                            <a id="type2" onclick="setSearchFilter(2)">金额最多</a>
+                            <a id="type3" onclick="setSearchFilter(3)">智能匹配</a>
                         </li>
                     </ul>
                 </div>
@@ -133,15 +134,18 @@ layout("/layouts/platform.html"){
 <script src="${base!}/assets/js/jquery.pagination.js"></script>
 <script type="text/javascript">
     var count = ${count} ;                          //页码
-    var perpage = 2;                                //每页项目数量
+    var perpage = 16;                                //每页项目数量
     var defaultstart = 0;                           //默认页
     var SearchType = 0;                             //默认过滤类型
     var taskName = "";                              //默认项目名称
-    var pagecount = count/perpage;       //页码总数
+    var pagecount = count/perpage;                  //页码总数
 
     function initxmlist(){
+
+
+        $('#result').html("");
         $.ajax({
-            url:"/public/xm/data?start="+defaultstart,
+            url:"/public/xm/data?start="+defaultstart+"&SearchType="+SearchType+"&taskName="+taskName,
             type:"get",
             contentType:"application/json;charset=utf-8",
             dataType:"json",
@@ -171,13 +175,13 @@ layout("/layouts/platform.html"){
                         '<p>' + xminfo + '</p>' +
                         '<div class="mb10">' +
                         '<a href="javascript:;" class="mr15">' +
-                        '<i class="ti-file text-warning mr5"></i>' + firstcommit +
+                        '<i class="ti-file text-warning mr5"></i>初稿提交：' + firstcommit +
                         '</a>' +
                         '<a href="javascript:;" class="mr15">' +
-                        '<i class="ti-alarm-clock  text-danger mr5"></i>' + endtime +
+                        '<i class="ti-alarm-clock  text-danger mr5"></i>项目完成：' + endtime +
                         '</a>' +
                         '<a href="javascript:;" class="mr15">' +
-                        '<i class="ti-alarm-clock  text-danger mr5"></i>' + applyendtime +
+                        '<i class="ti-bolt  text-danger mr5"></i>申报截止：' + applyendtime +
                         '</a>' +
                         '<a href="javascript:;">' +
                         '<i class="ti-wallet  text-danger mr5"></i><b>' + award + '</b> RMB' +
@@ -185,8 +189,6 @@ layout("/layouts/platform.html"){
                         '</div>' +
                         '<p class=" mg-b">';
                     $.each(data["data"], function (i, n) {
-//                        console.log("skilllimit");
-//                        console.log(n);
                         switch (n.skilllevel) {
                             case 1:
                                 resultitem = resultitem + '<span class="label label-default">' + n.skilllevel + '</span>';
@@ -221,18 +223,19 @@ layout("/layouts/platform.html"){
 
     $(function() {
         //初始化当前页
-        console.log(pagecount);
         if( pagecount%1 != 0) {
             pagecount = parseInt(pagecount) + 1;
         }
-        console.log(pagecount);
+        console.log("pagecount:"+pagecount);
+        console.log("perpage:"+perpage);
+        console.log("count:"+count);
 
 
         initxmlist();
         $('.M-box3').pagination({
             pageCount: pagecount,    //pagecount,
             showData: perpage,       //eachpage,
-//          current: current,        //current,
+            // current: current,        //current,
             jump: true,
             coping: false,
             homePage: '首页',
@@ -306,10 +309,20 @@ layout("/layouts/platform.html"){
     });
 
     function setSearchFilter(type) {
+        console.log("searchtype="+type);
         var typeid = "type" + type;
         var SearchName = $('#'+typeid).text();
         $('#search').text(SearchName);
-        var SearchType = $('#SearchType').val(type);
+        // 更改查询方式函数
+        SearchType = type;
+        initxmlist();
+    }
+    
+    function searchTaskByName() {
+        var taskname = $("#searchtaskname").val();
+        console.log("searchtaskname="+taskname);
+        taskName = taskname;
+        initxmlist();
     }
 
 
