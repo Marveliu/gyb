@@ -37,7 +37,7 @@ layout("/layouts/platform.html"){
                                                                 </button>
                                                             </span>
                                                 </div>
-                                                <input type="hidden" name="category" value="<%if(!isEmpty(libtask)){%>${libtask.id}<%}%>">
+                                                <input type="hidden" id="libtaskname" name="category" value="<%if(!isEmpty(libtask)){%>${libtask.id}<%}%>">
                                             </div>
                                         </div>
 
@@ -60,6 +60,13 @@ layout("/layouts/platform.html"){
                                             </div>
                                         </div>
 
+                                        <div class="form-group">
+                                            <label for="original_order" class="col-sm-2 control-label">原始订单编号</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="original_order" class="form-control" name="original_order" data-parsley-required="true"
+                                                       value="" placeholder="任务书标题">
+                                            </div>
+                                        </div>
 
                                         <div class="form-group">
                                             <label for="designnum" class="col-sm-2 control-label">设计方案套数</label>
@@ -202,6 +209,7 @@ layout("/layouts/platform.html"){
         $("#queue").html("");
         $("#fileurl").val("");
     }
+
     function initTreeView() {
         $("#jsTree").jstree({
             plugins: ["wholerow", "json_data"],
@@ -284,6 +292,7 @@ layout("/layouts/platform.html"){
 
             //初始化技能限制
             $.ajax({
+
                 url:"${base}/platform/xm/task/limitdata?libtaskid=${libtask.id}",
                 success:function(result){
                     console.log(result);
@@ -348,6 +357,12 @@ layout("/layouts/platform.html"){
         });
 
         $("#save").on("click",function(){
+            alert($("#libtaskname").val());
+             if($("#libtaskname").val()=="")
+            {
+                Toast.error("你必须选择一个所属任务类型");
+                return;
+            }
             $("#footer_content").val(ue.getContent());
             $('#addForm').submit();
         });
@@ -356,6 +371,7 @@ layout("/layouts/platform.html"){
             beforeSubmit: function (arr, form, options) {
                 sublime.showLoadingbar($(".main-content"));
             },
+
             success: function (data, statusText, xhr, form) {
                 if (data.code == 0) {
                     Toast.success(data.msg);

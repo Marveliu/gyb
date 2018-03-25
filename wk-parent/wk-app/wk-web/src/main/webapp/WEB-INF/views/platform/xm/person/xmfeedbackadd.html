@@ -75,7 +75,7 @@ layout("/layouts/platform.html"){
                     <div class="form-group text-center">
                         <label></label>
                         <div>
-                            <button class="btn btn-primary btn-block btn-lg btn-parsley" data-loading-text="${msg['globals.button.submit.tip']}">${msg['globals.button.submit']}</button>
+                            <button id="save" class="btn btn-primary btn-block btn-lg btn-parsley" data-loading-text="${msg['globals.button.submit.tip']}">${msg['globals.button.save']}</button>
                         </div>
                     </div>
                 </div>
@@ -91,6 +91,10 @@ layout("/layouts/platform.html"){
         $("#picurl").val("");
     }
     var ue;
+    $("#save").click(function(){
+        Toast.success("请在反馈列表页确认提交")
+    });
+
     $(document).ready(function () {
         setTimeout(function () {
             ue= new baidu.editor.ui.Editor();
