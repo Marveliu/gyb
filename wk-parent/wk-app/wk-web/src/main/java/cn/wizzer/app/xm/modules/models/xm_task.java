@@ -38,6 +38,11 @@ public class xm_task extends BaseModel implements Serializable {
     private String taskname;
 
     @Column
+    @Comment("原始订单编号")
+    @ColDefine(type = ColType.VARCHAR, width = 100)
+    private String original_order;
+
+    @Column
     @Comment("任务书种类编号")
     @ColDefine(type = ColType.VARCHAR, width = 32)
     private String category;
@@ -311,6 +316,14 @@ public class xm_task extends BaseModel implements Serializable {
         this.authorrealname = authorrealname;
     }
 
+    public String getOriginal_order() {
+        return original_order;
+    }
+
+    public void setOriginal_order(String original_order) {
+        this.original_order = original_order;
+    }
+
     /**
      * @function: 雇员编号
      * @param:
@@ -318,18 +331,16 @@ public class xm_task extends BaseModel implements Serializable {
      * @note: 编号说明:17年份,10497学校代码,0学历:(0本科1研究生2博士),0性别 (0女生 ,1男生),010顺序码
      */
     public String taskid() {
-
         String id = new String();
         //顺序码
         Dao dao =  Mvcs.getIoc().get((Dao.class));
         XmTaskServiceImpl xmTaskService = new XmTaskServiceImpl(dao);
         try {
             int count = Mvcs.getIoc().get(XmTaskServiceImpl.class).count();
-             return  id =  Mvcs.getIoc().get(NumberUtil.class).XmtaskidGenerator(count,dao.fetch(lib_task.class,this.category).getUnitcode());
+            return  id =  Mvcs.getIoc().get(NumberUtil.class).XmtaskidGenerator(count,dao.fetch(lib_task.class,this.category).getUnitcode());
         }catch (Exception e){
             Logs.get().debug(e);
         }
-
         return id;
     }
 }

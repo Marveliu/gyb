@@ -20,7 +20,6 @@ import java.util.Date;
 @IocBean
 public class NumberUtil {
 
-
     /**
      * 根据时间生成唯一雇员编号
      * @param num

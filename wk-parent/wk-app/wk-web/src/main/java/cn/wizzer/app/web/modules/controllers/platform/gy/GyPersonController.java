@@ -32,6 +32,7 @@ import org.apache.shiro.subject.Subject;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
+import org.nutz.dao.FieldFilter;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
@@ -243,12 +244,21 @@ public class GyPersonController {
         String userid = StringUtil.getUid();
         gy_inf gy = gyInfService.getGyByUserId(userid);
         Sys_user user = sysuserService.fetch(userid);
+
+        //过滤字段更新QQ
+        FieldFilter ff = FieldFilter.create(gy_inf.class, "^qq$");
+        ff.run(new Atom() {
+            public void run() {
+                gy.setQq(qq);
+                dao.update(gy);
+            }
+        });
+
         try {
 
             if(!gyService.infCheckable(StringUtil.getGyid())){
                 if(!gy.getQq().equals(qq))
                 {
-                    gyService.changeQq(gyInf.getQq(),qq);
                     return Result.success("你的qq已经成功修改为" + qq);
                 }
                 return Result.error("在身份审核及审核完成阶段，只可以修改个人qq");

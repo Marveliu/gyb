@@ -152,7 +152,7 @@ public class GyInfController{
 
     @At("/setGy4/?")
     @Ok("json")
-    @RequiresPermissions("platform.gy.inf.delete")
+    @RequiresPermissions("gy.inf.set_offical")
     @SLog(tag = "通过正式雇员", msg = "${req.getAttribute('id')}")
     public Object setGy4(String id, HttpServletRequest req) {
         try {
