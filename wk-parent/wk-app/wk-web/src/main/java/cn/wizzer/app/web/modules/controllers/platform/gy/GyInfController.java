@@ -158,7 +158,6 @@ public class GyInfController{
         try {
                 if(gyService.updateGyRole(id,"gy4")){
                     req.setAttribute("id", id);
-
                     //todo: 当前status仅仅是作为标记
                     gyInfService.update(Chain.make("status",1),Cnd.where("userid","=",id));
                     return Result.success("system.success");
