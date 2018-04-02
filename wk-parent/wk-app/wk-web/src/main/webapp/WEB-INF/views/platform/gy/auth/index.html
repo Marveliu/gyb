@@ -162,6 +162,16 @@ layout("/layouts/platform.html"){
                 },
                 {
                     "render": function (data, type, row) {
+                        if (data == 1) {
+                            return '<i id="status' + row.gyid + '" class="fa fa-circle text-success ml5"></i>';
+                        } else {
+                            return '<i id="status' + row.gyid + '" class="fa fa-circle text-danger ml5"></i>';
+                        }
+                    },
+                    "targets": -1,
+                },
+                {
+                    "render": function (data, type, row) {
                         if (data) {
                             return moment(parseInt(data*1000)).format("YYYY-MM-DD HH:mm:ss");
                         }

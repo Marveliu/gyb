@@ -9,9 +9,11 @@ import cn.wizzer.app.xm.modules.services.*;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
+import cn.wizzer.framework.util.ShiroUtil;
 import cn.wizzer.framework.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.*;
+import org.nutz.dao.Chain;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
@@ -41,6 +43,8 @@ public class XmApplyController{
     private XmService xmService;
     @Inject
     private Dao dao;
+    @Inject
+    private ShiroUtil shiroUtil;
 
     @At("")
     @Ok("beetl:/platform/xm/apply/index.html")
@@ -85,6 +89,11 @@ public class XmApplyController{
             @Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
 
         Cnd cnd = Cnd.NEW();
+        String sysuserid=StringUtil.getSysuserid();
+        //项目总监:项目总监的权限标识为sys.allpm,超管权限标识platform.xm.task.add.allpm
+        if(!shiroUtil.hasAnyPermissions("platform.xm.task.add.allpm")){
+            cnd.and("author","=", sysuserid);
+        }
         // xmtaskid不为空
         if( xmtaskid != null && !xmtaskid.isEmpty()){
             cnd.and("xmtaskid","=",xmtaskid);
@@ -149,14 +158,20 @@ public class XmApplyController{
     @SLog(tag = "xm_apply", msg = "${req.getAttribute('id')}")
     public Object delete(String id, @Param("ids")  String[] ids, HttpServletRequest req) {
 		try {
-			if(ids!=null&&ids.length>0){
+            //查询该Apply是否还有申请
+            String xm_task_id=xmApplyService.fetch(id).getXmtaskid();
+            //如果没有申请了,就更新状态码为1即任务书申请状态
+            List<xm_apply> XmApplies=xmApplyService.query(Cnd.where("xmtaskid", "=", xm_task_id));
+            if(XmApplies.size()==1)
+                dao.update(xm_task.class,Chain.make("status",1),Cnd.where("id","=",xm_task_id));
+            if(ids!=null&&ids.length>0){
 				xmApplyService.delete(ids);
     			req.setAttribute("id", org.apache.shiro.util.StringUtils.toString(ids));
 			}else{
 				xmApplyService.delete(id);
     			req.setAttribute("id", id);
 			}
-            return Result.success("system.success");
+			return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");
         }

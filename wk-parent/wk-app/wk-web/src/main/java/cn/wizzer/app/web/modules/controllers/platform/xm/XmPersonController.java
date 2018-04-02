@@ -14,7 +14,9 @@ import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
 import cn.wizzer.framework.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
@@ -48,7 +50,8 @@ public class XmPersonController {
     private NumberUtil numberUtil;
     @Inject
     private GyInfService gyInfService;
-
+    @Inject
+    private Dao dao;
     // @Inject
     // private  V_XmInfService v_xmInfService;
 
@@ -93,6 +96,8 @@ public class XmPersonController {
             apply.setStatus(0);
             apply.setAt((int) (System.currentTimeMillis() / 1000));
             xmApplyService.insert(apply);
+            //有雇员申请任务,更新状态码为2--申请状态
+            dao.update(xm_task.class,Chain.make("status",2),Cnd.where("id","=",xmtaskid));
             return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");
@@ -278,6 +283,26 @@ public class XmPersonController {
         }
     }
 
+
+    /**
+     * @function: 取消提交
+     * @param:
+     * @return:
+     * @note:
+     */
+    @At("/notfeedback/?")
+    @Ok("json")
+    @RequiresPermissions("platform.xm.person")
+    //Slog是日志管理
+    public Object notfeedback(
+            @Param("id") String id) {
+        try {
+            xmFeedbackService.update(org.nutz.dao.Chain.make("Status",0),Cnd.where("id","=",id));
+            return Result.success("system.success");
+        } catch (Exception e) {
+            return Result.error("system.error");
+        }
+    }
 
     /**
     * @function: 确认提交

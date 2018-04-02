@@ -266,6 +266,7 @@ layout("/layouts/platform.html"){
         });
 
     }
+
     var ue;
     $(document).ready(function () {
         setTimeout(function () {
@@ -357,7 +358,6 @@ layout("/layouts/platform.html"){
         });
 
         $("#save").on("click",function(){
-            alert($("#libtaskname").val());
              if($("#libtaskname").val()=="")
             {
                 Toast.error("你必须选择一个所属任务类型");

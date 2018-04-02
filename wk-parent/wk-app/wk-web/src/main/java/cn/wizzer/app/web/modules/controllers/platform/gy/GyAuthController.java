@@ -1,7 +1,9 @@
 package cn.wizzer.app.web.modules.controllers.platform.gy;
 
 import cn.wizzer.app.gy.modules.models.gy_auth;
+import cn.wizzer.app.gy.modules.models.gy_inf;
 import cn.wizzer.app.gy.modules.services.GyAuthService;
+import cn.wizzer.app.gy.modules.services.GyInfService;
 import cn.wizzer.app.gy.modules.services.VGyService;
 import cn.wizzer.app.web.commons.slog.annotation.SLog;
 import cn.wizzer.app.web.commons.util.StatusCodeUtil;
@@ -10,7 +12,9 @@ import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
 import cn.wizzer.framework.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
@@ -30,7 +34,13 @@ public class GyAuthController{
     private GyAuthService gyAuthService;
 
     @Inject
+    private GyInfService gyInfService;
+
+    @Inject
     private VGyService vGyService;
+
+    @Inject
+    private Dao dao;
 
     @At("")
     @Ok("beetl:/platform/gy/auth/index.html")
@@ -149,8 +159,10 @@ public class GyAuthController{
             HttpServletRequest req) {
         try {
             if(null == note || note.isEmpty()){
+
                 note = "恭喜你审核通过！";
             }
+            dao.update(gy_inf.class,Chain.make("status",1),Cnd.where("id","=",id));
             gyAuthService.enable(id,note);
             return Result.success("system.success");
         } catch (Exception e) {

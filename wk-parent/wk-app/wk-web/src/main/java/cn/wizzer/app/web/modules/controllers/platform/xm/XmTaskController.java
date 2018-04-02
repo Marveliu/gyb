@@ -18,6 +18,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Condition;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -33,6 +34,7 @@ import org.nutz.trans.Trans;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 /**
@@ -42,6 +44,8 @@ import java.util.*;
 @At("/platform/xm/task")
 public class XmTaskController {
     private static final Log log = Logs.get();
+    @Inject
+    private Dao dao;
     @Inject
     private XmTaskService xmTaskService;
     @Inject
@@ -81,6 +85,22 @@ public class XmTaskController {
         return tree;
     }
 
+    //递归一个cnd
+    private List<lib_task> ChildTaskID(String ParentTaskId)
+    {
+        List<lib_task> list=new CopyOnWriteArrayList();
+        List<lib_task> alllist=new CopyOnWriteArrayList();
+        list = libTaskService.query(Cnd.where("parentId", "=", Strings.sBlank(ParentTaskId)).asc("location").asc("path"));
+        if(!list.isEmpty())
+        {
+            for (lib_task libTask : list) {
+                alllist.addAll(ChildTaskID(libTask.getId()));
+            }
+        }
+        alllist.addAll(list);
+        return alllist;
+    }
+
     /**
      * @function: 任务书列表
      * @param: 任务书所属项目类别，任务书题目
@@ -93,22 +113,41 @@ public class XmTaskController {
     public Object data(@Param("libtaskId") String libtaskid,@Param("title") String title, @Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
 
         Cnd cnd = Cnd.NEW();
+
+        String sysuserid=StringUtil.getSysuserid();
         // 超级管理员
         if(!shiroUtil.hasAnyPermissions("platform.xm.task.add.manager")){
-            cnd.and("author","=", StringUtil.getSysuserid());
-        }
-        String sysuserid=StringUtil.getSysuserid();
-        if(!sysuserid.equals("gyb201800")){
             cnd.and("author","=", sysuserid);
         }
+        //项目总监:项目总监的权限标识为sys.allpm,超管权限标识platform.xm.task.add.allpm
+        if(!shiroUtil.hasAnyPermissions("platform.xm.task.add.allpm")){
+            cnd.and("author","=", sysuserid);
+        }
+//        if(shiroUtil.hasAnyPermissions("sys.allpm")){
+//            cnd.and("author","=", sysuserid);
+//        }
+//        //产品经理只能看到自己的项目
+//        if(shiroUtil.hasAnyPermissions("sys.pm")){
+//            cnd.and("author","=", sysuserid);
+//        }
+//        if(!sysuserid.equals("gyb201800")){
+//            cnd.and("author","=", sysuserid);
+//        }
         if (!Strings.isBlank(libtaskid) && !"0".equals(libtaskid)) {
-            cnd.and("category", "like", "%" + libtaskid + "%");
+            //显示全部子菜单
+            List<lib_task> libtask = ChildTaskID(libtaskid);
+            for (lib_task Lib_Task:libtask)
+            {
+                cnd.or("category", "like", "%" + Lib_Task.getId() + "%");
+            }
+            cnd.or("category", "like", "%" + libtaskid + "%");
         }
         if (!Strings.isBlank(title)) {
             cnd.and("taskname", "like", "%" + title + "%");
         }
         return xmTaskService.data(length, start, draw, order, columns, cnd, null);
     }
+
 
 
     //跳转到任务书添加界面
