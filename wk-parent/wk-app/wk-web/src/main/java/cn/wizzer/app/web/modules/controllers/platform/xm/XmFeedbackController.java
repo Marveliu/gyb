@@ -127,11 +127,14 @@ public class XmFeedbackController{
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
             xm_feedback xfd = xmFeedbackService.fetch(xmFeedback.getId());
+            String xm_inf_id =xmFeedbackService.fetch(xmFeedback.getId()).getXminfid();
+            String xm_task_id =xmInfService.fetch(xm_inf_id).getXmtaskid();
             xfd.setStatus(2);
             if(iffinal){
                 //反馈完结
                 xfd.setStatus(4);
                 dao.update(xm_inf.class, Chain.make("status",1),Cnd.where("id","=",xfd.getXminfid()));
+                dao.update(xm_task.class, Chain.make("status",4),Cnd.where("id","=",xm_task_id));
             }
             int nextcommitat = (int) (sdf.parse(nextcommit).getTime() / 1000);
             xfd.setReply(xmFeedback.getReply());

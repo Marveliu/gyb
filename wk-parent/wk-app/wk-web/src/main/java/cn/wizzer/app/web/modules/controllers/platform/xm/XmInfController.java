@@ -8,6 +8,7 @@ import cn.wizzer.app.xm.modules.services.XmInfService;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
+import cn.wizzer.framework.util.ShiroUtil;
 import cn.wizzer.framework.util.StringUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -32,6 +33,8 @@ public class XmInfController{
     private XmInfService xmInfService;
     @Inject
     private V_XmInfService v_xmInfService;
+    @Inject
+    private ShiroUtil shiroUtil;
 
     @At("")
     @Ok("beetl:/platform/code/inf/index.html")
@@ -139,12 +142,15 @@ public class XmInfController{
     ){
         Cnd cnd = Cnd.NEW();
         String sysuserid = StringUtil.getSysuserid();
-
+        //TODO:subject是个什么东东
         org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
         if(!subject.isPermitted("platform.xm.inf.manager")){
             cnd.and("author","=",sysuserid);
         }
-
+        //项目总监:项目总监的权限标识为sys.allpm,超管权限标识platform.xm.task.add.allpm
+        if(!shiroUtil.hasAnyPermissions("platform.xm.task.add.allpm")){
+            cnd.and("author","=", sysuserid);
+        }
         if(null !=xminfname && !xminfname.isEmpty()){
             cnd.and("taskname","like","%"+xminfname+"%");
         }

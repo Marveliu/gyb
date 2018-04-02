@@ -11,6 +11,7 @@ import cn.wizzer.app.xm.modules.services.*;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.page.datatable.DataTableColumn;
 import cn.wizzer.framework.page.datatable.DataTableOrder;
+import cn.wizzer.framework.util.ShiroUtil;
 import cn.wizzer.framework.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.*;
@@ -43,6 +44,9 @@ public class XmFinalController {
     @Inject
     private GyPayService gyPayService;
 
+    @Inject
+    private ShiroUtil shiroUtil;
+
     @At("")
     @Ok("beetl:/platform//xm/final/index.html")
     @RequiresPermissions("platform.xm.final")
@@ -69,6 +73,11 @@ public class XmFinalController {
     public Object data(@Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
         Cnd cnd = Cnd.NEW();
         cnd.and("status",">=",1);
+        String sysuserid=StringUtil.getSysuserid();
+        //项目总监:项目总监的权限标识为sys.allpm,超管权限标识platform.xm.task.add.allpm
+        if(!shiroUtil.hasAnyPermissions("platform.xm.task.add.allpm")){
+            cnd.and("author","=", sysuserid);
+        }
         return xmInfService.data(length, start, draw, order, columns, cnd, null);
     }
 
