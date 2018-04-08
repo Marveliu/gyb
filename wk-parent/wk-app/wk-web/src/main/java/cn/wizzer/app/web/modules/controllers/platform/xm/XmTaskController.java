@@ -113,26 +113,20 @@ public class XmTaskController {
     public Object data(@Param("libtaskId") String libtaskid,@Param("title") String title, @Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
 
         Cnd cnd = Cnd.NEW();
-
         String sysuserid=StringUtil.getSysuserid();
-        // 超级管理员
-        if(!shiroUtil.hasAnyPermissions("platform.xm.task.add.manager")){
+
+        // 权限标识，可以从配置文件里面读
+        String[] permissions = {
+                "platform.xm.task.add.manager",
+                "platform.xm.task.add.allpm"
+        };
+
+        // 权限验证
+        if(!shiroUtil.hasAnyPermissions(permissions)){
             cnd.and("author","=", sysuserid);
         }
-        //项目总监:项目总监的权限标识为sys.allpm,超管权限标识platform.xm.task.add.allpm
-        if(!shiroUtil.hasAnyPermissions("platform.xm.task.add.allpm")){
-            cnd.and("author","=", sysuserid);
-        }
-//        if(shiroUtil.hasAnyPermissions("sys.allpm")){
-//            cnd.and("author","=", sysuserid);
-//        }
-//        //产品经理只能看到自己的项目
-//        if(shiroUtil.hasAnyPermissions("sys.pm")){
-//            cnd.and("author","=", sysuserid);
-//        }
-//        if(!sysuserid.equals("gyb201800")){
-//            cnd.and("author","=", sysuserid);
-//        }
+
+
         if (!Strings.isBlank(libtaskid) && !"0".equals(libtaskid)) {
             //显示全部子菜单
             List<lib_task> libtask = ChildTaskID(libtaskid);
@@ -142,9 +136,11 @@ public class XmTaskController {
             }
             cnd.or("category", "like", "%" + libtaskid + "%");
         }
+
         if (!Strings.isBlank(title)) {
             cnd.and("taskname", "like", "%" + title + "%");
         }
+
         return xmTaskService.data(length, start, draw, order, columns, cnd, null);
     }
 
