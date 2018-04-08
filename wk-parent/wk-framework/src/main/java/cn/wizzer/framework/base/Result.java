@@ -5,13 +5,13 @@ import org.nutz.json.JsonFormat;
 import org.nutz.lang.Strings;
 import org.nutz.mvc.Mvcs;
 
+import java.io.Serializable;
 
 /**
- * json返回后台结果
- * 状态码[0:success,1:error,2:warning]
- * // TODO: 2018/1/19 0019  
+ * Created by wizzer on 2016/12/21.
  */
-public class Result {
+public class Result implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private int code;
     private String msg;
@@ -78,8 +78,8 @@ public class Result {
     public static Result error() {
         return new Result(1, "globals.result.error", null);
     }
-    
-    
+
+
     public int getCode() {
         return code;
     }

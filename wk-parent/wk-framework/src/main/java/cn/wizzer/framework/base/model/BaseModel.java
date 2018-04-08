@@ -1,21 +1,20 @@
 package cn.wizzer.framework.base.model;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.nutz.dao.entity.annotation.*;
-import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
 import org.nutz.lang.Strings;
+import org.nutz.lang.Times;
 import org.nutz.lang.random.R;
+import org.nutz.mvc.Mvcs;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 
 /**
  * Created by wizzer on 2016/6/21.
  */
 public abstract class BaseModel implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Column
     @Comment("操作人")
@@ -26,8 +25,8 @@ public abstract class BaseModel implements Serializable {
     @Column
     @Comment("操作时间")
     @Prev(els = @EL("$me.now()"))
-    @ColDefine(type = ColType.INT)
-    private Integer opAt;
+    @ColDefine(type = ColType.INT,width = 9)
+    private Long opAt;
 
     @Column
     @Comment("删除标记")
@@ -43,21 +42,19 @@ public abstract class BaseModel implements Serializable {
         return false;
     }
 
-    public Integer now() {
-        return (int) (System.currentTimeMillis() / 1000);
+    public Long now() {
+        return Times.getTS();
     }
 
     public String uid() {
         try {
-            Subject subject = SecurityUtils.getSubject();
-            if (subject != null) {
-                return Strings.sNull(subject.getSession(true).getAttribute("uid"));
+            HttpServletRequest request = Mvcs.getReq();
+            if (request != null) {
+                return Strings.sNull(request.getSession(true).getAttribute("platform_uid"));
             }
-        } catch (Exception e) {
-        }
+        }catch (Exception e){}
         return "";
     }
-
 
     public String getOpBy() {
         return opBy;
@@ -67,11 +64,11 @@ public abstract class BaseModel implements Serializable {
         this.opBy = opBy;
     }
 
-    public Integer getOpAt() {
+    public Long getOpAt() {
         return opAt;
     }
 
-    public void setOpAt(Integer opAt) {
+    public void setOpAt(Long opAt) {
         this.opAt = opAt;
     }
 
