@@ -4,12 +4,10 @@ import cn.wizzer.app.sys.modules.models.Sys_menu;
 import cn.wizzer.app.sys.modules.models.Sys_role;
 import cn.wizzer.app.sys.modules.models.Sys_user;
 import cn.wizzer.app.sys.modules.services.SysMenuService;
-import cn.wizzer.app.sys.modules.services.SysUnitService;
 import cn.wizzer.app.sys.modules.services.SysUserService;
 import cn.wizzer.framework.base.service.BaseServiceImpl;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.nutz.aop.interceptor.ioc.TransAop;
-import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.Sqls;
@@ -37,7 +35,6 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
 
     @Inject
     private SysMenuService sysMenuService;
-
     /**
      * 查询用户角色code列表
      *
@@ -55,25 +52,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
     }
 
     /**
-     * 获得rolelist
-     * @param user
-     * @return
-     */
-    public List<Sys_role> getRoleList(Sys_user user) {
-        dao().fetchLinks(user, "roles");
-        List<Sys_role> roleNameList = new ArrayList<Sys_role>();
-        for (Sys_role role : user.getRoles()) {
-            if (!role.isDisabled())
-                roleNameList.add(role);
-        }
-        return roleNameList;
-    }
-
-    /**
      * 获取用户菜单
      * @param user
      */
-    public void fillMenu(Sys_user user) {
+    public Sys_user fillMenu(Sys_user user) {
         user.setMenus(getMenus(user.getId()));
         //计算左侧菜单
         List<Sys_menu> firstMenus = new ArrayList<>();
@@ -93,6 +75,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
         if (!Strings.isBlank(user.getCustomMenu())) {
             user.setCustomMenus(sysMenuService.query(Cnd.where("id", "in", user.getCustomMenu().split(","))));
         }
+        return user;
     }
 
     /**
@@ -172,16 +155,6 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
         dao().clear("sys_user_unit", Cnd.where("userId", "in", userIds));
         dao().clear("sys_user_role", Cnd.where("userId", "in", userIds));
         dao().clear("sys_user", Cnd.where("id", "in", userIds));
-    }
-
-
-    public boolean setEmail(String userid,String email){
-        Chain chain = Chain.make("email",email);
-        Cnd cnd = Cnd.where("id","=",userid);
-        if(this.dao().update(Sys_user.class,chain,cnd)!=0){
-            return true;
-        }
-        return  false;
     }
 
 }

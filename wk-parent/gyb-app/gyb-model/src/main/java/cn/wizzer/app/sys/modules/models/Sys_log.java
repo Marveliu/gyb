@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * Created by wizzer on 2016/6/21.
  */
-@Table("sys_log")
+@Table("sys_log_${month}")
 public class Sys_log extends BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
     @Column
@@ -25,7 +25,7 @@ public class Sys_log extends BaseModel implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 100)
     private String username;
 
-    @Column// aop.before aop.after aop.error
+    @Column
     @Comment("日志类型")
     @ColDefine(type = ColType.VARCHAR, width = 20)
     private String type;
@@ -49,6 +49,16 @@ public class Sys_log extends BaseModel implements Serializable {
     @Comment("日志内容")
     @ColDefine(type = ColType.TEXT)
     private String msg;
+
+    @Column
+    @Comment("请求结果")
+    @ColDefine(type = ColType.TEXT)
+    private String param;
+
+    @Column
+    @Comment("执行结果")
+    @ColDefine(type = ColType.TEXT)
+    private String result;
 
     public long getId() {
         return id;
@@ -104,6 +114,22 @@ public class Sys_log extends BaseModel implements Serializable {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public String getParam() {
+        return param;
+    }
+
+    public void setParam(String param) {
+        this.param = param;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 
 }

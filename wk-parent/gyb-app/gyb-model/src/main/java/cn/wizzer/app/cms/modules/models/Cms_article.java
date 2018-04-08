@@ -17,7 +17,13 @@ public class Cms_article extends BaseModel implements Serializable {
     @Comment("ID")
     @ColDefine(type = ColType.VARCHAR, width = 32)
     @Prev(els = {@EL("uuid()")})
+    //@Prev(els = {@EL("ig(view.tableName,'')")}) 主键生成器示例
     private String id;
+
+    @Column
+    @Comment("站点ID")
+    @ColDefine(type = ColType.VARCHAR, width = 32)
+    private String siteid;
 
     @Column
     @Comment("预留商城ID")
@@ -28,6 +34,11 @@ public class Cms_article extends BaseModel implements Serializable {
     @Comment("文章标题")
     @ColDefine(type = ColType.VARCHAR, width = 120)
     private String title;
+
+    @Column
+    @Comment("链接地址")
+    @ColDefine(type = ColType.VARCHAR, width = 255)
+    private String url;
 
     @Column
     @Comment("文章简介")
@@ -56,14 +67,31 @@ public class Cms_article extends BaseModel implements Serializable {
 
     @Column
     @Comment("发布时间")
+    @ColDefine(type = ColType.INT, width = 9)
+    private Long publishAt;
+
+    @Column
+    @Comment("截至时间")
+    @ColDefine(type = ColType.INT, width = 9)
+    private Long endAt;
+
+    @Column
+    @Comment("同步状态")
     @ColDefine(type = ColType.INT)
-    private Integer publishAt;
+    @Default(value = "0")
+    private int status;
+
+    @Column
+    @Comment("浏览量")
+    @ColDefine(type = ColType.INT)
+    @Default("0")
+    private Integer view_num;
 
     @Column
     @Comment("排序字段")
     @Prev({
-            @SQL(db= DB.MYSQL,value = "SELECT IFNULL(MAX(location),0)+1 FROM cms_article"),
-            @SQL(db= DB.ORACLE,value = "SELECT COALESCE(MAX(location),0)+1 FROM cms_article")
+            @SQL(db = DB.MYSQL, value = "SELECT IFNULL(MAX(location),0)+1 FROM cms_article"),
+            @SQL(db = DB.ORACLE, value = "SELECT COALESCE(MAX(location),0)+1 FROM cms_article")
     })
     private Integer location;
 
@@ -82,6 +110,14 @@ public class Cms_article extends BaseModel implements Serializable {
         this.id = id;
     }
 
+    public String getSiteid() {
+        return siteid;
+    }
+
+    public void setSiteid(String siteid) {
+        this.siteid = siteid;
+    }
+
     public String getShopid() {
         return shopid;
     }
@@ -96,6 +132,14 @@ public class Cms_article extends BaseModel implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getInfo() {
@@ -138,12 +182,36 @@ public class Cms_article extends BaseModel implements Serializable {
         this.disabled = disabled;
     }
 
-    public Integer getPublishAt() {
+    public Long getPublishAt() {
         return publishAt;
     }
 
-    public void setPublishAt(Integer publishAt) {
+    public void setPublishAt(Long publishAt) {
         this.publishAt = publishAt;
+    }
+
+    public Long getEndAt() {
+        return endAt;
+    }
+
+    public void setEndAt(Long endAt) {
+        this.endAt = endAt;
+    }
+
+    public Integer getView_num() {
+        return view_num;
+    }
+
+    public void setView_num(Integer view_num) {
+        this.view_num = view_num;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public Integer getLocation() {

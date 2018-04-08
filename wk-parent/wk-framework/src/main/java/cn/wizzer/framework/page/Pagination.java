@@ -10,7 +10,7 @@ public class Pagination extends SimplePage implements java.io.Serializable {
 
 	/**
 	 * 构造器
-	 * 
+	 *
 	 * @param pageNo
 	 *            页码
 	 * @param pageSize
@@ -24,7 +24,7 @@ public class Pagination extends SimplePage implements java.io.Serializable {
 
 	/**
 	 * 构造器
-	 * 
+	 *
 	 * @param pageNo
 	 *            页码
 	 * @param pageSize
@@ -41,7 +41,7 @@ public class Pagination extends SimplePage implements java.io.Serializable {
 
 	/**
 	 * 第一条数据位置
-	 * 
+	 *
 	 * @return
 	 */
 	public int getFirstResult() {
@@ -55,7 +55,7 @@ public class Pagination extends SimplePage implements java.io.Serializable {
 
 	/**
 	 * 获得分页内容
-	 * 
+	 *
 	 * @return
 	 */
 	public List<?> getList() {
@@ -64,7 +64,7 @@ public class Pagination extends SimplePage implements java.io.Serializable {
 
 	/**
 	 * 设置分页内容
-	 * 
+	 *
 	 * @param list
 	 */
 	public void setList(List<?> list) {
