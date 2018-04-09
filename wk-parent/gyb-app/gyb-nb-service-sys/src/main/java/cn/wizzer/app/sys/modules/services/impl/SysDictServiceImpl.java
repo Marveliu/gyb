@@ -30,6 +30,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
     }
 
 
+
     /**
      * 通过code获取name
      *
@@ -39,6 +40,12 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
     //@Cacheable
     public String getNameByCode(String code) {
         Sys_dict dict = this.fetch(Cnd.where("code", "=", code));
+        return dict == null ? "" : dict.getName();
+    }
+
+    //todo:cache支持
+    public String getNameByCode(String prefix, String code) {
+        Sys_dict dict = this.fetch(Cnd.where("code", "=", prefix+code));
         return dict == null ? "" : dict.getName();
     }
 

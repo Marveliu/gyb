@@ -80,9 +80,13 @@ public class SysUserController {
     @SLog(tag = "新建用户", msg = "用户名:${args[0].loginname}")
     public Object addDo(@Param("..") Sys_user user, HttpServletRequest req) {
         try {
-            String salt = R.UU32();
-            user.setSalt(salt);
-            user.setPassword(new Sha256Hash(user.getPassword(), ByteSource.Util.bytes(salt), 1024).toHex());
+            // hex 不兼容之前的密码
+            // String salt = R.UU32();
+            // user.setSalt(salt);
+            // user.setPassword(new Sha256Hash(user.getPassword(), ByteSource.Util.bytes(salt), 1024).toHex());
+            RandomNumberGenerator rng = new SecureRandomNumberGenerator();
+            String salt = rng.nextBytes().toBase64();
+            String hashedPasswordBase64 = new Sha256Hash(user.getPassword(), salt, 1024).toBase64();
             user.setLoginPjax(true);
             user.setLoginCount(0);
             user.setLoginAt(0L);

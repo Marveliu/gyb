@@ -31,6 +31,24 @@ public class StringUtil {
         return "";
     }
 
+
+    /**
+     * 获取平台后台登陆GYID
+     *
+     * @return
+     */
+    public static String getPlatformGyid() {
+        try {
+            HttpServletRequest request = Mvcs.getReq();
+            if (request != null) {
+                return Strings.sNull(request.getSession(true).getAttribute("platform_gyid"));
+            }
+        } catch (Exception e) {
+
+        }
+        return "";
+    }
+
     /**
      * 获取平台后台登陆用户名称
      *
