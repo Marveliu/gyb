@@ -14,19 +14,7 @@ public interface GyAuthService extends BaseService<gy_auth>{
     // 通过雇员id检查是否验证成功
     public boolean ifAuth(String gyid);
 
-    /**
-     * 通过审核
-     * @param gyid
-     * @param note
-     * @return
-     */
     public boolean enable(String gyid,String note);
 
-    /**
-     * 不通过审核
-     * @param gyid
-     * @param note
-     * @return
-     */
     public boolean disable(String gyid,String note);
 }

@@ -157,6 +157,7 @@ public class SysLoginController {
         try {
             //输错三次显示验证码窗口
             errCount = NumberUtils.toInt(Strings.sNull(SecurityUtils.getSubject().getSession(true).getAttribute("platformErrCount")));
+
             Subject subject = SecurityUtils.getSubject();
             ThreadContext.bind(subject);
             //进入shiro

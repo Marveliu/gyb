@@ -11,7 +11,6 @@ import java.util.Map;
  */
 public interface SysDictService extends BaseService<Sys_dict> {
     String getNameByCode(String code);
-    String getNameByCode(String prefix,String code);
     String getNameById(String id);
     List<Sys_dict> getSubListByPath(String path);
     List<Sys_dict> getSubListById(String id);

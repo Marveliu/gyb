@@ -10,48 +10,22 @@ import java.util.List;
 
 public interface GyInfService extends BaseService<gy_inf>{
 
-    /**
-     * 获得雇员信息
-     * @param userid
-     * @return
-     */
+    //  获得用户id
     public gy_inf getGyByUserId(String userid);
 
-    /**
-     * 获得雇员账号信息
-     * @param gyid
-     * @return
-     */
+    //  获得用户id
     public Sys_user getUserByGyid(String gyid);
 
 
-    /**
-     * 获得雇员技能信息
-     * @param gyid
-     * @return
-     */
+    // 根据雇员id获得技能信息
     public List<gy_skill> getSkillsByGyid(String gyid);
 
-    /**
-     * 获得雇员支付信息
-     * @param gyid
-     * @return
-     */
+    // 根据雇员id获得支付
     public List<gy_pay> getPaysByGyid(String gyid);
 
-    /**
-     * 雇员邮箱是否验证
-     * @param gyid
-     * @return
-     */
+    //  获得用户id
     public boolean ifEmailChecked(String gyid);
 
-    /**
-     * 修改qq
-     * @param gyid
-     * @param qq
-     * @return
-     */
     public boolean setQq(String gyid , String qq);
 
 

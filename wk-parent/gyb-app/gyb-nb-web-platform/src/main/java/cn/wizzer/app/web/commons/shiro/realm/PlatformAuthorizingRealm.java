@@ -122,8 +122,7 @@ public class PlatformAuthorizingRealm extends AuthorizingRealm {
         HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
         hashedCredentialsMatcher.setHashAlgorithmName("SHA-256");
         hashedCredentialsMatcher.setHashIterations(1024);
-        // hex解码不兼容存储的账号信息
-        hashedCredentialsMatcher.setStoredCredentialsHexEncoded(false);
+        hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
         setAuthenticationTokenClass(CaptchaToken.class);
         setCredentialsMatcher(hashedCredentialsMatcher);
     }

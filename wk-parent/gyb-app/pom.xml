@@ -21,7 +21,6 @@
         <module>gyb-nb-web-platform</module>
         <module>gyb-nb-task</module>
         <module>gyb-nb-service-library</module>
-        <module>gyb-nb-service-gy</module>
     </modules>
 
 
