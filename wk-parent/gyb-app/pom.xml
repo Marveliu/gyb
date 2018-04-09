@@ -20,6 +20,7 @@
         <module>gyb-nb-service-cms</module>
         <module>gyb-nb-web-platform</module>
         <module>gyb-nb-task</module>
+        <module>gyb-nb-service-library</module>
     </modules>
 
 
