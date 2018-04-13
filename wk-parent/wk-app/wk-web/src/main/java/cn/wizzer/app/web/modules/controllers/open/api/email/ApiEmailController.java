@@ -61,10 +61,9 @@ public class ApiEmailController {
         Sys_user user = sysUserService.fetch(userId);
         String token = String.format("%s,%s", user.getEmail(), System.currentTimeMillis());
         token = Toolkit._3DES_encode(user.getSalt().getBytes(), token.getBytes());
-        String url = req.getRequestURL() + "?token=" + token+"&"+"userId=" + userId;
+        String url = req.getRequestURL() + "?token=" + token+"&userId=" + userId;
         // String url = Globals.AppRoot + "?token=" + token +"&userId=" + userId;
 
-        // TODO: 2018/1/19 0019 从模板里面读出html
         String html = "您好！" + StringUtil.getUsername()+",请访问链接激活邮箱！"+
                 "<br>" +
                 "<div>如果无法点击,请拷贝一下链接到浏览器中打开<p/>验证链接 %s</div>";

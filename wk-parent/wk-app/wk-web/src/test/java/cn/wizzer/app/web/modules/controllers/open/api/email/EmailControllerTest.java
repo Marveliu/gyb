@@ -12,17 +12,15 @@ import static org.junit.Assert.*;
  */
 public class EmailControllerTest extends TestBase {
 
-
-    // 全都无法验证，因为你的junti无法获得gyb项目的session
     @Test
     public void activeMail() throws Exception {
 
-        ioc.get(EmailController.class).activeMail("5d16cfb5109446ac86d19e163df6e4bd");
+        ioc.get(EmailController.class).activeMail("6bb32317af9343a484390698ec18778f");
     }
 
     @Test
     public void activeMailCallback() throws Exception {
-        ioc.get(EmailController.class).activeMailCallback("40c0a1f62915fe52c98f37034220498ad4d3786336d618b7dc563af3f4dee66f","5d16cfb5109446ac86d19e163df6e4bd");
+        ioc.get(EmailController.class).activeMailCallback("df552ea5092edffe59b276d1760f08275a362b9d10abd6510ad661ddc8039372","6bb32317af9343a484390698ec18778f");
     }
 
 }

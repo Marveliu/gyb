@@ -4,7 +4,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 /**
- * runable
+ * 邮件发送任务
  *
  * @Author Marveliu
  * @Create 2018/1/8 0008.

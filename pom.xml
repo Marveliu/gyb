@@ -12,7 +12,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>wiki</module>
         <module>wk-parent</module>
         <module>wiki</module>
     </modules>

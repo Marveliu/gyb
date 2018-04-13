@@ -43,8 +43,6 @@ public class GybWebsocket extends AbstractWsEndpoint {
 
 
 }
-
-
 //     AbstractWsChatEndpoint 是单例的，是websocket的入口，维护全局的信息，接管open，error，close
 //     handler 类是多例的每个ws连接对应一个，接管onMessage 专注于信息的路由发送
 //     provider类主要是用于缓存全局的长连接信息，以供handler类能够方便检索、路由的

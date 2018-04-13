@@ -72,7 +72,8 @@ public class EmailController {
             // 直接传递函数
             // EmailTask task = new EmailTask(user.getEmail(),"测试",html,emailService);
             // boolean ok = emailThreadPool.send(task);
-            // TODO: 2018/1/8 0008 采用线程
+
+            // 确定用户的邮箱存在
             boolean ok = emailService.send(user.getEmail(),"测试",html);
             if (!ok) {
                 return re.setv("ok", false).setv("msg", "发送失败");
