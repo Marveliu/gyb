@@ -5,10 +5,17 @@ import cn.wizzer.app.sys.modules.models.Sys_user;
 import cn.wizzer.app.sys.modules.services.SysUserService;
 import cn.wizzer.app.web.commons.base.Globals;
 import cn.wizzer.app.web.commons.services.email.EmailService;
+import cn.wizzer.app.web.commons.services.email.EmailTask;
+import cn.wizzer.app.web.commons.services.email.EmailThreadPool;
+import cn.wizzer.app.web.commons.services.email.task.TemplateEmailTask;
 import cn.wizzer.app.web.commons.services.gy.GyService;
 import cn.wizzer.app.web.commons.services.websocket.WsService;
 import cn.wizzer.framework.base.Result;
 import cn.wizzer.framework.util.StringUtil;
+import org.beetl.core.Configuration;
+import org.beetl.core.GroupTemplate;
+import org.beetl.core.Template;
+import org.beetl.core.resource.WebAppResourceLoader;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -44,6 +51,8 @@ public class ApiEmailController {
     @Inject
     private GyService gyService;
     @Inject
+    private EmailThreadPool emailThreadPool;
+    @Inject
     private Dao dao;
 
 
@@ -62,19 +71,36 @@ public class ApiEmailController {
         String token = String.format("%s,%s", user.getEmail(), System.currentTimeMillis());
         token = Toolkit._3DES_encode(user.getSalt().getBytes(), token.getBytes());
         String url = req.getRequestURL() + "?token=" + token+"&userId=" + userId;
+
         // String url = Globals.AppRoot + "?token=" + token +"&userId=" + userId;
+        // String html = "您好！" + StringUtil.getUsername()+",请访问链接激活邮箱！"+
+        //         "<br>" +
+        //         "<div>如果无法点击,请拷贝一下链接到浏览器中打开<p/>验证链接 %s</div>";
+        //
+        // html = String.format(html, url, url);
 
-        String html = "您好！" + StringUtil.getUsername()+",请访问链接激活邮箱！"+
-                "<br>" +
-                "<div>如果无法点击,请拷贝一下链接到浏览器中打开<p/>验证链接 %s</div>";
-
-        html = String.format(html, url, url);
         try {
-            boolean ok = emailService.send(
-                    user.getEmail(), "雇佣帮账号邮箱激活", html.toString());
-            if (ok) {
-                return Result.success("邮件发送成功，请注意查收！");
-            }
+            // boolean ok = emailService.sendHtmlTemplate(user.getEmail(),"雇佣帮账号邮箱激活","register");
+            // boolean ok = emailService.send(
+            //         user.getEmail(), "雇佣帮账号邮箱激活", html.toString());
+            // if (ok) {
+            //     return Result.success("邮件发送成功，请注意查收！");
+            // }
+
+
+            WebAppResourceLoader resourceLoader = new WebAppResourceLoader();
+            Configuration cfg = Configuration.defaultConfiguration();
+            GroupTemplate gt = new GroupTemplate(resourceLoader, cfg);
+            Template t = gt.getTemplate("/template/email/register.html");
+            t.binding("username",user.getLoginname());
+            t.binding("url",url);
+            t.binding("email",user.getEmail());
+            // 直接传递函数
+            EmailTask task = new TemplateEmailTask(user.getEmail(),"雇佣帮邮箱激活邮件",emailService,t);
+            //task.run();
+            // 如果失败websocket发送给用户
+            emailThreadPool.send(task);
+            return Result.success("邮件已经发送！");
         } catch (Throwable e) {
             log.debug("发送邮件失败", e);
         }

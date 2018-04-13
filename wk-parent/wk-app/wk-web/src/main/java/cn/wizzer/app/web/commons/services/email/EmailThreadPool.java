@@ -36,7 +36,4 @@ public class EmailThreadPool{
     public void close() {// 关闭
         es.shutdown();
     }
-
-
-
 }

@@ -7,10 +7,15 @@ import cn.wizzer.app.web.commons.services.email.EmailService;
 import cn.wizzer.app.web.commons.services.email.EmailServiceImpl.EmailServiceImpl;
 import cn.wizzer.app.web.commons.services.email.EmailTask;
 import cn.wizzer.app.web.commons.services.email.EmailThreadPool;
+import cn.wizzer.app.web.commons.services.email.task.TemplateEmailTask;
 import cn.wizzer.app.web.commons.services.gy.GyService;
 import cn.wizzer.app.web.commons.util.Toolkit;
 import cn.wizzer.app.web.modules.controllers.open.api.websocket.ApiWebsocketController;
 import cn.wizzer.app.web.modules.controllers.open.websocket.WebsocketController;
+import org.beetl.core.Configuration;
+import org.beetl.core.GroupTemplate;
+import org.beetl.core.Template;
+import org.beetl.core.resource.WebAppResourceLoader;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -58,26 +63,34 @@ public class EmailController {
      */
     public Object activeMail(String userId) {
         NutMap re = new NutMap();
-        Sys_user user = sysUserService.fetch(userId);
 
+        // token生成
+        Sys_user user = sysUserService.fetch(userId);
         String token = String.format("%s,%s", user.getEmail(), System.currentTimeMillis());
         token = Toolkit._3DES_encode(user.getSalt().getBytes(), token.getBytes());
-
-//        String url = req.getRequestURL() + "?token=" + token+ "&userId=" + userId;
+        // String url = req.getRequestURL() + "?token=" + token+ "&userId=" + userId;
         String url = Globals.AppDomain + "?token=" + token +"&userId=" + userId;
+
         String html = "<div>如果无法点击,请拷贝一下链接到浏览器中打开<p/>验证链接 %s</div>";
         html = String.format(html, url, url);
 
         try {
+            WebAppResourceLoader resourceLoader = new WebAppResourceLoader();
+            Configuration cfg = Configuration.defaultConfiguration();
+            GroupTemplate gt = new GroupTemplate(resourceLoader, cfg);
+            Template t = gt.getTemplate("/template/email/register.html");
+            t.binding("username",user.getLoginname());
+            t.binding("url",url);
+            t.binding("email",user.getEmail());
             // 直接传递函数
-            // EmailTask task = new EmailTask(user.getEmail(),"测试",html,emailService);
-            // boolean ok = emailThreadPool.send(task);
-
-            // 确定用户的邮箱存在
-            boolean ok = emailService.send(user.getEmail(),"测试",html);
-            if (!ok) {
-                return re.setv("ok", false).setv("msg", "发送失败");
-            }
+            EmailTask task = new TemplateEmailTask(user.getEmail(),"测试",emailService,t);
+            // 如果失败websocket发送给用户
+            emailThreadPool.send(task);
+            // todo：应该是上层进行确定，确定用户的邮箱存在
+            // boolean ok = emailService.send(user.getEmail(),"测试",html);
+            // if (!ok) {
+            //     return re.setv("ok", false).setv("msg", "发送失败");
+            // }
             log.debug("toke:"+token);
         } catch (Throwable e) {
             log.debug("发送邮件失败", e);

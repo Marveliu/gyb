@@ -37,7 +37,6 @@ public class WsService {
     // 在Service或Module中,通过ioc注入上述的MyWebsocket
 
 
-
     // 按业务需要,调用myWebsocket提供的各种api
     public void send_job_notify(String room, final String from) {
         // 通过each方法变量房间内的会话
