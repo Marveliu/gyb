@@ -28,5 +28,5 @@ public interface SysUserService extends BaseService<Sys_user> {
 
     boolean setEmail(String userid,String email);
 
-
+    String resetPassword(String userId);
 }

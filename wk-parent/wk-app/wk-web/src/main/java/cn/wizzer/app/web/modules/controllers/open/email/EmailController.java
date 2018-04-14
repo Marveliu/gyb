@@ -41,7 +41,6 @@ import java.util.concurrent.Executors;
 public class EmailController {
 
     private static  final Log log = Logs.get();
-
     @Inject
     private SysUserService sysUserService;
     @Inject
@@ -57,20 +56,18 @@ public class EmailController {
 
 
     /**
-     * 多线程给userid发送激活邮件
+     * 发送激活邮件
      * @param userId
      * @return
      */
     public Object activeMail(String userId) {
         NutMap re = new NutMap();
-
         // token生成
         Sys_user user = sysUserService.fetch(userId);
         String token = String.format("%s,%s", user.getEmail(), System.currentTimeMillis());
         token = Toolkit._3DES_encode(user.getSalt().getBytes(), token.getBytes());
         // String url = req.getRequestURL() + "?token=" + token+ "&userId=" + userId;
         String url = Globals.AppDomain + "?token=" + token +"&userId=" + userId;
-
         String html = "<div>如果无法点击,请拷贝一下链接到浏览器中打开<p/>验证链接 %s</div>";
         html = String.format(html, url, url);
 
@@ -98,6 +95,8 @@ public class EmailController {
         }
         return re.setv("ok", true);
     }
+
+
 
 
     /**
@@ -137,6 +136,8 @@ public class EmailController {
             return "非法token";
         }
     }
+
+
 
 
 }

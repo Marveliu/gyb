@@ -1,4 +1,4 @@
-package cn.wizzer.app.web.modules.controllers.front.gy;
+package cn.wizzer.app.web.modules.controllers.front;
 
 import cn.wizzer.app.gy.modules.services.GyAuthService;
 import cn.wizzer.app.gy.modules.services.GyInfService;
@@ -35,11 +35,11 @@ import java.text.SimpleDateFormat;
  */
 
 
-// 游客前台界面控制器
+// 前台界面控制器
 
 @IocBean
 @At("/public")
-public class GyHomeController {
+public class HomeController {
     private static final Log log = Logs.get();
     @Inject
     private SysMenuService menuService;
@@ -84,6 +84,18 @@ public class GyHomeController {
      * @return:
      * @note: 直接进入后台的系统登陆界面
      */
+    @At("/redirect")
+    @Ok("beetl:/public/redirect.html")
+    public void redirect(HttpServletRequest request) {
+
+    }
+
+    /**
+     * @function: 登陆界面
+     * @param:
+     * @return:
+     * @note: 直接进入后台的系统登陆界面
+     */
     @At("/login")
     @Ok("beetl:/platform/sys/login.html")
     public void login() {
@@ -100,13 +112,43 @@ public class GyHomeController {
     public void reg() {
     }
 
+    /**
+     * @function: 找回密码界面
+     * @param:
+     * @return:
+     * @note:
+     */
+    @At("/password")
+    @Ok("beetl:/public/password.html")
+    public void password() {
+    }
+
+    /**
+     * @function: 找回密码
+     * @param:
+     * @return:
+     * @note:
+     */
+    @At("/dopassword")
+    @Ok("json")
+    @AdaptBy(type = WhaleAdaptor.class)
+    public Object doPassword(
+            @Param("email") String email,
+            HttpServletRequest req
+    ) {
+        // 邮箱
+        Sys_user user =  userService.fetch(Cnd.where("email","=",email));
+        if(user == null) return Result.error("邮箱不存在!,请联系管理员");
+        return apiEmailController.lostPassword(user.getId(),req);
+    }
+
 
 
     @At("/doreg")
     @Ok("json")
     //@SLog(tag = "新雇员注册", msg = "用户名:${username}")
     @AdaptBy(type = WhaleAdaptor.class)
-    public Object regDo(
+    public Object doReg(
             @Param("email") String email,
             @Param("username") String username,
             @Param("password") String password,

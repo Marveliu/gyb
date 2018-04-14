@@ -29,6 +29,7 @@ import org.nutz.lang.util.NutMap;
 import cn.wizzer.app.web.commons.util.Toolkit;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 邮件Api
@@ -61,18 +62,18 @@ public class ApiEmailController {
      * @param userId,req
      * @return
      */
-    @At("/mail/activeMail")
+    @At("/activeMail")
     @Ok("json")
     @POST
     public Object activeMail(
-           @Param("userid") String  userId,HttpServletRequest req) {
+           @Param("userId") String  userId,HttpServletRequest req) {
         NutMap re = new NutMap();
         Sys_user user = sysUserService.fetch(userId);
         String token = String.format("%s,%s", user.getEmail(), System.currentTimeMillis());
         token = Toolkit._3DES_encode(user.getSalt().getBytes(), token.getBytes());
-        String url = req.getRequestURL() + "?token=" + token+"&userId=" + userId;
+        //String url = req.getRequestURL() + "?token=" + token+"&userid=" + userId;
 
-        // String url = Globals.AppRoot + "?token=" + token +"&userId=" + userId;
+         String url = Globals.AppDomain + "/open/api/email/activeMailCheck?token=" + token +"&userId=" + userId;
         // String html = "您好！" + StringUtil.getUsername()+",请访问链接激活邮箱！"+
         //         "<br>" +
         //         "<div>如果无法点击,请拷贝一下链接到浏览器中打开<p/>验证链接 %s</div>";
@@ -114,41 +115,131 @@ public class ApiEmailController {
      * @return
      */
     @Filters
-    @At("/mail/activeMail")
+    @At("/activeMailCheck")
     @GET
-    @Ok("raw")
-    public String activeMailCallback(@Param("token") String token,
-                                     @Param("userId") String userId) {
+    @Ok("re:beetl:/platform/sys/home.html")
+    public String activeMailCheck(@Param("token") String token,
+                                     @Param("userId") String userId,
+                                     HttpServletRequest request) {
+
+        String Msg = null;
         if (Strings.isBlank(token)) {
-            return "请不要直接访问这个链接!!!";
+            Msg= "请不要直接访问这个链接!!!";
         }
         if (token.length() < 10) {
-            return "非法token";
+            Msg ="非法token";
         }
         try {
             token = Toolkit._3DES_decode(sysUserService.fetch(userId).getSalt().getBytes(), Toolkit.hexstr2bytearray(token));
-            if (token == null)
-                return "非法token";
+            if (token == null){
+                Msg ="非法token";
+            }
             String[] tmp = token.split(",", 2);
-            if (tmp.length != 2 || tmp[0].length() == 0 || tmp[1].length() == 0)
-                return "非法token";
+            if (tmp.length != 2 || tmp[0].length() == 0 || tmp[1].length() == 0){
+                Msg ="非法token";
+            }
             long time = Long.parseLong(tmp[1]);
             if (System.currentTimeMillis() - time > 10 * 60 * 1000) {
-                return "该验证链接已经超时";
+                Msg ="链接超时";
             }
             Cnd cnd = Cnd.where("id", "=", userId);
             int re = dao.update(Sys_user.class, org.nutz.dao.Chain.make("emailChecked", true), cnd);
             if (re == 1) {
                 NutMap msg = new NutMap("action", "refresh").setv("notify", "邮件已经激活");
                 gyService.sendMsgByUid(userId,msg);
-                return "验证成功";
+                Msg ="邮箱验证成功";
             }
-            return "验证失败!!请重新验证!!";
         } catch (Throwable e) {
             log.debug("检查token时出错", e);
-            return "非法token";
         }
-
+        request.setAttribute("Msg",Msg);
+        return "beetl:/public/redirect.html";
     }
+
+    /**
+     * 发送密码重置邮件
+     * @param userId,req
+     * @return
+     */
+    @At("/lostPassword")
+    @Ok("json")
+    @POST
+    public Object lostPassword(
+            @Param("userId") String  userId,
+            HttpServletRequest req) {
+        NutMap re = new NutMap();
+        Sys_user user = sysUserService.fetch(userId);
+        String token = String.format("%s,%s", user.getEmail(), System.currentTimeMillis());
+        token = Toolkit._3DES_encode(user.getSalt().getBytes(), token.getBytes());
+        String url = Globals.AppDomain + "/open/api/email/lostPasswordCheck?token=" + token+"&userId=" + userId;
+
+        try {
+            WebAppResourceLoader resourceLoader = new WebAppResourceLoader();
+            Configuration cfg = Configuration.defaultConfiguration();
+            GroupTemplate gt = new GroupTemplate(resourceLoader, cfg);
+            Template t = gt.getTemplate("/template/email/password.html");
+            t.binding("username",user.getLoginname());
+            t.binding("url",url);
+            t.binding("email",user.getEmail());
+            // 直接传递函数
+            EmailTask task = new TemplateEmailTask(user.getEmail(),"雇佣帮密码找回邮件",emailService,t);
+            //task.run();
+            // 如果失败websocket发送给用户
+            emailThreadPool.send(task);
+            return Result.success("邮件已经发送！");
+        } catch (Throwable e) {
+            log.debug("发送邮件失败", e);
+        }
+        return Result.error("邮件发送失败，请稍后再试！");
+    }
+
+
+    /**
+     * 重置密码
+     * @param token
+     * @param
+     * @return
+     */
+    @Filters
+    @At("/lostPasswordCheck")
+    @GET
+    @Ok("re:beetl:/platform/sys/home.html")
+    public String lostPassword(
+            @Param("token") String token,
+            @Param("userId") String userId,
+            HttpServletRequest request) {
+
+        String Msg = null;
+        if (Strings.isBlank(token)) {
+            Msg= "请不要直接访问这个链接!!!";
+        }
+        if (token.length() < 10) {
+            Msg ="非法token";
+        }
+        try {
+            token = Toolkit._3DES_decode(sysUserService.fetch(userId).getSalt().getBytes(), Toolkit.hexstr2bytearray(token));
+            if (token == null){
+                Msg ="非法token";
+            }
+            String[] tmp = token.split(",", 2);
+            if (tmp.length != 2 || tmp[0].length() == 0 || tmp[1].length() == 0){
+                Msg ="非法token";
+            }
+            long time = Long.parseLong(tmp[1]);
+            if (System.currentTimeMillis() - time > 10 * 60 * 1000) {
+                Msg ="链接超时";
+            }
+            Cnd cnd = Cnd.where("id", "=", userId);
+            // 密码修改
+            String pwd = sysUserService.resetPassword(userId);
+            Msg="密码重置为:"+pwd+",请及时修改！";
+        } catch (Throwable e) {
+            log.debug("检查token时出错", e);
+        }
+        request.setAttribute("Msg",Msg);
+        return "beetl:/public/redirect.html";
+    }
+
+
 
 }

@@ -5,8 +5,12 @@ import cn.wizzer.app.sys.modules.models.Sys_role;
 import cn.wizzer.app.sys.modules.models.Sys_user;
 import cn.wizzer.app.sys.modules.services.SysMenuService;
 import cn.wizzer.app.sys.modules.services.SysUserService;
+import cn.wizzer.app.web.commons.services.email.EmailService;
 import cn.wizzer.framework.base.service.BaseServiceImpl;
 import cn.wizzer.framework.util.StringUtil;
+import org.apache.shiro.crypto.RandomNumberGenerator;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.nutz.aop.interceptor.ioc.TransAop;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
@@ -18,6 +22,7 @@ import org.nutz.ioc.aop.Aop;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
+import org.nutz.lang.random.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +40,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
 
     @Inject
     private SysMenuService sysMenuService;
+
+    @Inject
+    private EmailService emailService;
 
     /**
      * 查询用户角色code列表
@@ -172,6 +180,16 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
         dao().clear("sys_user", Cnd.where("id", "in", userIds));
     }
 
+    public String resetPassword(String userId){
+        Sys_user user = dao().fetch(Sys_user.class,Cnd.where("id","=",userId));
+        RandomNumberGenerator rng = new SecureRandomNumberGenerator();
+        String salt = rng.nextBytes().toBase64();
+        String pwd = R.captchaNumber(6);
+        String hashedPasswordBase64 = new Sha256Hash(pwd, salt, 1024).toBase64();
+        dao().update(Sys_user.class,Chain.make("salt", salt).add("password", hashedPasswordBase64), Cnd.where("id", "=", userId));
+        emailService.send(user.getEmail(),"临时密码","您的雇佣帮临时密码为:"+pwd);
+        return pwd;
+    }
 
     public boolean setEmail(String userid,String email){
         Chain chain = Chain.make("email",email);

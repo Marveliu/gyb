@@ -1,0 +1,29 @@
+<%
+layout("/layouts/clean.html"){
+%>
+
+<div class="center-wrapper">
+    <div class="center-content">
+        <div class="row no-m">
+            <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+                <section class="panel bg-white no-b fadeIn animated">
+                    <header class="panel-heading no-b text-center" style="font-size:30px;">
+                        ${AppName!}
+                    </header>
+                    <div class="p15 text-center" style="min-height: 150px">
+                        <p>${Msg!}</p>
+                    </div>
+                    <button class="btn btn-primary btn-block" onclick="location='/sysadmin'">
+                        返回首页
+                    </button>
+                    <p class="text-center">
+                        Copyright &copy;
+                        <span id="year" class="mr5"></span>
+                        <span>武汉哎嘀信息科技有限公司</span>
+                    </p>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+<%}%>

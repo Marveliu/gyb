@@ -120,14 +120,14 @@ public class SysUserController {
     @SLog(tag = "重置密码", msg = "用户名:${args[1].getAttribute('loginname')}")
     public Object resetPwd(String id, HttpServletRequest req) {
         try {
-            Sys_user user = userService.fetch(id);
-            RandomNumberGenerator rng = new SecureRandomNumberGenerator();
-            String salt = rng.nextBytes().toBase64();
-            String pwd = R.captchaNumber(6);
-            String hashedPasswordBase64 = new Sha256Hash(pwd, salt, 1024).toBase64();
-            userService.update(Chain.make("salt", salt).add("password", hashedPasswordBase64), Cnd.where("id", "=", id));
-            req.setAttribute("loginname", user.getLoginname());
-            return Result.success("system.success", pwd);
+            // Sys_user user = userService.fetch(id);
+            // RandomNumberGenerator rng = new SecureRandomNumberGenerator();
+            // String salt = rng.nextBytes().toBase64();
+            // String pwd = R.captchaNumber(6);
+            // String hashedPasswordBase64 = new Sha256Hash(pwd, salt, 1024).toBase64();
+            // userService.update(Chain.make("salt", salt).add("password", hashedPasswordBase64), Cnd.where("id", "=", id));
+            // req.setAttribute("loginname", user.getLoginname());
+            return Result.success("system.success", userService.resetPassword(id));
         } catch (Exception e) {
             return Result.error("system.error");
         }
