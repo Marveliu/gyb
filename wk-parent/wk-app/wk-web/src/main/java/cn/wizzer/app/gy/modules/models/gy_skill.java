@@ -31,8 +31,8 @@ public class gy_skill extends BaseModel implements Serializable {
 
     @Column
     @Comment("技能等级")
-    @ColDefine(type = ColType.INT)
-    private int skilllevel;
+    @ColDefine(type = ColType.FLOAT)
+    private float skilllevel;
 
     // 参照 技能和系统雇员
     @One(field = "skillid")
@@ -65,11 +65,11 @@ public class gy_skill extends BaseModel implements Serializable {
         this.skillid = skillid;
     }
 
-    public int getSkilllevel() {
+    public float getSkilllevel() {
         return skilllevel;
     }
 
-    public void setSkilllevel(int skilllevel) {
+    public void setSkilllevel(float skilllevel) {
         this.skilllevel = skilllevel;
     }
 
