@@ -1,11 +1,12 @@
 package com.marveliu.app.web.modules.controllers.front.wx;
 
-import cn.wizzer.app.cms.modules.services.CmsArticleService;
-import cn.wizzer.app.cms.modules.services.CmsChannelService;
-import cn.wizzer.app.cms.modules.services.CmsSiteService;
-import cn.marveliu.app.services.wx.WxConfigService;
-import cn.wizzer.app.services.base.Result;
+
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.marveliu.framework.model.base.Result;
+import com.marveliu.framework.services.cms.CmsArticleService;
+import com.marveliu.framework.services.cms.CmsChannelService;
+import com.marveliu.framework.services.cms.CmsSiteService;
+import com.marveliu.framework.services.wx.WxConfigService;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;

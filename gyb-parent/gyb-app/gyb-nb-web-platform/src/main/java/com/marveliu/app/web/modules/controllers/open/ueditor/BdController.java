@@ -1,7 +1,8 @@
 package com.marveliu.app.web.modules.controllers.open.ueditor;
 
-import cn.wizzer.app.web.commons.base.Globals;
-import cn.wizzer.app.web.commons.utils.DateUtil;
+
+import com.marveliu.app.web.commons.base.Globals;
+import com.marveliu.app.web.commons.utils.DateUtil;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;

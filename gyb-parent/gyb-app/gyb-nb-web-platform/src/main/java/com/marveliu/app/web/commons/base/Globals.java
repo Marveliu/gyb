@@ -1,10 +1,10 @@
 package com.marveliu.app.web.commons.base;
 
-import cn.wizzer.app.sys.modules.models.Sys_config;
-import cn.wizzer.app.sys.modules.models.Sys_route;
-import cn.marveliu.app.services.sys.SysConfigService;
-import cn.marveliu.app.services.sys.SysRouteService;
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.marveliu.framework.model.sys.Sys_config;
+import com.marveliu.framework.model.sys.Sys_route;
+import com.marveliu.framework.services.sys.SysConfigService;
+import com.marveliu.framework.services.sys.SysRouteService;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;

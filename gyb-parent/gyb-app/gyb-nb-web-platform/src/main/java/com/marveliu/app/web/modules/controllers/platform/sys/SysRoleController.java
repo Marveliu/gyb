@@ -1,20 +1,21 @@
 package com.marveliu.app.web.modules.controllers.platform.sys;
 
-import cn.wizzer.app.sys.modules.models.Sys_menu;
-import cn.wizzer.app.sys.modules.models.Sys_role;
-import cn.wizzer.app.sys.modules.models.Sys_unit;
-import cn.wizzer.app.sys.modules.models.Sys_user;
-import cn.marveliu.app.services.sys.SysMenuService;
-import cn.marveliu.app.services.sys.SysRoleService;
-import cn.marveliu.app.services.sys.SysUnitService;
-import cn.marveliu.app.services.sys.SysUserService;
-import cn.wizzer.app.web.commons.slog.annotation.SLog;
-import cn.wizzer.app.web.commons.utils.ShiroUtil;
-import cn.wizzer.app.web.commons.utils.StringUtil;
-import cn.wizzer.app.services.base.Result;
-import cn.wizzer.app.services.page.datatable.DataTableColumn;
-import cn.wizzer.app.services.page.datatable.DataTableOrder;
+
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.marveliu.app.web.commons.slog.annotation.SLog;
+import com.marveliu.app.web.commons.utils.ShiroUtil;
+import com.marveliu.app.web.commons.utils.StringUtil;
+import com.marveliu.framework.model.base.Result;
+import com.marveliu.framework.model.sys.Sys_menu;
+import com.marveliu.framework.model.sys.Sys_role;
+import com.marveliu.framework.model.sys.Sys_unit;
+import com.marveliu.framework.model.sys.Sys_user;
+import com.marveliu.framework.page.datatable.DataTableColumn;
+import com.marveliu.framework.page.datatable.DataTableOrder;
+import com.marveliu.framework.services.sys.SysMenuService;
+import com.marveliu.framework.services.sys.SysRoleService;
+import com.marveliu.framework.services.sys.SysUnitService;
+import com.marveliu.framework.services.sys.SysUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;

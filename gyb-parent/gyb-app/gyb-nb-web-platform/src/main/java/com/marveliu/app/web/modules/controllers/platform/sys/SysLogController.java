@@ -1,12 +1,13 @@
 package com.marveliu.app.web.modules.controllers.platform.sys;
 
-import cn.marveliu.app.services.sys.SysLogService;
-import cn.wizzer.app.services.base.Result;
-import cn.wizzer.app.services.page.datatable.DataTableColumn;
-import cn.wizzer.app.services.page.datatable.DataTableOrder;
-import cn.wizzer.framework.slog.annotation.SLog;
-import cn.wizzer.framework.utils.DateUtil;
+
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.marveliu.app.web.commons.slog.annotation.SLog;
+import com.marveliu.app.web.commons.utils.DateUtil;
+import com.marveliu.framework.model.base.Result;
+import com.marveliu.framework.page.datatable.DataTableColumn;
+import com.marveliu.framework.page.datatable.DataTableOrder;
+import com.marveliu.framework.services.sys.SysLogService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;

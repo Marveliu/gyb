@@ -1,9 +1,10 @@
 package com.marveliu.app.web.modules.controllers.platform.sys;
 
-import cn.wizzer.app.sys.modules.models.Sys_menu;
-import cn.marveliu.app.services.sys.SysMenuService;
-import cn.wizzer.app.web.commons.base.Globals;
+
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.marveliu.app.web.commons.base.Globals;
+import com.marveliu.framework.model.sys.Sys_menu;
+import com.marveliu.framework.services.sys.SysMenuService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.nutz.dao.Cnd;

@@ -1,7 +1,8 @@
-package com.marveliu.app.web.shiro.pam;
+package com.marveliu.app.web.commons.shiro.pam;
 
-import cn.wizzer.app.web.commons.shiro.exception.CaptchaEmptyException;
-import cn.wizzer.app.web.commons.shiro.exception.CaptchaIncorrectException;
+import com.marveliu.app.web.commons.shiro.exception.CaptchaEmptyException;
+import com.marveliu.app.web.commons.shiro.exception.CaptchaIncorrectException;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.pam.AbstractAuthenticationStrategy;
 import org.apache.shiro.realm.Realm;
 import org.nutz.ioc.loader.annotation.IocBean;

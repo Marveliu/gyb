@@ -1,4 +1,4 @@
-package com.marveliu.app.web.shiro.token;
+package com.marveliu.app.web.commons.shiro.token;
 
 import org.apache.shiro.authc.UsernamePasswordToken;
 

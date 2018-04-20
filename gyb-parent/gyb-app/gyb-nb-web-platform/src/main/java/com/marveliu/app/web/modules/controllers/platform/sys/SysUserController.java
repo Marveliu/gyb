@@ -1,18 +1,19 @@
 package com.marveliu.app.web.modules.controllers.platform.sys;
 
-import cn.wizzer.app.sys.modules.models.Sys_menu;
-import cn.wizzer.app.sys.modules.models.Sys_unit;
-import cn.wizzer.app.sys.modules.models.Sys_user;
-import cn.marveliu.app.services.sys.SysMenuService;
-import cn.marveliu.app.services.sys.SysUnitService;
-import cn.marveliu.app.services.sys.SysUserService;
-import cn.wizzer.app.web.commons.slog.annotation.SLog;
-import cn.wizzer.app.web.commons.utils.ShiroUtil;
-import cn.wizzer.app.web.commons.utils.StringUtil;
-import cn.wizzer.app.services.base.Result;
-import cn.wizzer.app.services.page.datatable.DataTableColumn;
-import cn.wizzer.app.services.page.datatable.DataTableOrder;
+
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.marveliu.app.web.commons.slog.annotation.SLog;
+import com.marveliu.app.web.commons.utils.ShiroUtil;
+import com.marveliu.app.web.commons.utils.StringUtil;
+import com.marveliu.framework.model.base.Result;
+import com.marveliu.framework.model.sys.Sys_menu;
+import com.marveliu.framework.model.sys.Sys_unit;
+import com.marveliu.framework.model.sys.Sys_user;
+import com.marveliu.framework.page.datatable.DataTableColumn;
+import com.marveliu.framework.page.datatable.DataTableOrder;
+import com.marveliu.framework.services.sys.SysMenuService;
+import com.marveliu.framework.services.sys.SysUnitService;
+import com.marveliu.framework.services.sys.SysUserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -80,9 +81,18 @@ public class SysUserController {
     @SLog(tag = "新建用户", msg = "用户名:${args[0].loginname}")
     public Object addDo(@Param("..") Sys_user user, HttpServletRequest req) {
         try {
-            String salt = R.UU32();
+            // String salt = R.UU32();
+            // user.setSalt(salt);
+            // user.setPassword(new Sha256Hash(user.getPassword(), ByteSource.Util.bytes(salt), 1024).toHex());
+            // hex 不兼容之前的密码
+            // String salt = R.UU32();
+            // user.setSalt(salt);
+            // user.setPassword(new Sha256Hash(user.getPassword(), ByteSource.Util.bytes(salt), 1024).toHex());
+            RandomNumberGenerator rng = new SecureRandomNumberGenerator();
+            String salt = rng.nextBytes().toBase64();
+            String hashedPasswordBase64 = new Sha256Hash(user.getPassword(), salt, 1024).toBase64();
+            user.setPassword(hashedPasswordBase64);
             user.setSalt(salt);
-            user.setPassword(new Sha256Hash(user.getPassword(), ByteSource.Util.bytes(salt), 1024).toHex());
             user.setLoginPjax(true);
             user.setLoginCount(0);
             user.setLoginAt(0L);

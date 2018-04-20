@@ -1,15 +1,16 @@
-package com.marveliu.app.web.shiro.realm;
+package com.marveliu.app.web.commons.shiro.realm;
 
-import cn.wizzer.app.sys.modules.models.Sys_role;
-import cn.wizzer.app.sys.modules.models.Sys_user;
-import cn.wizzer.app.sys.modules.services.SysRoleService;
-import cn.wizzer.app.sys.modules.services.SysUserService;
-import cn.wizzer.app.web.commons.shiro.exception.CaptchaEmptyException;
-import cn.wizzer.app.web.commons.shiro.exception.CaptchaIncorrectException;
-import cn.wizzer.app.web.commons.shiro.token.CaptchaToken;
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.marveliu.app.web.commons.shiro.exception.CaptchaEmptyException;
+import com.marveliu.app.web.commons.shiro.exception.CaptchaIncorrectException;
+import com.marveliu.app.web.commons.shiro.token.CaptchaToken;
+import com.marveliu.framework.model.sys.Sys_role;
+import com.marveliu.framework.model.sys.Sys_user;
+import com.marveliu.framework.services.sys.SysRoleService;
+import com.marveliu.framework.services.sys.SysUserService;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -121,7 +122,7 @@ public class PlatformAuthorizingRealm extends AuthorizingRealm {
         HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
         hashedCredentialsMatcher.setHashAlgorithmName("SHA-256");
         hashedCredentialsMatcher.setHashIterations(1024);
-        hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
+        hashedCredentialsMatcher.setStoredCredentialsHexEncoded(false);
         setAuthenticationTokenClass(CaptchaToken.class);
         setCredentialsMatcher(hashedCredentialsMatcher);
     }

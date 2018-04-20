@@ -1,8 +1,7 @@
 package com.marveliu.app.web.commons.filter;
 
-import cn.wizzer.app.sys.modules.models.Sys_route;
-import cn.wizzer.app.web.commons.base.Globals;
 import com.marveliu.app.web.commons.base.Globals;
+import com.marveliu.framework.model.sys.Sys_route;
 import org.nutz.lang.Strings;
 
 import javax.servlet.*;

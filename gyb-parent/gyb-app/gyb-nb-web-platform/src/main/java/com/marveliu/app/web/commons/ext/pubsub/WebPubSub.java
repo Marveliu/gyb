@@ -1,10 +1,10 @@
 package com.marveliu.app.web.commons.ext.pubsub;
 
-import cn.marveliu.app.services.sys.SysConfigService;
-import cn.marveliu.app.services.sys.SysRouteService;
-import cn.wizzer.app.web.commons.base.Globals;
+
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.marveliu.app.web.commons.base.Globals;
+import com.marveliu.framework.services.sys.SysConfigService;
+import com.marveliu.framework.services.sys.SysRouteService;
 import org.nutz.integration.jedis.pubsub.PubSub;
 import org.nutz.integration.jedis.pubsub.PubSubService;
 import org.nutz.ioc.Ioc;

@@ -1,4 +1,4 @@
-package com.marveliu.app.web.shiro.remember;
+package com.marveliu.app.web.commons.shiro.remember;
 
 import org.apache.shiro.io.SerializationException;
 import org.apache.shiro.io.Serializer;

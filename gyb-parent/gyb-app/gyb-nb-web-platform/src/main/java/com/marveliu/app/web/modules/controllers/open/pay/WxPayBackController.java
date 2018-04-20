@@ -1,6 +1,7 @@
 package com.marveliu.app.web.modules.controllers.open.pay;
 
-import cn.marveliu.app.services.wx.WxConfigService;
+
+import com.marveliu.framework.services.wx.WxConfigService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;

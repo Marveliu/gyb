@@ -1,7 +1,7 @@
 package com.marveliu.app.web.commons.core;
 
-import cn.wizzer.app.web.commons.base.Globals;
-import cn.wizzer.app.web.commons.ext.pubsub.WebPubSub;
+import com.marveliu.app.web.commons.base.Globals;
+import com.marveliu.app.web.commons.ext.pubsub.WebPubSub;
 import org.nutz.boot.NbApp;
 import org.nutz.integration.jedis.JedisAgent;
 import org.nutz.integration.shiro.ShiroSessionProvider;
@@ -17,7 +17,7 @@ import org.nutz.mvc.annotation.*;
  * Created by wizzer on 2018/3/16.
  */
 @IocBean(create = "init", depose = "depose")
-@Modules(packages = "cn.wizzer")
+@Modules(packages = "com.marveliu")
 @Localization(value = "locales/", defaultLocalizationKey = "zh_CN")
 @Encoding(input = "UTF-8", output = "UTF-8")
 @ChainBy(args = "chain/nutzwk-mvc-chain.json")
@@ -37,7 +37,7 @@ public class WebPlatformMainLauncher {
 
     public static void main(String[] args) throws Exception {
         NbApp nb = new NbApp().setArgs(args).setPrintProcDoc(true);
-        nb.getAppContext().setMainPackage("cn.wizzer");
+        nb.getAppContext().setMainPackage("com.marveliu");
         nb.run();
     }
 

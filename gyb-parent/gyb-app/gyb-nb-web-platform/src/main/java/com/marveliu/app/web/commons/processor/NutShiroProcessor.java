@@ -1,6 +1,6 @@
 package com.marveliu.app.web.commons.processor;
 
-import cn.wizzer.app.services.base.Result;
+import com.marveliu.framework.model.base.Result;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.nutz.integration.shiro.NutShiro;

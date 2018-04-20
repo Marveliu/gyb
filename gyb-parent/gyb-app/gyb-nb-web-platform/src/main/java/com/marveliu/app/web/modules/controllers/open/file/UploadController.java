@@ -1,8 +1,9 @@
 package com.marveliu.app.web.modules.controllers.open.file;
 
-import cn.wizzer.app.web.commons.base.Globals;
-import cn.wizzer.app.web.commons.utils.DateUtil;
-import cn.wizzer.app.services.base.Result;
+
+import com.marveliu.app.web.commons.base.Globals;
+import com.marveliu.app.web.commons.utils.DateUtil;
+import com.marveliu.framework.model.base.Result;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Files;

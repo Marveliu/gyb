@@ -1,4 +1,4 @@
-package com.marveliu.app.web.slog.annotation;
+package com.marveliu.app.web.commons.slog.annotation;
 
 import java.lang.annotation.*;
 

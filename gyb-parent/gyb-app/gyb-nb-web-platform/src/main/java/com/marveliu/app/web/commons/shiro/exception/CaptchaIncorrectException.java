@@ -1,4 +1,4 @@
-package com.marveliu.app.web.shiro.exception;
+package com.marveliu.app.web.commons.shiro.exception;
 
 import org.apache.shiro.authc.AuthenticationException;
 

@@ -1,8 +1,8 @@
-package com.marveliu.app.web.slog;
+package com.marveliu.app.web.commons.slog;
 
-import cn.marveliu.framework.services.sys.SysLogService;
-import cn.wizzer.framework.utils.StringUtil;
-import com.marveliu.app.web.utils.StringUtil;
+import com.marveliu.app.web.commons.utils.StringUtil;
+import com.marveliu.framework.model.sys.Sys_log;
+import com.marveliu.framework.services.sys.SysLogService;
 import jdk.nashorn.internal.ir.annotations.Reference;
 import org.nutz.el.El;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -18,7 +18,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;:
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;

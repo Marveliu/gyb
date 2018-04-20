@@ -1,4 +1,4 @@
-package com.marveliu.app.web.utils;
+package com.marveliu.app.web.commons.utils;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;

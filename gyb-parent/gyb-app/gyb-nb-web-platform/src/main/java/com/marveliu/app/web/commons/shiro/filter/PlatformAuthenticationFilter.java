@@ -1,10 +1,8 @@
-package com.marveliu.app.web.shiro.filter;
+package com.marveliu.app.web.commons.shiro.filter;
 
 
-import cn.wizzer.framework.shiro.token.CaptchaToken;
-import cn.wizzer.framework.utils.RSAUtil;
-import com.marveliu.app.web.shiro.token.CaptchaToken;
-import com.marveliu.app.web.utils.RSAUtil;
+import com.marveliu.app.web.commons.shiro.token.CaptchaToken;
+import com.marveliu.app.web.commons.utils.RSAUtil;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;

@@ -1,4 +1,4 @@
-package com.marveliu.app.web.utils;
+package com.marveliu.app.web.commons.utils;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 import org.nutz.ioc.loader.annotation.IocBean;

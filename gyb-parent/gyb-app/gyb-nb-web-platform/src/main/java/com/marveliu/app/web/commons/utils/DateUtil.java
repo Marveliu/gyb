@@ -1,4 +1,4 @@
-package com.marveliu.app.web.utils;
+package com.marveliu.app.web.commons.utils;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.nutz.ioc.loader.annotation.IocBean;

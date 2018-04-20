@@ -1,6 +1,6 @@
-package com.marveliu.app.web.slog;
+package com.marveliu.app.web.commons.slog;
 
-import cn.wizzer.app.web.commons.slog.annotation.SLog;
+import com.marveliu.app.web.commons.slog.annotation.SLog;
 import org.nutz.aop.InterceptorChain;
 import org.nutz.aop.MethodInterceptor;
 import org.nutz.el.El;

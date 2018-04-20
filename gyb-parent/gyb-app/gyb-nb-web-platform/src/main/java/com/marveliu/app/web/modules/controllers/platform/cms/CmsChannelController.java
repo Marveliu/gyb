@@ -1,13 +1,13 @@
 package com.marveliu.app.web.modules.controllers.platform.cms;
 
-import cn.wizzer.app.cms.modules.models.Cms_channel;
-import cn.wizzer.app.cms.modules.models.Cms_site;
-import cn.wizzer.app.cms.modules.services.CmsChannelService;
-import cn.wizzer.app.cms.modules.services.CmsSiteService;
-import cn.wizzer.app.web.commons.slog.annotation.SLog;
-import cn.wizzer.app.web.commons.utils.StringUtil;
-import cn.wizzer.app.services.base.Result;
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.marveliu.app.web.commons.slog.annotation.SLog;
+import com.marveliu.app.web.commons.utils.StringUtil;
+import com.marveliu.framework.model.base.Result;
+import com.marveliu.framework.model.cms.Cms_channel;
+import com.marveliu.framework.model.cms.Cms_site;
+import com.marveliu.framework.services.cms.CmsChannelService;
+import com.marveliu.framework.services.cms.CmsSiteService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
