@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <groupId>com.marveliu</groupId>
+        <artifactId>gyb</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.marveliu</groupId>
+    <artifactId>gyb-parent</artifactId>
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+    <name>gyb-parent</name>
+    <url>http://www.guyongbang.cn</url>
+
+
+    <modules>
+        <module>gyb-framework</module>
+        <module>gyb-app</module>
+    </modules>
+
+
+    <properties>
+        <nutzboot.version>2.2-SNAPSHOT</nutzboot.version>
+        <zkclient.version>0.10</zkclient.version>
+        <druid.version>1.1.9</druid.version>
+        <mysql-connector-java.version>5.1.46</mysql-connector-java.version>
+        <docker.image.prefix>nutzboot</docker.image.prefix>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.nutz</groupId>
+                <artifactId>nutzboot-parent</artifactId>
+                <version>${nutzboot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
+                    <useIncrementalCompilation>false</useIncrementalCompilation>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <repositories>
+        <repository>
+            <id>nutz</id>
+            <url>http://jfrog.nutz.cn/artifactory/libs-release</url>
+        </repository>
+        <repository>
+            <id>nutz-snapshots</id>
+            <url>http://jfrog.nutz.cn/artifactory/snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+    </repositories>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>nutzcn-snapshots</id>
+            <url>https://jfrog.nutz.cn/artifactory/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+
+</project>

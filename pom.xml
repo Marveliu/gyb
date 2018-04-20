@@ -4,17 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.marvliu</groupId>
+    <groupId>com.marveliu</groupId>
     <artifactId>gyb</artifactId>
-    <version>5.0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
 
 
     <packaging>pom</packaging>
 
     <modules>
         <module>wiki</module>
-        <module>wk-parent</module>
-        <module>wiki</module>
+        <module>gyb-parent</module>
     </modules>
     
 </project>
