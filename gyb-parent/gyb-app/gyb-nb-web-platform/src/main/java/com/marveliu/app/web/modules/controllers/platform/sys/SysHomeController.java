@@ -3,8 +3,14 @@ package com.marveliu.app.web.modules.controllers.platform.sys;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.marveliu.app.web.commons.base.Globals;
+import com.marveliu.app.web.commons.utils.ShiroUtil;
+import com.marveliu.app.web.commons.utils.StringUtil;
+import com.marveliu.framework.model.sys.Sys_log;
 import com.marveliu.framework.model.sys.Sys_menu;
+import com.marveliu.framework.model.sys.Sys_role;
+import com.marveliu.framework.model.sys.Sys_user;
 import com.marveliu.framework.services.sys.SysMenuService;
+import com.marveliu.framework.services.sys.SysRoleService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.nutz.dao.Cnd;
@@ -18,7 +24,6 @@ import org.nutz.mvc.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-
 /**
  * Created by wizzer on 2016/6/23.
  */
@@ -30,11 +35,21 @@ public class SysHomeController {
     @Reference
     private SysMenuService menuService;
 
+    @Inject
+    private ShiroUtil shiroUtil;
+
+    /**
+     * 不同的角色返回不同的主页
+     */
     @At("")
-    @Ok("beetl:/platform/sys/home.html")
+    @Ok("re:beetl:/platform/sys/home.html")
     @RequiresAuthentication
-    public void home() {
-        //SecurityUtils.getSubject().getSession().setTimeout(1000);
+    public String home(HttpServletRequest req) {
+        // 角色：管理员和雇员
+        if(shiroUtil.isGy()){
+            return "forward:/platform/gy/person";
+        }
+        return null;
     }
 
     @At

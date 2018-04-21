@@ -1,0 +1,41 @@
+<div class="modal-body no-p">
+    <div class="row">
+        <div class="col-xs-12">
+            <section class="panel panel-primary no-b">
+                <header class="panel-heading clearfix brtl brtr">
+                    <div class="overflow-hidden">
+                        <a href="javascript:;" class="h4 show no-m pt5">xm_prepay</a>
+                        <small>${obj.id}</small>
+                    </div>
+                </header>
+                <div class="list-group">
+                    <table class="table table-bordered table-striped mg-t datatable">
+                        <tbody>
+                                                        <tr>
+                                <td>${msg['xm.prepay.column.gypayid']}</td><td>${obj.gypayid}</td>
+                            </tr>
+                                                        <tr>
+                                <td>${msg['xm.prepay.column.realgypayid']}</td><td>${obj.realgypayid}</td>
+                            </tr>
+                                                        <tr>
+                                <td>${msg['xm.prepay.column.prepaycount']}</td><td>${obj.prepaycount}</td>
+                            </tr>
+                                                        <tr>
+                                <td>${msg['xm.prepay.column.note']}</td><td>${obj.note}</td>
+                            </tr>
+                                                        <tr>
+                                <td>${msg['xm.prepay.column.payby']}</td><td>${obj.payby}</td>
+                            </tr>
+                                                        <tr>
+                                <td>${msg['xm.prepay.column.at']}</td><td>${obj.at}</td>
+                            </tr>
+                                                    </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">${msg['globals.button.ok']}</button>
+</div>

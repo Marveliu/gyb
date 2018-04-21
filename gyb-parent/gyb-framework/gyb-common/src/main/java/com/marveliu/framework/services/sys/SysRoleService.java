@@ -7,9 +7,8 @@ import com.marveliu.framework.services.base.BaseService;
 
 import java.util.List;
 
-/**
- * Created by wizzer on 2016/12/22.
- */
+
+// 系统角色接口
 public interface SysRoleService extends BaseService<Sys_role> {
     List<Sys_menu> getMenusAndButtons(String roleId);
 

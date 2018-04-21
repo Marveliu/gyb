@@ -1,0 +1,258 @@
+<div class="modal-body no-p">
+    <div class="row">
+        <div class="col-xs-12">
+            <section class="panel panel-primary no-b">
+                <header class="panel-heading clearfix brtl brtr">
+                    <div class="overflow-hidden">
+                        <a href="javascript:;" class="h4 show no-m pt5">个人信息</a>
+                    </div>
+                </header>
+                <section class="panel panel-form">
+                    <!--form-->
+                    <form id="addForm" role="form" class="form-horizontal parsley-form" data-parsley-validate action="${base}/platform/gy/person/infeditDo" method="post">
+
+                        <input type="text" name="userid" value="${gy.userid}" hidden>
+                        <input type="text" name="id" value="${gy.id}" hidden>
+
+                        <div class="ro">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="realname" class="col-sm-3 control-label">真实姓名</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="realname" class="form-control" name="realname" value="${gy.realname}" data-parsley-required="true" placeholder="请输入您的真实姓名！"  data-parsley-pattern="/^[\u4E00-\u9FA5A-Za-z]+$/"  data-parsley-trigger="change">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="sex" class="col-sm-3 control-label">性别</label>
+                                    <div class="col-sm-8">
+                                        <select id="sex" name="sex" data-parsley-required="true" class="form-control">
+                                            <option value="0">男</option>
+                                            <option value="1">女</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email" class="col-sm-3 control-label">邮箱</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="email" class="form-control" name="email" value="${email}" data-parsley-required="true" placeholder="请输入您邮箱"  data-parsley-type="email" data-parsley-trigger="change">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="qq" class="col-sm-3 control-label">qq</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="qq" class="form-control" name="qq" value="${gy.qq}" data-parsley-required="true" placeholder="请填写您的qq，方便我们联系。" data-parsley-pattern="[1-9][0-9]{4,14}" data-parsley-trigger="change">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone" class="col-sm-3 control-label">${msg['gy.inf.column.phone']}</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="phone" class="form-control" name="phone" value="${gy.phone}" data-parsley-required="true" placeholder="请输入您本人的手机号！" data-parsley-trigger="change">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="idcard" class="col-sm-3 control-label">${msg['gy.inf.column.idcard']}</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="idcard" class="form-control" name="idcard" value="${gy.idcard}" data-parsley-required="true" placeholder="请输入您本人的身份证号！" data-parsley-trigger="change">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="birthday" class="col-sm-3 control-label">${msg['gy.inf.column.birthday']}</label>
+                                    <div class="col-sm-8 input-group date form_datetime" style="padding-left: 16px;padding-right: 16px;" data-date="1979-09-16T05:25:07Z"
+                                         data-date-format="dd MM yyyy - HH:ii p" data-link-field="birthday">
+                                        <input type="text" size="16" readonly class="form-control" value="${@date.getDate(gy.birthday,'yyyy-MM-dd')}" data-parsley-required="true">
+                                        <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </span>
+                                        <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </span>
+                                    </div>
+                                    <input type="hidden" id="birthday" name="birthdayat" value="${@date.getDate(gy.regYear,'yyyy-MM-dd')}" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="college" class="col-sm-3 control-label">选择学校</label>
+                                    <div class="col-sm-8">
+                                        <div class="input-group">
+                                            <input id="college" type="text" class="form-control" placeholder="请选择您的学校" disabled
+                                                   value="${@status.bind( gy.college!)}"/>
+
+                                            <span class="input-group-btn">
+			                             			<button type="button" class="btn btn-primary" data-toggle="modal"
+                                                            data-target="#dialogSelectSchool"><i class="ti-plus"></i>选择
+                                                    </button>
+			                             		</span>
+                                        </div>
+                                        <input type="hidden"  name="college"  data-parsley-required="true" value="${gy.college}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="school" class="col-sm-3 control-label">${msg['gy.inf.column.school']}</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="school" class="form-control" name="school" value="${gy.school}" data-parsley-required="true" placeholder="${msg['gy.inf.column.college']}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="major" class="col-sm-3 control-label">${msg['gy.inf.column.major']}</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" id="major" class="form-control" name="major" value="${gy.major}" data-parsley-required="true" placeholder="${msg['gy.inf.column.major']}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="stuLevel" class="col-sm-3 control-label">${msg['gy.inf.column.stuLevel']}</label>
+                                    <div class="col-sm-8">
+                                        <select id="stuLevel" name="stuLevel" data-parsley-required="true" class="form-control">
+                                            <option value="0">本科在读</option>
+                                            <option value="1">研究生在读</option>
+                                            <option value="2">博士在读</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="regYear" class="col-sm-3 control-label">${msg['gy.inf.column.regYear']}</label>
+                                    <div class="col-sm-8 input-group date form_datetime" style="padding-left: 16px;padding-right: 16px;" data-date-format="dd MM yyyy"
+                                         data-link-field="regYear">
+                                        <input type="text" size="16" readonly class="form-control" value="${@date.getDate(gy.regYear,'yyyy-MM-dd')}" data-parsley-required="true">
+                                        <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </span>
+                                        <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-th"></span>
+                                            </span>
+                                    </div>
+                                    <input type="hidden" id="regYear" name="regYearat" value="${@date.getDate(gy.regYear,'yyyy-MM-dd')}" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-8">
+                                    <button class="btn btn-primary btn-block btn-parsley" data-loading-text="正在提交...">提 交
+                                    </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!--基本信息-->
+
+
+                        <!--教育信息-->
+
+
+
+                        <!--证件上传-->
+                    </form>
+                </section>
+            </section>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+</div>
+
+
+
+<!-- 选择上级单位 -->
+<div id="dialogSelectSchool" class="modal fade " tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">选择上级菜单</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="jsTreeParentUnit" class="demo"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="pull-left">
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="selectFirstMenu()">设为顶级菜单</button>
+                </div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+                <button type="button" class="btn btn-primary" onclick="selectParentMenu()">确认选择</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    // 学校选择
+    function initSysDictTreeView(code) {
+        $("#jsTreeParentUnit").jstree({
+            plugins: ["wholerow", "json_data"],
+            core: {
+                data: {
+                    dataType: "json",
+                    url: function (node) {
+                        return node.id === "#" ? "${base}/platform/sys/dict/opentree?code="+ code: "${base}/platform/sys/dict/opentree?pid=" + node.id
+                    }
+                },
+                multiple: false
+            }
+        }).on("dblclick.jstree", function (node) {
+            selectParentMenu();
+        });
+    }
+    //选择父菜单
+    function selectParentMenu() {
+        var tree = $.jstree.reference("#jsTreeParentUnit");
+        var node = tree.get_selected(true);
+        var a = node    ;
+        console.log(a );
+        $("#addForm #college").val(node[0].text);
+        $("#addForm input[name='gyinf.college']").val(node[0].original.code);
+        $("#dialogSelectSchool").modal("hide");
+    }
+    function selectFirstMenu() {
+        $("#addForm #parentId").val("顶级菜单");
+        $("#addForm input[name='gyinf.college']").val("");
+        $("#dialogSelectSchool").modal("hide");
+    }
+
+
+    $(document).ready(function () {
+        initSysDictTreeView("school");
+        myForm.init();
+
+        // 时间选择器
+        $('.form_datetime').datetimepicker({
+            language: 'zh-CN',
+            format: 'yyyy-mm-dd',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1
+        });
+
+
+        //        提交注册信息
+        $('#addForm').ajaxForm({
+            dataType: 'json',
+            beforeSubmit: function (arr, form, options) {
+                form.find("button:submit").button("loading");
+            },
+            success: function (data, statusText, xhr, form) {
+                if (data.code == 0) {
+                    Toast.success(data.msg);
+                    window.location.href = "/platform/gy/person";
+                    //登入系统
+                } else {
+                    Toast.error(data.msg);
+                }
+                form.find("button:submit").button("reset");
+            }
+        });
+    });
+</script>
+</body>
+

@@ -1,0 +1,250 @@
+<%
+layout("/layouts/platform.html"){
+%>
+    <section class="content-wrap bg-white">
+        <header class="header navbar bg-white shadow">
+            <button class="btn btn-danger navbar-btn" onclick="setGy4()">
+                <i class="fa fa-save"></i> 设置正式会员
+            </button>
+            <!-- <div class="btn-group tool-button">
+            <a id="add" class="btn btn-primary navbar-btn" href="${base}/platform/gy/inf/add" data-pjax><i class="ti-plus"></i> ${msg['globals.button.add']}</a>
+        </div> -->
+            <div class="pull-right offscreen-right">
+                <button class="btn btn-primary navbar-btn" onclick="sublime.toggleFilter('.cd-panel')">
+                    <i class="fa fa-sliders"></i> 筛选
+                </button>
+            </div>
+        </header>
+        <div class=panel-body style="padding-top: 50px;">
+            <div class="table-responsive no-border">
+                <table class="table table-bordered table-striped mg-t datatable">
+                    <thead>
+                        <tr>
+                            <th>雇员编号</th>
+                            <th>${msg['gy.inf.column.realname']}</th>
+                            <th>${msg['gy.inf.column.qq']}</th>
+                            <th>${msg['gy.inf.column.phone']}</th>
+                            <th>${msg['gy.inf.column.birthday']}</th>
+                            <th>${msg['gy.inf.column.sex']}</th>
+                            <th>${msg['gy.inf.column.idcard']}</th>
+                            <th>${msg['gy.inf.column.college']}</th>
+                            <th>${msg['gy.inf.column.school']}</th>
+                            <th>${msg['gy.inf.column.major']}</th>
+                            <th>${msg['gy.inf.column.regYear']}</th>
+                            <th>${msg['gy.inf.column.stuLevel']}</th>
+                            <th>可否接单</th>
+                            <th>${msg['globals.table.column.operation']}</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <div class="cd-panel from-right">
+        <header class="cd-panel-header">
+            <h4>高级筛选</h4>
+        </header>
+        <div class="cd-panel-container">
+            <div class="cd-panel-content shadow">
+                <div class="form-group">
+                    <label for="status">雇员状态</label>
+                    <select id="status" name="gyinf.stuLevel" data-parsley-required="true" class="form-control">
+                        <option value="0">未审核</option>
+                        <option value="1">通过审核</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="gyid">雇员编号</label>
+                    <input type="text" id="gyid" name="gyid" onclick="this.value=''" class="form-control" placeholder="用户名" autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="realname">真实姓名</label>
+                    <input type="text" id="realname" name="realname" onclick="this.value=''" class="form-control" placeholder="姓名/昵称">
+                </div>
+                <button id="searchBtn" type="button" class="btn btn-default">查询</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="dialogDelete" class="modal fade bs-modal-sm" tabindex="-2" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">${msg['globals.button.delete']}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            ${msg['globals.button.delete.notice']}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">${msg['globals.button.cancel']}</button>
+                    <button id="okDel" type="button" class="btn btn-primary" data-loading-text="${msg['globals.button.delete.tip']}">${msg['globals.button.confirm']}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="dialogDetail" class="modal fade bs-modal-sm" tabindex="-3" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+    <script language="JavaScript">
+        var datatable;
+        function initDatatable() {
+            datatable = $('.datatable').DataTable({
+                "dom": '<"toolbar">frtip',
+                "searching": false,
+                "processing": false,
+                "serverSide": true,
+                "select": true,
+                "ordering": true,
+                "language": {
+                    "url": "${base}/assets/plugins/datatables/${lang}.json"
+                },
+                "preDrawCallback": function () {
+                    sublime.showLoadingbar($(".main-content"));
+                },
+                "drawCallback": function () {
+                    sublime.closeLoadingbar($(".main-content"));
+                },
+                "ajax": {
+                    "url": "${base}/platform/gy/inf/data",
+                    "type": "post",
+                    "data": function (d) {
+                    }
+                },
+                "order": [[0, "desc"]],
+                "columns": [
+                    { "data": "gyid", "bSortable": true },
+                    { "data": "realname", "bSortable": true },
+                    { "data": "qq", "bSortable": true },
+                    { "data": "phone", "bSortable": true },
+                    { "data": "birthday", "bSortable": true },
+                    { "data": "sex", "bSortable": true },
+                    { "data": "idcard", "bSortable": true },
+                    { "data": "college", "bSortable": true },
+                    { "data": "school", "bSortable": true },
+                    { "data": "major", "bSortable": true },
+                    { "data": "regYear", "bSortable": true },
+                    { "data": "stuLevel", "bSortable": true },
+                    { "data": "status", "bSortable": true },
+                ],
+                "columnDefs": [
+                    {
+                        "render": function (data, type, row) {
+                            return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
+                                ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
+                                '<li><a href="${base}/platform/gy/inf/detail/' + row.gyid + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
+                                '<li class="divider"></li>' +
+                                '<li><a href="javascript:;" onclick="del(\'' + row.gyid + '\')">${msg["globals.button.delete"]}</a></li>' +
+                                '</ul></div>';
+                        },
+                        "targets": 13
+                    },
+                    {
+                        "render": function (data, type, row) {
+                            if (data == 1) {
+                                return '<i id="status' + row.gyid + '" class="fa fa-circle text-success ml5"></i>';
+                            } else {
+                                return '<i id="status' + row.gyid + '" class="fa fa-circle text-danger ml5"></i>';
+                            }
+                        },
+                        "targets": -1,
+                    },
+                    {
+                        "render": function (data, type, row) {
+                            if (data) {
+                                return moment(parseInt(data * 1000)).format("YYYY-MM-DD");
+                            }
+                            return '';
+                        },
+                        "targets": [4,10]
+                    },
+                ]
+            });
+            datatable.on('click', 'tr', function () {
+                $(this).toggleClass('selected');
+            });
+            $("#searchBtn").on('click', function () {
+                datatable.ajax.reload();
+            });
+        }
+
+        function setGy4() {
+            var chks = datatable.rows('.selected').data();
+            console.log(chks);
+            if (chks.length == 1) {
+                $.post("${base}/platform/gy/inf/setGy4/"+chks[0].userid, { }, function (data) {
+                        if (data.code == 0) {
+                            datatable.ajax.reload(null, false);
+                        } else {
+                            Toast.error(data.msg);
+                        }
+                    }, "json");
+            } else if (chks.length >1) {
+                Toast.warning("只能选择一个雇员");
+            } else {
+                Toast.warning("你必须选择一个雇员");
+            }
+        }
+
+
+        function del(id) {
+            var dialog = $("#dialogDelete");
+            dialog.modal("show");
+            dialog.find("#okDel").unbind("click");
+            dialog.find("#okDel").bind("click", function (event) {
+                var btn = $(this);
+                btn.button("loading");
+                $.post("${base}/platform/gy/inf/delete/" + id, {}, function (data) {
+                    if (data.code == 0) {
+                        datatable.ajax.reload(null, false);
+                    } else {
+                        Toast.error(data.msg);
+                    }
+                    btn.button("reset");
+                    dialog.modal("hide");
+                }, "json");
+            });
+        }
+        function delCheck() {
+            var chks = datatable.rows('.selected').data();
+            if (chks.length > 0) {
+                var ids = [];
+                $.each(datatable.rows('.selected').data(), function (i, n) {
+                    ids.push(n.id);
+                });
+                var dialog = $("#dialogDelete");
+                dialog.modal("show");
+                dialog.find("#okDel").unbind("click");
+                dialog.find("#okDel").bind("click", function (event) {
+                    var btn = $(this);
+                    btn.button("loading");
+                    $.post("${base}/platform/gy/inf/delete", { ids: ids.toString() }, function (data) {
+                        if (data.code == 0) {
+                            datatable.ajax.reload(null, false);
+                        } else {
+                            Toast.error(data.msg);
+                        }
+                        btn.button("reset");
+                        dialog.modal("hide");
+                    }, "json");
+                });
+            } else {
+                Toast.warning("${msg['globals.button.delete.select']}");
+            }
+        }
+        $(function () {
+            initDatatable();
+            $("#dialogDetail").on("hidden.bs.modal", function () {
+                $(this).removeData("bs.modal");
+            });
+        });
+    </script>
+    <%}%>

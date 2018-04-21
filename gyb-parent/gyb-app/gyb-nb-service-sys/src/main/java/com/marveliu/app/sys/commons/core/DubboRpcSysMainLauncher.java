@@ -42,14 +42,14 @@ public class DubboRpcSysMainLauncher {
     public void init() {
         //通过POJO类创建表结构
         try {
-            Daos.createTablesInPackage(dao, "com.marveliu.app.sys", false);
+            Daos.createTablesInPackage(dao, "com.marveliu.framework.model.sys", false);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
         try {
             if (log.isDebugEnabled()) {
                 //通过POJO类修改表结构
-                Daos.migration(dao, "com.marveliu.app.sys", true, false);
+                Daos.migration(dao, "com.marveliu.framework.model.sys", true, false);
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);

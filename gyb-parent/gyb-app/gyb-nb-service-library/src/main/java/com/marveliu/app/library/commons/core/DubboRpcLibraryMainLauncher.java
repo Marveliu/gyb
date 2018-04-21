@@ -17,32 +17,25 @@ package com.marveliu.app.library.commons.core;
 
 import com.marveliu.framework.model.sys.Sys_user;
 import org.nutz.boot.NbApp;
-import org.nutz.dao.Chain;
 import org.nutz.dao.Dao;
-import org.nutz.dao.Sqls;
-import org.nutz.dao.impl.FileSqlManager;
-import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Mirror;
-import org.nutz.lang.Times;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import org.nutz.mvc.annotation.Modules;
+import org.nutz.mvc.annotation.*;
 
 import java.sql.Driver;
 import java.sql.DriverManager;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 
 /**
  * @author Marveliu
  * @since 09/04/2018
  **/
 @IocBean(create = "init", depose = "depose")
-@Modules(packages = "cn.wizzer")
+@Modules(packages = "com.marveliu")
 public class DubboRpcLibraryMainLauncher {
     private static final Log log = Logs.get();
 
@@ -51,21 +44,21 @@ public class DubboRpcLibraryMainLauncher {
 
     public static void main(String[] args) throws Exception {
         NbApp nb = new NbApp().setArgs(args).setPrintProcDoc(true);
-        nb.getAppContext().setMainPackage("cn.wizzer");
+        nb.getAppContext().setMainPackage("com.marveliu");
         nb.run();
     }
 
     public void init() {
         //通过POJO类创建表结构
         try {
-            Daos.createTablesInPackage(dao, "cn.wizzer.app.library", false);
+            Daos.createTablesInPackage(dao, "com.marveliu.framework.model.library", false);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
         try {
             if (log.isDebugEnabled()) {
                 //通过POJO类修改表结构
-                Daos.migration(dao, "cn.wizzer.app.library", true, false);
+                Daos.migration(dao, "com.marveliu.framework.model.library", true, false);
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);

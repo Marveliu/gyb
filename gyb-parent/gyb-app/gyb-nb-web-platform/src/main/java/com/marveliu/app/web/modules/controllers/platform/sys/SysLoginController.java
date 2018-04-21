@@ -42,9 +42,8 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.HashMap;
 
-/**
- * Created by wizzer on 2016/6/22.
- */
+
+
 @IocBean // 声明为Ioc容器中的一个Bean
 @At("/platform/login") // 整个模块的路径前缀
 @Ok("json:{locked:'password|createAt',ignoreNull:true}") // 忽略password和createAt属性,忽略空属性的json输出

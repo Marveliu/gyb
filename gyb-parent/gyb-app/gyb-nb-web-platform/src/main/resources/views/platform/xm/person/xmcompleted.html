@@ -1,0 +1,106 @@
+<%
+layout("/layouts/platform.html"){
+%>
+
+<section class="content-wrap bg-white">
+    <header class="header navbar bg-white shadow">
+            <div class="col-md-6 bg-none">
+                <ol class="breadcrumb mt10" style="margin-bottom: 0px;">
+                    <li>
+                        <a href="javascript:;">雇佣项目</a>
+                    </li>
+                    <li class="active">待结算项目</li>
+                </ol>
+            </div>
+    </header>
+    <div class=panel-body style="padding-top: 50px;">
+        <div class="table-responsive no-border">
+            <table class="table table-bordered table-striped mg-t datatable">
+                <thead>
+                <tr>
+                <tr>
+                    <th>${msg['xm.evaluation.column.xminfid']}</th>
+                    <th>项目名称</th>
+                    <th>雇员编号</th>
+                    <th>雇员名称</th>
+                    <th>${msg['globals.table.column.operation']}</th>
+                </tr>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</section>
+
+
+<div id="dialogDetail" class="modal fade bs-modal-sm" tabindex="-3" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+
+<script language="JavaScript">
+    var datatable;
+    function initDatatable() {
+        datatable = $('.datatable').DataTable({
+            "dom": '<"toolbar">frtip',
+            "searching": false,
+            "processing": false,
+            "serverSide": true,
+            "select": true,
+            "ordering": true,
+            "language": {
+                "url": "${base}/assets/plugins/datatables/${lang}.json"
+            },
+            "preDrawCallback": function () {
+                sublime.showLoadingbar($(".main-content"));
+            },
+            "drawCallback": function () {
+                sublime.closeLoadingbar($(".main-content"));
+            },
+            "ajax": {
+                "url": "${base}/platform/xm/person/xmcompleteddata",
+                "type": "post",
+                "data": function (d) {
+
+                }
+            },
+            "order": [[0, "desc"]],
+            "columns": [
+                {"data": "id", "bSortable": true},
+                {"data": "taskname", "bSortable": true},
+                {"data": "gyid", "bSortable": true},
+                {"data": "author", "bSortable": true},
+            ],
+            "columnDefs": [
+                {
+                    "render": function (data, type, row) {
+                        return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
+                                ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
+                                '<li><a href="${base}/platform/xm/person/xminfdetail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">查 看</a></li>' +
+                                '<li><a href="${base}/platform/xm/person/xmcompleteddetail/' + row.id + '">结 算</a></li>' +
+                                '</ul></div>';
+                    },
+                    "targets": 4
+                }
+            ]
+        });
+        datatable.on('click', 'tr', function () {
+            $(this).toggleClass('selected');
+        });
+        $("#searchBtn").on('click', function () {
+            datatable.ajax.reload();
+        });
+    }
+    $(function () {
+        myForm.init();
+        initDatatable();
+        $("#dialogDetail").on("hidden.bs.modal", function () {
+            $(this).removeData("bs.modal");
+        });
+    });
+
+</script>
+<%}%>

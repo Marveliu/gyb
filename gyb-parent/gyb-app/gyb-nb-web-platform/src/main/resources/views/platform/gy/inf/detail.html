@@ -1,0 +1,79 @@
+<div class="modal-body no-p">
+    <div class="row">
+        <div class="col-xs-12">
+            <section class="panel panel-primary no-b">
+                <header class="panel-heading clearfix brtl brtr">
+                    <div class="overflow-hidden">
+                        <a href="javascript:;" class="h4 show no-m pt5">雇员信息表</a>
+                        <!-- <small>${obj.userid}</small> -->
+                    </div>
+                </header>
+                <div class="list-group">
+                    <table class="table table-bordered table-striped mg-t datatable">
+                        <tbody>
+                            <tr>
+                                <td>雇员编号</td>
+                                <td>${obj.gyid}</td>
+                            </tr>
+                            <tr>
+                                <td>${msg['gy.inf.column.realname']}</td>
+                                <td>${obj.realname}</td>
+                            </tr>
+                            <tr>
+                                <td>${msg['gy.inf.column.qq']}</td>
+                                <td>${obj.qq}</td>
+                            </tr>
+                                                        <tr>
+                                                            <td>邮箱</td>
+                                                            <td>${obj.email}</td>
+                                                        </tr>
+                            <tr>
+                                <td>${msg['gy.inf.column.phone']}</td>
+                                <td>${obj.phone}</td>
+                            </tr>
+                            <tr>
+                                <td>${msg['gy.inf.column.birthday']}</td>
+                                <td>${@date.getDate(obj.birthday)}</td>
+                            </tr>
+                            <tr>
+                                <td>${msg['gy.inf.column.sex']}</td>
+                                <td>${obj.sex}</td>
+                            </tr>
+                            <tr>
+                                <td>${msg['gy.inf.column.idcard']}</td>
+                                <td>${obj.idcard}</td>
+                            </tr>
+                            <tr>
+                                <td>${msg['gy.inf.column.college']}</td>
+                                <td>${obj.college}</td>
+                            </tr>
+                            <tr>
+                                <td>${msg['gy.inf.column.school']}</td>
+                                <td>${obj.school}</td>
+                            </tr>
+                            <tr>
+                                <td>${msg['gy.inf.column.major']}</td>
+                                <td>${obj.major}</td>
+                            </tr>
+                            <tr>
+                                <td>${msg['gy.inf.column.regYear']}</td>
+                                <td>${@date.getDate(obj.regYear)}</td>
+                            </tr>
+                            <tr>
+                                <td>${msg['gy.inf.column.stuLevel']}</td>
+                                <td>${obj.stuLevel}</td>
+                            </tr>
+                            <tr>
+                                <td>${msg['gy.inf.column.status']}</td>
+                                <td>${obj.status}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">${msg['globals.button.ok']}</button>
+</div>

@@ -21,6 +21,7 @@
         <module>gyb-nb-service-library</module>
         <module>gyb-nb-service-gy</module>
         <module>gyb-nb-service-xm</module>
+        <module>gyb-nb-service-msg</module>
     </modules>
 
     <dependencies>

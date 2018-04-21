@@ -18,8 +18,16 @@ import java.util.Collection;
 public class ShiroUtil {
     private static final String ROLE_NAMES_DELIMETER = ",";
     private static final String PERMISSION_NAMES_DELIMETER = ",";
-
     private static final Logger logger = LoggerFactory.getLogger(ShiroUtil.class);
+    private static final String GY_ROLE_NAMES="gy0,gy1,gy2,gy3,gy4";
+
+    /**
+     * 检验是否为雇员
+     * @return
+     */
+    public boolean isGy(){
+        return this.hasAnyRoles(GY_ROLE_NAMES,ROLE_NAMES_DELIMETER);
+    }
 
     /**
      * 验证是否为已认证通过的用户，不包含已记住的用户，这是与 isUser 标签方法的区别所在。

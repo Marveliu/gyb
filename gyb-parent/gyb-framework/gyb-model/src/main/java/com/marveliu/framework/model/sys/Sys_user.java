@@ -23,6 +23,9 @@ public class Sys_user extends BaseModel implements Serializable {
     @Prev(els = {@EL("uuid()")})
     private String id;
 
+    /**
+     * websocket id要废弃
+     */
     @Column
     @Comment("wsid")
     @ColDefine(type = ColType.VARCHAR, width = 32)
@@ -62,13 +65,10 @@ public class Sys_user extends BaseModel implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 255)
     private String email;
 
-
-    /**邮箱是否已经验证过*/
     @Column("email_checked")
     @Comment("邮箱是否已经验证过")
     protected boolean emailChecked;
 
-    /**头像的byte数据*/
     @Column
     @JsonField(ignore=true)
     @Comment("用户头像")
