@@ -1,10 +1,10 @@
 package com.marveliu.app.task.commons.core;
 
-import cn.wizzer.app.sys.modules.models.Sys_task;
-import cn.marveliu.app.services.sys.SysTaskService;
-import com.marveliu.app.task.commons.base.Globals;
-import cn.marveliu.app.services.task.TaskPlatformService;
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.marveliu.app.task.commons.base.Globals;
+import com.marveliu.framework.model.sys.Sys_task;
+import com.marveliu.framework.services.sys.SysTaskService;
+import com.marveliu.framework.services.task.TaskPlatformService;
 import org.nutz.boot.NbApp;
 import org.nutz.dao.Dao;
 import org.nutz.dao.impl.FileSqlManager;

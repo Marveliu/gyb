@@ -1,8 +1,7 @@
 package com.marveliu.app.task.commons.ext.quartz.job;
 
-import cn.wizzer.app.sys.modules.models.Sys_task;
-import cn.marveliu.app.services.sys.SysTaskService;
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.marveliu.framework.services.sys.SysTaskService;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;

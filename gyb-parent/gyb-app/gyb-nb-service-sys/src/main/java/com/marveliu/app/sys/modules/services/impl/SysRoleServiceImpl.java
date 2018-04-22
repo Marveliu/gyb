@@ -97,8 +97,15 @@ public class SysRoleServiceImpl extends BaseServiceImpl<Sys_role> implements Sys
      * @param code
      * @return
      */
-    public Sys_role getRoleFormCode(String code){
+    public Sys_role getRoleFromCode(String code){
        return this.dao().fetch(Sys_role.class, Cnd.where("code", "=", code));
     }
 
+
+    @Override
+    public Boolean setUserRoleByRoleid(String userid, String roleid) {
+        int count = this.dao().update("sys_user_role", org.nutz.dao.Chain.make("roleId",roleid),Cnd.where("userId","= ",userid));
+        if (count == 1) return  true;
+        return false;
+    }
 }

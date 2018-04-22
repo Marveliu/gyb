@@ -22,5 +22,7 @@ public interface SysRoleService extends BaseService<Sys_role> {
 
     void del(String[] roleids);
 
-    Sys_role getRoleFormCode(String code);
+    Sys_role getRoleFromCode(String code);
+
+    Boolean setUserRoleByRoleid(String userid, String roleid);
 }

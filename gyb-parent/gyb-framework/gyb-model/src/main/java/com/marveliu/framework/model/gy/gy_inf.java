@@ -3,9 +3,15 @@ package com.marveliu.framework.model.gy;
 
 import com.marveliu.framework.model.base.BaseModel;
 import com.marveliu.framework.model.xm.xm_task;
+import org.nutz.boot.AppContext;
+import org.nutz.dao.Dao;
 import org.nutz.dao.entity.annotation.*;
+import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.log.Logs;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,12 +19,14 @@ import java.util.List;
  */
 
 @Table("gy_inf")
+@IocBean
 public class gy_inf extends BaseModel implements Serializable {
 
     @Column
     @Name
     @Comment("雇员编号")
     @ColDefine(type = ColType.VARCHAR, width = 32)
+    @Prev(els = {@EL("$me.gyid()")})
     private String id;
 
     @Column
@@ -90,8 +98,6 @@ public class gy_inf extends BaseModel implements Serializable {
     private String email;
 
 
-
-
     //参照
     @ManyMany(relation = "xm_apply", from = "gyid", to = "xmtaskid")
     private List<xm_task> xmtasks;
@@ -102,10 +108,6 @@ public class gy_inf extends BaseModel implements Serializable {
     // gy_pay查询是通过视图，所以此处是gyid
     @Many(field = "gyid")
     private List<gy_pay> gypays;
-
-
-
-
 
     public String getId() {
         return id;
@@ -252,4 +254,27 @@ public class gy_inf extends BaseModel implements Serializable {
         this.email = email;
     }
 
+    /**
+     * @function: 雇员编号
+     * @param:
+     * @return:
+     * @note: 编号说明:17年份,10497学校代码,0学历:(0本科1研究生2博士),0性别 (0女生 ,1男生),010顺序码
+     */
+    public String gyid() {
+        StringBuilder str = new StringBuilder();
+        try {
+            Date date = new Date();
+            long times =date.getTime();//时间戳
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+            String dateString = formatter.format(date);
+            int count =AppContext.getDefault().getIoc().get(Dao.class).count(this.getClass());
+            str.append("gy");
+            str.append(dateString.substring(2, 6));
+            str.append(count + 1);
+        }catch (Exception e){
+            Logs.get().debug(e);
+        }
+
+        return str.toString();
+    }
 }

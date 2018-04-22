@@ -1,7 +1,10 @@
 package com.marveliu.framework.model.base;
 
 
+import org.nutz.dao.Dao;
 import org.nutz.dao.entity.annotation.*;
+import org.nutz.ioc.loader.annotation.Inject;
+import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
 import org.nutz.lang.Strings;
@@ -14,6 +17,8 @@ import java.io.Serializable;
 
 public abstract class BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
+
+
     @Column
     @Comment("操作人")
     @Prev(els = @EL("$me.uid()"))

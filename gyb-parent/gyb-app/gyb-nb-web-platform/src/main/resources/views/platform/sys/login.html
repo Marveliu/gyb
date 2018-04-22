@@ -33,69 +33,96 @@
     <div class="center-content">
         <div class="row no-m">
             <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
-                <section class="panel bg-white no-b fadeIn animated">
-                    <header class="panel-heading no-b text-center" style="font-size:30px;">
-                        ${AppName!}
-                    </header>
-                    <!-- START Language list-->
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="language-dropdown dropdown hidden-xs">
-                            <a href="javascript:;" data-toggle="dropdown" id="language">
-                                <%if(lang==null||lang=="zh_CN"){%>
-                                <img src="${base!}/assets/img/flags/cn.png" class="flag">
-                                <span class="language">中文</span>
-                                <%}else{%>
-                                <img src="${base!}/assets/img/flags/us.png" class="flag">
-                                <span class="language">English</span>
-                                <%}%>
-                                <ul class="dropdown-menu dropdown-menu-right animated fadeInUp">
-                                    <li>
-                                        <a href="?lang=en_US">
-                                            <img src="${base!}/assets/img/flags/us.png" class="flag">
-                                            <span class="language">English</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="?lang=zh_CN">
-                                            <img src="${base!}/assets/img/flags/cn.png" class="flag">
-                                            <span class="language">中文</span>
-                                        </a>
-                                    </li>
-                                </ul>
+                <section class="panel bg-white no-b">
+                    <ul class="switcher-dash-action">
+
+                        <li  class="active">
+                            <a href="#" class="selected">登陆</a>
+                        </li>
+
+                        <li>
+                            <a href="/public/reg" class="">注册</a>
                         </li>
                     </ul>
-                    <!-- END Language list    -->
-                    <div class="p15">
-                        <form id="loginForm" action="${base!}/platform/login/doLogin" data-parsley-validate="" novalidate=""
-                              role="form"
-                              method="post">
-                            <input type="hidden" id="platformCaptcha" name="platformCaptcha">
 
-                            <div class="form-group">
-                                <input type="text" id="username" name="username" value="superadmin" required
-                                       class="form-control input-lg mb25"
-                                       placeholder="${msg['login.username']}">
-                            </div>
-                            <div class="form-group">
-                                <input type="password" id="password" name="password" value="1" required
-                                       class="form-control input-lg mb25"
-                                       placeholder="${msg['login.password']}">
-                            </div>
-                            <p id="tip" class="bg-danger p15" style="display:none"></p>
 
-                            <div class="show">
-                                <button id="login" class="btn btn-primary btn-lg btn-block" type="button"
-                                        data-loading-text="${msg['login.submit']}...">
-                                    ${msg['login.submit']}
-                                </button>
+                    <div class="step-content">
+
+                        <section class="panel bg-white no-b fadeIn animated">
+                            <header class="panel-heading no-b text-center" style="font-size:30px;">
+                                ${AppName!}
+                            </header>
+                            <!-- START Language list-->
+                            <!--<ul class="nav navbar-nav navbar-right">-->
+                            <!--<li class="language-dropdown dropdown hidden-xs">-->
+                            <!--<a href="javascript:;" data-toggle="dropdown" id="language">-->
+                            <!--<%if(lang==null||lang=="zh_CN"){%>-->
+                            <!--<img src="${base!}/assets/img/flags/cn.png" class="flag">-->
+                            <!--<span class="language">中文</span>-->
+                            <!--<%}else{%>-->
+                            <!--<img src="${base!}/assets/img/flags/us.png" class="flag">-->
+                            <!--<span class="language">English</span>-->
+                            <!--<%}%>-->
+                            <!--<ul class="dropdown-menu dropdown-menu-right animated fadeInUp">-->
+                            <!--<li>-->
+                            <!--<a href="?lang=en_US">-->
+                            <!--<img src="${base!}/assets/img/flags/us.png" class="flag">-->
+                            <!--<span class="language">English</span>-->
+                            <!--</a>-->
+                            <!--</li>-->
+                            <!--<li>-->
+                            <!--<a href="?lang=zh_CN">-->
+                            <!--<img src="${base!}/assets/img/flags/cn.png" class="flag">-->
+                            <!--<span class="language">中文</span>-->
+                            <!--</a>-->
+                            <!--</li>-->
+                            <!--</ul>-->
+                            <!--</li>-->
+                            <!--</ul>-->
+                            <!-- END Language list    -->
+                            <div class="p15">
+                                <form id="loginForm" action="${base!}/platform/login/doLogin" data-parsley-validate="" novalidate=""
+                                      role="form"
+                                      method="post">
+                                    <input type="hidden" id="platformCaptcha" name="platformCaptcha">
+
+                                    <div class="form-group">
+                                        <input type="text" id="username" name="username" value="" required
+                                               class="form-control input-lg mb25"
+                                               placeholder="${msg['login.username']}">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" id="password" name="password" value="" required
+                                               class="form-control input-lg mb25"
+                                               placeholder="${msg['login.password']}">
+                                    </div>
+                                    <p id="tip" class="bg-danger p15" style="display:none"></p>
+
+                                    <div class="show">
+                                        <button id="login" class="btn btn-primary btn-lg btn-block" type="button"
+                                                data-loading-text="${msg['login.submit']}...">
+                                            ${msg['login.submit']}
+                                        </button>
+                                    </div>
+                                </form>
+
+                                <div class="p10">
+                                    <p class="pull-left"><a href="/public/password">找回密码</a></p>
+                                    <p class="pull-right"><a href="">联系客服</a></p>
+                                </div>
                             </div>
-                        </form>
+                        </section>
+
+                        <div class="text-center">
+                            Copyright &copy;
+                            <span id="year" class="mr5"></span>
+                            <span>武汉哎嘀信息科技有限公司</span>
+                        </div>
+
                     </div>
+
+
                 </section>
-                <p class="text-center text-default">
-                    Copyright &copy;
-                    <span id="year" class="mr5"></span>
-                </p>
             </div>
         </div>
 

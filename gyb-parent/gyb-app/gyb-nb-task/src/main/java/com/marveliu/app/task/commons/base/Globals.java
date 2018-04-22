@@ -1,8 +1,8 @@
 package com.marveliu.app.task.commons.base;
 
-import cn.wizzer.app.sys.modules.models.Sys_task;
-import cn.marveliu.app.services.sys.SysTaskService;
-import cn.marveliu.app.services.task.TaskPlatformService;
+import com.marveliu.framework.model.sys.Sys_task;
+import com.marveliu.framework.services.sys.SysTaskService;
+import com.marveliu.framework.services.task.TaskPlatformService;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
