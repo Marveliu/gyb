@@ -25,7 +25,7 @@ public class GyInfSubSubServiceImplTest {
     private IdGeneratorUtil idGeneratorUtil;
 
     @Test
-    public void insert(){
+    public void insert() {
         gy_inf gy_inf = new gy_inf();
         gy_inf.setUserid("405a28c9389d4a8581a29c283dc9f5b9");
         assertNotNull(gyInfSubService.insert(gy_inf));
