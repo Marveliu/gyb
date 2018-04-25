@@ -38,11 +38,10 @@ import java.util.List;
 
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass = GyInfSubService.class)
-public class GyInfSubSubServiceImpl extends BaseServiceImpl<gy_inf> implements GyInfSubService {
+public class GyInfSubServiceImpl extends BaseServiceImpl<gy_inf> implements GyInfSubService {
 
 
-
-    public GyInfSubSubServiceImpl(Dao dao) {
+    public GyInfSubServiceImpl(Dao dao) {
         super(dao);
     }
 

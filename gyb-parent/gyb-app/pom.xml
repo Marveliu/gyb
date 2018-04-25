@@ -37,19 +37,6 @@
         </dependency>
     </dependencies>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.marveliu.framework</groupId>
-                <artifactId>gyb-framework</artifactId>
-                <version>${project.version}</version>
-                <type>jar</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-
 
 
 </project>

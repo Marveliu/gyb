@@ -7,6 +7,7 @@ import org.nutz.boot.AppContext;
 import org.nutz.dao.Dao;
 import org.nutz.dao.entity.annotation.*;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Lang;
 import org.nutz.log.Logs;
 
 import java.io.Serializable;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 
 @Table("gy_inf")
-@IocBean
+@View("v_gy")
 public class gy_inf extends BaseModel implements Serializable {
 
     @Column
@@ -95,9 +96,6 @@ public class gy_inf extends BaseModel implements Serializable {
     private int status;
 
 
-    private String email;
-
-
     //参照
     @ManyMany(relation = "xm_apply", from = "gyid", to = "xmtaskid")
     private List<xm_task> xmtasks;
@@ -108,6 +106,86 @@ public class gy_inf extends BaseModel implements Serializable {
     // gy_pay查询是通过视图，所以此处是gyid
     @Many(field = "gyid")
     private List<gy_pay> gypays;
+
+
+
+
+    @Column("username")
+    @Readonly
+    private String username;
+
+    @Column("sexname")
+    @Readonly
+    private String sexname;
+
+
+    @Column("avator")
+    @Readonly
+    private String avator;
+
+    @Column("gyid")
+    @Readonly
+    private String gyid;
+
+    @Column("isOnline")
+    @Readonly
+    private String isOnline;
+
+
+    @Column("LoginIp")
+    @Readonly
+    private String LoginIp;
+
+
+    @Column("email")
+    @Readonly
+    private String email;
+
+
+    @Column("email_checked")
+    @Readonly
+    private String email_checked;
+
+    @Column("wsid")
+    @Readonly
+    private String wsid;
+
+
+    @Column("idcardF")
+    @Readonly
+    private String idcardF;
+
+    @Column("idcardB")
+    @Readonly
+    private String idcardB;
+
+    @Column("stuCardF")
+    @Readonly
+    private String stuCardF;
+
+    @Column("stuCardB")
+    @Readonly
+    private String stuCardB;
+
+    @Column("reAuthTime")
+    @Readonly
+    private int reAuthTime;
+
+
+    @Column("gyauthstatus")
+    @Readonly
+    private int gyauthstatus;
+
+
+    @Column("gyauthstatusname")
+    @Readonly
+    private String gyauthstatusname;
+
+    @Column("disabled")
+    @Readonly
+    private String disabled;
+
+
 
     public String getId() {
         return id;
@@ -267,12 +345,17 @@ public class gy_inf extends BaseModel implements Serializable {
             long times =date.getTime();//时间戳
             SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
             String dateString = formatter.format(date);
+            Dao dao =  AppContext.getDefault().getIoc().get(Dao.class);
+            // web modules也会来找dao
+            // 1. 给其配置数据库
+            // 2. 跳过这些配置
+            if (Lang.isEmpty(dao)) return null;
             int count =AppContext.getDefault().getIoc().get(Dao.class).count(this.getClass());
             str.append("gy");
             str.append(dateString.substring(2, 6));
             str.append(count + 1);
         }catch (Exception e){
-            Logs.get().debug(e);
+            // Logs.get().debug(e);
         }
 
         return str.toString();

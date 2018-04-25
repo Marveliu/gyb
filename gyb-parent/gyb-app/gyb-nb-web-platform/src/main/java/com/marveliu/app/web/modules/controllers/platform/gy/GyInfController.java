@@ -73,7 +73,12 @@ public class GyInfController{
     @At("/data")
     @Ok("json")
     @RequiresPermissions("platform.gy.inf")
-    public Object data(@Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
+    public Object data(
+            @Param("length") int length,
+            @Param("start") int start,
+            @Param("draw") int draw,
+            @Param("::order") List<DataTableOrder> order,
+            @Param("::columns") List<DataTableColumn> columns) {
         Cnd cnd = Cnd.NEW();
         return gyInfSubService.data(length, start, draw, order, columns, cnd, null);
     }

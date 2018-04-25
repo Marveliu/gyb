@@ -40,16 +40,6 @@
         </dependency>
         <dependency>
             <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-redis</artifactId>
-            <version>${nutzboot.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.nutz</groupId>
-            <artifactId>nutzboot-starter-wkcache</artifactId>
-            <version>${nutzboot.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.nutz</groupId>
             <artifactId>nutzboot-starter-test-junit4</artifactId>
             <version>${nutzboot.version}</version>
         </dependency>
@@ -113,7 +103,7 @@
                     <archive>
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <mainClass>DubboRpcSysMainLauncher</mainClass>
+                            <mainClass>DubboRpcGyMainLauncher</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -138,7 +128,7 @@
                                 </transformer>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>DubboRpcSysMainLauncher
+                                    <mainClass>DubboRpcGyMainLauncher
                                     </mainClass>
                                 </transformer>
                             </transformers>

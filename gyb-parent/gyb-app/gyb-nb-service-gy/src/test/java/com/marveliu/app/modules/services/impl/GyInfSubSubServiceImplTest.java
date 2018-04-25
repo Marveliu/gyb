@@ -47,9 +47,9 @@ public class GyInfSubSubServiceImplTest {
     // 测试类带@IocBean或不带@IocBean,本规则一样生效
     // 若不提供,默认使用当前测试类作为MainLauncher.
     // 也可以自定义NbJUnit4Runner, 继承NbJUnit4Runner并覆盖其createNbApp方法
-    public static NbApp createNbApp() {
-        NbApp nb = new NbApp().setMainClass(DubboRpcGyMainLauncher.class).setPrintProcDoc(false);
-        nb.getAppContext().setMainPackage("com.marveliu");
-        return nb;
-    }
+    // public static NbApp createNbApp() {
+    //     NbApp nb = new NbApp().setMainClass(DubboRpcGyMainLauncher.class).setPrintProcDoc(false);
+    //     nb.getAppContext().setMainPackage("com.marveliu");
+    //     return nb;
+    // }
 }

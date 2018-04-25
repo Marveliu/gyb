@@ -43,13 +43,15 @@ public class DubboRpcGyMainLauncher {
     private static final Log log = Logs.get();
 
     @Inject
-    public static Dao dao;
+    private Dao dao;
+
 
     public static void main(String[] args) throws Exception {
         NbApp nb = new NbApp().setArgs(args).setPrintProcDoc(true);
         nb.getAppContext().setMainPackage("com.marveliu");
         nb.run();
     }
+
 
     public void init() {
         try {

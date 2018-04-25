@@ -20,6 +20,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -923,15 +924,38 @@ public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<
                 cnd.orderBy(Sqls.escapeSqlFieldValue(col.getData()).toString(), order.getDir());
             }
         }
+
         Pager pager = new OffsetPager(start, length);
         re.put("recordsFiltered", this.dao().count(this.getEntityClass(), cnd));
-        List<?> list = this.dao().query(this.getEntityClass(), cnd, pager);
+        // todo: list<DataTableColumn> 最后一位存储的是数目，
+        List<?> list = null;
+        if(!Lang.isEmpty(columns)){
+            StringBuilder str = new StringBuilder("^");
+            int count =0;
+            for(DataTableColumn dataTableColumn:columns){
+                str.append(dataTableColumn.getData());
+                if(count == columns.size()-2){
+                    str.append("$");
+                    break;
+                }
+                str.append("|");
+                count++;
+            }
+            FieldFilter ff = FieldFilter.create(this.getEntityClass(), str.toString());
+            list = Daos.ext(this.dao(),ff).query(this.getEntityClass(), cnd, pager);
+        }else {
+            list = this.dao().query(this.getEntityClass(), cnd, pager);
+        }
+        //Daos.ext(this.dao(),)
+
+        // List<?> list =  this.dao().query(this.getEntityClass(), cnd, pager);
         if (!Strings.isBlank(linkName)) {
             this.dao().fetchLinks(list, linkName);
         }
         re.put("data", list);
         re.put("draw", draw);
         re.put("recordsTotal", length);
+        System.out.println("json:"+re);
         return re;
     }
 

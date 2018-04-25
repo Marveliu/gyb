@@ -53,9 +53,11 @@ public class GyFacadeServiceImpl implements GyFacadeService {
     private GyInfSubService gyInfSubService;
     @Inject
     private GyPaySubService gyPaySubService;
+
     @Inject
     @Reference
     private SysUserService sysUserService;
+
     @Inject
     @Reference
     private SysRoleService sysRoleService;
