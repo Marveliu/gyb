@@ -38,21 +38,33 @@ import java.util.List;
  */
 public interface GyFacadeService {
 
+
+    /************ 用户相关 ************/
+
+    /**
+     * 检查指定联系方式是否被验证
+     * @param gyid
+     * @return
+     */
+    public boolean ifEmailChecked(String gyid,String[] contactWay);
+
+    /**
+     * 修改联系方式,迁移联系方式
+     * 在已认证的情况下，只允许修改联系方式信息，并且全部需要重新验证
+     * @param gy_inf 提交的雇员信息
+     * @return
+     */
+    public boolean updateGyinf(gy_inf gy_inf);
+
+
     /**
      * 修改雇员角色
      * @param gyId
      * @param rolecode
      * @return
      */
-    public boolean updateGyRole(String gyId, String rolecode);
+    public boolean updateGyRoleByGyid(String gyId, String rolecode);
 
-    /**
-     * 给雇员发送消息
-     * @param gyid
-     * @param msg
-     * @return
-     */
-    public boolean sendMsgByGyid(String gyid,Sys_msg msg);
 
     /**
      * 修改雇员联系方式
@@ -64,9 +76,6 @@ public interface GyFacadeService {
 
 
     /************ 支付相关 ************/
-
-
-
 
     /**
      * 通过支付id获得雇员信息
@@ -88,11 +97,11 @@ public interface GyFacadeService {
 
 
 
-
-    /************ 用户相关 ************/
-
-    //  获得用户id
-    public boolean ifEmailChecked(String gyid);
-
-    public boolean setQq(String gyid , String qq);
+    /**
+     * 给雇员发送消息
+     * @param gyid
+     * @param msg
+     * @return
+     */
+    public boolean sendMsgByGyid(String gyid,Sys_msg msg);
 }

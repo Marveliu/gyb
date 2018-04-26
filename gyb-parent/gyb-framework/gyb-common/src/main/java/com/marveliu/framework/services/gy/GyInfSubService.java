@@ -27,4 +27,13 @@ public interface GyInfSubService extends BaseService<gy_inf> {
     public String getUserByGyid(String gyid);
 
 
+    /**
+     * 启用或者禁用雇员
+     * @param gyid
+     * @param flag true 启用 false 禁用
+     * @return
+     */
+    public Boolean setGyStatus(String gyid,Boolean flag);
+
+
 }

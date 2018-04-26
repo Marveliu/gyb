@@ -49,7 +49,7 @@ import java.util.List;
 
 @IocBean
 @At("/platform/gy/inf")
-public class GyInfController{
+public class GyInfController {
     private static final Log log = Logs.get();
 
     @Inject
@@ -80,35 +80,16 @@ public class GyInfController{
             @Param("::order") List<DataTableOrder> order,
             @Param("::columns") List<DataTableColumn> columns) {
         Cnd cnd = Cnd.NEW();
+
         return gyInfSubService.data(length, start, draw, order, columns, cnd, null);
-    }
-
-    @At("/add")
-    @Ok("beetl:/platform/gy/inf/add.html")
-    @RequiresPermissions("platform.gy.inf")
-    public void add() {
-
-    }
-
-    @At("/addDo")
-    @Ok("json")
-    @RequiresPermissions("platform.gy.inf.add")
-    @SLog(tag = "gz_inf", msg = "${args[0].id}")
-    public Object addDo(@Param("..")gy_inf gyInf, HttpServletRequest req) {
-        try {
-            gyInfSubService.insert(gyInf);
-            return Result.success("system.success");
-        } catch (Exception e) {
-            return Result.error("system.error");
-        }
     }
 
     @At("/edit/?")
     @Ok("beetl:/platform/gy/inf/edit.html")
     @RequiresPermissions("platform.gy.inf")
-    public void edit(String id,HttpServletRequest req) {
+    public void edit(String id, HttpServletRequest req) {
         Cnd cnd = Cnd.NEW();
-        Object test = gyInfSubService.fetch(cnd.and("gyid","=",id));
+        Object test = gyInfSubService.fetch(cnd.and("gyid", "=", id));
         req.setAttribute("obj", test);
     }
 
@@ -129,7 +110,6 @@ public class GyInfController{
             user.setOpBy(StringUtil.getPlatformUid());
             user.setOpAt((Long) (System.currentTimeMillis() / 1000));
             userService.updateIgnoreNull(user);
-
             //修改雇员信息
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             int birthdayat = (int) (sdf.parse(birthday).getTime() / 1000);
@@ -141,25 +121,6 @@ public class GyInfController{
             gyInfSubService.updateIgnoreNull(gyInf);
             return Result.success("system.success");
 
-        } catch (Exception e) {
-            return Result.error("system.error");
-        }
-    }
-
-    @At({"/delete/?", "/delete"})
-    @Ok("json")
-    @RequiresPermissions("platform.gy.inf.delete")
-    @SLog(tag = "gz_inf", msg = "${req.getAttribute('id')}")
-    public Object delete(String id, @Param("ids")  String[] ids, HttpServletRequest req) {
-        try {
-            if(ids!=null&&ids.length>0){
-                gyInfSubService.delete(ids);
-                req.setAttribute("id", org.apache.shiro.util.StringUtils.toString(ids));
-            }else{
-                gyInfSubService.delete(id);
-                req.setAttribute("id", id);
-            }
-            return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");
         }
@@ -178,19 +139,19 @@ public class GyInfController{
         }
     }
 
-
     @At("/setGy4/?")
     @Ok("json")
-    @RequiresPermissions("gy.inf.set_offical")
-    @SLog(tag = "通过正式雇员", msg = "${req.getAttribute('id')}")
+    @RequiresPermissions("platform.gy.inf.edit")
+    @SLog(type = "gy", tag = "通过正式雇员", msg = "${req.getAttribute('id')}")
     public Object setGy4(String id, HttpServletRequest req) {
         try {
-            if(gyFacadeService.updateGyRole(id,"gy4")){
-                req.setAttribute("id", id);
-                //todo: 当前status仅仅是作为标记
-                gyInfSubService.update(Chain.make("status",1),Cnd.where("userid","=",id));
+            String gyid = gyInfSubService.getGyByUserId(id).getGyid();
+            if (gyFacadeService.updateGyRoleByGyid(gyid, "gy4")) {
+                req.setAttribute("id", gyid);
+                // 设置雇员为允许接单的状态
+                gyInfSubService.update(Chain.make("status", 1), Cnd.where("userid", "=", id));
                 return Result.success("system.success");
-            }else {
+            } else {
                 return Result.error("system.error");
             }
         } catch (Exception e) {
@@ -199,5 +160,21 @@ public class GyInfController{
     }
 
 
-
+    @At("/setGyStatus")
+    @Ok("json")
+    @RequiresPermissions("platform.gy.inf.edit")
+    @SLog(type = "gy", tag = "调整雇员状态", msg = "${req.getAttribute('id')}")
+    public Object setGyStatus(
+            @Param("gyid") String gyid,
+            @Param("flag") boolean flag,
+            HttpServletRequest req) {
+        try {
+            if (gyInfSubService.setGyStatus(gyid, flag)) {
+                return Result.success("雇员编号" + gyid + "启用状态:" +flag);
+            }
+            return Result.error("system.error");
+        } catch (Exception e) {
+            return Result.error("system.error");
+        }
+    }
 }

@@ -29,76 +29,84 @@ layout("/layouts/platform.html"){
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-4 text-center">
                                         <figure>
-                                            <img src="/assets/img/avatar.jpg" alt="" class="avatar avatar-lg img-circle avatar-bordered">
+                                            <img src="/assets/img/avatar.jpg" alt=""
+                                                 class="avatar avatar-lg img-circle avatar-bordered">
                                             <!--<div class="small mt10">信息完成度</div>-->
                                             <!--<div class="progress progress-xs mt5 mb5">-->
-                                                <!--<div class="progress-bar done" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">-->
-                                                <!--</div>-->
+                                            <!--<div class="progress-bar done" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">-->
+                                            <!--</div>-->
                                             <!--</div>-->
                                             <!--<small>234 / 879</small>-->
                                         </figure>
 
                                         <div class="row">
-                                                <!--<h6 class="mt15">平台信息</h6>-->
-                                                <ul class="user-meta ">
-                                                    <li >
-                                                        <i class="fa fa-beer mr5"></i>
-                                                        <a href="javascript:;">${role.name}</a>
-                                                    </li>
-                                                </ul>
+                                            <!--<h6 class="mt15">平台信息</h6>-->
+                                            <ul class="user-meta ">
+                                                <li>
+                                                    <i class="fa fa-beer mr5"></i>
+                                                    <a href="javascript:;">${role.name}</a>
+                                                </li>
+                                            </ul>
                                         </div>
 
                                         <div class="mt10 mb10">
-                                            <a href="${base}/platform/gy/person/infedit" class="btn btn-social btn-xs btn-facebook mr5" data-toggle="modal" data-target="#dialogDeal"><i class="fa fa-info"></i>个人信息 </a>
+                                            <a href="${base}/platform/gy/person/infedit"
+                                               class="btn btn-social btn-xs btn-facebook mr5" data-toggle="modal"
+                                               data-target="#dialogDeal"><i class="fa fa-info"></i>个人信息 </a>
                                             <!--<a href="${base}/platform/gy/person/payindex" class="btn btn-social btn-xs btn-facebook mr5" data-toggle="modal" data-target="#dialogPayDeal"><i class="fa fa-facebook"></i>交易方式 </a>-->
-                                            <a href="${base}/platform/gy/person/payindex" class="btn btn-social btn-xs btn-google-plus mr5" ><i class="fa fa-rmb"></i>交易方式 </a>
-                                            <a id="emailchecked" class="btn btn-social btn-xs btn-twitter mr5" v-if="!emailchecked" v-on:click="askActiviEmail('${obj.id}')"><i class="fa fa-mail-forward"></i>邮箱未激活，发送激活邮件 </a>
+                                            <a href="${base}/platform/gy/person/payindex"
+                                               class="btn btn-social btn-xs btn-google-plus mr5"><i
+                                                    class="fa fa-rmb"></i>交易方式 </a>
+                                            <a id="emailchecked" class="btn btn-social btn-xs btn-twitter mr5"
+                                               v-if="!emailchecked" v-on:click="askActiviEmail('${obj.id}')"><i
+                                                    class="fa fa-mail-forward"></i>邮箱未激活，发送激活邮件 </a>
                                         </div>
 
                                     </div>
                                     <div class="col-xs-12 col-sm-8">
-                                        <h4 class="mb5"> <b>${gy.realname!}</b> ${@status.bind( 'sex'+gy.sex!)}，你好！ </h4>
+                                        <h4 class="mb5"><b>${gy.realname!}</b> ${@status.bind( 'sex'+gy.sex!)}，你好！ </h4>
                                         <h6 class="mt15 mb15">雇员编号：${gy.id!}</h6>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <h6 class="mt15">基本信息</h6>
-                                            <ul class="user-meta ">
-                                                <li >
-                                                    <i class="fa fa-graduation-cap mr5"></i>
-                                                    <a href="javascript:;">${@status.bind( gy.college!)}</a>
-                                                </li>
-                                                <li >
-                                                    <i class="fa fa-institution mr5"></i>
-                                                    <a href="javascript:;">${gy.school!}</a>
-                                                </li>
-                                                <li >
-                                                    <i class="fa fa-institution mr5"></i>
-                                                    <a href="javascript:;">${gy.major!}</a>
-                                                </li>
-                                                <li >
-                                                    <i class="fa fa-cube mr5"></i>
-                                                    <a href="javascript:;">${@status.bind( 'stulevel'+gy.stuLevel!)}</a>
-                                                </li>
-                                            </ul>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h6 class="mt15">基本信息</h6>
+                                                <ul class="user-meta ">
+                                                    <li>
+                                                        <i class="fa fa-graduation-cap mr5"></i>
+                                                        <a href="javascript:;">${@status.bind( gy.college!)}</a>
+                                                    </li>
+                                                    <li>
+                                                        <i class="fa fa-institution mr5"></i>
+                                                        <a href="javascript:;">${gy.school!}</a>
+                                                    </li>
+                                                    <li>
+                                                        <i class="fa fa-institution mr5"></i>
+                                                        <a href="javascript:;">${gy.major!}</a>
+                                                    </li>
+                                                    <li>
+                                                        <i class="fa fa-cube mr5"></i>
+                                                        <a href="javascript:;">${@status.bind(
+                                                            'stulevel'+gy.stuLevel!)}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h6 class="mt15">联系方式</h6>
+                                                <ul class="user-meta ">
+                                                    <li>
+                                                        <i class="ti-email mr5"></i>
+                                                        <a href="javascript:;">${obj.email!}</a>
+                                                    </li>
+                                                    <li>
+                                                        <i class="ti-mobile mr5"></i>
+                                                        <a href="javascript:;">${gy.phone!}</a>
+                                                    </li>
+                                                    <li>
+                                                        <i class="fa fa-qq mr5"></i>
+                                                        <a href="javascript:;">${gy.qq!}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <h6 class="mt15">联系方式</h6>
-                                            <ul class="user-meta ">
-                                                <li >
-                                                    <i class="ti-email mr5"></i>
-                                                    <a href="javascript:;">${obj.email!}</a>
-                                                </li>
-                                                <li >
-                                                    <i class="ti-mobile mr5"></i>
-                                                    <a href="javascript:;">${gy.phone!}</a>
-                                                </li>
-                                                <li >
-                                                    <i class="fa fa-qq mr5"></i>
-                                                    <a href="javascript:;">${gy.qq!}</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
                                     </div>
                                 </div>
                             </div>
@@ -121,10 +129,10 @@ layout("/layouts/platform.html"){
 
                     <!--vue测试-->
                     <!--<section class="panel panel-primary">-->
-                        <!--<h5>vue 测试</h5>-->
-                        <!--<div id="app1">-->
-                            <!--{{message}}-->
-                        <!--</div>-->
+                    <!--<h5>vue 测试</h5>-->
+                    <!--<div id="app1">-->
+                    <!--{{message}}-->
+                    <!--</div>-->
                     <!--</section>-->
 
                     <!-- /profile information sidebar -->
@@ -150,14 +158,15 @@ layout("/layouts/platform.html"){
                         <div class="panel-body no-p">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div class="chat-user" id="gyauth"  @click="gyauthedit" >
-                                        <a class="user-avatar" >
+                                    <div class="chat-user" id="gyauth" @click="gyauthedit">
+                                        <a class="user-avatar">
                                             <img src="/assets/img/face5.jpg" class="avatar avatar-sm img-circle" alt="">
                                             <div class="status bg-danger"></div>
                                         </a>
                                         <div class="user-details">
                                             <p>身份认证</p>
-                                            <small class="user-department">${@status.bind( 'gyauth'+ gyauth.status!)}</small>
+                                            <small class="user-department">${@status.bind( 'gyauth'+ gyauth.status!)}
+                                            </small>
                                         </div>
                                     </div>
                                 </div>
@@ -167,7 +176,8 @@ layout("/layouts/platform.html"){
                                     <div class="chat-user">
                                         <!--点击查看相关弹出框查看认证信息-->
                                         <a href="javascript:;" class="user-avatar">
-                                            <img src="/assets/img/avatar.jpg" class="avatar avatar-sm img-circle" alt="">
+                                            <img src="/assets/img/avatar.jpg" class="avatar avatar-sm img-circle"
+                                                 alt="">
                                             <div class="status bg-color"></div>
                                         </a>
                                         <div class="user-details">
@@ -182,22 +192,22 @@ layout("/layouts/platform.html"){
 
                     <!--消息中心-->
                     <!--<section class="panel panel-primary no-b">-->
-                        <!--<header class="panel-heading clearfix brtl brtr">-->
-                            <!--<div class="overflow-hidden">-->
-                                <!--<a href="javascript:;" class="h4 show no-m pt10">待处理消息</a>-->
-                            <!--</div>-->
-                        <!--</header>-->
+                    <!--<header class="panel-heading clearfix brtl brtr">-->
+                    <!--<div class="overflow-hidden">-->
+                    <!--<a href="javascript:;" class="h4 show no-m pt10">待处理消息</a>-->
+                    <!--</div>-->
+                    <!--</header>-->
 
-                        <!--<div class="list-group">-->
-                            <!--<a href="javascript:;" class="list-group-item">-->
-                                <!--<span class="badge bg-info pull-right">89</span>-->
-                                <!--<i class="ti-calendar mr10 text-muted"></i>项目消息-->
-                            <!--</a>-->
-                            <!--<a href="javascript:;" class="list-group-item">-->
-                                <!--<span class="badge bg-danger pull-right">8</span>-->
-                                <!--<i class="ti-bell mr10 text-muted"></i>系统通知-->
-                            <!--</a>-->
-                        <!--</div>-->
+                    <!--<div class="list-group">-->
+                    <!--<a href="javascript:;" class="list-group-item">-->
+                    <!--<span class="badge bg-info pull-right">89</span>-->
+                    <!--<i class="ti-calendar mr10 text-muted"></i>项目消息-->
+                    <!--</a>-->
+                    <!--<a href="javascript:;" class="list-group-item">-->
+                    <!--<span class="badge bg-danger pull-right">8</span>-->
+                    <!--<i class="ti-bell mr10 text-muted"></i>系统通知-->
+                    <!--</a>-->
+                    <!--</div>-->
 
                     <!--</section>-->
 
@@ -278,8 +288,8 @@ layout("/layouts/platform.html"){
         methods: {
             askActiviEmail: function (id) {
                 console.log("vue ajax begin");
-                var url= "${base}/open/api/email/mail/activeMail?userid="+id;
-                $.post(url,function(data){
+                var url = "${base}/open/api/email/mail/activeMail?userid=" + id;
+                $.post(url, function (data) {
                     if (data.code == 0) {
                         Toast.success(data.msg);
                     } else {
@@ -295,25 +305,26 @@ layout("/layouts/platform.html"){
     var gyauth = new Vue({
         el: '#gyauth',
         data: {
-            ifgyauth: ${ifgyauth}
+            isAuth: ${isAuth}
         },
         // 在 `methods` 对象中定义方法
         methods: {
             gyauthedit: function () {
-
 //                服务端验证
-                if( ${gyauth.status} == 1 || ${gyauth.status} == 2 ){
+                if (${gyauth.status} == 1 || ${gyauth.status} == 2
+            )
+                {
                     Toast.warning("当前状态无法修改身份信息！")
                     return null;
                 }
 
                 console.log("modal remote");
-                if(!this.ifgyauth){
+                if (!this.isAuth) {
                     $("#dialogAuthDeal").modal({
                         remote: "${base}/platform/gy/person/authedit"
                     });
                     $("#dialogAuthDeal").show();
-                }else{
+                } else {
                     Toast.warning("身份已经验证！")
                 }
             }
@@ -322,37 +333,37 @@ layout("/layouts/platform.html"){
 
     // 首先,需要创建一个WebSocket连接
     var ws;
-    var WS_URL = window.location.host + "${base!}"+"/websocket"
+    var WS_URL = window.location.host + "${base!}" + "/websocket"
 
     // 如果页面是https,那么必须走wss协议, 否则走ws协议
     if (location.protocol == 'http:') {
-        ws = new WebSocket("ws://"+WS_URL);
+        ws = new WebSocket("ws://" + WS_URL);
     } else {
-        ws = new WebSocket("wss://"+WS_URL);
+        ws = new WebSocket("wss://" + WS_URL);
     }
 
     // 连接成功后,会触发onopen回调
-    ws.onopen = function(event) {
+    ws.onopen = function (event) {
         console.log("websocket建立：");
         // 加入home房间
-        ws.send(JSON.stringify({room:'home',"action":"join"}));
+        ws.send(JSON.stringify({room: 'home', "action": "join"}));
     };
 
     // 收到服务器发来的信息时触发的回调
-    ws.onmessage = function(event) {
+    ws.onmessage = function (event) {
         console.log("websocket onmessage", event.data);
         var re = JSON.parse(event.data);
         if (re.action == "notify") {
             // 弹个浏览器通知
         } else if (re.action == "msg") {
             // 插入到聊天记录中
-        } else if(re.action == "refresh"){
+        } else if (re.action == "refresh") {
             // 刷新本页
             window.location.reload();
         }
     };
 
-    ws.onclose = function(evt) {
+    ws.onclose = function (evt) {
         console.log("Connection closed.");
     };
 
@@ -362,6 +373,7 @@ layout("/layouts/platform.html"){
             ws.send("{}"); // TODO 断线重连.
         }
     }
+
     setInterval("ws_ping()", 25000); // 25秒一次就可以了
 
     $(document).ready(function () {
@@ -373,7 +385,6 @@ layout("/layouts/platform.html"){
     });
 
 </script>
-
 
 
 <%}%>

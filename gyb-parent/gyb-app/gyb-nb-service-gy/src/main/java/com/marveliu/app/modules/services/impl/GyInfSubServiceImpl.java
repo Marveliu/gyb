@@ -65,6 +65,24 @@ public class GyInfSubServiceImpl extends BaseServiceImpl<gy_inf> implements GyIn
         return this.dao().fetch(gy_inf.class,Cnd.where("id","=",gyid)).getUserid();
     }
 
+    /**
+     * 启用或者禁用雇员
+     *
+     * @param gyid
+     * @param flag true 启用 false 禁用
+     * @return
+     */
+    @Override
+    public Boolean setGyStatus(String gyid, Boolean flag) {
+        Cnd cnd = Cnd.where("id","=",gyid);
+        Chain chain = Chain.make("disabled",!flag);
+        if(this.dao().update(gy_inf.class,chain,cnd)!=0)
+        {
+            return true;
+        }
+        return false;
+    }
+
     public boolean setQq(String userid , String qq)
     {
         Chain chain = Chain.make("qq",qq);
@@ -75,5 +93,7 @@ public class GyInfSubServiceImpl extends BaseServiceImpl<gy_inf> implements GyIn
         }
         return false;
     }
+
+
 
 }

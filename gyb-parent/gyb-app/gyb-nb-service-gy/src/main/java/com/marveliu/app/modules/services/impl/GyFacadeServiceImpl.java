@@ -71,7 +71,7 @@ public class GyFacadeServiceImpl implements GyFacadeService {
      * @return
      */
     @Override
-    public boolean updateGyRole(String gyid, String rolecode) {
+    public boolean updateGyRoleByGyid(String gyid, String rolecode) {
         try {
             String roleid =  sysRoleService.getRoleFromCode(rolecode).getId();
             String userid = gyInfSubService.getUserByGyid(gyid);

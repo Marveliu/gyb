@@ -40,15 +40,6 @@ public class gy_inf extends BaseModel implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 20)
     private String realname;
 
-    @Column
-    @Comment("qq")
-    @ColDefine(type = ColType.VARCHAR, width = 20)
-    private String qq;
-
-    @Column
-    @Comment("电话")
-    @ColDefine(type = ColType.VARCHAR, width = 20)
-    private String phone;
 
     @Column
     @Comment("出生日期")
@@ -95,6 +86,10 @@ public class gy_inf extends BaseModel implements Serializable {
     @ColDefine(type = ColType.INT)
     private int status;
 
+    @Column
+    @Comment("是否禁用")
+    @ColDefine(type = ColType.BOOLEAN)
+    private boolean disabled;
 
     //参照
     @ManyMany(relation = "xm_apply", from = "gyid", to = "xmtaskid")
@@ -106,9 +101,6 @@ public class gy_inf extends BaseModel implements Serializable {
     // gy_pay查询是通过视图，所以此处是gyid
     @Many(field = "gyid")
     private List<gy_pay> gypays;
-
-
-
 
     @Column("username")
     @Readonly
@@ -181,11 +173,17 @@ public class gy_inf extends BaseModel implements Serializable {
     @Readonly
     private String gyauthstatusname;
 
-    @Column("disabled")
+    @Column("stuLevelname")
     @Readonly
-    private String disabled;
+    private String stuLevelname;
 
+    @Comment("qq")
+    @Readonly
+    private String qq;
 
+    @Comment("电话")
+    @Readonly
+    private String phone;
 
     public String getId() {
         return id;
@@ -323,6 +321,53 @@ public class gy_inf extends BaseModel implements Serializable {
         this.gypays = gypays;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getSexname() {
+        return sexname;
+    }
+
+    public void setSexname(String sexname) {
+        this.sexname = sexname;
+    }
+
+    public String getAvator() {
+        return avator;
+    }
+
+    public void setAvator(String avator) {
+        this.avator = avator;
+    }
+
+    public String getGyid() {
+        return gyid;
+    }
+
+    public void setGyid(String gyid) {
+        this.gyid = gyid;
+    }
+
+    public String getIsOnline() {
+        return isOnline;
+    }
+
+    public void setIsOnline(String isOnline) {
+        this.isOnline = isOnline;
+    }
+
+    public String getLoginIp() {
+        return LoginIp;
+    }
+
+    public void setLoginIp(String loginIp) {
+        LoginIp = loginIp;
+    }
 
     public String getEmail() {
         return email;
@@ -330,6 +375,94 @@ public class gy_inf extends BaseModel implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getEmail_checked() {
+        return email_checked;
+    }
+
+    public void setEmail_checked(String email_checked) {
+        this.email_checked = email_checked;
+    }
+
+    public String getWsid() {
+        return wsid;
+    }
+
+    public void setWsid(String wsid) {
+        this.wsid = wsid;
+    }
+
+    public String getIdcardF() {
+        return idcardF;
+    }
+
+    public void setIdcardF(String idcardF) {
+        this.idcardF = idcardF;
+    }
+
+    public String getIdcardB() {
+        return idcardB;
+    }
+
+    public void setIdcardB(String idcardB) {
+        this.idcardB = idcardB;
+    }
+
+    public String getStuCardF() {
+        return stuCardF;
+    }
+
+    public void setStuCardF(String stuCardF) {
+        this.stuCardF = stuCardF;
+    }
+
+    public String getStuCardB() {
+        return stuCardB;
+    }
+
+    public void setStuCardB(String stuCardB) {
+        this.stuCardB = stuCardB;
+    }
+
+    public int getReAuthTime() {
+        return reAuthTime;
+    }
+
+    public void setReAuthTime(int reAuthTime) {
+        this.reAuthTime = reAuthTime;
+    }
+
+    public int getGyauthstatus() {
+        return gyauthstatus;
+    }
+
+    public void setGyauthstatus(int gyauthstatus) {
+        this.gyauthstatus = gyauthstatus;
+    }
+
+    public String getGyauthstatusname() {
+        return gyauthstatusname;
+    }
+
+    public void setGyauthstatusname(String gyauthstatusname) {
+        this.gyauthstatusname = gyauthstatusname;
+    }
+
+    public String getStuLevelname() {
+        return stuLevelname;
+    }
+
+    public void setStuLevelname(String stuLevelname) {
+        this.stuLevelname = stuLevelname;
+    }
+
+    public Boolean getDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(Boolean disabled) {
+        this.disabled = disabled;
     }
 
     /**

@@ -61,7 +61,7 @@ var Toast = {
     toastr.options = {
       closeButton: false,
       debug: false,
-      positionClass: "toast-top-right",
+      positionClass: "toast-bottom-right",
       onclick: null,
       showDuration: 300,
       hideDuration: 1000,

@@ -1,11 +1,14 @@
 package com.marveliu.app.web.commons.utils;
 
+import com.marveliu.framework.model.sys.Sys_user;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.subject.Subject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -20,6 +23,31 @@ public class ShiroUtil {
     private static final String PERMISSION_NAMES_DELIMETER = ",";
     private static final Logger logger = LoggerFactory.getLogger(ShiroUtil.class);
     private static final String GY_ROLE_NAMES="gy0,gy1,gy2,gy3,gy4";
+
+    /**
+     * 获得系统用户
+     * 从shiro里面拿，可能会出现和数据不一致的情况
+     * @return
+     */
+    public Sys_user getSysuser(){
+        Subject currentUser = SecurityUtils.getSubject();
+        Sys_user user = (Sys_user) currentUser.getPrincipal();
+        return user;
+    }
+
+
+    /**
+     * 从数据库中获得user,并更新shiroseesion
+     * @param req
+     * @return
+     */
+    public  Sys_user getCurrentUser(HttpServletRequest req){
+        Subject subject = SecurityUtils.getSubject();
+        AuthenticationToken token  = (AuthenticationToken) req.getSession().getAttribute("sysUserToken");
+        subject.login(token);
+        Sys_user user = (Sys_user) subject.getPrincipal();
+        return  user;
+    }
 
     /**
      * 检验是否为雇员
