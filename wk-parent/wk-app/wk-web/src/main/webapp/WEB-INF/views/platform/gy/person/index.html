@@ -278,7 +278,7 @@ layout("/layouts/platform.html"){
         methods: {
             askActiviEmail: function (id) {
                 console.log("vue ajax begin");
-                var url= "${base}/open/api/email/mail/activeMail?userid="+id;
+                var url= "${base}/open/api/email/activeMail?userId="+id;
                 $.post(url,function(data){
                     if (data.code == 0) {
                         Toast.success(data.msg);

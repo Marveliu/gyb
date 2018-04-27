@@ -246,6 +246,8 @@ public class XmTaskController {
             xmtask.setFirstcommit(firstcommitAt);
             xmtask.setEndtime(endtimeAt);
             xmtask.setApplyendtime(applyendtimeAt);
+            xmtask.setStatus(0);
+            xmtask.setDisabled(true);
 
 
             Trans.exec(new Atom() {
