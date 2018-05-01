@@ -15,19 +15,8 @@ package com.marveliu.app.web.modules.controllers.platform.gy;
  * limitations under the License.
  */
 
-import com.marveliu.app.web.commons.shiro.token.CaptchaToken;
-import com.marveliu.app.web.commons.slog.annotation.SLog;
-import com.marveliu.app.web.commons.utils.DateUtil;
+
 import com.marveliu.app.web.commons.utils.ShiroUtil;
-import com.marveliu.app.web.commons.utils.StringUtil;
-import com.marveliu.framework.model.base.Result;
-import com.marveliu.framework.model.gy.gy_auth;
-import com.marveliu.framework.model.gy.gy_inf;
-import com.marveliu.framework.model.gy.gy_pay;
-import com.marveliu.framework.model.sys.Sys_role;
-import com.marveliu.framework.model.sys.Sys_user;
-import com.marveliu.framework.page.datatable.DataTableColumn;
-import com.marveliu.framework.page.datatable.DataTableOrder;
 import com.marveliu.framework.services.gy.GyAuthSubService;
 import com.marveliu.framework.services.gy.GyFacadeService;
 import com.marveliu.framework.services.gy.GyInfSubService;
@@ -36,31 +25,13 @@ import com.marveliu.framework.services.sys.SysRoleService;
 import com.marveliu.framework.services.sys.SysUserService;
 import com.marveliu.framework.services.xm.XmApplyService;
 import com.marveliu.framework.services.xm.XmInfService;
-import jdk.nashorn.internal.ir.annotations.Reference;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.subject.Subject;
-import org.apache.shiro.subject.SubjectContext;
-import org.nutz.dao.Chain;
-import org.nutz.dao.Cnd;
+import com.alibaba.dubbo.config.annotation.Reference;
 import org.nutz.dao.Dao;
-import org.nutz.dao.FieldFilter;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import org.nutz.mvc.Mvcs;
-import org.nutz.mvc.adaptor.WhaleAdaptor;
-import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
-import org.nutz.mvc.annotation.Ok;
-import org.nutz.mvc.annotation.Param;
-import org.nutz.trans.Atom;
-import org.nutz.trans.Trans;
-
-import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
 
 /**
  * 负责和雇员端进行交互
@@ -78,13 +49,16 @@ public class GyPersonController {
 
     @Inject
     @Reference
-    private GyInfSubService gyInfSubService;
+    private GyInfSubService gyInfSubSegyrvice;
+
     @Inject
     @Reference
     private GyAuthSubService gyAuthSubService;
+
     @Inject
     @Reference
     private GyPaySubService gyPaySubService;
+
     @Inject
     @Reference
     private GyFacadeService gyFacadeService;
@@ -97,6 +71,7 @@ public class GyPersonController {
     @Inject
     @Reference
     private SysRoleService sysRoleService;
+
     @Inject
     @Reference
     private SysUserService sysuserService;

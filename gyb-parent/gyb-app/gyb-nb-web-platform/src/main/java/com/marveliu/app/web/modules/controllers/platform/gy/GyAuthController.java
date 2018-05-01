@@ -15,6 +15,7 @@ package com.marveliu.app.web.modules.controllers.platform.gy;
  * limitations under the License.
  */
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.marveliu.app.web.commons.slog.annotation.SLog;
 import com.marveliu.app.web.commons.utils.StringUtil;
 import com.marveliu.framework.model.base.Result;
@@ -25,7 +26,7 @@ import com.marveliu.framework.page.datatable.DataTableOrder;
 import com.marveliu.framework.services.gy.GyAuthSubService;
 import com.marveliu.framework.services.gy.GyFacadeService;
 import com.marveliu.framework.services.gy.GyInfSubService;
-import jdk.nashorn.internal.ir.annotations.Reference;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
@@ -51,18 +52,18 @@ import java.util.List;
 @At("/platform/gy/auth")
 public class GyAuthController{
     private static final Log log = Logs.get();
+
     @Inject
     @Reference
     private GyAuthSubService gyAuthSubService;
+
     @Inject
     @Reference
     private GyInfSubService gyInfSubService;
+
     @Inject
     @Reference
     private GyFacadeService gyFacadeService;
-    @Inject
-    @Reference
-    private Dao dao;
 
     @At("")
     @Ok("beetl:/platform/gy/auth/index.html")
@@ -73,6 +74,7 @@ public class GyAuthController{
     @At("/data")
     @Ok("json")
     @RequiresPermissions("platform.gy.auth")
+    @SLog(tag = "查看雇员认证信息",msg = "")
     public Object data(
             @Param("gyid") String gyid,
             @Param("realname") String realname,
@@ -89,26 +91,18 @@ public class GyAuthController{
         if(!Strings.isBlank(status) && !"3".equals(status) && Strings.isBlank(realname) && Strings.isBlank(gyid)){
             cnd.and("status", "=", status);
         }
-        return gyAuthSubService.data(length, start, draw, order, columns, cnd, null);
-    }
-
-
-    @At("/add")
-    @Ok("beetl:/platform/gy/auth/add.html")
-    @RequiresPermissions("platform.gy.auth")
-    public void add() {
-
+        return gyInfSubService.data(length, start, draw, order, columns, cnd, null);
     }
 
 
     @At("/detail/?")
     @Ok("beetl:/platform/gy/auth/detail.html")
     @RequiresPermissions("platform.gy.auth")
+    @SLog(tag = "查看具体雇员信息",msg = "${args[0]}")
     public void detail(String gyid, HttpServletRequest req) {
         Cnd cnd = Cnd.NEW();
-        cnd.and("gyid","=",gyid);
         if (!Strings.isBlank(gyid)) {
-            req.setAttribute("obj", gyAuthSubService.fetch(cnd));
+            req.setAttribute("obj", gyInfSubService.fetch(cnd));
         }else{
             req.setAttribute("obj", null);
         }

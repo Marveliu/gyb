@@ -171,7 +171,7 @@ public class SysLoginController {
             sysLog.setType("info");
             sysLog.setTag("用户登录");
             sysLog.setSrc(this.getClass().getName() + "#doLogin");
-            sysLog.setMsg("成功登录："+StringUtil.getPlatformUsername());
+            sysLog.setMsg(StringUtil.getPlatformUsername());
             sysLog.setIp(Lang.getIP(req));
             sysLog.setOpBy(user.getId());
             sysLog.setOpAt(Times.getTS());
@@ -219,7 +219,7 @@ public class SysLoginController {
                 sysLog.setType("info");
                 sysLog.setTag("用户登出");
                 sysLog.setSrc(this.getClass().getName() + "#logout");
-                sysLog.setMsg("成功退出系统！");
+                sysLog.setMsg(StringUtil.getPlatformUsername());
                 sysLog.setIp(Lang.getIP(req));
                 sysLog.setOpBy(user.getId());
                 sysLog.setOpAt(Times.getTS());

@@ -6,9 +6,7 @@ import com.marveliu.framework.model.xm.xm_task;
 import org.nutz.boot.AppContext;
 import org.nutz.dao.Dao;
 import org.nutz.dao.entity.annotation.*;
-import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
-import org.nutz.log.Logs;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -142,7 +140,6 @@ public class gy_inf extends BaseModel implements Serializable {
     @Readonly
     private String wsid;
 
-
     @Column("idcardF")
     @Readonly
     private String idcardF;
@@ -177,11 +174,11 @@ public class gy_inf extends BaseModel implements Serializable {
     @Readonly
     private String stuLevelname;
 
-    @Comment("qq")
+    @Column("qq")
     @Readonly
     private String qq;
 
-    @Comment("电话")
+    @Column("phone")
     @Readonly
     private String phone;
 
@@ -462,6 +459,14 @@ public class gy_inf extends BaseModel implements Serializable {
     }
 
     public void setDisabled(Boolean disabled) {
+        this.disabled = disabled;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
         this.disabled = disabled;
     }
 

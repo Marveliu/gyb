@@ -19,7 +19,6 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.marveliu.framework.model.gy.gy_auth;
 import com.marveliu.framework.services.base.BaseServiceImpl;
 import com.marveliu.framework.services.gy.GyAuthSubService;
-import com.marveliu.framework.services.gy.GySkillSubService;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;

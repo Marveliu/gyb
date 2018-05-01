@@ -34,6 +34,4 @@ public interface GyInfSubService extends BaseService<gy_inf> {
      * @return
      */
     public Boolean setGyStatus(String gyid,Boolean flag);
-
-
 }

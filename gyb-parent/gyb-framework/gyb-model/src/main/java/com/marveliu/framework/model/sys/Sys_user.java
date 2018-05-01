@@ -141,20 +141,20 @@ public class Sys_user extends BaseModel implements Serializable {
     protected List<Sys_unit> units;
 
 
+    protected List<Sys_menu> menus;
+
+    protected List<Sys_menu> firstMenus;
+
+    protected Map<String, List<Sys_menu>> secondMenus;
+
+    private List<Sys_menu> customMenus;
+
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getWsid() {
-        return wsid;
-    }
-
-    public void setWsid(String wsid) {
-        this.wsid = wsid;
     }
 
     public String getLoginname() {
@@ -193,8 +193,8 @@ public class Sys_user extends BaseModel implements Serializable {
         return isOnline;
     }
 
-    public void setOnline(boolean online) {
-        isOnline = online;
+    public void setIsOnline(boolean isOnline) {
+        this.isOnline = isOnline;
     }
 
     public boolean isDisabled() {
@@ -211,54 +211,6 @@ public class Sys_user extends BaseModel implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public boolean isEmailChecked() {
-        return emailChecked;
-    }
-
-    public void setEmailChecked(boolean emailChecked) {
-        this.emailChecked = emailChecked;
-    }
-
-    public boolean isPhoneChecked() {
-        return phoneChecked;
-    }
-
-    public void setPhoneChecked(boolean phoneChecked) {
-        this.phoneChecked = phoneChecked;
-    }
-
-    public String getQq() {
-        return qq;
-    }
-
-    public void setQq(String qq) {
-        this.qq = qq;
-    }
-
-    public byte[] getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(byte[] avatar) {
-        this.avatar = avatar;
-    }
-
-    public Long getLoginAt() {
-        return loginAt;
-    }
-
-    public void setLoginAt(Long loginAt) {
-        this.loginAt = loginAt;
     }
 
     public String getLoginIp() {
@@ -355,5 +307,94 @@ public class Sys_user extends BaseModel implements Serializable {
 
     public void setUnits(List<Sys_unit> units) {
         this.units = units;
+    }
+
+    public List<Sys_menu> getMenus() {
+        return menus;
+    }
+
+    public void setMenus(List<Sys_menu> menus) {
+        this.menus = menus;
+    }
+
+    public List<Sys_menu> getFirstMenus() {
+        return firstMenus;
+    }
+
+    public void setFirstMenus(List<Sys_menu> firstMenus) {
+        this.firstMenus = firstMenus;
+    }
+
+    public Map<String, List<Sys_menu>> getSecondMenus() {
+        return secondMenus;
+    }
+
+    public void setSecondMenus(Map<String, List<Sys_menu>> secondMenus) {
+        this.secondMenus = secondMenus;
+    }
+
+    public List<Sys_menu> getCustomMenus() {
+        return customMenus;
+    }
+
+    public void setCustomMenus(List<Sys_menu> customMenus) {
+        this.customMenus = customMenus;
+    }
+
+    public boolean isEmailChecked() {
+        return emailChecked;
+    }
+
+    public void setEmailChecked(boolean emailChecked) {
+        this.emailChecked = emailChecked;
+    }
+
+    public byte[] getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(byte[] avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getWsid() {
+        return wsid;
+    }
+
+    public void setWsid(String wsid) {
+        this.wsid = wsid;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
+    }
+
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public boolean isPhoneChecked() {
+        return phoneChecked;
+    }
+
+    public void setPhoneChecked(boolean phoneChecked) {
+        this.phoneChecked = phoneChecked;
+    }
+
+    public String getQq() {
+        return qq;
+    }
+
+    public void setQq(String qq) {
+        this.qq = qq;
+    }
+
+    public void setLoginAt(Long loginAt) {
+        this.loginAt = loginAt;
     }
 }

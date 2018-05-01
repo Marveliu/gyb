@@ -132,16 +132,37 @@ public class GyFacadeServiceImpl implements GyFacadeService {
         return gy.getGypays();
     }
 
+    /**
+     * 检查指定联系方式是否被验证
+     *
+     * @param gyid
+     * @param contactWay
+     * @return
+     */
+    @Override
+    public boolean ifEmailChecked(String gyid, String[] contactWay) {
+        return false;
+    }
+
+    /**
+     * 修改联系方式,迁移联系方式
+     * 在已认证的情况下，只允许修改联系方式信息，并且全部需要重新验证
+     * @param gy_inf 提交的雇员信息
+     * @return
+     */
+    @Override
+    public boolean updateGyinf(gy_inf gy_inf) {
+
+
+        return false;
+    }
+
 
     /************ 用户相关 ************/
-
-
-    @Override
     public boolean ifEmailChecked(String gyid) {
         return false;
     }
 
-    @Override
     public boolean setQq(String gyid, String qq) {
         return false;
     }
