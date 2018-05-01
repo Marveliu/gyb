@@ -74,7 +74,7 @@ public class GyAuthController{
     @At("/data")
     @Ok("json")
     @RequiresPermissions("platform.gy.auth")
-    @SLog(tag = "查看雇员认证信息",msg = "")
+    // @SLog(tag = "查看雇员认证信息",param = true)
     public Object data(
             @Param("gyid") String gyid,
             @Param("realname") String realname,
@@ -88,8 +88,9 @@ public class GyAuthController{
         if(!Strings.isBlank(realname)){
             cnd.and("realname", "like", "%" + realname + "%");
         }
-        if(!Strings.isBlank(status) && !"3".equals(status) && Strings.isBlank(realname) && Strings.isBlank(gyid)){
-            cnd.and("status", "=", status);
+        // gyid和realname，都为空
+        if(!Strings.isBlank(status) && !"4".equals(status) && Strings.isBlank(realname) && Strings.isBlank(gyid)){
+            cnd.and("gyauthstatus", "=", status);
         }
         return gyInfSubService.data(length, start, draw, order, columns, cnd, null);
     }
@@ -102,6 +103,7 @@ public class GyAuthController{
     public void detail(String gyid, HttpServletRequest req) {
         Cnd cnd = Cnd.NEW();
         if (!Strings.isBlank(gyid)) {
+            cnd.and("gyid","=",gyid);
             req.setAttribute("obj", gyInfSubService.fetch(cnd));
         }else{
             req.setAttribute("obj", null);
@@ -112,19 +114,20 @@ public class GyAuthController{
     @At("/setGyAuthStatus")
     @Ok("json")
     @RequiresPermissions("platform.gy.inf.edit")
-    @SLog(type = "gy", tag = "雇员身份审批", msg = "${req.getAttribute('flag')}")
+    @SLog(type = "gy", tag = "雇员身份审批", msg = "${args[0]}:${args[1]}"    )
     public Object setGyAuthStatus(
             @Param("gyid") String gyid,
             @Param("flag") boolean flag,
             @Param("note") String note,
             HttpServletRequest req) {
         try {
+            // 修改雇员认证信息状态
             if (gyAuthSubService.setStatus(gyid, flag,note)) {
                 return Result.success("雇员编号" + gyid + "身份认证状态:" +flag);
             }
-            return Result.error("system.error");
         } catch (Exception e) {
             return Result.error("system.error");
         }
+        return Result.error("system.error");
     }
 }

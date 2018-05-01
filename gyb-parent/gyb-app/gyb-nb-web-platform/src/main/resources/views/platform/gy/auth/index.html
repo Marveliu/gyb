@@ -37,7 +37,7 @@ layout("/layouts/platform.html"){
                 <label for="status">审核状态</label>
                 <select id="status" name="gyinf.stuLevel" data-parsley-required="true"
                         class="form-control">
-                    <option value="3" selected="true">全部</option>
+                    <option value="4" selected="true">全部</option>
                     <option value="1">待审核</option>
                     <option value="2">通过审核</option>
                     <option value="3">未过审核</option>
@@ -120,7 +120,7 @@ layout("/layouts/platform.html"){
                 {"data": "phone", "bSortable": false},
                 {"data": "email", "bSortable": false},
                 {"data": "reAuthTime", "bSortable": true},
-                {"data": "status", "bSortable": true},
+                {"data": "gyauthstatusname", "bSortable": true},
             ],
             "columnDefs": [
                 {
@@ -129,21 +129,11 @@ layout("/layouts/platform.html"){
                                 ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
                                 '<li><a href="${base}/platform/gy/auth/detail/' + row.gyid + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
                                 '<li class="divider"></li>' +
-                                '<li><a href="javascript:;" onclick="enable(\'' + row.gyid + '\')" data-pjax>通过</a></li>'+
-                                '<li><a href="javascript:;" onclick="disable(\'' + row.gyid + '\')" data-pjax>不通过</a></li>';
+                                '<li><a href="javascript:;" onclick="setGyAuthStatus(\'' + row.gyid + '\',true)" data-pjax>通过</a></li>'+
+                                '<li><a href="javascript:;" onclick="setGyAuthStatus(\'' + row.gyid + '\',false)" data-pjax>不通过</a></li>';
                                 '</ul></div>';
                     },
                     "targets": 6,
-                },
-                {
-                    "render": function (data, type, row) {
-                        if (data == 1) {
-                            return '<i id="status' + row.gyid + '" class="fa fa-circle text-success ml5"></i>';
-                        } else {
-                            return '<i id="status' + row.gyid + '" class="fa fa-circle text-danger ml5"></i>';
-                        }
-                    },
-                    "targets": -1,
                 },
                 {
                     "render": function (data, type, row) {
@@ -238,6 +228,23 @@ layout("/layouts/platform.html"){
             if (data.code == 0) {
                 Toast.success(data.msg);
                 setTimeout('location.reload()',500);
+            } else {
+                Toast.error(data.msg);
+            }
+        }, "json");
+    }
+
+    // 禁用启用账号
+    function setGyAuthStatus(gyid,flag) {
+        $.post("${base}/platform/gy/auth/setGyAuthStatus?gyid=" + gyid+"&flag="+flag, {}, function (data) {
+            if (data.code == 0) {
+                if(flag)
+                {
+                    $("#status" + gyid).attr("class", "fa fa-circle text-success ml5");
+                }else{
+                    $("#status" + gyid).attr("class", "fa fa-circle text-danger ml5");
+                }
+                Toast.success(data.msg);
             } else {
                 Toast.error(data.msg);
             }
