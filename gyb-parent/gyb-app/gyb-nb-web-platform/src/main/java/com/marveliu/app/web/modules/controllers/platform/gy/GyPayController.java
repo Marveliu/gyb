@@ -64,23 +64,9 @@ public class GyPayController{
         return gyPaySubService.data(length, start, draw, order, columns, cnd, null);
     }
 
-
-    @At("/detail/?")
-    @Ok("beetl:/platform/gy/pay/detail.html")
-    @RequiresPermissions("platform.gy.pay")
-    public void detail(String gyid, HttpServletRequest req) {
-        if (!Strings.isBlank(gyid)) {
-            req.setAttribute("obj", gyPaySubService.fetch(gyid));
-        }else{
-            req.setAttribute("obj", null);
-        }
-    }
-
     @At("/payselect")
     @Ok("beetl:/platform/gy/pay/payselect.html")
     @RequiresPermissions("platform.gy.pay")
     public void payselect() {}
-
-
 
 }

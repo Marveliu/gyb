@@ -145,6 +145,4 @@ public class gy_pay extends BaseModel implements Serializable {
     public void setRealname(String realname) {
         this.realname = realname;
     }
-
-
 }

@@ -1,4 +1,4 @@
-package com.marveliu.app.modules.services.impl;
+package com.marveliu.app.gy.modules.services.impl;
 /*
  * Copyright [2018] [Marveliu]
  *
@@ -83,6 +83,7 @@ public class GyAuthSubServiceImpl extends BaseServiceImpl<gy_auth> implements Gy
      */
     @Override
     public boolean setStatus(String gyid, Boolean flag, String note) {
+        //todo:异步发送通知邮件和消息
         Cnd cnd = Cnd.where("gyid", "=", gyid);
         int status = 0;
         if(Lang.isEmpty(note)) note = GY_AUTH_DECLINE_NOTE;

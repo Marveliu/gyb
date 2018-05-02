@@ -2,6 +2,7 @@ package com.marveliu.framework.model.gy;
 
 import com.marveliu.framework.model.base.BaseModel;
 import org.nutz.dao.entity.annotation.*;
+import org.nutz.mvc.Mvcs;
 
 import java.io.Serializable;
 
@@ -17,6 +18,7 @@ public class gy_auth extends BaseModel implements Serializable {
     @Name
     @Comment("认证单号")
     @ColDefine(type = ColType.VARCHAR, width = 32)
+    @Prev(els = {@EL("$me.gyauid()")})
     private String id;
 
     @Column
@@ -132,5 +134,12 @@ public class gy_auth extends BaseModel implements Serializable {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String gyauid() {
+        StringBuilder str = new StringBuilder();
+        str.append("Au");
+        str.append(this.gyid);
+        return str.toString();
     }
 }

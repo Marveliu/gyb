@@ -21,8 +21,6 @@ public class GyInfSubSubServiceImplTest {
 
     @Inject
     private GyInfSubService gyInfSubService;
-    @Inject
-    private IdGeneratorUtil idGeneratorUtil;
 
     @Test
     public void insert() {
