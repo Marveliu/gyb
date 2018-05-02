@@ -1,4 +1,4 @@
-package com.marveliu.app.msg;
+package com.marveliu.app.xm.modules.services.impl;
 /*
  * Copyright [2018] [Marveliu]
  *
@@ -17,8 +17,8 @@ package com.marveliu.app.msg;
 
 /**
  * @author Marveliu
- * @since 23/04/2018
+ * @since 02/05/2018
  **/
 
-public class tst {
+public class XmFeedbackServiceImpl {
 }
