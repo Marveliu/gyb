@@ -24,15 +24,15 @@ public class Globals {
     //项目目录
     public static String AppBase = "";
     //项目名称
-    public static String AppName = "NutzWk 开发框架";
+    public static String AppName = "雇佣帮";
     //项目短名称
-    public static String AppShrotName = "NutzWk";
+    public static String AppShrotName = "GYB";
     //项目域名
     public static String AppDomain = "http://127.0.0.1";
     //文件上传路径
-    public static String AppUploadPath = "D://upload";
+    public static String AppUploadPath = "/upload";
     //文件上传路径
-    public static String AppUploadBase = "/upload";
+    public static String AppUploadBase = "./";
     // 是否启用了队列
     public static boolean RabbitMQEnabled = false;
     //系统自定义参数

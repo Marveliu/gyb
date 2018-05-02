@@ -2,7 +2,10 @@ package com.marveliu.framework.model.xm;
 
 import com.marveliu.framework.model.base.BaseModel;
 import com.marveliu.framework.model.gy.gy_pay;
+import org.nutz.dao.Dao;
 import org.nutz.dao.entity.annotation.*;
+import org.nutz.log.Logs;
+import org.nutz.mvc.Mvcs;
 
 import java.io.Serializable;
 
@@ -17,6 +20,7 @@ public class xm_bill extends BaseModel implements Serializable {
     @Name
     @Comment("账单编号")
     @ColDefine(type = ColType.VARCHAR, width = 32)
+    @Prev(els = {@EL("$me.xmbillid()")})
     private String id;
 
     @Column
@@ -257,6 +261,19 @@ public class xm_bill extends BaseModel implements Serializable {
 
     public void setRealgypay(gy_pay realgypay) {
         this.realgypay = realgypay;
+    }
+
+
+    /**
+     * 项目账单编号
+     * @return
+     */
+    public String xmbillid() {
+        StringBuilder str = new StringBuilder();
+        String[] arr = this.xminfid.split("_");
+        str.append("bill_");
+        str.append(arr[1]);
+        return str.toString();
     }
 
 }

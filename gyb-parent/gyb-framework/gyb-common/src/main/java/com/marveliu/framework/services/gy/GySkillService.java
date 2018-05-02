@@ -25,7 +25,7 @@ import java.util.Map;
  * @since 22/04/2018
  **/
 
-public interface GySkillSubService {
+public interface GySkillService {
 
     /**
      * 通过雇员id获得用户的技能等级

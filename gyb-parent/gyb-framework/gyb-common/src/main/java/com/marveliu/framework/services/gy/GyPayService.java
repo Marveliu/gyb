@@ -5,7 +5,7 @@ import com.marveliu.framework.model.gy.gy_inf;
 import com.marveliu.framework.model.gy.gy_pay;
 import com.marveliu.framework.services.base.BaseService;
 
-public interface GyPaySubService extends BaseService<gy_pay> {
+public interface GyPayService extends BaseService<gy_pay> {
 
     /**
      * 获得默认支付方式

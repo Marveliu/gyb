@@ -1,13 +1,9 @@
 package com.marveliu.app.modules.services.impl;
 
-import com.alibaba.dubbo.config.annotation.Reference;
-import com.marveliu.app.gy.commons.core.DubboRpcGyMainLauncher;
 import com.marveliu.framework.model.gy.gy_inf;
-import com.marveliu.framework.model.utils.IdGeneratorUtil;
-import com.marveliu.framework.services.gy.GyInfSubService;
+import com.marveliu.framework.services.gy.GyInfService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.nutz.boot.NbApp;
 import org.nutz.boot.test.junit4.NbJUnit4Runner;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -20,13 +16,13 @@ public class GyInfSubSubServiceImplTest {
 
 
     @Inject
-    private GyInfSubService gyInfSubService;
+    private GyInfService gyInfService;
 
     @Test
     public void insert() {
         gy_inf gy_inf = new gy_inf();
         gy_inf.setUserid("405a28c9389d4a8581a29c283dc9f5b9");
-        assertNotNull(gyInfSubService.insert(gy_inf));
+        assertNotNull(gyInfService.insert(gy_inf));
     }
 
     @Test

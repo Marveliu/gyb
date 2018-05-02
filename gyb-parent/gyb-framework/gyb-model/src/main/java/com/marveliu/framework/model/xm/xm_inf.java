@@ -16,6 +16,7 @@ public class xm_inf extends BaseModel implements Serializable {
     @Name
     @Comment("项目编号")
     @ColDefine(type = ColType.VARCHAR, width = 50)
+    @Prev(els = {@EL("$me.xminfid()")})
     private String id;
 
     @Column
@@ -31,7 +32,7 @@ public class xm_inf extends BaseModel implements Serializable {
     @Column
     @Comment("立项时间")
     @ColDefine(type = ColType.INT)
-    private int at;
+    private Long at;
 
     @Column
     @Comment("状态")
@@ -170,11 +171,11 @@ public class xm_inf extends BaseModel implements Serializable {
         this.xmtaskid = xmtaskid;
     }
 
-    public int getAt() {
+    public Long getAt() {
         return at;
     }
 
-    public void setAt(int at) {
+    public void setAt(Long at) {
         this.at = at;
     }
 
@@ -385,5 +386,7 @@ public class xm_inf extends BaseModel implements Serializable {
     public void setPaysum(float paysum) {
         this.paysum = paysum;
     }
+
+
 
 }

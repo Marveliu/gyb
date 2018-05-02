@@ -54,11 +54,24 @@ layout("/layouts/platform.html"){
     </header>
     <div class="cd-panel-container">
         <div class="cd-panel-content shadow">
-            <div class="form-group">
-                <label for="title">任务书标题</label>
-                <input type="text" id="title" name="title" class="form-control" placeholder="请输入要查询的任务书标题" autofocus>
-            </div>
-            <button id="searchBtn" type="button" class="btn btn-default">查询</button>
+                <div class="form-group">
+                    <label for="status">任务书状态</label>
+                    <select id="status" class="form-control">
+                        <option value="5" selected="true">全部</option>
+                        <option value="0">编辑中</option>
+                        <option value="1">发布中</option>
+                        <option value="2">申请中</option>
+                        <option value="3">跟踪中</option>
+                        <option value="4">已完成</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="title">任务书标题</label>
+                    <input type="text" id="title" name="title" onclick="this.value=''" class="form-control" placeholder="请输入要查询的任务书标题">
+                </div>
+                <button id="searchBtn" type="button" class="btn btn-default">查询</button>
+
         </div>
     </div>
 </div>
@@ -124,6 +137,7 @@ layout("/layouts/platform.html"){
                 "data": function (d) {
                     d.libtaskId = $('#libtaskId').val();
                     d.title = $('#title').val();
+                    d.status = $('#status').val();
                 }
             },
             "order": [[2, "desc"]],
@@ -141,12 +155,12 @@ layout("/layouts/platform.html"){
                     "render": function (data, type, row) {
                         return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
                                 ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-                                '<li><a href="${base}/platform/xm/task/edit/' + row.id + '" data-pjax>修改</a></li>' +
-                                '<li><a href="javascript:;" onclick="del(\'' + row.id + '\')">删除</a></li>' +
-                                '<li><a href="${base}/public/xm/task/' + row.id + '" target="_blank">${msg["globals.button.detail"]}</a></li>'+
+                                '<li><a href="${base}/platform/xm/task/edit/' + row.id + '" data-pjax>${msg["globals.button.edit"]}</a></li>' +
+                                '<li><a href="javascript:;" onclick="del(\'' + row.id + '\')">${msg["globals.button.delete"]}</a></li>' +
+                                '<li><a href="${base}/platform/xm/task/detail/' + row.id + '" target="_blank">${msg["globals.button.detail"]}</a></li>'+
                                 '<li class="divider"></li>' +
-                                '<li><a href="javascript:;" onclick="enable(\'' + row.id + '\')">发布</a></li>' +
-                                '<li><a href="javascript:;" onclick="disable(\'' + row.id + '\')">取消发布</a></li>' +
+                                '<li><a href="javascript:;" onclick="setXmtaskStatus(\'' + row.id + '\',true)">${msg["globals.button.enable"]}</a></li>' +
+                                '<li><a href="javascript:;" onclick="setXmtaskStatus(\'' + row.id + '\',false)">${msg["globals.button.disable"]}</a></li>' +
                                 '</ul></div>';
                     },
                     "targets": 7
@@ -253,27 +267,29 @@ layout("/layouts/platform.html"){
                 }, "json");
             });
         } else {
-            Toast.warning("请先选择要删除的文章！");
+            Toast.warning("请先选择要删除的任务书！");
         }
     }
-    function enable(id) {
-        $.post("${base}/platform/xm/task/enable/" + id, {}, function (data) {
+
+
+    // 禁用启用任务书
+    function setXmtaskStatus(xmtaskid,flag) {
+        $.post("${base}/platform/xm/task/setXmtaskStatus?xmtaskid=" + xmtaskid+"&flag="+flag, {}, function (data) {
             if (data.code == 0) {
-                $("#disable_" + id).attr("class", "fa fa-circle text-success ml5");
+                if(flag)
+                {
+                    $("#disable_" + xmtaskid).attr("class", "fa fa-circle text-success ml5");
+                }else{
+                    $("#disable_" + xmtaskid).attr("class", "fa fa-circle text-danger ml5");
+                }
+                Toast.success(data.msg);
             } else {
                 Toast.error(data.msg);
             }
         }, "json");
     }
-    function disable(id) {
-        $.post("${base}/platform/xm/task/disable/" + id, {}, function (data) {
-            if (data.code == 0) {
-                $("#disable_" + id).attr("class", "fa fa-circle text-danger ml5");
-            } else {
-                Toast.error(data.msg);
-            }
-        }, "json");
-    }
+
+
     $(document).ready(function () {
         initTreeView();
         initDatatable();

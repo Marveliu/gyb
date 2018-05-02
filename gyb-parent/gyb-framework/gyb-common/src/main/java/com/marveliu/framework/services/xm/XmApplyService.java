@@ -7,5 +7,4 @@ import com.marveliu.framework.services.base.BaseService;
 
 public interface XmApplyService extends BaseService<xm_apply> {
 
-    public xm_task getTaskByAppyid(String id);
 }

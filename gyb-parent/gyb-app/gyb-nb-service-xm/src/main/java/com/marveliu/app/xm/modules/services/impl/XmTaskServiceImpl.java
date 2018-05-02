@@ -15,10 +15,50 @@ package com.marveliu.app.xm.modules.services.impl;
  * limitations under the License.
  */
 
+import com.alibaba.dubbo.config.annotation.Service;
+import com.marveliu.framework.model.gy.gy_inf;
+import com.marveliu.framework.model.xm.xm_task;
+import com.marveliu.framework.services.base.BaseServiceImpl;
+import com.marveliu.framework.services.xm.XmTaskService;
+import org.nutz.dao.Chain;
+import org.nutz.dao.Cnd;
+import org.nutz.dao.Dao;
+import org.nutz.ioc.loader.annotation.IocBean;
+
 /**
  * @author Marveliu
  * @since 02/05/2018
  **/
+@IocBean(args = {"refer:dao"})
+@Service(interfaceClass = XmTaskService.class)
+public class XmTaskServiceImpl extends BaseServiceImpl<xm_task> implements XmTaskService {
 
-public class XmTaskServiceImpl {
+    private static final int XM_TASK_INIT = 0;
+    private static final int XM_TASK_PUBLISH = 1;
+    private static final int XM_TASK_APPLYING = 2;
+    private static final int XM_TASK_DOING = 3;
+    private static final int XM_TASK_FINISH = 4;
+
+
+    public XmTaskServiceImpl(Dao dao) {
+        super(dao);
+    }
+
+
+    /**
+     * 启用或者禁用任务书
+     * @param xmtaskid
+     * @param flag true 启用 false 禁用
+     * @return
+     */
+    @Override
+    public Boolean setXmTaskStatus(String xmtaskid, Boolean flag) {
+        Cnd cnd = Cnd.where("id","=",xmtaskid);
+        Chain chain = Chain.make("disabled",!flag);
+        if(this.update(chain,cnd)!=0)
+        {
+            return true;
+        }
+        return false;
+    }
 }

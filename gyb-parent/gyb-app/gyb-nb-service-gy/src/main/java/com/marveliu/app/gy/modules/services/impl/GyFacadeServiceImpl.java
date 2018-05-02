@@ -19,13 +19,10 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.marveliu.framework.model.gy.gy_inf;
 import com.marveliu.framework.model.gy.gy_pay;
-import com.marveliu.framework.model.gy.gy_skill;
 import com.marveliu.framework.model.sys.Sys_msg;
 import com.marveliu.framework.services.gy.*;
 import com.marveliu.framework.services.sys.SysRoleService;
 import com.marveliu.framework.services.sys.SysUserService;
-import org.nutz.dao.Cnd;
-import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
@@ -46,13 +43,13 @@ public class GyFacadeServiceImpl implements GyFacadeService {
     private static final Log log = Logs.get();
 
     @Inject
-    private GySkillSubService gySkillSubService;
+    private GySkillService gySkillService;
     @Inject
-    private GyAuthSubService gyAuthSubService;
+    private GyAuthService gyAuthService;
     @Inject
-    private GyInfSubService gyInfSubService;
+    private GyInfService gyInfService;
     @Inject
-    private GyPaySubService gyPaySubService;
+    private GyPayService gyPayService;
 
     @Inject
     @Reference
@@ -74,7 +71,7 @@ public class GyFacadeServiceImpl implements GyFacadeService {
     public boolean updateGyRoleByGyid(String gyid, String rolecode) {
         try {
             String roleid =  sysRoleService.getRoleFromCode(rolecode).getId();
-            String userid = gyInfSubService.getUserByGyid(gyid);
+            String userid = gyInfService.getUserByGyid(gyid);
             return sysRoleService.setUserRoleByRoleid(userid,roleid);
         }catch (Exception e){
             log.error("修改雇员角色出错:",e);
@@ -116,7 +113,7 @@ public class GyFacadeServiceImpl implements GyFacadeService {
      */
     @Override
     public gy_inf getGyByPayid(String payid) {
-        if(!Lang.isEmpty(payid)) return gyInfSubService.getGyByUserId(gyPaySubService.getGyidByPayid(payid));
+        if(!Lang.isEmpty(payid)) return gyInfService.getGyByUserId(gyPayService.getGyidByPayid(payid));
         return null;
     }
 
@@ -127,8 +124,8 @@ public class GyFacadeServiceImpl implements GyFacadeService {
      * @return
      */
     public List<gy_pay> getPaysByGyid(String gyid){
-        gy_inf gy = gyInfSubService.fetch(gyid);
-        gy = gyInfSubService.fetchLinks(gy,"gy_pays");
+        gy_inf gy = gyInfService.fetch(gyid);
+        gy = gyInfService.fetchLinks(gy,"gy_pays");
         return gy.getGypays();
     }
 

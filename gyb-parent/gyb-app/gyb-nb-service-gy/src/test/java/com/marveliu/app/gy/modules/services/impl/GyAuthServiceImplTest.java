@@ -1,9 +1,7 @@
 package com.marveliu.app.gy.modules.services.impl;
 
 import com.marveliu.framework.model.gy.gy_auth;
-import com.marveliu.framework.model.gy.gy_inf;
-import com.marveliu.framework.services.gy.GyAuthSubService;
-import com.marveliu.framework.services.gy.GyInfSubService;
+import com.marveliu.framework.services.gy.GyAuthService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nutz.boot.test.junit4.NbJUnit4Runner;
@@ -16,24 +14,24 @@ import static org.junit.Assert.*;
 
 @IocBean
 @RunWith(NbJUnit4Runner.class)
-public class GyAuthSubServiceImplTest {
+public class GyAuthServiceImplTest {
 
     @Inject
-    private GyAuthSubService gyAuthSubService;
+    private GyAuthService gyAuthService;
 
     // 测试主键
     @Test
     public void test() {
         gy_auth gy_auth = new gy_auth();
         gy_auth.setGyid("gyTest");
-        gy_auth result = gyAuthSubService.insert(gy_auth);
+        gy_auth result = gyAuthService.insert(gy_auth);
         assertNotNull(result);
         assertEquals("AugyTest",result.getId());
-        gyAuthSubService.setStatus(result.getGyid(),true,"测试认证成功");
-        assertEquals(true,gyAuthSubService.isAuth(result.getGyid()));
-        assertEquals("测试认证成功",gyAuthSubService.fetch(
+        gyAuthService.setStatus(result.getGyid(),true,"测试认证成功");
+        assertEquals(true, gyAuthService.isAuth(result.getGyid()));
+        assertEquals("测试认证成功", gyAuthService.fetch(
                 Cnd.where("gyid","=","gyTest")).getNote());
-        gyAuthSubService.delete(result.getId());
+        gyAuthService.delete(result.getId());
 
     }
 

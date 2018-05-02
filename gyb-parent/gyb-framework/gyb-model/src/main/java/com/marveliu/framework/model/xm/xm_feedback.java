@@ -72,7 +72,6 @@ public class xm_feedback extends BaseModel implements Serializable {
 
 
     // 视图
-
     @Column
     @Readonly
     private String  phone;

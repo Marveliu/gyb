@@ -15,10 +15,25 @@ package com.marveliu.app.xm.modules.services.impl;
  * limitations under the License.
  */
 
+import com.alibaba.dubbo.config.annotation.Service;
+import com.marveliu.framework.model.xm.xm_limit;
+import com.marveliu.framework.services.base.BaseServiceImpl;
+import com.marveliu.framework.services.xm.XmLimitService;
+import org.nutz.dao.Dao;
+import org.nutz.ioc.loader.annotation.Inject;
+import org.nutz.ioc.loader.annotation.IocBean;
+
 /**
  * @author Marveliu
  * @since 02/05/2018
  **/
 
-public class XmLimitServiceImpl {
+@IocBean(args = {"refer:dao"})
+@Service(interfaceClass = XmLimitService.class)
+public class XmLimitServiceImpl extends BaseServiceImpl<xm_limit> implements XmLimitService {
+
+    public XmLimitServiceImpl(Dao dao) {
+        super(dao);
+    }
+
 }

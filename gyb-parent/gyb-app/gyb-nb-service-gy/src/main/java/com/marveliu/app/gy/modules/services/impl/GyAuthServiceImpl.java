@@ -18,7 +18,7 @@ package com.marveliu.app.gy.modules.services.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.marveliu.framework.model.gy.gy_auth;
 import com.marveliu.framework.services.base.BaseServiceImpl;
-import com.marveliu.framework.services.gy.GyAuthSubService;
+import com.marveliu.framework.services.gy.GyAuthService;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
@@ -30,8 +30,8 @@ import org.nutz.lang.Lang;
  * @since 22/04/2018
  **/
 @IocBean(args = {"refer:dao"})
-@Service(interfaceClass = GyAuthSubService.class)
-public class GyAuthSubServiceImpl extends BaseServiceImpl<gy_auth> implements GyAuthSubService {
+@Service(interfaceClass = GyAuthService.class)
+public class GyAuthServiceImpl extends BaseServiceImpl<gy_auth> implements GyAuthService {
 
     private static final int GY_AUTH_DECLINE = 3;
     private static final int GY_AUTH_PASS = 2;
@@ -40,7 +40,7 @@ public class GyAuthSubServiceImpl extends BaseServiceImpl<gy_auth> implements Gy
     private static final String GY_AUTH_DECLINE_NOTE = "很遗憾您的雇员身份未能认证通过！";
     private static final String GY_AUTH_PASS_NOTE = "恭喜您雇员身份认证通过！";
 
-    public GyAuthSubServiceImpl(Dao dao) {
+    public GyAuthServiceImpl(Dao dao) {
         super(dao);
     }
 

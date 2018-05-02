@@ -1,7 +1,10 @@
 package com.marveliu.framework.model.xm;
 
 import com.marveliu.framework.model.base.BaseModel;
+import org.nutz.dao.Dao;
 import org.nutz.dao.entity.annotation.*;
+import org.nutz.log.Logs;
+import org.nutz.mvc.Mvcs;
 
 import java.io.Serializable;
 
@@ -16,6 +19,7 @@ public class xm_evaluation extends BaseModel implements Serializable {
     @Name
     @Comment("评价编号")
     @ColDefine(type = ColType.VARCHAR, width = 32)
+    @Prev(els = {@EL("$me.xmevaid()")})
     private String id;
 
     @Column
@@ -79,5 +83,15 @@ public class xm_evaluation extends BaseModel implements Serializable {
         this.at = at;
     }
 
-
+    /**
+     * 项目评价编号
+     * @return
+     */
+    public String xmevaid() {
+        StringBuilder str = new StringBuilder();
+        String[] arr = this.xminfid.split("_");
+        str.append("eva_");
+        str.append(arr[1]);
+        return str.toString();
+    }
 }

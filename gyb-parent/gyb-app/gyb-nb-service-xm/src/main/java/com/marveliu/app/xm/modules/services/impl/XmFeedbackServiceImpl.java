@@ -15,10 +15,30 @@ package com.marveliu.app.xm.modules.services.impl;
  * limitations under the License.
  */
 
+import com.alibaba.dubbo.config.annotation.Service;
+import com.marveliu.framework.model.xm.xm_feedback;
+import com.marveliu.framework.services.base.BaseServiceImpl;
+import com.marveliu.framework.services.xm.XmFeedbackService;
+import org.nutz.dao.Cnd;
+import org.nutz.dao.Dao;
+import org.nutz.ioc.loader.annotation.IocBean;
+
 /**
  * @author Marveliu
  * @since 02/05/2018
  **/
 
-public class XmFeedbackServiceImpl {
+@IocBean(args = {"refer:dao"})
+@Service(interfaceClass = XmFeedbackService.class)
+public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implements XmFeedbackService {
+    public XmFeedbackServiceImpl(Dao dao) {
+        super(dao);
+    }
+
+    public int getXfdCount(String xminfid){
+        Cnd cnd = Cnd.NEW();
+        cnd.and("xminfid","=",xminfid);
+        int count = this.dao().count(xm_feedback.class,cnd);
+        return count;
+    }
 }

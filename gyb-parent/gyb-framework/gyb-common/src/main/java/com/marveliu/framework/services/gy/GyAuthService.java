@@ -3,7 +3,7 @@ package com.marveliu.framework.services.gy;
 import com.marveliu.framework.model.gy.gy_auth;
 import com.marveliu.framework.services.base.BaseService;
 
-public interface GyAuthSubService extends BaseService<gy_auth> {
+public interface GyAuthService extends BaseService<gy_auth> {
 
     /**
      * 获得雇员身份信息

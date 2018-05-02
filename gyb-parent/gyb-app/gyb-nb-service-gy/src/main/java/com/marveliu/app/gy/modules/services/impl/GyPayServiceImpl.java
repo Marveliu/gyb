@@ -16,16 +16,12 @@ package com.marveliu.app.gy.modules.services.impl;
  */
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.marveliu.framework.model.gy.gy_inf;
 import com.marveliu.framework.model.gy.gy_pay;
 import com.marveliu.framework.services.base.BaseServiceImpl;
-import com.marveliu.framework.services.gy.GyPaySubService;
-import com.marveliu.framework.services.gy.GySkillSubService;
+import com.marveliu.framework.services.gy.GyPayService;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.IocBean;
-
-import java.util.List;
 
 /**
  * @author Marveliu
@@ -33,10 +29,10 @@ import java.util.List;
  **/
 
 @IocBean(args = {"refer:dao"})
-@Service(interfaceClass = GyPaySubService.class)
-public class GyPaySubServiceImpl extends BaseServiceImpl<gy_pay> implements GyPaySubService {
+@Service(interfaceClass = GyPayService.class)
+public class GyPayServiceImpl extends BaseServiceImpl<gy_pay> implements GyPayService {
 
-    public GyPaySubServiceImpl(Dao dao) {
+    public GyPayServiceImpl(Dao dao) {
         super(dao);
     }
 

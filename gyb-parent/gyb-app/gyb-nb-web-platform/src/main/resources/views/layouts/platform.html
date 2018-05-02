@@ -33,6 +33,9 @@
     <% }else{ %>
     <link rel="stylesheet" href="${base!}/assets/css/skins/palette.css" id="skin">
     <% } %>
+    <% if(@shiro.getPrincipalProperty('username')=='dml'){ %>
+    <script src="${base!}/assets/js/dmlLoveClick.js"></script>
+    <% } %>
     <script src="${base!}/assets/plugins/jquery-1.11.1.min.js"></script>
     <script type="text/javascript">
         var base = '${base!}';
@@ -70,11 +73,11 @@
                 <div></div>
             </a>
             <!--<a onclick="sublime.changeTheme('palette.4.css')" href="${base!}/assets/css/skins/palette.4.css"-->
-               <!--class="css_orange cs_color cs_4 <% if('palette.4.css' == @shiro.getPrincipalProperty('loginTheme')){ %>active<% } %>">-->
-                <!--<div></div>-->
-                <!--<div></div>-->
-                <!--<div></div>-->
-                <!--<div></div>-->
+            <!--class="css_orange cs_color cs_4 <% if('palette.4.css' == @shiro.getPrincipalProperty('loginTheme')){ %>active<% } %>">-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
             <!--</a>-->
         </div>
         <div class="options-container">
@@ -128,32 +131,29 @@
             <%
             var secondMenus=@shiro.getPrincipalProperty('secondMenus');
             for(firstMenu in @shiro.getPrincipalProperty('firstMenus')){
-
             %>
             <li class="dropdown">
-
-                    <% if(!isEmpty(@secondMenus.get(firstMenu.path))){%>
+                <% if(!isEmpty(@secondMenus.get(firstMenu.path))){%>
                 <a href="javascript:;" data-toggle="dropdown">
                     <% if(has(firstMenu.icon)){ %>
                     <i class="${firstMenu.icon}"></i>
                     <% } %>
                     <span>
                         <%if(lang=="zh_CN"){%>${firstMenu.name}<%}else{%>${firstMenu.aliasName}<%}%></span>
-                    <b class="caret"></b
-                            >
+                    <b class="caret"></b>
                 </a>
                 <%}else{%>
-                    <a href="<% if(!isEmpty(firstMenu.href)){ %><%if(@string.startWith(firstMenu.href,'/')){%>${base}${firstMenu.href!}<%}else{%>${firstMenu.href!}<%}%> <% }else{ %>javascript:;<% } %>" <%if(@string.startWith(firstMenu.target,'_')){%>target="${firstMenu.target!}"<%}else{%>${firstMenu.target!}<%}%>>
-                   <span>
+                <a href="<% if(!isEmpty(firstMenu.href)){ %><%if(@string.startWith(firstMenu.href,'/')){%>${base}${firstMenu.href!}<%}else{%>${firstMenu.href!}<%}%> <% }else{ %>javascript:;<% } %>" <%if(@string.startWith(firstMenu.target,'_')){%>target="${firstMenu.target!}"<%}else{%>${firstMenu.target!}<%}%>>
+                <span>
                         <%if(lang=="zh_CN"){%>${firstMenu.name}<%}else{%>${firstMenu.aliasName}<%}%></span></a>
-                    <%}%>
+                <%}%>
                 <% if(!isEmpty(@secondMenus.get(firstMenu.path))){%>
                 <ul class="dropdown-menu topnav">
                     <% for(secondMenu in @secondMenus.get(firstMenu.path)){ %>
                     <li class="dropdown">
                         <a href="<% if(!isEmpty(secondMenu.href)){ %><%if(@string.startWith(secondMenu.href,'/')){%>${base}${secondMenu.href!}<%}else{%>${secondMenu.href!}<%}%> <% }else{ %>javascript:;<% } %>" <%if(@string.startWith(secondMenu.target,'_')){%>target="${secondMenu.target!}"<%}else{%>${secondMenu.target!}<%}%>>
-                            <% if(!isEmpty(@secondMenus.get(secondMenu.path))){ %><i class="toggle-accordion"></i><%}%>
-                            <span><%if(lang=="zh_CN"){%>${secondMenu.name}<%}else{%>${secondMenu.aliasName}<%}%></span>
+                        <% if(!isEmpty(@secondMenus.get(secondMenu.path))){ %><i class="toggle-accordion"></i><%}%>
+                        <span><%if(lang=="zh_CN"){%>${secondMenu.name}<%}else{%>${secondMenu.aliasName}<%}%></span>
                         </a>
                         <% if(!isEmpty(@secondMenus.get(secondMenu.path))){ %>
                         <ul class="sub-menu">
@@ -172,26 +172,26 @@
         <ul class="nav navbar-nav navbar-right">
             <!--通知位置-->
             <li class="language-dropdown dropdown hidden-xs">
-                <a href="javascript:;" data-toggle="dropdown" id="language">
-                    <%if(lang==null||lang=="zh_CN"){%>
-                    <img src="${base!}/assets/img/flags/cn.png" class="flag">
-                    <%}else{%>
-                    <img src="${base!}/assets/img/flags/us.png" class="flag">
-                    <%}%>
-                    <ul class="dropdown-menu dropdown-menu-right animated fadeInUp">
-                        <li>
-                            <a href="javascript:sublime.changeLang('en_US');">
-                                <img src="${base!}/assets/img/flags/us.png" class="flag">
-                                <span class="language">English</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:sublime.changeLang('zh_CN');">
-                                <img src="${base!}/assets/img/flags/cn.png" class="flag">
-                                <span class="language">中文</span>
-                            </a>
-                        </li>
-                    </ul>
+            <a href="javascript:;" data-toggle="dropdown" id="language">
+            <%if(lang==null||lang=="zh_CN"){%>
+            <img src="${base!}/assets/img/flags/cn.png" class="flag">
+            <%}else{%>
+            <img src="${base!}/assets/img/flags/us.png" class="flag">
+            <%}%>
+            <ul class="dropdown-menu dropdown-menu-right animated fadeInUp">
+            <li>
+            <a href="javascript:sublime.changeLang('en_US');">
+            <img src="${base!}/assets/img/flags/us.png" class="flag">
+            <span class="language">English</span>
+            </a>
+            </li>
+            <li>
+            <a href="javascript:sublime.changeLang('zh_CN');">
+            <img src="${base!}/assets/img/flags/cn.png" class="flag">
+            <span class="language">中文</span>
+            </a>
+            </li>
+            </ul>
             </li>
             <li class="off-right">
                 <a href="javascript:;" data-toggle="dropdown">
@@ -199,10 +199,6 @@
                     <i class="ti-angle-down ti-caret hidden-xs"></i>
                 </a>
                 <ul class="dropdown-menu animated fadeInLeft">
-                    <li>
-                        <a href="${base!}/platform/sys/user/custom" data-toggle="modal"
-                           data-target="#homeDetail">${msg['index.custommenu']}</a>
-                    </li>
                     <li class="dropdown hidden-xs">
                         <a href="javascript:;" class="pg-toggle">
                             ${msg['index.user.layout']}
@@ -228,47 +224,16 @@
         </ul>
     </header>
     <section class="layout">
-
-        <aside class="sidebar offscreen-left">
-
-            <nav class="main-navigation" data-height="auto" data-size="6px" data-distance="0" data-rail-visible="true"
-                 data-wheel-step="10">
-                <!--<p class="nav-title">MENU</p>-->
-                <ul class="nav">
-                    <li class="open">
-                        <a href="javascript:;">
-                            <%if(!isEmpty(@shiro.getPrincipalProperty('customMenus'))){%>
-                            <i class="toggle-accordion"></i>
-                            <%}%>
-                            <i class="ti-heart"></i>
-                            <span>${msg['index.custommenu']}</span>
-                        </a>
-                        <%if(!isEmpty(@shiro.getPrincipalProperty('customMenus'))){%>
-                        <ul class="sub-menu">
-                            <%for(o in @shiro.getPrincipalProperty('customMenus')){%>
-
-                            <li>
-                                <a <%if(!isEmpty(o.href)){%>href="${base}${o.href}" <%if('data-pjax'==o.target){%>data-pjax<%}}else{ %>href="javascript:;"<%}%>>
-                                <span><%if(lang=="zh_CN"){%>${o.name}<%}else{%>${o.aliasName}<%}%></span>
-                                </a>
-                            </li>
-
-                            <%}%>
-                        </ul>
-                        <%}%>
-                    </li>
-
-                </ul>
-                <ul id="leftnav" class="nav">
-                </ul>
-            </nav>
-        </aside>
         <section class="main-content" id="container">
             ${layoutContent}
         </section>
     </section>
 
-
+    <footer style="width:300px;margin:0 auto; padding:20px 0;">
+        <a target="_blank" href="http://www.miitbeian.gov.cn" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂ICP备 18000705号-1</p></a>
+        <br>
+        <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42011102001026" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42011102001026号</p></a>
+    </footer>
 </div>
 <div id="homeDetail" class="modal fade bs-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
@@ -276,6 +241,9 @@
         </div>
     </div>
 </div>
+
+
+
 <!--script-->
 <script src="${base!}/assets/plugins/modernizr.js"></script>
 <script src="${base!}/assets/js/jquery.pjax.js"></script>
@@ -329,10 +297,9 @@
         });
     }
     $(document).ready(function () {
-
         if($.support.pjax) {
-              <%if(@shiro.getPrincipalProperty('loginPjax')){%>
-            $(document).pjax('a[data-pjax]', '#container', {maxCacheLength:0,push:false, replace:true,fragment: '#container', timeout: 8000});
+        <%if(@shiro.getPrincipalProperty('loginPjax')){%>
+                $(document).pjax('a[data-pjax]', '#container', {maxCacheLength:0,push:false, replace:true,fragment: '#container', timeout: 8000});
             <%}%>
             bindLeft();
             $('#topnav a[data-pjax]').on('click',function(){
@@ -345,16 +312,15 @@
                 $("#leftnav").html(data);
                 bindLeft();
             }, "html");
-            <%if(@shiro.getPrincipalProperty('loginPjax')){%>
-            $(document).on('pjax:send', function () { //pjax链接点击后显示加载动画；
-                $(".gallery-loader").fadeIn();
-            });
-            $(document).on('pjax:complete', function () { //pjax链接加载完成后隐藏加载动画；
-                setTimeout(function(){$(".gallery-loader").fadeOut()},250);
-            });
+        <%if(@shiro.getPrincipalProperty('loginPjax')){%>
+                $(document).on('pjax:send', function () { //pjax链接点击后显示加载动画；
+                    $(".gallery-loader").fadeIn();
+                });
+                $(document).on('pjax:complete', function () { //pjax链接加载完成后隐藏加载动画；
+                    setTimeout(function(){$(".gallery-loader").fadeOut()},250);
+                });
             <%}%>
         }
-
         try {
             $(".gallery-loader").fadeOut();
         } catch (e) {

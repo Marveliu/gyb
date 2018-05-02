@@ -24,7 +24,7 @@ import com.marveliu.framework.model.sys.Sys_user;
 import com.marveliu.framework.page.datatable.DataTableColumn;
 import com.marveliu.framework.page.datatable.DataTableOrder;
 import com.marveliu.framework.services.gy.GyFacadeService;
-import com.marveliu.framework.services.gy.GyInfSubService;
+import com.marveliu.framework.services.gy.GyInfService;
 import com.marveliu.framework.services.sys.SysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Chain;
@@ -54,7 +54,7 @@ public class GyInfController {
 
     @Inject
     @Reference
-    private GyInfSubService gyInfSubService;
+    private GyInfService gyInfService;
 
     @Inject
     @Reference
@@ -81,7 +81,7 @@ public class GyInfController {
             @Param("::columns") List<DataTableColumn> columns) {
         Cnd cnd = Cnd.NEW();
 
-        return gyInfSubService.data(length, start, draw, order, columns, cnd, null);
+        return gyInfService.data(length, start, draw, order, columns, cnd, null);
     }
 
     @At("/edit/?")
@@ -89,7 +89,7 @@ public class GyInfController {
     @RequiresPermissions("platform.gy.inf")
     public void edit(String id, HttpServletRequest req) {
         Cnd cnd = Cnd.NEW();
-        Object test = gyInfSubService.fetch(cnd.and("gyid", "=", id));
+        Object test = gyInfService.fetch(cnd.and("gyid", "=", id));
         req.setAttribute("obj", test);
     }
 
@@ -118,7 +118,7 @@ public class GyInfController {
             gyInf.setRegYear(regyearat);
             gyInf.setOpBy(StringUtil.getPlatformUid());
             gyInf.setOpAt((Long) (System.currentTimeMillis() / 1000));
-            gyInfSubService.updateIgnoreNull(gyInf);
+            gyInfService.updateIgnoreNull(gyInf);
             return Result.success("system.success");
 
         } catch (Exception e) {
@@ -132,7 +132,7 @@ public class GyInfController {
     public void detail(String id, HttpServletRequest req) {
         if (!Strings.isBlank(id)) {
             Cnd cnd = Cnd.NEW();
-            gy_inf gy_inf = gyInfSubService.fetch(cnd.and("gyid","=",id));
+            gy_inf gy_inf = gyInfService.fetch(cnd.and("gyid","=",id));
             req.setAttribute("obj", gy_inf);
         }else{
             req.setAttribute("obj", null);
@@ -145,11 +145,11 @@ public class GyInfController {
     @SLog(type = "gy", tag = "通过正式雇员", msg = "${req.getAttribute('id')}")
     public Object setGy4(String id, HttpServletRequest req) {
         try {
-            String gyid = gyInfSubService.getGyByUserId(id).getGyid();
+            String gyid = gyInfService.getGyByUserId(id).getGyid();
             if (gyFacadeService.updateGyRoleByGyid(gyid, "gy4")) {
                 req.setAttribute("id", gyid);
                 // 设置雇员为允许接单的状态
-                gyInfSubService.update(Chain.make("status", 1), Cnd.where("userid", "=", id));
+                gyInfService.update(Chain.make("status", 1), Cnd.where("userid", "=", id));
                 return Result.success("system.success");
             } else {
                 return Result.error("system.error");
@@ -163,13 +163,13 @@ public class GyInfController {
     @At("/setGyStatus")
     @Ok("json")
     @RequiresPermissions("platform.gy.inf.edit")
-    @SLog(type = "gy", tag = "调整雇员状态", msg = "${req.getAttribute('id')}")
+    @SLog(type = "gy", tag = "修改雇员状态", msg = "雇员编号：${args[0]},状态：${args[1]}")
     public Object setGyStatus(
             @Param("gyid") String gyid,
             @Param("flag") boolean flag,
             HttpServletRequest req) {
         try {
-            if (gyInfSubService.setGyStatus(gyid, flag)) {
+            if (gyInfService.setGyStatus(gyid, flag)) {
                 return Result.success("雇员编号" + gyid + "启用状态:" +flag);
             }
             return Result.error("system.error");

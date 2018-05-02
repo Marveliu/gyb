@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
  * Created by wizzer on 2018/3/17.
  */
 @IocBean(create = "init", depose = "depose")
-@Modules(packages = "cn.wizzer")
+@Modules(packages = "com.marveliu")
 public class DubboRpcCmsMainLauncher {
     private static final Log log = Logs.get();
     @Inject("refer:$ioc")
@@ -46,7 +46,7 @@ public class DubboRpcCmsMainLauncher {
 
     public static void main(String[] args) throws Exception {
         NbApp nb = new NbApp().setArgs(args).setPrintProcDoc(true);
-        nb.getAppContext().setMainPackage("cn.wizzer");
+        nb.getAppContext().setMainPackage("com.marveliu");
         nb.run();
     }
 
@@ -55,14 +55,14 @@ public class DubboRpcCmsMainLauncher {
         CustomMake.me().register("ig", ioc.get(RedisIdGenerator.class));
         //通过POJO类创建表结构
         try {
-            Daos.createTablesInPackage(dao, "cn.wizzer.app.cms", false);
+            Daos.createTablesInPackage(dao, "com.marveliu.framework.model.cms", false);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
         try {
             if (log.isDebugEnabled()) {
                 //通过POJO类修改表结构
-                Daos.migration(dao, "cn.wizzer.app.cms", true, false);
+                Daos.migration(dao, "com.marveliu.framework.model.cms", true, false);
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);

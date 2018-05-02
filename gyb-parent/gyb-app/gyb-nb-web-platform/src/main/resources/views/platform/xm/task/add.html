@@ -230,20 +230,16 @@ layout("/layouts/platform.html"){
     function select() {
         var tree = $.jstree.reference("#jsTree");
         var node = tree.get_selected(true);
-
         $("#addForm #libtaskId").val(node[0].text);
         $("#addForm input[name='category']").val(node[0].id);
         $("#dialogSelect").modal("hide");
-
         //清空技能限制
         $("#skilllimit").html('')
-
         //初始化技能限制
         $.ajax({
             url:"${base}/platform/xm/task/limitdata?libtaskid="+node[0].id,
             success:function(result){
                 console.log(result);
-
                 $.each(result,function (i,n) {
                     console.log("索引："+i+",值："+n.toString())
                     $("#skilllimit").append(
@@ -264,7 +260,6 @@ layout("/layouts/platform.html"){
                 })
             }
         });
-
     }
 
     var ue;
@@ -287,13 +282,9 @@ layout("/layouts/platform.html"){
         });
 
         initTreeView();
-
-
          <%if(!isEmpty(libtask)) {%>
-
             //初始化技能限制
             $.ajax({
-
                 url:"${base}/platform/xm/task/limitdata?libtaskid=${libtask.id}",
                 success:function(result){
                     console.log(result);
@@ -318,8 +309,6 @@ layout("/layouts/platform.html"){
                     })
                 }
             });
-
-
         <%}%>
 
 

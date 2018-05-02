@@ -17,20 +17,15 @@ package com.marveliu.app.web.modules.controllers.platform.gy;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.marveliu.app.web.commons.slog.annotation.SLog;
-import com.marveliu.app.web.commons.utils.StringUtil;
 import com.marveliu.framework.model.base.Result;
-import com.marveliu.framework.model.gy.gy_auth;
-import com.marveliu.framework.model.gy.gy_inf;
 import com.marveliu.framework.page.datatable.DataTableColumn;
 import com.marveliu.framework.page.datatable.DataTableOrder;
-import com.marveliu.framework.services.gy.GyAuthSubService;
+import com.marveliu.framework.services.gy.GyAuthService;
 import com.marveliu.framework.services.gy.GyFacadeService;
-import com.marveliu.framework.services.gy.GyInfSubService;
+import com.marveliu.framework.services.gy.GyInfService;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
-import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
@@ -55,11 +50,11 @@ public class GyAuthController{
 
     @Inject
     @Reference
-    private GyAuthSubService gyAuthSubService;
+    private GyAuthService gyAuthService;
 
     @Inject
     @Reference
-    private GyInfSubService gyInfSubService;
+    private GyInfService gyInfService;
 
     @Inject
     @Reference
@@ -92,7 +87,7 @@ public class GyAuthController{
         if(!Strings.isBlank(status) && !"4".equals(status) && Strings.isBlank(realname) && Strings.isBlank(gyid)){
             cnd.and("gyauthstatus", "=", status);
         }
-        return gyInfSubService.data(length, start, draw, order, columns, cnd, null);
+        return gyInfService.data(length, start, draw, order, columns, cnd, null);
     }
 
 
@@ -104,7 +99,7 @@ public class GyAuthController{
         Cnd cnd = Cnd.NEW();
         if (!Strings.isBlank(gyid)) {
             cnd.and("gyid","=",gyid);
-            req.setAttribute("obj", gyInfSubService.fetch(cnd));
+            req.setAttribute("obj", gyInfService.fetch(cnd));
         }else{
             req.setAttribute("obj", null);
         }
@@ -122,7 +117,7 @@ public class GyAuthController{
             HttpServletRequest req) {
         try {
             // 修改雇员认证信息状态
-            if (gyAuthSubService.setStatus(gyid, flag,note)) {
+            if (gyAuthService.setStatus(gyid, flag,note)) {
                 return Result.success("雇员编号" + gyid + "身份认证状态:" +flag);
             }
         } catch (Exception e) {

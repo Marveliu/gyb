@@ -1,9 +1,18 @@
 package com.marveliu.framework.model.xm;
 
 import com.marveliu.framework.model.base.BaseModel;
+import com.marveliu.framework.model.library.lib_task;
+import org.nutz.boot.AppContext;
+import org.nutz.dao.Cnd;
+import org.nutz.dao.Dao;
 import org.nutz.dao.entity.annotation.*;
+import org.nutz.lang.Lang;
+import org.nutz.log.Logs;
+import org.nutz.mvc.Mvcs;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by 89792 on 2017/11/22 0022.
@@ -17,6 +26,7 @@ public class xm_apply extends BaseModel implements Serializable {
     @Name
     @Comment("申请编号")
     @ColDefine(type = ColType.VARCHAR, width = 50)
+    @Prev(els = {@EL("$me.xmapplyid()")})
     private String id;
 
     @Column
@@ -158,4 +168,25 @@ public class xm_apply extends BaseModel implements Serializable {
         this.authorrealname = authorrealname;
     }
 
+
+    /**
+     * 任务申请编号生成 xmtaskid
+     * apply_+ 任务标识码 + 当前任务申请数目
+     * @return
+     */
+    public String xmapplyid() {
+        StringBuilder str = new StringBuilder();
+        try {
+            Dao dao =  AppContext.getDefault().getIoc().get(Dao.class);
+            String prefix = "apply_";
+            String temp = this.getXmtaskid().split("_")[1];
+            int count = dao.count(xm_apply.class,Cnd.where("xmtaskid","=",this.getXmtaskid()))+1;
+            str.append(prefix);
+            str.append(temp);
+            str.append(count);
+        }catch (Exception e){
+            // Logs.get().debug(e);
+        }
+        return str.toString();
+    }
 }

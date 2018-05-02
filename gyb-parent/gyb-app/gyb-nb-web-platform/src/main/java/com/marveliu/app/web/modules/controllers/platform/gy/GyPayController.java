@@ -16,24 +16,19 @@ package com.marveliu.app.web.modules.controllers.platform.gy;
  */
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.marveliu.app.web.commons.slog.annotation.SLog;
-import com.marveliu.framework.model.base.Result;
-import com.marveliu.framework.model.gy.gy_pay;
 import com.marveliu.framework.page.datatable.DataTableColumn;
 import com.marveliu.framework.page.datatable.DataTableOrder;
-import com.marveliu.framework.services.gy.GyPaySubService;
+import com.marveliu.framework.services.gy.GyPayService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -48,7 +43,7 @@ public class GyPayController{
 
     @Inject
     @Reference
-    private GyPaySubService gyPaySubService;
+    private GyPayService gyPayService;
 
     @At("")
     @Ok("beetl:/platform/gy/pay/index.html")
@@ -61,7 +56,7 @@ public class GyPayController{
     @RequiresPermissions("platform.gy.pay")
     public Object data(@Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
         Cnd cnd = Cnd.NEW();
-        return gyPaySubService.data(length, start, draw, order, columns, cnd, null);
+        return gyPayService.data(length, start, draw, order, columns, cnd, null);
     }
 
     @At("/payselect")

@@ -10,7 +10,7 @@ import com.marveliu.framework.services.base.BaseService;
 
 import java.util.List;
 
-public interface GyInfSubService extends BaseService<gy_inf> {
+public interface GyInfService extends BaseService<gy_inf> {
 
     /**
      * 通过用户编号获得雇员信息

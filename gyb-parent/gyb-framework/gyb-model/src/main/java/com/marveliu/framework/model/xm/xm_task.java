@@ -4,10 +4,18 @@ package com.marveliu.framework.model.xm;
 import com.marveliu.framework.model.base.BaseModel;
 import com.marveliu.framework.model.gz.gz_inf;
 import com.marveliu.framework.model.library.lib_task;
+import com.marveliu.framework.model.sys.Sys_userinf;
+import org.nutz.boot.AppContext;
+import org.nutz.dao.Cnd;
 import org.nutz.dao.DB;
+import org.nutz.dao.Dao;
 import org.nutz.dao.entity.annotation.*;
+import org.nutz.log.Logs;
+import org.nutz.mvc.Mvcs;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,6 +30,7 @@ public class xm_task extends BaseModel implements Serializable {
     @Name
     @Comment("任务书编号")
     @ColDefine(type = ColType.VARCHAR, width = 32)
+    @Prev(els = {@EL("$me.xmtaskid()")})
     private String id;
 
     @Column
@@ -92,8 +101,8 @@ public class xm_task extends BaseModel implements Serializable {
     @Column
     @Comment("排序字段")
     @Prev({
-            @SQL(db= DB.MYSQL,value = "SELECT IFNULL(MAX(location),0)+1 FROM cms_article"),
-            @SQL(db= DB.ORACLE,value = "SELECT COALESCE(MAX(location),0)+1 FROM cms_article")
+            @SQL(db = DB.MYSQL, value = "SELECT IFNULL(MAX(location),0)+1 FROM cms_article"),
+            @SQL(db = DB.ORACLE, value = "SELECT COALESCE(MAX(location),0)+1 FROM cms_article")
     })
     private Integer location;
 
@@ -126,7 +135,7 @@ public class xm_task extends BaseModel implements Serializable {
     private lib_task libtask;
 
     @One(field = "author")
-    private gz_inf gzinf;
+    private Sys_userinf sys_userinf;
 
     @Many(field = "xmtaskid")
     private List<xm_limit> xmlimits;
@@ -268,12 +277,12 @@ public class xm_task extends BaseModel implements Serializable {
         this.libtask = libtask;
     }
 
-    public gz_inf getGzinf() {
-        return gzinf;
+    public Sys_userinf getGzinf() {
+        return sys_userinf;
     }
 
-    public void setGzinf(gz_inf gzinf) {
-        this.gzinf = gzinf;
+    public void setGzinf(Sys_userinf sys_userinf) {
+        this.sys_userinf = sys_userinf;
     }
 
     public List<xm_limit> getXmlimits() {
@@ -316,4 +325,28 @@ public class xm_task extends BaseModel implements Serializable {
         this.original_order = original_order;
     }
 
+
+    /**
+     * 任务书编号生成
+     * rws_任务书类别码+日期标记+该类别总数
+     * @return
+     */
+    public String xmtaskid() {
+        Dao dao =  AppContext.getDefault().getIoc().get(Dao.class);
+        Date date = new Date();
+        long times = date.getTime();//时间戳
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+        String dateString = formatter.format(date);
+        StringBuilder str = new StringBuilder();
+        String categorycode = dao.fetch(lib_task.class,this.category).getUnitcode();
+        int count = dao.count(xm_task.class, Cnd.where("category","=",categorycode))+1;
+        str.append("rws_");
+        // 任务书类别码
+        str.append(categorycode);
+        // 时间日期
+        str.append(dateString);
+        // 该类别总数
+        str.append(count);
+        return str.toString();
+    }
 }

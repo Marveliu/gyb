@@ -17,10 +17,10 @@ package com.marveliu.app.web.modules.controllers.platform.gy;
 
 
 import com.marveliu.app.web.commons.utils.ShiroUtil;
-import com.marveliu.framework.services.gy.GyAuthSubService;
+import com.marveliu.framework.services.gy.GyAuthService;
 import com.marveliu.framework.services.gy.GyFacadeService;
-import com.marveliu.framework.services.gy.GyInfSubService;
-import com.marveliu.framework.services.gy.GyPaySubService;
+import com.marveliu.framework.services.gy.GyInfService;
+import com.marveliu.framework.services.gy.GyPayService;
 import com.marveliu.framework.services.sys.SysRoleService;
 import com.marveliu.framework.services.sys.SysUserService;
 import com.marveliu.framework.services.xm.XmApplyService;
@@ -49,15 +49,15 @@ public class GyPersonController {
 
     @Inject
     @Reference
-    private GyInfSubService gyInfSubSegyrvice;
+    private GyInfService gyInfSubSegyrvice;
 
     @Inject
     @Reference
-    private GyAuthSubService gyAuthSubService;
+    private GyAuthService gyAuthService;
 
     @Inject
     @Reference
-    private GyPaySubService gyPaySubService;
+    private GyPayService gyPayService;
 
     @Inject
     @Reference
@@ -110,7 +110,7 @@ public class GyPersonController {
     //     req.setAttribute("role", user.getRoles().get(0));
     //
     //     gy_inf gy = gyInfSubService.getGyByUserId(user.getId());
-    //     gy_auth auth = gyAuthSubService.getGyAuthByGyid(gy.getId());
+    //     gy_auth auth = gyAuthService.getGyAuthByGyid(gy.getId());
     //     int apply = xmApplyService.count(Cnd.where("gyid", "=", gy.getId()));
     //     int doing = xmInfService.count(Cnd.where("status", "=", 0).and("gyid", "=", gy.getId()));
     //     int done = xmInfService.count(Cnd.where("status", "=", 1).and("gyid", "=", gy.getId()));
@@ -120,7 +120,7 @@ public class GyPersonController {
     //     // 返回参数
     //     req.getSession().setAttribute("gyid", gy.getId());
     //     // 是否认证
-    //     req.setAttribute("isAuth", gyAuthSubService.isAuth(gy.getId()));
+    //     req.setAttribute("isAuth", gyAuthService.isAuth(gy.getId()));
     //     // 认证信息
     //     req.setAttribute("gyauth", auth);
     //     // 基础信息能否修改

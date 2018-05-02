@@ -15,10 +15,22 @@ package com.marveliu.app.xm.modules.services.impl;
  * limitations under the License.
  */
 
+import com.alibaba.dubbo.config.annotation.Service;
+import com.marveliu.framework.model.xm.xm_evaluation;
+import com.marveliu.framework.services.base.BaseServiceImpl;
+import com.marveliu.framework.services.xm.XmEvaluationService;
+import org.nutz.dao.Dao;
+import org.nutz.ioc.loader.annotation.IocBean;
+
 /**
  * @author Marveliu
  * @since 02/05/2018
  **/
 
-public class XmEvaluationServiceImpl {
+@IocBean(args = {"refer:dao"})
+@Service(interfaceClass = XmEvaluationService.class)
+public class XmEvaluationServiceImpl extends BaseServiceImpl<xm_evaluation> implements XmEvaluationService {
+    public XmEvaluationServiceImpl(Dao dao) {
+        super(dao);
+    }
 }
