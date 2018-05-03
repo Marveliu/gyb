@@ -16,6 +16,7 @@
         <dependency>
             <groupId>com.marveliu.framework</groupId>
             <artifactId>gyb-model</artifactId>
+            <scope>provided</scope>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

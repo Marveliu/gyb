@@ -172,7 +172,7 @@ public class UploadController {
                 String uri = "/file/" + DateUtil.format(new Date(), "yyyyMMdd") + "/" + R.UU32() + tf.getSubmittedFileName().substring(tf.getSubmittedFileName().indexOf("."));
                 String f = Globals.AppUploadPath + uri;
                 Files.write(new File(f), tf.getInputStream());
-                return Result.success("上传成功", NutMap.NEW().addv("file_type", s.toLowerCase()).addv("file_name", tf.getName()).addv("file_size", tf.getSize()).addv("file_url", Globals.AppUploadBase + uri));
+                return Result.success("上传成功", NutMap.NEW().addv("file_type", s.toLowerCase()).addv("file_name", tf.getName()).addv("file_size", tf.getSize()).addv("file_url", uri));
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);

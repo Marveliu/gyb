@@ -30,9 +30,9 @@ public class Globals {
     //项目域名
     public static String AppDomain = "http://127.0.0.1";
     //文件上传路径
-    public static String AppUploadPath = "/upload";
+    public static String AppUploadPath = "upload";
     //文件上传路径
-    public static String AppUploadBase = "./";
+    public static String AppUploadBase = "";
     // 是否启用了队列
     public static boolean RabbitMQEnabled = false;
     //系统自定义参数

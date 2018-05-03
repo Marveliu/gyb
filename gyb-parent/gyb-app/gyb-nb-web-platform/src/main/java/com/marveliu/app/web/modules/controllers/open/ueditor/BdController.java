@@ -49,7 +49,7 @@ public class BdController {
                 String f = Globals.AppUploadPath + uri;
                 Files.write(new File(f), tf.getInputStream());
                 nutMap.addv("state", "SUCCESS");
-                nutMap.addv("url", Globals.AppUploadBase + uri);
+                nutMap.addv("url",  uri);
                 nutMap.addv("original", tf.getSubmittedFileName());
                 nutMap.addv("type", tf.getSubmittedFileName().substring(tf.getSubmittedFileName().indexOf(".") + 1));
                 nutMap.addv("size", tf.getSize());
@@ -79,7 +79,8 @@ public class BdController {
                 String f = Globals.AppUploadPath + uri;
                 Files.write(new File(f), tf.getInputStream());
                 nutMap.addv("state", "SUCCESS");
-                nutMap.addv("url", Globals.AppUploadBase + uri);
+                // nutMap.addv("url", Globals.AppUploadBase + uri);
+                nutMap.addv("url", uri);
                 nutMap.addv("original", tf.getSubmittedFileName());
                 nutMap.addv("type", tf.getSubmittedFileName().substring(tf.getSubmittedFileName().indexOf(".") + 1));
                 nutMap.addv("size", tf.getSize());
@@ -109,7 +110,7 @@ public class BdController {
                 String f = Globals.AppUploadPath + uri;
                 Files.write(new File(f), tf.getInputStream());
                 nutMap.addv("state", "SUCCESS");
-                nutMap.addv("url", Globals.AppUploadBase + uri);
+                nutMap.addv("url", uri);
                 nutMap.addv("original", tf.getSubmittedFileName());
                 nutMap.addv("type", tf.getSubmittedFileName().substring(tf.getSubmittedFileName().indexOf(".") + 1));
                 nutMap.addv("size", tf.getSize());

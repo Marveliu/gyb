@@ -62,29 +62,31 @@
             </plugin>
         </plugins>
     </build>
-    <repositories>
-        <repository>
-            <id>nutz</id>
-            <url>http://jfrog.nutz.cn/artifactory/libs-release</url>
-        </repository>
-        <repository>
-            <id>nutz-snapshots</id>
-            <url>http://jfrog.nutz.cn/artifactory/snapshots</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-    </repositories>
-    <distributionManagement>
-        <snapshotRepository>
-            <id>nutzcn-snapshots</id>
-            <url>https://jfrog.nutz.cn/artifactory/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+
+    <!--<repositories>-->
+        <!--<repository>-->
+            <!--<id>nutz</id>-->
+            <!--<url>http://jfrog.nutz.cn/artifactory/libs-release</url>-->
+        <!--</repository>-->
+        <!--<repository>-->
+            <!--<id>nutz-snapshots</id>-->
+            <!--<url>http://jfrog.nutz.cn/artifactory/snapshots</url>-->
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>-->
+                <!--<updatePolicy>always</updatePolicy>-->
+            <!--</snapshots>-->
+            <!--<releases>-->
+                <!--<enabled>false</enabled>-->
+            <!--</releases>-->
+        <!--</repository>-->
+    <!--</repositories>-->
+
+    <!--<distributionManagement>-->
+        <!--<snapshotRepository>-->
+            <!--<id>nutzcn-snapshots</id>-->
+            <!--<url>https://jfrog.nutz.cn/artifactory/snapshots/</url>-->
+        <!--</snapshotRepository>-->
+    <!--</distributionManagement>-->
 
 
 </project>

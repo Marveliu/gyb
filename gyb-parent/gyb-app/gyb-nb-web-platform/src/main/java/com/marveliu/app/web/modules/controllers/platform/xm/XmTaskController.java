@@ -27,6 +27,7 @@ import com.marveliu.framework.page.datatable.DataTableColumn;
 import com.marveliu.framework.page.datatable.DataTableOrder;
 import com.marveliu.framework.services.library.LibSkillService;
 import com.marveliu.framework.services.library.LibTaskService;
+import com.marveliu.framework.services.sys.SysUserinfService;
 import com.marveliu.framework.services.xm.XmTaskService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -50,10 +51,7 @@ import org.nutz.trans.Trans;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -77,6 +75,10 @@ public class XmTaskController {
     @Inject
     @Reference
     private XmTaskService xmTaskService;
+
+    @Inject
+    @Reference
+    private SysUserinfService  sysUserinfService;
     @Inject
     @Reference
     private LibTaskService libTaskService;
@@ -173,6 +175,8 @@ public class XmTaskController {
     @Ok("beetl:/platform/xm/task/add.html")
     @RequiresPermissions("platform.xm.task.add")
     public void add(@Param("libtaskId") String libtaskid, HttpServletRequest req) {
+         String sysuserinfid = sysUserinfService.getSysUserinfId(StringUtil.getPlatformUid());
+        req.setAttribute("authorid",sysuserinfid);
         req.setAttribute("libtask", libtaskid != null && !"0".equals(libtaskid) ? libTaskService.fetch(libtaskid) : null);
     }
 
@@ -191,8 +195,8 @@ public class XmTaskController {
             @Param("at") String at,
             HttpServletRequest req) {
         try {
-            String sysuserid = StringUtil.getPlatformUid();
 
+            String sysuserid = StringUtil.getPlatformUid();
             //设置时间
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             int publishAt = (int) (sdf.parse(at).getTime() / 1000);

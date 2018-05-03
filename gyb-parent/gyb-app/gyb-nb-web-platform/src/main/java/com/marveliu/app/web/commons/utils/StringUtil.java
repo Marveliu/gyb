@@ -1,5 +1,9 @@
 package com.marveliu.app.web.commons.utils;
 
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.marveliu.framework.services.sys.SysUserinfService;
+import org.nutz.dao.Cnd;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
@@ -14,6 +18,8 @@ import java.util.Random;
  */
 @IocBean
 public class StringUtil {
+
+
     /**
      * 获取平台后台登陆UID
      *

@@ -10,4 +10,10 @@ import com.marveliu.framework.services.base.BaseService;
 public interface SysUserinfService extends BaseService<Sys_userinf> {
 
 
+    /**
+     *
+     * @param uid
+     * @return
+     */
+    public String getSysUserinfId(String uid);
 }

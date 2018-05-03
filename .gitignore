@@ -25,3 +25,6 @@ target/
 hs_err_pid*
 
 
+/temp/
+/picture/
+/upload/
