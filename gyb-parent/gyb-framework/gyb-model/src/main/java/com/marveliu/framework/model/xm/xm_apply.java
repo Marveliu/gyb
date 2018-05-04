@@ -26,7 +26,8 @@ public class xm_apply extends BaseModel implements Serializable {
     @Name
     @Comment("申请编号")
     @ColDefine(type = ColType.VARCHAR, width = 50)
-    @Prev(els = {@EL("$me.xmapplyid()")})
+    // 异步处理 fastinsert prev 失效
+    // @Prev(els = {@EL("$me.xmapplyid()")})
     private String id;
 
     @Column
