@@ -24,6 +24,7 @@ import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.mvc.Mvcs;
 
 /**
  * @author Marveliu
@@ -58,6 +59,29 @@ public class XmTaskServiceImpl extends BaseServiceImpl<xm_task> implements XmTas
         if(this.update(chain,cnd)!=0)
         {
             return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * 更新任务书
+     * 删除之前的任务书技能限定，重新添加
+     *
+     * @param xmtask
+     * @return
+     */
+    @Override
+    public Boolean updateXmtask(xm_task xmtask) {
+        try {
+            //清空之前的技能限制
+            xm_task oldxmtask = this.fetchLinks(this.fetch(xmtask.getId()), null);
+            this.dao().deleteLinks(oldxmtask, "xmlimits");
+            this.insertLinks(xmtask, "xmlimits");
+            int result =  this.updateIgnoreNull(xmtask);
+            return result == 1;
+        }catch (Exception e){
+
         }
         return false;
     }

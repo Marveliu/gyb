@@ -18,4 +18,12 @@ public interface XmTaskService extends BaseService<xm_task> {
      */
     public Boolean setXmTaskStatus(String xmtaskid, Boolean flag);
 
+    /**
+     * 更新任务书
+     * 删除之前的任务书技能限定，重新添加
+     * @param xmtask
+     * @return
+     */
+    public Boolean updateXmtask(xm_task xmtask);
+
 }

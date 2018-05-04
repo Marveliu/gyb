@@ -256,32 +256,19 @@ public class XmTaskController {
             int firstcommitAt = (int) (sdf.parse(firstcommit).getTime() / 1000);
             int endtimeAt = (int) (sdf.parse(endtime).getTime() / 1000);
             int applyendtimeAt = (int) (sdf.parse(applyendtime).getTime() / 1000);
-
             xmtask.setPublishAt(publishAt);
             xmtask.setFirstcommit(firstcommitAt);
             xmtask.setEndtime(endtimeAt);
             xmtask.setApplyendtime(applyendtimeAt);
             xmtask.setStatus(XM_TASK_INIT);
             xmtask.setDisabled(true);
-
-            Trans.exec(new Atom() {
-                @Override
-                public void run() {
-                    //清空之前的技能限制
-                    xm_task oldxmtask = xmTaskService.fetchLinks(xmTaskService.fetch(xmtask.getId()), null);
-                    Dao dao = Mvcs.getIoc().get(Dao.class);
-                    dao.deleteLinks(oldxmtask, "xmlimits");
-                    xmTaskService.insertLinks(xmtask, "xmlimits");
-                    //更新
-                    xmTaskService.updateIgnoreNull(xmtask);
-                }
-            });
-
-
-            return Result.success("system.success");
+            if(xmTaskService.updateXmtask(xmtask)){
+                return Result.success("system.success");
+            }
         } catch (Exception e) {
             return Result.error("system.error");
         }
+        return Result.error("system.error");
     }
 
     @At("/setXmtaskStatus")
