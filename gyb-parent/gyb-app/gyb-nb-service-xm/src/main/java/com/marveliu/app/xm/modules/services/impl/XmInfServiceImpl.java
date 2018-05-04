@@ -16,11 +16,13 @@ package com.marveliu.app.xm.modules.services.impl;
  */
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.marveliu.framework.model.xm.xm_apply;
 import com.marveliu.framework.model.xm.xm_inf;
 import com.marveliu.framework.services.base.BaseServiceImpl;
 import com.marveliu.framework.services.xm.XmInfService;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Times;
 
 /**
  * @author Marveliu
@@ -32,5 +34,38 @@ import org.nutz.ioc.loader.annotation.IocBean;
 public class XmInfServiceImpl extends BaseServiceImpl<xm_inf> implements XmInfService {
     public XmInfServiceImpl(Dao dao) {
         super(dao);
+    }
+
+
+    private static final int XM_INF_DOING = 0;
+    private static final int XM_INF_DONE = 1;
+    private static final int XM_INF_CHECKING = 2;
+    private static final int XM_INF_PAYING = 3;
+    private static final int XM_INF_PAYED = 4;
+    private static final int XM_INF_ERROR = 5;
+
+
+    /**
+     * 初始化项目信息
+     *
+     * @param xmApply
+     * @param uid
+     * @return
+     */
+    @Override
+    public xm_inf initXminf(xm_apply xmApply,String uid) {
+        try {
+            // 项目信息
+            xm_inf xmInf = new  xm_inf();
+            xmInf.setGyid(xmApply.getGyid());
+            xmInf.setXmtaskid(xmApply.getId());
+            xmInf.setAt(Times.getTS());
+            xmInf.setOpBy(uid);
+            xmInf.setStatus(XM_INF_DOING);
+            return this.insert(xmInf);
+        }catch (Exception e){
+
+        }
+        return null;
     }
 }

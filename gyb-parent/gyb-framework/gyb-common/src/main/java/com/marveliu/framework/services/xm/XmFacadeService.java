@@ -41,14 +41,14 @@ public interface XmFacadeService {
      */
     public boolean isGyForXm(String xminfid,String gyid);
 
+
     /**
-     * 立项
-     * @param taskid
-     * @param gyid
+     * 受理任务申请，并建立项目和账单
+     * @param xmapplyid
      * @param uid
      * @return
      */
-    public xm_inf initXminf(String taskid, String gyid, String uid);
+    public xm_inf acceptXmapply(String xmapplyid,String uid);
 
     /**
      * 项目结算

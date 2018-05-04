@@ -25,6 +25,7 @@ import com.marveliu.framework.util.DateUtil;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
+import org.nutz.dao.Sqls;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.random.R;
 import org.nutz.log.Log;
@@ -48,7 +49,7 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
 
     private static final int XM_APPLY_INIT = 0;
     private static final int XM_APPLY_PASS = 1;
-    private static final int XM_TASK_FAIL = 2;
+    private static final int XM_APPLY_FAIL = 2;
 
 
     private final static Log log = Logs.get();
@@ -187,15 +188,22 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
      * 受理项目申请
      * @param xmapplyid
      * @param flag true 通过 false 不通过
+     * @param uid
      * @return
      */
-    public Boolean setXmApplyStatus(String xmapplyid, Boolean flag) {
+    public Boolean setXmApplyStatus(String xmapplyid, Boolean flag,String uid) {
         Cnd cnd = Cnd.where("id","=",xmapplyid);
-        Chain chain = null;
+        long opAt = (int) (System.currentTimeMillis() / 1000);
+        Chain chain = Chain.make("opAt",opAt).add("opBy",uid);
         if(flag){
-            chain = Chain.make("status",XM_APPLY_PASS);
+            chain.add("status",XM_APPLY_PASS);
+            // 之前所有的申请拒绝
+            this.dao().execute(Sqls.create("update xm_apply set status = @status where id = @xmapplyid")
+                    .setParam("status",XM_APPLY_FAIL)
+                    .setParam("xmapplyid",xmapplyid)
+            );
         }else{
-            chain = Chain.make("status",XM_TASK_FAIL);
+            chain.add("status",XM_APPLY_FAIL);
         }
         if(this.dao().update(gy_inf.class,chain,cnd)!=0)
         {

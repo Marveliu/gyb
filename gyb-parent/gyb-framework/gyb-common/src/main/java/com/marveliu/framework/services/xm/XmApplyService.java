@@ -26,9 +26,10 @@ public interface XmApplyService extends BaseService<xm_apply> {
      * 处理任务申请信息
      * @param xmapplyid
      * @param flag
+     * @param uid
      * @return
      */
-    public Boolean setXmApplyStatus(String xmapplyid, Boolean flag) ;
+    public Boolean setXmApplyStatus(String xmapplyid, Boolean flag,String uid) ;
 
     /**
      * 通过申请编号获得任务

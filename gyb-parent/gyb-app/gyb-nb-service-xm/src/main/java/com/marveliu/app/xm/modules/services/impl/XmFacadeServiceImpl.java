@@ -15,11 +15,14 @@ package com.marveliu.app.xm.modules.services.impl;
  * limitations under the License.
  */
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.marveliu.framework.model.sys.Sys_log;
 import com.marveliu.framework.model.xm.xm_apply;
 import com.marveliu.framework.model.xm.xm_bill;
 import com.marveliu.framework.model.xm.xm_inf;
 import com.marveliu.framework.model.xm.xm_task;
+import com.marveliu.framework.services.sys.SysLogService;
 import com.marveliu.framework.services.xm.*;
 import org.jboss.netty.util.internal.StringUtil;
 import org.nutz.dao.Chain;
@@ -29,6 +32,7 @@ import org.nutz.dao.Sqls;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
+import org.nutz.lang.Times;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.trans.Atom;
@@ -60,6 +64,9 @@ public class XmFacadeServiceImpl implements XmFacadeService {
     private XmTaskService xmTaskService;
     @Inject
     private XmLimitService xmLimitService;
+    @Inject
+    @Reference
+    private SysLogService sysLogService;
 
 
     /**
@@ -84,58 +91,38 @@ public class XmFacadeServiceImpl implements XmFacadeService {
 
 
     /**
-     * 立项
-     * @param taskid
-     * @param gyid
+     * 受理请求
+     * @param xmapplyid
      * @param uid
      * @return
      */
-    public xm_inf initXminf(String taskid, String gyid,String uid){
-
-        xm_task task = xmTaskService.fetch(taskid);
-        long opAt = (int) (System.currentTimeMillis() / 1000);
-
-        try{
-            Trans.exec(new Atom() {
-                @Override
-                public void run() {
-                    // 之前所有的申请拒绝
-                    dao.execute(Sqls.create("update xm_apply set status = @status,opBy = @opBy,opAt = @opAt where xmtaskid = @xmtaskid")
-                            .setParam("status",2)
-                            .setParam("opBy",uid)
-                            .setParam("opAt",opAt)
-                            .setParam("xmtaskid",taskid)
-                    );
-                    // 受理用户
-                    dao.update(xm_apply.class,Chain.make("status",1),Cnd.where("xmtaskid","=",taskid).and("gyid","=",gyid));
-                    //进入任务跟踪
-                    dao.update(xm_task.class,Chain.make("status",3),Cnd.where("id","=",taskid));
-
-                    // 项目
-                    xm_inf xf = new  xm_inf();
-                    xf.setGyid(gyid);
-                    xf.setXmtaskid(task.getId());
-                    xf.setAt(opAt);
-                    xf.setOpBy(uid);
-                    xf.setStatus(0);
-                    xf = xmInfService.insert(xf);
-
-                    // 账单
-                    xm_bill bill = new xm_bill();
-                    bill.setXminfid(xf.getId());
-                    bill.setOpBy(uid);
-                    bill.setOpAt(opAt);
-                    bill.setPaysum(task.getAward());
-                    xmBillService.insert(bill);
-                }
-            });
-
-            // TODO: 2018/1/12 0012 项目日志与通知
-        }catch (Exception e){
-            log.debug("项目建立出错："+e);
+    public xm_inf acceptXmapply(String xmapplyid,String uid){
+        xm_inf xmInf = null;
+        xm_bill xmBill = null;
+        xmInf =  xmInfService.initXminf(xmApplyService.fetch(xmapplyid),uid);
+        // 建立项目
+        if(!Lang.isEmpty(xmInf)){
+            xmBill =  xmBillService.initXmbill(xmInf,uid);
+        }
+        // 建立表单
+        if(!Lang.isEmpty(xmBill)){
+            // 项目建立日志
+            Sys_log sysLog = new Sys_log();
+            sysLog.setType("xm");
+            sysLog.setTag("项目建立");
+            sysLog.setSrc(this.getClass().getName() + "#acceptXmapply");
+            sysLog.setMsg("任务："+xmapplyid+"->项目："+xmInf.getId());;
+            sysLog.setOpBy(uid);
+            sysLog.setOpAt(Times.getTS());
+            sysLog.setUsername(uid);
+            sysLogService.insert(sysLog);
+            // todo：邮件类信息通知
+            return xmInf;
         }
         return null;
     }
+
+
 
 
     /**
