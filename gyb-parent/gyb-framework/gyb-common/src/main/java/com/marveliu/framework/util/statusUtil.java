@@ -1,0 +1,49 @@
+package com.marveliu.framework.util;
+/*
+ * Copyright [2018] [Marveliu]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @author Marveliu
+ * @since 05/05/2018
+ **/
+
+public class statusUtil {
+
+    public final static int XM_APPLY_INIT = 0;
+    public final static int XM_APPLY_PASS = 1;
+    public final static int XM_APPLY_FAIL = 2;
+    public final static int XM_APPLY_FINAL = 3;
+
+
+    public static final int XM_BILL_INIT = 0;
+    public static final int XM_BILL_CHECKING = 1;
+    public static final int XM_BILL_PAYING = 2;
+    public static final int XM_BILL_PAYED = 3;
+    public static final int XM_BILL_ERROR = 4;
+
+    public static final int XM_TASK_INIT = 0;
+    public static final int XM_TASK_PUBLISH = 1;
+    public static final int XM_TASK_APPLYING = 2;
+    public static final int XM_TASK_DOING = 3;
+    public static final int XM_TASK_FINISH = 4;
+
+
+    public static final int XM_FEEDBACK_INIT = 0;
+    public static final int XM_FEEDBACK_COMMIT = 1;
+    public static final int XM_FEEDBACK_CHECKING = 2;
+    public static final int XM_FEEDBACK_FINISH = 3;
+    public static final int XM_FEEDBACK_FINAL = 4;
+}

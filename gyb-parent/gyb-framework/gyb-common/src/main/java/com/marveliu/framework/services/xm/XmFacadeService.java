@@ -43,7 +43,9 @@ public interface XmFacadeService {
 
 
     /**
-     * 受理任务申请，并建立项目和账单
+     * 受理任务申请，并建立
+     * 1. 项目
+     * 2. 账单
      * @param xmapplyid
      * @param uid
      * @return

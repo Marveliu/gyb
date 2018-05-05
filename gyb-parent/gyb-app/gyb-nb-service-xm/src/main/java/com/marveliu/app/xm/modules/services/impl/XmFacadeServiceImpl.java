@@ -17,26 +17,22 @@ package com.marveliu.app.xm.modules.services.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.marveliu.framework.util.statusUtil;
 import com.marveliu.framework.model.sys.Sys_log;
-import com.marveliu.framework.model.xm.xm_apply;
 import com.marveliu.framework.model.xm.xm_bill;
 import com.marveliu.framework.model.xm.xm_inf;
 import com.marveliu.framework.model.xm.xm_task;
 import com.marveliu.framework.services.sys.SysLogService;
 import com.marveliu.framework.services.xm.*;
-import org.jboss.netty.util.internal.StringUtil;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
-import org.nutz.dao.Sqls;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Times;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import org.nutz.trans.Atom;
-import org.nutz.trans.Trans;
 
 /**
  * @author Marveliu
@@ -46,6 +42,10 @@ import org.nutz.trans.Trans;
 @IocBean
 @Service(interfaceClass = XmFacadeService.class)
 public class XmFacadeServiceImpl implements XmFacadeService {
+
+
+
+
 
 
     private static final Log log = Logs.get();
@@ -97,27 +97,42 @@ public class XmFacadeServiceImpl implements XmFacadeService {
      * @return
      */
     public xm_inf acceptXmapply(String xmapplyid,String uid){
-        xm_inf xmInf = null;
-        xm_bill xmBill = null;
-        xmInf =  xmInfService.initXminf(xmApplyService.fetch(xmapplyid),uid);
-        // 建立项目
-        if(!Lang.isEmpty(xmInf)){
-            xmBill =  xmBillService.initXmbill(xmInf,uid);
-        }
-        // 建立表单
-        if(!Lang.isEmpty(xmBill)){
-            // 项目建立日志
-            Sys_log sysLog = new Sys_log();
-            sysLog.setType("xm");
-            sysLog.setTag("项目建立");
-            sysLog.setSrc(this.getClass().getName() + "#acceptXmapply");
-            sysLog.setMsg("任务："+xmapplyid+"->项目："+xmInf.getId());;
-            sysLog.setOpBy(uid);
-            sysLog.setOpAt(Times.getTS());
-            sysLog.setUsername(uid);
-            sysLogService.insert(sysLog);
-            // todo：邮件类信息通知
-            return xmInf;
+
+        // 更新任务书状态并检查任务书是否存在
+        if(xmApplyService.update(
+                Chain.make("status",statusUtil.XM_APPLY_FINAL),
+                Cnd.where("id","=",xmapplyid))!=0){
+
+            xm_inf xmInf = null;
+            xm_bill xmBill = null;
+            xm_task xmTask = xmApplyService.getXmTaskByAppyid(xmapplyid);
+
+            // 更新任务书状态
+            xmTask.setStatus(statusUtil.XM_TASK_DOING);
+            xmTaskService.updateXmtask(xmTask);
+
+            // 建立项目
+            xmInf =  xmInfService.initXminf(xmTask,xmApplyService.fetch(xmapplyid).getGyid(),uid);
+
+            // 建立表单
+            if(!Lang.isEmpty(xmInf)){
+                xmBill =  xmBillService.initXmbill(xmInf.getId(),xmTask.getAward(),uid);
+            }
+
+            // 建立日志
+            if(!Lang.isEmpty(xmBill)){
+                Sys_log sysLog = new Sys_log();
+                sysLog.setType("xm");
+                sysLog.setTag("项目建立");
+                sysLog.setSrc(this.getClass().getName() + "#acceptXmapply");
+                sysLog.setMsg("任务："+xmapplyid+"->项目："+xmInf.getId());;
+                sysLog.setOpBy(uid);
+                sysLog.setOpAt(Times.getTS());
+                sysLog.setUsername(uid);
+                sysLogService.insert(sysLog);
+                // todo：邮件类信息通知
+                return xmInf;
+            }
         }
         return null;
     }
@@ -146,7 +161,7 @@ public class XmFacadeServiceImpl implements XmFacadeService {
         //         eva.setOpAt(at);
         //         eva.setXminfid(id);
         //         eva.setGrade(xmInf.);
-        //         eva.setNote(evanote);
+        //         eva.setNote(evanote);r
         //         xmEvaluationService.insert(eva);
         //
         //         //账单

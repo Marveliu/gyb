@@ -16,6 +16,7 @@ package com.marveliu.app.xm.modules.services.impl;
  */
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.marveliu.framework.util.statusUtil;
 import com.marveliu.framework.model.gy.gy_inf;
 import com.marveliu.framework.model.xm.xm_apply;
 import com.marveliu.framework.model.xm.xm_task;
@@ -27,6 +28,8 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.Sqls;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Lang;
+import org.nutz.lang.Times;
 import org.nutz.lang.random.R;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
@@ -47,9 +50,7 @@ import java.util.concurrent.TimeUnit;
 @Service(interfaceClass = XmApplyService.class)
 public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmApplyService,Runnable {
 
-    private static final int XM_APPLY_INIT = 0;
-    private static final int XM_APPLY_PASS = 1;
-    private static final int XM_APPLY_FAIL = 2;
+
 
 
     private final static Log log = Logs.get();
@@ -123,12 +124,14 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
      * 批量同步项目申请
      * @param xmApply
      */
-    public void sync(xm_apply xmApply) {
+    public Boolean sync(xm_apply xmApply) {
         try {
-            this.fastInsert(xmApply);
+             return Lang.isEmpty(this.fastInsert(xmApply));
         } catch (Throwable e) {
             log.info("insert xmApply sync fail", e);
         }
+
+        return false;
     }
 
 
@@ -157,12 +160,14 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
      */
     @Override
     public Boolean addXmApply(String xmtaskid, String gyid,Boolean async) {
+        if(isGyHasApply(xmtaskid,gyid)) return false;
+
         xm_apply  xmApply = new xm_apply();
         xmApply.setGyid(gyid);
         xmApply.setXmtaskid(xmtaskid);
         xmApply.setId(R.UU32().toLowerCase());
-        xmApply.setStatus(XM_APPLY_INIT);
-
+        xmApply.setStatus(statusUtil.XM_APPLY_INIT);
+        xmApply.setAt(Times.getTS());
         if(async){
             LinkedBlockingQueue<xm_apply> queue = this.queue;
             // 添加队列
@@ -171,13 +176,13 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
                     // 失效时间
                     boolean re = queue.offer(xmApply, 50, TimeUnit.MILLISECONDS);
                     if (!re) {
-                        System.out.println("xmApply queue is full, drop it ...");
+                        log.error("xmApply queue is full, drop it ...");
                     }
                     return re;
                 } catch (InterruptedException e) {
                 }
         }else{
-            sync(xmApply);
+            return sync(xmApply);
         }
         return false;
     }
@@ -196,14 +201,14 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
         long opAt = (int) (System.currentTimeMillis() / 1000);
         Chain chain = Chain.make("opAt",opAt).add("opBy",uid);
         if(flag){
-            chain.add("status",XM_APPLY_PASS);
+            chain.add("status",statusUtil.XM_APPLY_PASS);
             // 之前所有的申请拒绝
             this.dao().execute(Sqls.create("update xm_apply set status = @status where id = @xmapplyid")
-                    .setParam("status",XM_APPLY_FAIL)
+                    .setParam("status",statusUtil.XM_APPLY_FAIL)
                     .setParam("xmapplyid",xmapplyid)
             );
         }else{
-            chain.add("status",XM_APPLY_FAIL);
+            chain.add("status",statusUtil.XM_APPLY_FAIL);
         }
         if(this.dao().update(gy_inf.class,chain,cnd)!=0)
         {
@@ -226,7 +231,7 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
 
 
     /**
-     * 获得雇员申请的项目信息
+     * 通过雇员编号获得雇员申请的项目信息
      *
      * @param gyid
      * @return
@@ -237,13 +242,29 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
     }
 
     /**
-     * 获得雇员申请的项目信息
-     *
+     * 通过任务书编号获得所有的申请信息
      * @param xmtaskid
      * @return
      */
     @Override
     public List<xm_apply> getXmApplyListByXmtaskid(String xmtaskid) {
         return this.query(Cnd.where("xmtaskid","=",xmtaskid));
+    }
+
+
+    /**
+     * 查询雇员是否已经申请了任务书
+     *
+     * @param xmtaskid
+     * @param gyid
+     * @return
+     */
+    @Override
+    public boolean isGyHasApply(String xmtaskid, String gyid) {
+        xm_apply xmApply = this.fetch(Cnd.where("xmtaskid","=",xmtaskid).and("gyid","=",gyid));
+        if (Lang.isEmpty(xmApply)){
+            return false;
+        }
+        return true;
     }
 }

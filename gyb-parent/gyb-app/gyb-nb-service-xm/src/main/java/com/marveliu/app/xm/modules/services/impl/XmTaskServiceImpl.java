@@ -34,11 +34,7 @@ import org.nutz.mvc.Mvcs;
 @Service(interfaceClass = XmTaskService.class)
 public class XmTaskServiceImpl extends BaseServiceImpl<xm_task> implements XmTaskService {
 
-    private static final int XM_TASK_INIT = 0;
-    private static final int XM_TASK_PUBLISH = 1;
-    private static final int XM_TASK_APPLYING = 2;
-    private static final int XM_TASK_DOING = 3;
-    private static final int XM_TASK_FINISH = 4;
+
 
 
     public XmTaskServiceImpl(Dao dao) {

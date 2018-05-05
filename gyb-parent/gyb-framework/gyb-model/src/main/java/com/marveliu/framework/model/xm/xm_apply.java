@@ -43,7 +43,7 @@ public class xm_apply extends BaseModel implements Serializable {
     @Column
     @Comment("申请时间")
     @ColDefine(type = ColType.INT)
-    private int at;
+    private Long at;
 
     @Column
     @Comment("状态")
@@ -104,11 +104,11 @@ public class xm_apply extends BaseModel implements Serializable {
         this.xmtaskid = xmtaskid;
     }
 
-    public int getAt() {
+    public Long getAt() {
         return at;
     }
 
-    public void setAt(int at) {
+    public void setAt(Long at) {
         this.at = at;
     }
 

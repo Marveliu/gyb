@@ -18,6 +18,7 @@ package com.marveliu.app.xm.modules.services.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.marveliu.framework.model.xm.xm_apply;
 import com.marveliu.framework.model.xm.xm_inf;
+import com.marveliu.framework.model.xm.xm_task;
 import com.marveliu.framework.services.base.BaseServiceImpl;
 import com.marveliu.framework.services.xm.XmInfService;
 import org.nutz.dao.Dao;
@@ -47,19 +48,20 @@ public class XmInfServiceImpl extends BaseServiceImpl<xm_inf> implements XmInfSe
 
     /**
      * 初始化项目信息
-     *
-     * @param xmApply
+     * @param xmTask
+     * @param gyid
      * @param uid
      * @return
      */
     @Override
-    public xm_inf initXminf(xm_apply xmApply,String uid) {
+    public xm_inf initXminf(xm_task xmTask, String gyid, String uid){
         try {
             // 项目信息
             xm_inf xmInf = new  xm_inf();
-            xmInf.setGyid(xmApply.getGyid());
-            xmInf.setXmtaskid(xmApply.getId());
+            xmInf.setGyid(gyid);
+            xmInf.setXmtaskid(xmTask.getId());
             xmInf.setAt(Times.getTS());
+            xmInf.setOpAt(Times.getTS());
             xmInf.setOpBy(uid);
             xmInf.setStatus(XM_INF_DOING);
             return this.insert(xmInf);

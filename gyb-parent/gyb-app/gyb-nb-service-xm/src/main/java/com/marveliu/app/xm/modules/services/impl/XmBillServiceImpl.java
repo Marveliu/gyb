@@ -16,9 +16,8 @@ package com.marveliu.app.xm.modules.services.impl;
  */
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.marveliu.framework.model.xm.xm_apply;
+import com.marveliu.framework.util.statusUtil;
 import com.marveliu.framework.model.xm.xm_bill;
-import com.marveliu.framework.model.xm.xm_inf;
 import com.marveliu.framework.services.base.BaseServiceImpl;
 import com.marveliu.framework.services.xm.XmBillService;
 import org.nutz.dao.Dao;
@@ -34,11 +33,6 @@ import org.nutz.lang.Times;
 @Service(interfaceClass = XmBillService.class)
 public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBillService {
 
-    private static final int XM_BILL_INIT = 0;
-    private static final int XM_BILL_CHECKING = 1;
-    private static final int XM_BILL_PAYING = 2;
-    private static final int XM_BILL_PAYED = 3;
-    private static final int XM_BILL_ERROR = 4;
 
     public XmBillServiceImpl(Dao dao) {
         super(dao);
@@ -48,19 +42,21 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
      * 建立账单
      * after accept xmInf
      *
-     * @param xmInf
+     * @param xminfid
+     * @param award
      * @param uid
      * @return
      */
     @Override
-    public xm_bill initXmbill(xm_inf xmInf,String uid) {
+    public xm_bill initXmbill(String xminfid,float award, String uid) {
         try {
             // 账单信息
             xm_bill bill = new xm_bill();
-            bill.setXminfid(xmInf.getId());
+            bill.setXminfid(xminfid);
+            bill.setStatus(statusUtil.XM_BILL_INIT);
             bill.setOpBy(uid);
-            bill.setOpAt(Times.getTS());
-            bill.setPaysum(Float.valueOf(xmInf.getAward()));
+            bill.setAt(Times.getTS());
+            bill.setPaysum(award);
             return this.insert(bill);
         }catch (Exception e){
 

@@ -1,6 +1,9 @@
 package com.marveliu.framework.model.xm;
 
 import com.marveliu.framework.model.base.BaseModel;
+import org.nutz.boot.AppContext;
+import org.nutz.dao.Cnd;
+import org.nutz.dao.Dao;
 import org.nutz.dao.entity.annotation.*;
 
 import java.io.Serializable;
@@ -49,7 +52,6 @@ public class xm_inf extends BaseModel implements Serializable {
     private String taskname;
 
     // 视图
-
     @Column
     @Readonly
     private String author;
@@ -68,7 +70,7 @@ public class xm_inf extends BaseModel implements Serializable {
 
     @Column
     @Readonly
-    private String award;
+    private float award;
 
 
     @Column
@@ -235,11 +237,11 @@ public class xm_inf extends BaseModel implements Serializable {
         this.category = category;
     }
 
-    public String getAward() {
+    public float getAward() {
         return award;
     }
 
-    public void setAward(String award) {
+    public void setAward(float award) {
         this.award = award;
     }
 
@@ -388,5 +390,22 @@ public class xm_inf extends BaseModel implements Serializable {
     }
 
 
+    /**
+     * 项目编号生成 xmtaskid
+     * xm_+ 任务书标识码
+     * @return
+     */
+    public String xminfid() {
+        StringBuilder str = new StringBuilder();
+        try {
+            String prefix = "xm_";
+            String temp = this.getXmtaskid().split("_")[1];
+            str.append(prefix);
+            str.append(temp);
+        }catch (Exception e){
+            // Logs.get().debug(e);
+        }
+        return str.toString();
+    }
 
 }

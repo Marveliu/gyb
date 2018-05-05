@@ -37,7 +37,7 @@ public class xm_feedback extends BaseModel implements Serializable {
     @Column
     @Comment("创建时间")
     @ColDefine(type = ColType.INT)
-    private int at;
+    private Long at;
 
     @Column
     @Comment("审核文件")
@@ -133,11 +133,11 @@ public class xm_feedback extends BaseModel implements Serializable {
         this.xminfid = xminfid;
     }
 
-    public int getAt() {
+    public Long getAt() {
         return at;
     }
 
-    public void setAt(int at) {
+    public void setAt(Long at) {
         this.at = at;
     }
 

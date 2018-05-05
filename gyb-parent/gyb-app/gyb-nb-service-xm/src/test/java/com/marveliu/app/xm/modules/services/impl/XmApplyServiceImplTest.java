@@ -23,6 +23,7 @@ public class XmApplyServiceImplTest {
 
     private final static  String XMTASK_ID = "rw_test0";
     private final static  String GY_ID = "gy18041";             //liushangnan
+    private final static  String UID = "405a28c9389d4a8581a29c283dc9f5b9";             //liushangnan
 
 
     private volatile static int errorcount = 0;
@@ -74,11 +75,11 @@ public class XmApplyServiceImplTest {
     public void setXmApplyStatus() {
         List<xm_apply> xmApplies = xmApplyService.getXmApplyListByGyid(GY_ID);
         for (xm_apply xmApply :xmApplies){
-            xmApplyService.setXmApplyStatus(xmApply.getId(),true);
+            xmApplyService.setXmApplyStatus(xmApply.getId(),true,UID);
             assertEquals(1,xmApplyService.fetch(xmApply.getId()).getStatus());
         }
         for (xm_apply xmApply :xmApplies){
-            xmApplyService.setXmApplyStatus(xmApply.getId(),false);
+            xmApplyService.setXmApplyStatus(xmApply.getId(),false,UID);
             assertEquals(2,xmApplyService.fetch(xmApply.getId()).getStatus());
         }
     }

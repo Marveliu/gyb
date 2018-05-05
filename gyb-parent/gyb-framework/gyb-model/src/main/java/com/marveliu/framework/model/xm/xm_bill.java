@@ -67,7 +67,7 @@ public class xm_bill extends BaseModel implements Serializable {
     @Column
     @Comment("付款时间")
     @ColDefine(type = ColType.INT)
-    private int at;
+    private Long at;
 
     //参照
     @One(field = "gypayid")
@@ -167,11 +167,11 @@ public class xm_bill extends BaseModel implements Serializable {
         this.payby = payby;
     }
 
-    public int getAt() {
+    public Long getAt() {
         return at;
     }
 
-    public void setAt(int at) {
+    public void setAt(Long at) {
         this.at = at;
     }
 

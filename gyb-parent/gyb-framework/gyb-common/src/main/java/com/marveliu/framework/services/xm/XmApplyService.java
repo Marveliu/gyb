@@ -10,7 +10,6 @@ import java.util.List;
 public interface XmApplyService extends BaseService<xm_apply> {
 
 
-
     public String generateId(String xmtaskid);
 
     /**
@@ -24,6 +23,7 @@ public interface XmApplyService extends BaseService<xm_apply> {
 
     /**
      * 处理任务申请信息
+     *
      * @param xmapplyid
      * @param flag
      * @param uid
@@ -40,7 +40,7 @@ public interface XmApplyService extends BaseService<xm_apply> {
 
 
     /**
-     * 获得雇员申请的项目信息
+     * 通过雇员编号获得雇员申请的项目信息
      * @param gyid
      * @return
      */
@@ -48,10 +48,19 @@ public interface XmApplyService extends BaseService<xm_apply> {
 
 
     /**
-     * 获得雇员申请的项目信息
+     * 通过任务书编号获得所有的申请信息
      * @param xmtaskid
      * @return
      */
     public List<xm_apply> getXmApplyListByXmtaskid(String xmtaskid);
+
+
+    /**
+     * 查询雇员是否已经申请了任务书
+     * @param xmtaskid
+     * @param gyid
+     * @return
+     */
+    public boolean isGyHasApply(String xmtaskid,String gyid);
 
 }

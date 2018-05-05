@@ -437,7 +437,7 @@ public class GyPersonController {
     //     try {
     //         if (ids != null && ids.length > 0) {
     //             gyPayService.delete(ids);
-    //             req.setAttribute("id", org.apache.shiro.util.StringUtils.toString(ids));
+    //             req.setAttribute("id", org.apache.shiro.utils.StringUtils.toString(ids));
     //         } else {
     //             gyPayService.delete(id);
     //             req.setAttribute("id", id);

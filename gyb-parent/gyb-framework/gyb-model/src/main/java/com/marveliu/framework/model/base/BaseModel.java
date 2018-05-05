@@ -7,6 +7,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
+import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.lang.Times;
 import org.nutz.lang.random.R;
@@ -18,6 +19,7 @@ import java.io.Serializable;
 public abstract class BaseModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private static final String DEFAULT_UID = "405a28c9389d4a8581a29c283dc9f5b9";
 
     @Column
     @Comment("操作人")
@@ -56,7 +58,7 @@ public abstract class BaseModel implements Serializable {
                 return Strings.sNull(request.getSession(true).getAttribute("platform_uid"));
             }
         }catch (Exception e){}
-        return "";
+        return Strings.sNull(DEFAULT_UID);
     }
 
     public String getOpBy() {
