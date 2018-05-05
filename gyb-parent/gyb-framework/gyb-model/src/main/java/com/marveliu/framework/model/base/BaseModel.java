@@ -58,7 +58,7 @@ public abstract class BaseModel implements Serializable {
                 return Strings.sNull(request.getSession(true).getAttribute("platform_uid"));
             }
         }catch (Exception e){}
-        return Strings.sNull(DEFAULT_UID);
+        return Strings.sNull(getOpBy(),DEFAULT_UID);
     }
 
     public String getOpBy() {

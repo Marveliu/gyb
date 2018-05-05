@@ -21,6 +21,7 @@ import com.marveliu.framework.model.xm.xm_inf;
 import com.marveliu.framework.model.xm.xm_task;
 import com.marveliu.framework.services.base.BaseServiceImpl;
 import com.marveliu.framework.services.xm.XmInfService;
+import com.marveliu.framework.util.statusUtil;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Times;
@@ -38,12 +39,6 @@ public class XmInfServiceImpl extends BaseServiceImpl<xm_inf> implements XmInfSe
     }
 
 
-    private static final int XM_INF_DOING = 0;
-    private static final int XM_INF_DONE = 1;
-    private static final int XM_INF_CHECKING = 2;
-    private static final int XM_INF_PAYING = 3;
-    private static final int XM_INF_PAYED = 4;
-    private static final int XM_INF_ERROR = 5;
 
 
     /**
@@ -63,7 +58,7 @@ public class XmInfServiceImpl extends BaseServiceImpl<xm_inf> implements XmInfSe
             xmInf.setAt(Times.getTS());
             xmInf.setOpAt(Times.getTS());
             xmInf.setOpBy(uid);
-            xmInf.setStatus(XM_INF_DOING);
+            xmInf.setStatus(statusUtil.XM_INF_DOING);
             return this.insert(xmInf);
         }catch (Exception e){
 

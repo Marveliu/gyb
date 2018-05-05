@@ -28,6 +28,7 @@ public interface XmFacadeService {
 
     /**
      * 获得申请的任务信息
+     *
      * @param xmapplyid
      * @return
      */
@@ -35,28 +36,34 @@ public interface XmFacadeService {
 
     /**
      * 检查雇员是否为项目的拥有者
+     *
      * @param xminfid
      * @param gyid
      * @return
      */
-    public boolean isGyForXm(String xminfid,String gyid);
+    public boolean isGyForXm(String xminfid, String gyid);
 
 
     /**
      * 受理任务申请，并建立
      * 1. 项目
      * 2. 账单
+     *
      * @param xmapplyid
      * @param uid
      * @return
      */
-    public xm_inf acceptXmapply(String xmapplyid,String uid);
+    public xm_inf acceptXmapply(String xmapplyid, String uid);
 
     /**
-     * 项目结算
+     * 进行项目结算
+     *
      * @param xminfid
+     * @param xmEvaluationGrade
+     * @param xmEvaluationNote
+     * @param xmBillNote
      * @param uid
      * @return
      */
-    public boolean initXmFinal(String xminfid,String uid);
+    public boolean initXmFinal(String xminfid, float xmEvaluationGrade, String xmEvaluationNote, String xmBillNote, String uid);
 }

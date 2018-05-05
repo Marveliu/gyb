@@ -46,4 +46,12 @@ public class statusUtil {
     public static final int XM_FEEDBACK_CHECKING = 2;
     public static final int XM_FEEDBACK_FINISH = 3;
     public static final int XM_FEEDBACK_FINAL = 4;
+
+
+    public static final int XM_INF_DOING = 0;
+    public static final int XM_INF_DONE = 1;
+    public static final int XM_INF_CHECKING = 2;
+    public static final int XM_INF_PAYING = 3;
+    public static final int XM_INF_PAYED = 4;
+    public static final int XM_INF_ERROR = 5;
 }
