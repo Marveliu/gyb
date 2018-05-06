@@ -4,6 +4,7 @@ package com.marveliu.framework.services.library;
 import com.marveliu.framework.model.library.lib_skill;
 import com.marveliu.framework.model.library.lib_task;
 import com.marveliu.framework.services.base.BaseService;
+import org.nutz.mvc.annotation.Param;
 
 import java.util.List;
 
@@ -19,5 +20,7 @@ public interface LibTaskService extends BaseService<lib_task> {
 
     void save(lib_task skill, String pid);
 
-    void deleteAndChild(lib_task skill);
+    void deleteAndChild(lib_task skill);;
+
+    boolean editSkillsForTask(String skillIds,String taskid);
 }

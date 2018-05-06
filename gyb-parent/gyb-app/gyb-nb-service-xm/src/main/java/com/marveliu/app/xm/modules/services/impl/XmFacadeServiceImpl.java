@@ -18,13 +18,10 @@ package com.marveliu.app.xm.modules.services.impl;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.marveliu.framework.model.gy.gy_pay;
-import com.marveliu.framework.model.xm.xm_evaluation;
+import com.marveliu.framework.model.xm.*;
 import com.marveliu.framework.services.gy.GyPayService;
 import com.marveliu.framework.util.statusUtil;
 import com.marveliu.framework.model.sys.Sys_log;
-import com.marveliu.framework.model.xm.xm_bill;
-import com.marveliu.framework.model.xm.xm_inf;
-import com.marveliu.framework.model.xm.xm_task;
 import com.marveliu.framework.services.sys.SysLogService;
 import com.marveliu.framework.services.xm.*;
 import org.nutz.dao.Chain;
@@ -109,12 +106,13 @@ public class XmFacadeServiceImpl implements XmFacadeService {
      */
     public xm_inf acceptXmapply(String xmapplyid, String uid) {
 
-        if(xmApplyService.fetch(xmapplyid).getStatus() == statusUtil.XM_APPLY_FINAL) return null;
+        xm_apply xmApply = xmApplyService.fetch(xmapplyid);
+
+        // 检查申请信息是否存在且不可重复受理
+        if(Lang.isEmpty(xmApply) || xmApply.getStatus() == statusUtil.XM_APPLY_FINAL) return null;
 
         // 更新任务书申请状态为完结，同时可以检查任务书是否存在
-        if (xmApplyService.update(
-                Chain.make("status", statusUtil.XM_APPLY_FINAL),
-                Cnd.where("id", "=", xmapplyid)) != 0) {
+        if (xmApplyService.setXmApplyStatus(xmapplyid,true,uid)){
             xm_inf xmInf = null;
             xm_bill xmBill = null;
             try {

@@ -21,19 +21,18 @@ import com.marveliu.app.web.commons.utils.ShiroUtil;
 import com.marveliu.app.web.commons.utils.StringUtil;
 import com.marveliu.framework.model.base.Result;
 import com.marveliu.framework.model.xm.xm_apply;
+import com.marveliu.framework.model.xm.xm_inf;
 import com.marveliu.framework.model.xm.xm_task;
 import com.marveliu.framework.page.datatable.DataTableColumn;
 import com.marveliu.framework.page.datatable.DataTableOrder;
-import com.marveliu.framework.services.xm.XmApplyService;
-import com.marveliu.framework.services.xm.XmBillService;
-import com.marveliu.framework.services.xm.XmInfService;
-import com.marveliu.framework.services.xm.XmTaskService;
+import com.marveliu.framework.services.xm.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
@@ -67,6 +66,10 @@ public class XmApplyController{
     @Reference
     private XmBillService xmBillService;
 
+    @Inject
+    @Reference
+    private XmFacadeService xmFacadeService;
+
 
 
     @Inject
@@ -88,6 +91,9 @@ public class XmApplyController{
 
         Cnd cnd = Cnd.NEW();
         String sysuserid=StringUtil.getPlatformUid();
+
+        // 权限管理
+
         //项目总监:项目总监的权限标识为sys.allpm,超管权限标识platform.xm.task.add.allpm
         if(!shiroUtil.hasAnyPermissions("platform.xm.task.add.allpm")){
             cnd.and("author","=", sysuserid);
@@ -103,6 +109,7 @@ public class XmApplyController{
     @At("/detail/?")
     @Ok("beetl:/platform/xm/apply/detail.html")
     @RequiresPermissions("platform.xm.apply")
+    @SLog(type="xm",tag = "查看任务申请", msg = "任务申请编号:${args[0]}")
     public void detail(String id, HttpServletRequest req) {
         if (!Strings.isBlank(id)) {
             xm_apply apply = xmApplyService.fetch(id);
@@ -113,25 +120,27 @@ public class XmApplyController{
     }
 
 
-    // @At({"/deal"})
-    // @Ok("json")
-    // @RequiresPermissions("platform.xm.apply.deal")
-    // @SLog(tag = "xm_apply", msg = "后台受理项目申请")
-    // public Object deal(
-    //         @Param("applyid") String id,
-    //         @Param("gyid") String gyid,
-    //         HttpServletRequest req) {
-    //     try {
-    //         if(xmApplyService.fetch(id).getStatus() != 0){
-    //             return Result.error("任务书已经认领");
-    //         }
-    //         xm_task task = xmApplyService.get(id);
-    //         xmService.regXminf(task.getId(),gyid);
-    //         return Result.success("system.success");
-    //     } catch (Exception e) {
-    //         return Result.error("system.error");
-    //     }
-    // }
+    @At({"/deal"})
+    @Ok("json")
+    @RequiresPermissions("platform.xm.apply.deal")
+    @SLog(type = "xm",tag = "审批任务申请", msg = "任务申请编号:${args[0]},处理结果:${flag}")
+    public Object deal(
+            @Param("xmapplyid") String xmapplyid,
+            @Param("flag") boolean flag,
+            HttpServletRequest req) {
+        try {
+            // 申请通过
+            if(flag){
+                xm_inf xmInf = xmFacadeService.acceptXmapply(xmapplyid,StringUtil.getPlatformUid());
+                if (Lang.isEmpty(xmInf))  return Result.error("任务书已经认领");
+            }
+            // 拒绝申请
+            xmApplyService.setXmApplyStatus(xmapplyid,false,StringUtil.getPlatformUid());
+            return Result.success("system.success");
+        } catch (Exception e) {
+            return Result.error("system.error");
+        }
+    }
 
 
 

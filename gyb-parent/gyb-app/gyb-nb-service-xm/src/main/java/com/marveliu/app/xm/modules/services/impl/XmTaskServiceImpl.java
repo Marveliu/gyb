@@ -15,16 +15,23 @@ package com.marveliu.app.xm.modules.services.impl;
  * limitations under the License.
  */
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
-import com.marveliu.framework.model.gy.gy_inf;
+import com.marveliu.framework.model.xm.xm_limit;
 import com.marveliu.framework.model.xm.xm_task;
 import com.marveliu.framework.services.base.BaseServiceImpl;
+import com.marveliu.framework.services.library.LibSkillService;
 import com.marveliu.framework.services.xm.XmTaskService;
+import com.marveliu.framework.util.statusUtil;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
+import org.nutz.dao.Sqls;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.mvc.Mvcs;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Marveliu
@@ -35,15 +42,19 @@ import org.nutz.mvc.Mvcs;
 public class XmTaskServiceImpl extends BaseServiceImpl<xm_task> implements XmTaskService {
 
 
-
+    @Inject
+    @Reference
+    private LibSkillService libSkillService;
 
     public XmTaskServiceImpl(Dao dao) {
         super(dao);
     }
 
 
+
     /**
      * 启用或者禁用任务书
+     *
      * @param xmtaskid
      * @param flag true 启用 false 禁用
      * @return
@@ -52,6 +63,11 @@ public class XmTaskServiceImpl extends BaseServiceImpl<xm_task> implements XmTas
     public Boolean setXmTaskStatus(String xmtaskid, Boolean flag) {
         Cnd cnd = Cnd.where("id","=",xmtaskid);
         Chain chain = Chain.make("disabled",!flag);
+        if(flag){
+            chain.add("status",statusUtil.XM_TASK_APPLYING);
+        }else {
+            chain.add("status",statusUtil.XM_TASK_PUBLISH);
+        }
         if(this.update(chain,cnd)!=0)
         {
             return true;
@@ -76,6 +92,52 @@ public class XmTaskServiceImpl extends BaseServiceImpl<xm_task> implements XmTas
             this.insertLinks(xmtask, "xmlimits");
             int result =  this.updateIgnoreNull(xmtask);
             return result == 1;
+        }catch (Exception e){
+
+        }
+        return false;
+    }
+
+    /**
+     * 获得xm_task所有信息
+     *
+     * @param xmtaskid
+     * @return
+     */
+    @Override
+    public xm_task getXmtaskDetail(String xmtaskid) {
+        try {
+            xm_task xmTask = this.fetchLinks(this.fetch(xmtaskid), null);
+            List<xm_limit> limits = xmTask.getXmlimits();
+            List<xm_limit> xmlimits = new ArrayList<>();
+            for (xm_limit limit : limits) {
+                limit = libSkillService.fetchLinks(limit, "skill");
+                xmlimits.add(limit);
+            }
+            xmTask.setXmlimits(xmlimits);
+            return xmTask;
+        }catch (Exception e){
+
+        }
+        return null;
+    }
+
+
+    /**
+     * 删除任务书
+     *
+     * @param xmtaskid
+     * @return
+     */
+    @Override
+    public boolean deleteXmtask(String xmtaskid) {
+        try {
+            this.delete(xmtaskid);
+            this.dao().execute(
+                    Sqls.create("delete from xm_limit where xmtaskid = @xmtaskid")
+                            .setParam("xmtaskid",xmtaskid)
+            );
+            return true;
         }catch (Exception e){
 
         }

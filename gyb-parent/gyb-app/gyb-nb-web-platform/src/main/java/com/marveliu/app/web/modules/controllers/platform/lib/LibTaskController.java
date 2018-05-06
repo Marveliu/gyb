@@ -27,7 +27,10 @@ import com.marveliu.framework.services.library.LibSkillService;
 import com.marveliu.framework.services.library.LibTaskService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Dao;
+import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
@@ -63,6 +66,7 @@ public class LibTaskController {
     @Inject
     private ShiroUtil shiroUtil;
 
+
     //todo:给了管理员什么的权限？
     @At("")
     @Ok("beetl:/platform/lib/task/index.html")
@@ -91,7 +95,7 @@ public class LibTaskController {
     @At
     @Ok("json")
     @RequiresPermissions("lib.task.add")
-    @SLog(tag = "新建技能", msg = "技能 名称:${args[0].name}")
+    @SLog(type="lib",tag = "新建技能", msg = "技能名称:${args[0].name}")
     public Object addDo(@Param("..") lib_task task, @Param("parentId") String parentId, HttpServletRequest req) {
         try {
             libTaskService.save(task, parentId);
@@ -129,7 +133,7 @@ public class LibTaskController {
     @At
     @Ok("json")
     @RequiresPermissions("lib.task.edit")
-    @SLog(tag = "编辑技能", msg = "技能名称:${args[0].name}")
+    @SLog(type="lib",tag = "编辑技能", msg = "技能名称:${args[0].name}")
     public Object editDo(@Param("..") lib_task task, @Param("parentId") String parentId, HttpServletRequest req) {
         try {
             task.setOpBy(StringUtil.getPlatformUid());
@@ -144,7 +148,7 @@ public class LibTaskController {
     @At("/delete/?")
     @Ok("json")
     @RequiresPermissions("lib.task.delete")
-    @SLog(tag = "删除技能", msg = "技能名称:${args[1].getAttribute('name')}")
+    @SLog(type="lib", tag = "删除技能", msg = "技能名称:${args[1].getAttribute('name')}")
     public Object delete(String id, HttpServletRequest req) {
         try {
             lib_task task = libTaskService.fetch(id);
@@ -244,22 +248,18 @@ public class LibTaskController {
     @At
     @Ok("json")
     @RequiresPermissions("lib.task")
-    @SLog(tag = "修改角色菜单", msg = "角色名称:${args[2].getAttribute('name')}")
+    @SLog(type = "lib",tag = "修改任务所需技能类型", msg = "角色名称:${args[1]}")
     public Object editSkillDo(@Param("skillIds") String skillIds, @Param("taskid") String taskid, HttpServletRequest req) {
         try {
-            String[] ids = StringUtils.split(skillIds, ",");
-            libTaskService.dao().clear("lib_task_skill", Cnd.where("taskid", "=", taskid));
-            for (String s : ids) {
-                if (!Strings.isEmpty(s)) {
-                    libTaskService.insert("lib_task_skill", org.nutz.dao.Chain.make("taskId", taskid).add("skillId", s));
-                }
+            if(libTaskService.editSkillsForTask(skillIds,taskid)){
+                lib_task task = libTaskService.fetch(taskid);
+                req.setAttribute("name", task.getName());
+                return Result.success("system.success");
             }
-            lib_task task = libTaskService.fetch(taskid);
-            req.setAttribute("name", task.getName());
-            return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");
         }
+        return Result.error("system.error");
     }
 
 }

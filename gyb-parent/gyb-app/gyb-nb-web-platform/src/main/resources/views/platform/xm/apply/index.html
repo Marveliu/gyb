@@ -5,7 +5,7 @@ layout("/layouts/platform.html"){
 
 <aside class="sidebar-250 canvas-right bg-default ">
     <header class="header navbar clearfix bb bg-default pl0 pr0">
-        <p class="navbar-text"><i class="fa fa-sitemap mr5"></i> 任务申请表</p>
+        <p class="navbar-text"><i class="fa fa-sitemap mr5"></i> 任务书列表</p>
     </header>
 
     <div class="content-wrap no-p">
@@ -37,6 +37,7 @@ layout("/layouts/platform.html"){
 
                         <!--项目列表-->
                         <ul class="nav nav-stacked" id="xmtasklist">
+
                         </ul>
 
                     </div>
@@ -48,12 +49,7 @@ layout("/layouts/platform.html"){
 
 <section class="content-wrap bg-white">
     <header class="header navbar bg-white shadow">
-        <div class="btn-group tool-button">
-            <a id="add" class="btn btn-primary navbar-btn" href="${base}/platform/xm/apply/add" data-pjax><i class="ti-plus"></i> ${msg['globals.button.add']}</a>
-            <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> ${msg['globals.button.delete.more']}</button>
-        </div>
-
-        <div class="btn-group pull-right">
+        <div class="btn-group">
             <button id="currentxmtaskname" class="btn btn-primary navbar-btn" ></i> 全部申请</button>
         </div>
     </header>
@@ -67,8 +63,8 @@ layout("/layouts/platform.html"){
                             <th>${msg['xm.apply.column.gyid']}</th>
                             <th>${msg['xm.apply.column.xmtaskid']}</th>
                             <th>${msg['xm.apply.column.at']}</th>
-                            <th>任务书名称</th>
-                            <th>雇员名称</th>
+                            <th>${msg['xm.task.column.taskname']}</th>
+                            <th>${msg['gy.inf.column.realname']}</th>
                             <th>${msg['xm.apply.column.status']}</th>
                             <th>${msg['globals.table.column.operation']}</th>
                     </tr>
@@ -109,12 +105,12 @@ layout("/layouts/platform.html"){
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">接受该请求</h4>
+                <h4 class="modal-title">受理任务申请须知</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12">
-                        一旦接受该请求，同任务书的其他请求将会被拒绝！谨慎操作！
+                        1. 一旦接受该申请，同任务书的所有申请将会被标记完结！谨慎操作！
                     </div>
                 </div>
             </div>
@@ -173,8 +169,8 @@ layout("/layouts/platform.html"){
                                 ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
                                 '<li><a href="${base}/platform/xm/apply/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
                                 '<li class="divider"></li>' +
-                                '<li><a href="javascript:;" onclick="del(\'' + row.id + '\')">${msg["globals.button.delete"]}</a></li>' +
-                                '<li><a href="javascript:;" onclick="dealwith(\'' + row.id + '\',\'' + row.gyid+ '\')">接受申请</a></li>' +
+                                '<li><a href="javascript:;" onclick="deal(\'' + row.id + '\',false)">${msg["globals.button.pass"]}</a></li>' +
+                                '<li><a href="javascript:;" onclick="deal(\'' + row.id + '\',true)">${msg["globals.button.nopass"]}</a></li>' +
                                 '</ul></div>';
                     },
                     "targets": 6
@@ -197,34 +193,18 @@ layout("/layouts/platform.html"){
             datatable.ajax.reload();
         });
     }
-    function del(id) {
-        var dialog = $("#dialogDelete");
-        dialog.modal("show");
-        dialog.find("#okDel").unbind("click");
-        dialog.find("#okDel").bind("click", function (event) {
-            var btn = $(this);
-            btn.button("loading");
-            $.post("${base}/platform/xm/apply/delete/" + id, {}, function (data) {
-                if (data.code == 0) {
-                    datatable.ajax.reload(null,false);
-                } else {
-                    Toast.error(data.msg);
-                }
-                btn.button("reset");
-                dialog.modal("hide");
-            }, "json");
-        });
-    }
-    function dealwith(id,gyid) {
+
+    function deal(xmapplyid,flag) {
         var dialog = $("#dialogDeal");
         dialog.modal("show");
         dialog.find("#okDeal").unbind("click");
         dialog.find("#okDeal").bind("click", function (event) {
             var btn = $(this);
             btn.button("loading");
-            $.post("${base}/platform/xm/apply/deal?applyid=" + id+"&gyid="+gyid, {}, function (data) {
+            $.post("${base}/platform/xm/apply/deal?xmapplyid=" + xmapplyid+"&flag="+flag, {}, function (data) {
                 if (data.code == 0) {
                     datatable.ajax.reload(null,false);
+                    Toast.success(data.msg);
                 } else {
                     Toast.error(data.msg);
                 }
@@ -232,33 +212,6 @@ layout("/layouts/platform.html"){
                 dialog.modal("hide");
             }, "json");
         });
-    }
-    function delCheck() {
-        var chks = datatable.rows('.selected').data();
-        if (chks.length > 0) {
-            var ids = [];
-            $.each(datatable.rows('.selected').data(), function (i, n) {
-                ids.push(n.id);
-            });
-            var dialog = $("#dialogDelete");
-            dialog.modal("show");
-            dialog.find("#okDel").unbind("click");
-            dialog.find("#okDel").bind("click", function (event) {
-                var btn = $(this);
-                btn.button("loading");
-                $.post("${base}/platform/xm/apply/delete", {ids: ids.toString()}, function (data) {
-                    if (data.code == 0) {
-                        datatable.ajax.reload(null,false);
-                    } else {
-                        Toast.error(data.msg);
-                    }
-                    btn.button("reset");
-                    dialog.modal("hide");
-                }, "json");
-            });
-        } else {
-            Toast.warning("${msg['globals.button.delete.select']}");
-        }
     }
 
     function initxmtask() {

@@ -15,5 +15,5 @@ public interface SysUserinfService extends BaseService<Sys_userinf> {
      * @param uid
      * @return
      */
-    public String getSysUserinfId(String uid);
+    public String getSysuserinfid(String uid);
 }

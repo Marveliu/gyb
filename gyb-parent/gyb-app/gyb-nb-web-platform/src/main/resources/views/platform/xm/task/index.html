@@ -245,29 +245,14 @@ layout("/layouts/platform.html"){
     }
     function delCheck() {
         var chks = datatable.rows('.selected').data();
-        if (chks.length > 0) {
+        if (chks.length != 1) {
             var ids = [];
             $.each(datatable.rows('.selected').data(), function (i, n) {
                 ids.push(n.id);
             });
-            var dialog = $("#dialogDelete");
-            dialog.modal("show");
-            dialog.find("#ok").unbind("click");
-            dialog.find("#ok").bind("click", function (event) {
-                var btn = $(this);
-                btn.button("loading");
-                $.post("${base}/platform/xm/task/delete", {ids: ids.toString()}, function (data) {
-                    if (data.code == 0) {
-                        datatable.ajax.reload(null,false);
-                    } else {
-                        Toast.error(data.msg);
-                    }
-                    btn.button("reset");
-                    dialog.modal("hide");
-                }, "json");
-            });
+            del(ids[0]);
         } else {
-            Toast.warning("请先选择要删除的任务书！");
+            Toast.warning("有且只能选择一个要删除的任务书！");
         }
     }
 

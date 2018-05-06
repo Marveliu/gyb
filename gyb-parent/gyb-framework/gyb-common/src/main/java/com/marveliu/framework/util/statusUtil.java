@@ -40,7 +40,6 @@ public class statusUtil {
     public static final int XM_TASK_DOING = 3;
     public static final int XM_TASK_FINISH = 4;
 
-
     public static final int XM_FEEDBACK_INIT = 0;
     public static final int XM_FEEDBACK_COMMIT = 1;
     public static final int XM_FEEDBACK_CHECKING = 2;

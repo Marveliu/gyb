@@ -125,6 +125,11 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
      * @param xmApply
      */
     public Boolean sync(xm_apply xmApply) {
+        if(!Lang.isEmpty(this.fetch(
+                Cnd.where("gyid","=",xmApply.getGyid())
+                        .and("xmtaskid","=",xmApply.getXmtaskid())))){
+            return false;
+        }
         try {
              return Lang.isEmpty(this.fastInsert(xmApply));
         } catch (Throwable e) {
@@ -160,7 +165,8 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
      */
     @Override
     public Boolean addXmApply(String xmtaskid, String gyid,Boolean async) {
-        if(isGyHasApply(xmtaskid,gyid)) return false;
+
+        if(isApplyAllow(xmtaskid,gyid)) return false;
 
         xm_apply  xmApply = new xm_apply();
         xmApply.setGyid(gyid);
@@ -198,11 +204,12 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
      */
     public Boolean setXmApplyStatus(String xmapplyid, Boolean flag,String uid) {
         Cnd cnd = Cnd.where("id","=",xmapplyid);
-        long opAt = (int) (System.currentTimeMillis() / 1000);
+        long opAt = Times.getTS();
         Chain chain = Chain.make("opAt",opAt).add("opBy",uid);
+        // 通过
         if(flag){
             chain.add("status",statusUtil.XM_APPLY_PASS);
-            // 之前所有的申请拒绝
+            // 之前所有的申请全部标记结束
             this.dao().execute(Sqls.create("update xm_apply set status = @status where id = @xmapplyid")
                     .setParam("status",statusUtil.XM_APPLY_FAIL)
                     .setParam("xmapplyid",xmapplyid)
@@ -260,11 +267,14 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
      * @return
      */
     @Override
-    public boolean isGyHasApply(String xmtaskid, String gyid) {
+    public boolean isApplyAllow(String xmtaskid, String gyid) {
+        xm_task xmTask = this.dao().fetch(xm_task.class,Cnd.where("id","=",xmtaskid));
         xm_apply xmApply = this.fetch(Cnd.where("xmtaskid","=",xmtaskid).and("gyid","=",gyid));
-        if (Lang.isEmpty(xmApply)){
-            return false;
+        if(!Lang.isEmpty(xmTask)&& xmTask.getStatus() == statusUtil.XM_TASK_APPLYING){
+            if (Lang.isEmpty(xmApply)){
+                return true;
+            }
         }
-        return true;
+        return false;
     }
 }

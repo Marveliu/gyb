@@ -29,6 +29,7 @@ import com.marveliu.framework.services.library.LibSkillService;
 import com.marveliu.framework.services.library.LibTaskService;
 import com.marveliu.framework.services.sys.SysUserinfService;
 import com.marveliu.framework.services.xm.XmTaskService;
+import com.marveliu.framework.util.statusUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
@@ -37,6 +38,7 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
@@ -78,7 +80,7 @@ public class XmTaskController {
 
     @Inject
     @Reference
-    private SysUserinfService  sysUserinfService;
+    private SysUserinfService sysUserinfService;
     @Inject
     @Reference
     private LibTaskService libTaskService;
@@ -91,7 +93,8 @@ public class XmTaskController {
     @At("")
     @Ok("beetl:/platform/xm/task/index.html")
     @RequiresPermissions("platform.xm.task")
-    public void index() { }
+    public void index() {
+    }
 
     @At
     @Ok("json")
@@ -140,7 +143,14 @@ public class XmTaskController {
     @At
     @Ok("json:full")
     @RequiresPermissions("platform.xm.task")
-    public Object data(@Param("libtaskId") String libtaskid, @Param("title") String title, @Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
+    public Object data(
+            @Param("libtaskId") String libtaskid,
+            @Param("title") String title,
+            @Param("length") int length,
+            @Param("start") int start,
+            @Param("draw") int draw,
+            @Param("::order") List<DataTableOrder> order,
+            @Param("::columns") List<DataTableColumn> columns) {
 
         Cnd cnd = Cnd.NEW();
         String sysuserid = StringUtil.getPlatformUid();
@@ -175,17 +185,16 @@ public class XmTaskController {
     @Ok("beetl:/platform/xm/task/add.html")
     @RequiresPermissions("platform.xm.task.add")
     public void add(@Param("libtaskId") String libtaskid, HttpServletRequest req) {
-         String sysuserinfid = sysUserinfService.getSysUserinfId(StringUtil.getPlatformUid());
-        req.setAttribute("authorid",sysuserinfid);
+        String sysuserinfid = sysUserinfService.getSysuserinfid(StringUtil.getPlatformUid());
+        req.setAttribute("authorid", sysuserinfid);
         req.setAttribute("libtask", libtaskid != null && !"0".equals(libtaskid) ? libTaskService.fetch(libtaskid) : null);
     }
-
 
 
     @At
     @Ok("json")
     @RequiresPermissions("platform.xm.task.add")
-    @SLog(type = "xm",tag = "添加任务书", msg = "任务书标题:${args[0].taskname}")
+    @SLog(type = "xm", tag = "添加任务书", msg = "任务书标题:${args[0].taskname}")
     @AdaptBy(type = WhaleAdaptor.class)
     public Object addDo(
             @Param("::") xm_task xmtask,
@@ -203,7 +212,6 @@ public class XmTaskController {
             int firstcommitAt = (int) (sdf.parse(firstcommit).getTime() / 1000);
             int endtimeAt = (int) (sdf.parse(endtime).getTime() / 1000);
             int applyendtimeAt = (int) (sdf.parse(applyendtime).getTime() / 1000);
-
             xmtask.setPublishAt(publishAt);
             xmtask.setFirstcommit(firstcommitAt);
             xmtask.setEndtime(endtimeAt);
@@ -213,6 +221,7 @@ public class XmTaskController {
             xmtask.setReadnum(XM_TASK_INIT);
             // 默认不发布
             xmtask.setDisabled(true);
+            xmtask.setStatus(statusUtil.XM_TASK_INIT);
             //插入任务书，和任务书的技能要求
             xmTaskService.insertWith(xmtask, "xmlimits");
             return Result.success("system.success");
@@ -224,23 +233,22 @@ public class XmTaskController {
     @At("/edit/?")
     @Ok("beetl:/platform/xm/task/edit.html")
     @RequiresPermissions("platform.xm.task.edit")
-    public Object edit(String id, HttpServletRequest req) {
-        xm_task task = xmTaskService.fetchLinks(xmTaskService.fetch(id), null);
-        req.setAttribute("libtask", task.getLibtask());
-        List<xm_limit> limits = task.getXmlimits();
-        List<xm_limit> xmlimits = new ArrayList<>();
-        for (xm_limit limit : limits) {
-            limit = libSkillService.fetchLinks(limit, "skill");
-            xmlimits.add(limit);
+    public Object edit(String xmtaskid, HttpServletRequest req) {
+        if (isAllowForXmtask(xmtaskid)) {
+            xm_task xmTask = xmTaskService.getXmtaskDetail(xmtaskid);
+            if (!Lang.isEmpty(xmTask)) {
+                req.setAttribute("libtask", xmTask.getLibtask());
+                req.setAttribute("xmlimits", xmTask.getXmlimits());
+                return xmTask;
+            }
         }
-        req.setAttribute("xmlimits", xmlimits);
-        return task;
+        return null;
     }
 
     @At
     @Ok("json")
     @RequiresPermissions("platform.xm.task.edit")
-    @SLog(type="xm",tag = "修改任务书", msg = "任务书标题:${args[0].taskname}")
+    @SLog(type = "xm", tag = "修改任务书", msg = "任务书标题:${args[0].taskname}")
     @AdaptBy(type = WhaleAdaptor.class)
     public Object editDo(
             @Param("::") xm_task xmtask,
@@ -249,6 +257,7 @@ public class XmTaskController {
             @Param("applyendtimeat") String applyendtime,
             @Param("at") String at,
             HttpServletRequest req) {
+        if (!isAllowForXmtask(xmtask.getId())) return Result.error("system.nopermission");
         try {
             //设置时间
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -262,7 +271,7 @@ public class XmTaskController {
             xmtask.setApplyendtime(applyendtimeAt);
             xmtask.setStatus(XM_TASK_INIT);
             xmtask.setDisabled(true);
-            if(xmTaskService.updateXmtask(xmtask)){
+            if (xmTaskService.updateXmtask(xmtask)) {
                 return Result.success("system.success");
             }
         } catch (Exception e) {
@@ -281,7 +290,7 @@ public class XmTaskController {
             HttpServletRequest req) {
         try {
             if (xmTaskService.setXmTaskStatus(xmtaskid, flag)) {
-                return Result.success("任务书编号" + xmtaskid + "启用状态:" +flag);
+                return Result.success("任务书编号" + xmtaskid + "启用状态:" + flag);
             }
         } catch (Exception e) {
             return Result.error("system.error");
@@ -290,24 +299,24 @@ public class XmTaskController {
     }
 
 
-    @At({"/delete/?", "/delete"})
+    // 只允许一次删除一个任务书
+    @At({"/delete/?"})
     @Ok("json")
     @RequiresPermissions("platform.xm.task.delete")
-    @SLog(type = "xm",tag = "删除任务书", msg = "ID:${args[0]}")
-    public Object delete(String oneId, @Param("ids") String[] ids, HttpServletRequest req) {
+    @SLog(type = "xm", tag = "删除任务书", msg = "ID:${args[0]}")
+    public Object delete(String oneId, HttpServletRequest req) {
         try {
-            if (ids != null && ids.length > 0) {
-                //todo:采取事务，同时也要删除对应的技能限制信息
-                xmTaskService.delete(ids);
-                req.setAttribute("id",StringUtils.toString(ids));
-            } else {
-                xmTaskService.delete(oneId);
+            xm_task xmTask = xmTaskService.fetch(oneId);
+            if(Lang.isEmpty(xmTask)) return Result.success("没有该任务书信息");
+            if(xmTask.getStatus() >= statusUtil.XM_TASK_APPLYING) return Result.success("任务书已经在申请了，无法删除");
+            if(xmTaskService.deleteXmtask(oneId)){
                 req.setAttribute("id", oneId);
+                return Result.success("system.success");
             }
-            return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");
         }
+        return Result.error("system.error");
     }
 
     /**
@@ -342,7 +351,7 @@ public class XmTaskController {
             // }
 
             xm_task xm_task = xmTaskService.fetch(cnd);
-            xm_task = xmTaskService.fetchLinks(xm_task,null);
+            xm_task = xmTaskService.fetchLinks(xm_task, null);
 
             req.setAttribute("obj", xm_task);
         } else {
@@ -352,10 +361,11 @@ public class XmTaskController {
 
 
     /**
-     * @function: 查询当前雇员经理负责的所有项目
-     * @param:
-     * @return:
-     * @note:
+     * 查询任务书
+     *
+     * @param xmtaskname
+     * @param req
+     * @return
      */
     @At("/xmtasklist")
     @Ok("json")
@@ -365,16 +375,15 @@ public class XmTaskController {
             HttpServletRequest req
     ) {
         String sysuserid = StringUtil.getPlatformUid();
-
-        Cnd cnd = Cnd.NEW();
-
-        if (xmtaskname == null || xmtaskname.isEmpty()) {
-            cnd.and("author", "=", sysuserid);
-            cnd.and("disabled", "=", "false");
+        String sysuserinfid = sysUserinfService.getSysuserinfid(sysuserid);
+        Cnd cnd = Cnd.where("disabled", "=", "false");
+        if (Lang.isEmpty(xmtaskname)) {
+            if(!isSuper()){
+                cnd.and("author", "=", sysuserinfid);
+            }
         } else {
             cnd.and("taskname", "like", "%" + xmtaskname + "%");
         }
-
         List<xm_task> tasks = xmTaskService.query(cnd);
         Map<String, String> obj = new HashMap<>();
         for (xm_task task : tasks) {
@@ -383,4 +392,31 @@ public class XmTaskController {
         }
         return obj;
     }
+
+
+    // 能否对某一任务书进行修改等操作
+    private boolean isAllowForXmtask(String xmtaskid) {
+        if(isSuper()) return true;
+        xm_task xmTask = xmTaskService.fetch(xmtaskid);
+        if (!Lang.isEmpty(xmTask)) {
+            return xmTask.getAuthor().equals(sysUserinfService.getSysuserinfid(StringUtil.getPlatformUid()));
+        }
+        return false;
+    }
+
+    // 检查是否有超级权限
+    private boolean isSuper() {
+        // 权限验证
+        String[] permissions = {
+                "platform.xm.task.add.manager",
+                "platform.xm.task.add.allpm"
+        };
+        // 权限验证
+        if (!shiroUtil.hasAnyPermissions(permissions)) {
+            return true;
+        }
+        return false;
+    }
+
+
 }

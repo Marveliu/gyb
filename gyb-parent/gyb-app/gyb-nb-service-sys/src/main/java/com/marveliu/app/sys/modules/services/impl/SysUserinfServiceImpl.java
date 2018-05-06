@@ -25,7 +25,7 @@ public class SysUserinfServiceImpl extends BaseServiceImpl<Sys_userinf> implemen
      * @return
      */
     @Override
-    public String getSysUserinfId(String uid) {
+    public String getSysuserinfid(String uid) {
         return Strings.sNull(this.fetch(Cnd.where("userid", "=", uid)).getId());
     }
 }

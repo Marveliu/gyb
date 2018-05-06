@@ -1,10 +1,12 @@
 package com.marveliu.app.library.modules.services.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.marveliu.framework.model.base.Result;
 import com.marveliu.framework.model.library.lib_skill;
 import com.marveliu.framework.model.library.lib_task;
 import com.marveliu.framework.services.base.BaseServiceImpl;
 import com.marveliu.framework.services.library.LibTaskService;
+import org.apache.commons.lang3.StringUtils;
 import org.nutz.aop.interceptor.ioc.TransAop;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
@@ -101,5 +103,28 @@ public class LibTaskServiceImpl extends BaseServiceImpl<lib_task> implements Lib
         sql.setCallback(Sqls.callback.entities());
         dao().execute(sql);
         return sql.getList(lib_skill.class);
+    }
+
+    /**
+     * 修改任务所需要的技能信息
+     * @param skillIds
+     * @param taskid
+     * @return
+     */
+    @Override
+    public boolean editSkillsForTask(String skillIds, String taskid) {
+        try {
+            String[] ids = StringUtils.split(skillIds, ",");
+            this.clear("lib_task_skill", Cnd.where("taskid", "=", taskid));
+            for (String s : ids) {
+                if (!Strings.isEmpty(s)) {
+                    this.insert("lib_task_skill",Chain.make("taskId", taskid).add("skillId", s));
+                }
+            }
+            return true;
+        } catch (Exception e) {
+        }
+
+        return false;
     }
 }

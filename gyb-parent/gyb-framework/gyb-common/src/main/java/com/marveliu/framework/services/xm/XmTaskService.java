@@ -10,6 +10,7 @@ import org.nutz.dao.Cnd;
 public interface XmTaskService extends BaseService<xm_task> {
 
 
+
     /**
      * 启用或者禁用任务书
      * @param xmtaskid
@@ -25,5 +26,21 @@ public interface XmTaskService extends BaseService<xm_task> {
      * @return
      */
     public Boolean updateXmtask(xm_task xmtask);
+
+
+    /**
+     * 获得xm_task所有信息
+     * @param xmtaskid
+     * @return
+     */
+    public xm_task getXmtaskDetail(String xmtaskid);
+
+
+    /**
+     * 删除任务书
+     * @param xmtaskid
+     * @return
+     */
+    public boolean deleteXmtask(String xmtaskid);
 
 }

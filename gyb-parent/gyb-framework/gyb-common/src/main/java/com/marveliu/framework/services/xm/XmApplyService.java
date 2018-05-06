@@ -61,6 +61,6 @@ public interface XmApplyService extends BaseService<xm_apply> {
      * @param gyid
      * @return
      */
-    public boolean isGyHasApply(String xmtaskid,String gyid);
+    public boolean isApplyAllow(String xmtaskid,String gyid);
 
 }
