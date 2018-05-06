@@ -28,7 +28,6 @@ public class xm_bill extends BaseModel implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 32)
     private String xminfid;
 
-
     @Column
     @Comment("雇员要求付款方式")
     @ColDefine(type = ColType.VARCHAR, width = 32)

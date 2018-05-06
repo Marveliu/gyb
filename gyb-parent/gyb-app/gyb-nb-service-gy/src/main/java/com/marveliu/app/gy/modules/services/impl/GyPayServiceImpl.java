@@ -56,7 +56,7 @@ public class GyPayServiceImpl extends BaseServiceImpl<gy_pay> implements GyPaySe
      */
     @Override
     public String getGyidByPayid(String payid) {
-        return this.fetch(Cnd.where("payid","=",payid)).getGyid();
+        return this.fetch(Cnd.where("id","=",payid)).getGyid();
     }
 
 

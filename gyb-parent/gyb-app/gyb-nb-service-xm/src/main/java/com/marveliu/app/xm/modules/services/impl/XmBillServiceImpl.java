@@ -16,13 +16,21 @@ package com.marveliu.app.xm.modules.services.impl;
  */
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.marveliu.framework.services.gy.GyPayService;
 import com.marveliu.framework.util.statusUtil;
 import com.marveliu.framework.model.xm.xm_bill;
 import com.marveliu.framework.services.base.BaseServiceImpl;
 import com.marveliu.framework.services.xm.XmBillService;
+import jdk.nashorn.internal.ir.annotations.Reference;
+import org.nutz.dao.Chain;
+import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Lang;
 import org.nutz.lang.Times;
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
 
 /**
  * @author Marveliu
@@ -33,6 +41,11 @@ import org.nutz.lang.Times;
 @Service(interfaceClass = XmBillService.class)
 public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBillService {
 
+    private final static Log log = Logs.getLog(XmBillService.class);
+
+    @Inject
+    @Reference
+    private GyPayService gyPayService;
 
     public XmBillServiceImpl(Dao dao) {
         super(dao);
@@ -40,7 +53,6 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
 
     /**
      * 建立账单
-     * after accept xmInf
      *
      * @param xminfid
      * @param award
@@ -49,6 +61,10 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
      */
     @Override
     public xm_bill initXmbill(String xminfid,float award, String uid) {
+        if(!Lang.isEmpty(this.fetch(Cnd.where("xminfid","=",xminfid)))){
+            log.error("重复创建项目账单："+xminfid);
+            return null;
+        }
         try {
             // 账单信息
             xm_bill bill = new xm_bill();
@@ -56,11 +72,50 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
             bill.setStatus(statusUtil.XM_BILL_INIT);
             bill.setOpBy(uid);
             bill.setAt(Times.getTS());
-            bill.setPaysum(award);
             return this.insert(bill);
         }catch (Exception e){
 
         }
         return null;
     }
+
+    /**
+     * 更新项目支付方式
+     *
+     * @param xmbillid
+     * @param payid
+     * @param gyid
+     * @return
+     */
+    @Override
+    public boolean checkXmbillByGy(String xmbillid, String payid, String gyid) {
+        xm_bill xmBill = this.fetch(xmbillid);
+        // 检查 账单存在，账单状态，以及雇员收款方式核验
+        if(!Lang.isEmpty(xmBill) && xmBill.getStatus() == statusUtil.XM_BILL_CHECKING && gyid.equals(gyPayService.getGyidByPayid(payid))){
+            Cnd cnd = Cnd.where("id","=",xmbillid);
+            Chain chain = Chain.make("gypayid",payid).add("status",statusUtil.XM_BILL_PAYING).add("opAt",Times.getTS());
+            return this.update(chain,cnd)!=0;
+        }
+        return false;
+    }
+
+    /**
+     * 财务提交最终项目账单,支付完成
+     *
+     * @param xmbillid
+     * @param sysuserinfid
+     * @return
+     */
+    @Override
+    public boolean commitXmbill(String xmbillid, String sysuserinfid) {
+        xm_bill xmBill = this.fetch(xmbillid);
+        if(!Lang.isEmpty(xmBill) && xmBill.getStatus() == statusUtil.XM_BILL_PAYING){
+            Cnd cnd = Cnd.where("id","=",xmbillid);
+            Chain chain = Chain.make("realgypayid",xmBill.getGypayid()).add("status",statusUtil.XM_BILL_PAYED).add("payby",sysuserinfid).add("opAt",Times.getTS());
+            return this.update(chain,cnd)!=0;
+        }
+        return false;
+    }
+
+
 }

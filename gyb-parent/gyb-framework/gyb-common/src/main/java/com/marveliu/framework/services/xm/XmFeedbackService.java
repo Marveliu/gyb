@@ -37,7 +37,7 @@ public interface XmFeedbackService extends BaseService<xm_feedback> {
      * @param xmfeedbackid
      * @return
      */
-    public boolean commitXmfeedback(String xmfeedbackid);
+    public boolean commitXmfeedback(long xmfeedbackid);
 
 
     /**
@@ -56,7 +56,15 @@ public interface XmFeedbackService extends BaseService<xm_feedback> {
      * @param flag
      * @return
      */
-    public boolean confirmXmfeedback(String xmfeedbackid,Boolean flag);
+    public boolean confirmXmfeedback(long xmfeedbackid, Boolean flag);
+
+
+    /**
+     * 获得项目最新一次的反馈
+     * @param xminfid
+     * @return
+     */
+    public xm_feedback getLatestXmfeedback(String xminfid);
 
 
 

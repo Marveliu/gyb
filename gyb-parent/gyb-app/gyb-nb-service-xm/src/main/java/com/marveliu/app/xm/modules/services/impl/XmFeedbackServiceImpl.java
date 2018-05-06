@@ -17,6 +17,7 @@ package com.marveliu.app.xm.modules.services.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.marveliu.framework.model.xm.xm_feedback;
+import com.marveliu.framework.model.xm.xm_inf;
 import com.marveliu.framework.services.base.BaseServiceImpl;
 import com.marveliu.framework.services.xm.XmFeedbackService;
 import com.marveliu.framework.util.statusUtil;
@@ -56,8 +57,8 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
     @Override
     public int getXmfeedbackCount(String xminfid) {
         Cnd cnd = Cnd.NEW();
-        cnd.and("xminfid","=",xminfid);
-        int count = this.dao().count(xm_feedback.class,cnd);
+        cnd.and("xminfid", "=", xminfid);
+        int count = this.dao().count(xm_feedback.class, cnd);
         return count;
     }
 
@@ -72,11 +73,11 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
 
         xm_feedback xmFeedback = this.getLatestXmfeedback(xminfid);
         // 没有反馈过
-        if(Lang.isEmpty(xmFeedback)){
+        if (Lang.isEmpty(xmFeedback)) {
             return true;
-        }else {
+        } else {
             // 上次的反馈完成
-            if(xmFeedback.getStatus() == statusUtil.XM_FEEDBACK_FINISH){
+            if (xmFeedback.getStatus() == statusUtil.XM_FEEDBACK_FINISH) {
                 return true;
             }
         }
@@ -91,12 +92,20 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
      */
     @Override
     public xm_feedback addXmfeedback(xm_feedback xmFeedback) {
+
+        if (!isXmeedbackAllowed(xmFeedback.getXminfid())) return null;
         try {
+            xm_feedback parent = getLatestXmfeedback(xmFeedback.getXminfid());
+
+            xmFeedback.setParentid(0);
+            if(!Lang.isEmpty(parent)){
+                xmFeedback.setParentid(parent.getId());
+            }
             xmFeedback.setStatus(statusUtil.XM_FEEDBACK_INIT);
             xmFeedback.setAt(Times.getTS());
             return this.insert(xmFeedback);
-        }catch (Exception e){
-            log.error("雇员添加项目反馈失败",e);
+        } catch (Exception e) {
+            log.error("雇员添加项目反馈失败", e);
         }
         return null;
     }
@@ -108,11 +117,11 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
      * @return
      */
     @Override
-    public boolean commitXmfeedback(String xmfeedbackid) {
-        Chain chain = Chain.make("status",statusUtil.XM_FEEDBACK_COMMIT);
-        Cnd cnd = Cnd.where("id","=",xmfeedbackid);
+    public boolean commitXmfeedback(long xmfeedbackid) {
+        Chain chain = Chain.make("status", statusUtil.XM_FEEDBACK_COMMIT);
+        Cnd cnd = Cnd.where("id", "=", xmfeedbackid);
         // todo:邮件通知对应项目经理
-        return this.update(chain,cnd)!=0;
+        return this.update(chain, cnd) != 0;
     }
 
     /**
@@ -125,9 +134,9 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
     public boolean checkXmfeedback(xm_feedback xmFeedback) {
         try {
             xmFeedback.setStatus(statusUtil.XM_FEEDBACK_CHECKING);
-            return this.update(xmFeedback)!=0;
-        }catch (Exception e){
-            log.error("雇员添加项目反馈失败",e);
+            return this.update(xmFeedback) != 0;
+        } catch (Exception e) {
+            log.error("雇员添加项目反馈失败", e);
         }
         return false;
     }
@@ -140,10 +149,12 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
      * @return
      */
     @Override
-    public boolean confirmXmfeedback(String xmfeedbackid, Boolean flag) {
+    public boolean confirmXmfeedback(long xmfeedbackid, Boolean flag) {
         Chain chain = null;
         if(flag){
             chain = Chain.make("status",statusUtil.XM_FEEDBACK_FINAL);
+            // 设置xm_inf状态
+            this.dao().update(xm_inf.class,Chain.make("status",statusUtil.XM_INF_DONE),Cnd.where("id","=",this.fetch(xmfeedbackid).getXminfid()));
             // todo: 通知进行项目结算流程
         }else {
             chain = Chain.make("status",statusUtil.XM_FEEDBACK_FINISH);
@@ -154,11 +165,16 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
     }
 
 
-    public xm_feedback getLatestXmfeedback(String xminfid){
+    /**
+     * 获得项目最新一次的反馈
+     * @param xminfid
+     * @return
+     */
+    public xm_feedback getLatestXmfeedback(String xminfid) {
         try {
-            return this.query(Cnd.where("xminfid","=",xminfid).desc("at")).get(0);
-        }catch (Exception e){
-            log.error("getLatestXmfeedback fail",e);
+            return this.query(Cnd.where("xminfid", "=", xminfid).desc("at")).get(0);
+        } catch (Exception e) {
+            log.error("getLatestXmfeedback fail", e);
         }
         return null;
     }

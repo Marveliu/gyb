@@ -65,5 +65,5 @@ public interface XmFacadeService {
      * @param uid
      * @return
      */
-    public boolean initXmFinal(String xminfid, float xmEvaluationGrade, String xmEvaluationNote, String xmBillNote, String uid);
+    public boolean initXmFinal(String xminfid, float xmEvaluationGrade,float paySum,String xmEvaluationNote, String xmBillNote, String uid);
 }

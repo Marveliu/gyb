@@ -59,6 +59,8 @@ public class XmFacadeServiceImpl implements XmFacadeService {
     @Inject
     private XmBillService xmBillService;
     @Inject
+    private XmFeedbackService xmFeedbackService;
+    @Inject
     private XmEvaluationService xmEvaluationService;
     @Inject
     private XmApplyService xmApplyService;
@@ -106,6 +108,8 @@ public class XmFacadeServiceImpl implements XmFacadeService {
      * @return
      */
     public xm_inf acceptXmapply(String xmapplyid, String uid) {
+
+        if(xmApplyService.fetch(xmapplyid).getStatus() == statusUtil.XM_APPLY_FINAL) return null;
 
         // 更新任务书申请状态为完结，同时可以检查任务书是否存在
         if (xmApplyService.update(
@@ -160,9 +164,16 @@ public class XmFacadeServiceImpl implements XmFacadeService {
     public boolean initXmFinal(
             String xminfid,
             float xmEvaluationGrade,
+            float paySum,
             String xmEvaluationNote,
             String xmBillNote,
             String uid) {
+
+        int currentStatus = xmInfService.fetch(xminfid).getStatus();
+
+        // 如果已经结算，返回失败
+        if( currentStatus != statusUtil.XM_INF_DONE) return false;
+
         try{
             xm_evaluation xmEvaluation = new xm_evaluation();
             xmEvaluation.setXminfid(xminfid);
@@ -170,19 +181,23 @@ public class XmFacadeServiceImpl implements XmFacadeService {
             xmEvaluation.setNote(xmEvaluationNote);
             xm_inf xmInf = xmInfService.fetch(xminfid);
             gy_pay pay = gyPayService.getFirstPay(xmInf.getGyid());
-            Chain chain =  Chain.make("status",statusUtil.XM_BILL_CHECKING).add("note",xmBillNote).add("opAt",Times.getTS());
+
+            Chain xmBillChain =  Chain.make("status",statusUtil.XM_BILL_CHECKING).add("paysum",paySum).add("note",xmBillNote).add("opAt",Times.getTS());
 
             Trans.exec(new Atom() {
                 @Override
                 public void run() {
                     xmEvaluationService.insert(xmEvaluation);
                     if (!Lang.isEmpty(pay)) {
-                        chain.add("gypayid",pay.getId());
+                        xmBillChain.add("gypayid",pay.getId());
                     }
+                    xmFeedbackService.update(
+                            Chain.make("status",statusUtil.XM_FEEDBACK_FINAL),
+                            Cnd.where("id","=",xmFeedbackService.getLatestXmfeedback(xminfid).getId()));
                     // 任务书更新为: 完结
                     xmTaskService.update(Chain.make("status",statusUtil.XM_TASK_FINISH),Cnd.where("id","=",xmInf.getXmtaskid()));
                     // 项目账单更新为: 雇员审查
-                    xmBillService.update(chain,Cnd.where("xminfid","=",xminfid));
+                    xmBillService.update(xmBillChain,Cnd.where("xminfid","=",xminfid));
                     // 项目信息更新为: 雇员审查
                     xmInfService.update(Chain.make("status",statusUtil.XM_INF_CHECKING),Cnd.where("id","=",xminfid));
                 }
