@@ -73,7 +73,7 @@ public interface XmFeedbackService extends BaseService<xm_feedback> {
      * @param xmfeedbackid
      * @return
      */
-    public xm_task getXmtaskByXmfeedbackid(String xmfeedbackid);
+    public xm_task getXmtaskByXmfeedbackid(long xmfeedbackid);
 
 
 

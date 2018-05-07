@@ -7,11 +7,12 @@ layout("/layouts/platform.html"){
 
 <header class="header navbar bg-white shadow">
     <div class="btn-group tool-button">
-        <a class="btn btn-primary navbar-btn" href="${base}/platform/xm/feedback" id="goBack" data-pjax><i class="ti-angle-left"></i>${msg['globals.button.back']}</a>
+        <a class="btn btn-primary navbar-btn" href="${base}/platform/xm/feedback" id="goBack" data-pjax><i
+                class="ti-angle-left"></i>${msg['globals.button.back']}</a>
     </div>
 </header>
 
-<div class="sidebar-400 content-wrap">
+<div class="content-wrap">
     <div class="wrapper" style="min-height:500px;">
         <section class="panel panel-form">
             <form class="form-horizontal parsley-form">
@@ -19,13 +20,14 @@ layout("/layouts/platform.html"){
                 <div class="row mb10">
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="parentid" class="col-sm-2 control-label">${msg['xm.feedback.column.parentid']}</label>
+                            <label for="parentid"
+                                   class="col-sm-2 control-label">${msg['xm.feedback.column.parentid']}</label>
                             <div class="col-sm-8">
                                 <input type="text" id="parentid" class="form-control"
                                 <%if(obj.parentid == 0){ %>
-                                    value="初次提交反馈" disabled="disabled" >
+                                value="初次提交反馈" disabled="disabled" >
                                 <%}else{%>
-                                     value="${obj.code}" >
+                                value="${obj.code}" >
                                 <%}%>
                             </div>
                         </div>
@@ -34,34 +36,40 @@ layout("/layouts/platform.html"){
                         <div class="form-group">
                             <label for="at" class="col-sm-2 control-label">${msg['xm.feedback.column.at']}</label>
                             <div class="col-sm-8">
-                                <input disabled="disabled" type="text" id="at" class="form-control"  data-parsley-required="true"
-                                       placeholder="${msg['xm.feedback.column.at']}" value="${@date.getDate(obj.at)}" >
+                                <input disabled="disabled" type="text" id="at" class="form-control"
+                                       data-parsley-required="true"
+                                       placeholder="${msg['xm.feedback.column.at']}" value="${@date.getDate(obj.at)}">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="xminfid" class="col-sm-2 control-label">${msg['xm.feedback.column.xminfid']}</label>
+                            <label for="xminfid"
+                                   class="col-sm-2 control-label">${msg['xm.feedback.column.xminfid']}</label>
                             <div class="col-sm-8">
-                                <input type="text" disabled="disabled" id="xminfid" class="form-control" data-parsley-required="true"
-                                       placeholder="${msg['xm.feedback.column.xminfid']}" value="${obj.xminfid}" >
+                                <input type="text" disabled="disabled" id="xminfid" class="form-control"
+                                       data-parsley-required="true"
+                                       placeholder="${msg['xm.feedback.column.xminfid']}" value="${obj.xminfid}">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="taskname" class="col-sm-2 control-label">${msg['xm.feedback.column.xminfid']}</label>
+                            <label for="taskname"
+                                   class="col-sm-2 control-label">${msg['xm.feedback.column.xminfid']}</label>
                             <div class="col-sm-8">
-                                <input type="text" disabled="disabled" id="taskname" class="form-control" data-parsley-required="true"
-                                       placeholder="" value="${obj.taskname}" >
+                                <input type="text" disabled="disabled" id="taskname" class="form-control"
+                                       data-parsley-required="true"
+                                       placeholder="" value="${obj.taskname}">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="fileurl" class="col-sm-2 control-label">${msg['xm.feedback.column.fileurl']}</label>
+                            <label for="fileurl"
+                                   class="col-sm-2 control-label">${msg['xm.feedback.column.fileurl']}</label>
                             <div class="col-sm-8">
                                 <% if( null == obj.fileurl || "" == obj.fileurl){ %>
-                                     <p >暂无附件</p>
+                                <p>暂无附件</p>
                                 <% }else{ %>
-                                    <a id="fileurl" href="${obj.fileurl}" class="btn btn-default btn-sm mr5">附件下载</a>
+                                <a id="fileurl" href="${obj.fileurl}" class="btn btn-default btn-sm mr5">附件下载</a>
                                 <% }%>
 
 
@@ -77,16 +85,19 @@ layout("/layouts/platform.html"){
                         <div class="form-group">
                             <label for="gyid" class="col-sm-2 control-label">${msg['xm.feedback.column.gyid']}</label>
                             <div class="col-sm-8">
-                                <input type="text" id="gyid" disabled="disabled" class="form-control" data-parsley-required="true"
-                                       placeholder="${msg['xm.feedback.column.gyid']}" value="${obj.gyid}" >
+                                <input type="text" id="gyid" disabled="disabled" class="form-control"
+                                       data-parsley-required="true"
+                                       placeholder="${msg['xm.feedback.column.gyid']}" value="${obj.gyid}">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="realname" class="col-sm-2 control-label">${msg['xm.feedback.column.gyid']}</label>
+                            <label for="realname"
+                                   class="col-sm-2 control-label">${msg['gy.inf.column.realname']}</label>
                             <div class="col-sm-8">
-                                <input type="text" id="realname" disabled="disabled" class="form-control" data-parsley-required="true"
-                                       placeholder="${msg['xm.feedback.column.gyid']}" value="${obj.realname}" >
+                                <input type="text" id="realname" disabled="disabled" class="form-control"
+                                       data-parsley-required="true"
+                                       placeholder="${msg['xm.feedback.column.gyid']}" value="${obj.realname}">
                             </div>
                         </div>
 
@@ -97,27 +108,33 @@ layout("/layouts/platform.html"){
     </div>
 </div>
 
-<aside class="bg-white">
+<aside class="bg-white" style="top:65px; padding-bottom: 50px;">
     <div class="content-wrap">
         <div class="wrapper">
             <div class="p15 clearfix">
-                <div class="h6 text-uppercase mb25">Create New Event</div>
-                <form role="form" id="editForm"  method="post" class="form-horizontal parsley-form" action="${base}/platform/xm/feedback/editDo">
+                <form role="form" id="editForm" method="post" class="form-horizontal parsley-form"
+                      action="${base}/platform/xm/feedback/editDo">
                     <input name="id" type="hidden" value="${obj.id}">
 
                     <div class="form-group">
+                        <button type="submit" class="btn btn-primary">保存反馈</button>
+                    </div>
+
+                    <div class="form-group">
                         <label for="nextcommit">下一次提交时间</label>
-                        <div class="input-group date form_datetime " data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="nextcommit">
-                            <input type="text" size="16" readonly class="form-control" value="${@date.getDateTime()}" data-parsley-required="true">
+                        <div class="input-group date form_datetime " data-date="1979-09-16T05:25:07Z"
+                             data-date-format="dd MM yyyy - HH:ii p" data-link-field="nextcommit">
+                            <input type="text" size="16" readonly class="form-control" value="${@date.getDateTime()}"
+                                   data-parsley-required="true">
                             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                             <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                         </div>
 
                         <input type="hidden" id="nextcommit" name="nextcommitat"
                         <% if(obj.nextcommit == 0){%>
-                            value="${@date.getDateTime()}" />
+                        value="${@date.getDateTime()}" />
                         <% }else{%>
-                            value="${@date.getDate(obj.nextcommit)}" />
+                        value="${@date.getDate(obj.nextcommit)}" />
                         <% }%>
                     </div>
 
@@ -125,18 +142,7 @@ layout("/layouts/platform.html"){
                         <label for="reply">反馈意见</label>
                         <textarea id="reply" name="reply" style="width:100%;height:400px;">${obj.reply}</textarea>
                     </div>
-
-                    <div class="form-group">
-                        <label for="final">是否为终稿</label>
-                        <div class="mr15 switcha">
-                            <input type="checkbox" id="final" name="final" class="js-switch-blue" value="true" <%if(obj.status == 5){%>checked<%}%> >
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">保存反馈</button>
                 </form>
-
-
             </div>
         </div>
     </div>
@@ -145,22 +151,21 @@ layout("/layouts/platform.html"){
 <script language="JavaScript">
     $(document).ready(function () {
         setTimeout(function () {
-            ue= new baidu.editor.ui.Editor();
+            ue = new baidu.editor.ui.Editor();
             ue.render('reply');
-        },500);
+        }, 500);
         myForm.init();
         $('.form_datetime').datetimepicker({
-            language:  'zh-CN',
-            format:'yyyy-mm-dd hh:ii:ss',
+            language: 'zh-CN',
+            format: 'yyyy-mm-dd hh:ii:ss',
             weekStart: 1,
-            todayBtn:  1,
+            todayBtn: 1,
             autoclose: 1,
             todayHighlight: 1,
             startView: 2,
             forceParse: 0,
             showMeridian: 1
         });
-
         $('#editForm').ajaxForm({
             dataType: 'json',
             beforeSubmit: function (arr, form, options) {

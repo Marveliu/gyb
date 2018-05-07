@@ -142,8 +142,6 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
         if(getXmfeedbackStatus(xmFeedback.getId()) != statusUtil.XM_FEEDBACK_COMMIT) return false;
         try {
             xmFeedback.setStatus(statusUtil.XM_FEEDBACK_CHECKING);
-            // deadline 添加定时任务
-            // updateIgnoreNull
             return this.updateIgnoreNull(xmFeedback) != 0;
         } catch (Exception e) {
             log.error("项目经理审批失败", e);
@@ -163,6 +161,8 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
         if(getXmfeedbackStatus(xmfeedbackid) != statusUtil.XM_FEEDBACK_CHECKING) return false;
         Chain chain = null;
         if(flag){
+            // deadline 添加定时任务
+            // updateIgnoreNull
             chain = Chain.make("status",statusUtil.XM_FEEDBACK_FINAL);
             // 设置xm_inf状态
             this.dao().update(xm_inf.class,Chain.make("status",statusUtil.XM_INF_DONE),Cnd.where("id","=",this.fetch(xmfeedbackid).getXminfid()));
@@ -197,7 +197,7 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
      * @return
      */
     @Override
-    public xm_task getXmtaskByXmfeedbackid(String xmfeedbackid) {
+    public xm_task getXmtaskByXmfeedbackid(long xmfeedbackid) {
         return this.dao().fetch(xm_task.class,Cnd.where("id","=",this.fetch(xmfeedbackid)));
     }
 

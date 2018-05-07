@@ -4,7 +4,7 @@ layout("/layouts/platform-xm.html"){
 
 <section class="content-wrap bg-white">
     <header class="header navbar bg-white shadow">
-            <button id="currentxmname" class="btn btn-primary navbar-btn" ></i> 全部项目</button>
+        <button id="currentxmname" class="btn btn-primary navbar-btn"></i> 全部项目</button>
         <div class="pull-right offscreen-right">
             <button class="btn btn-primary navbar-btn" onclick="sublime.toggleFilter('#feedbackPanel')"><i
                     class="fa fa-sliders"></i> 筛选
@@ -17,23 +17,21 @@ layout("/layouts/platform-xm.html"){
             <input id="xmid" type="hidden" value="">
             <table class="table table-bordered table-striped mg-t datatable">
                 <thead>
-                    <tr>
-                            <th>${msg['xm.feedback.column.id']}</th>
-                            <th>${msg['xm.inf.column.name']}</th>
-                            <th>${msg['xm.feedback.column.at']}</th>
-                            <th>${msg['xm.feedback.column.fileurl']}</th>
-                            <th>${msg['gy.inf.column.realname']}</th>
-                            <th>项目经理名称</th>
-                            <th>${msg['xm.feedback.column.status']}</th>
-                            <th>${msg['globals.table.column.operation']}</th>
-                    </tr>
+                <tr>
+                    <th>${msg['xm.feedback.column.id']}</th>
+                    <th>${msg['xm.inf.column.name']}</th>
+                    <th>${msg['xm.feedback.column.at']}</th>
+                    <th>${msg['xm.feedback.column.fileurl']}</th>
+                    <th>${msg['gy.inf.column.realname']}</th>
+                    <th>项目经理名称</th>
+                    <th>${msg['xm.feedback.column.status']}</th>
+                    <th>${msg['globals.table.column.operation']}</th>
+                </tr>
                 </thead>
             </table>
         </div>
     </div>
 </section>
-
-
 
 
 <div id="dialogDelete" class="modal fade bs-modal-sm" tabindex="-2" role="dialog" aria-hidden="true">
@@ -51,8 +49,11 @@ layout("/layouts/platform-xm.html"){
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">${msg['globals.button.cancel']}</button>
-                <button id="okDel" type="button" class="btn btn-primary" data-loading-text="${msg['globals.button.delete.tip']}">${msg['globals.button.confirm']}</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">${msg['globals.button.cancel']}
+                </button>
+                <button id="okDel" type="button" class="btn btn-primary"
+                        data-loading-text="${msg['globals.button.delete.tip']}">${msg['globals.button.confirm']}
+                </button>
             </div>
         </div>
     </div>
@@ -78,7 +79,8 @@ layout("/layouts/platform-xm.html"){
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">${msg['globals.button.cancel']}</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">${msg['globals.button.cancel']}
+                </button>
                 <button id="doCommit" type="button" class="btn btn-primary" data-loading-text="正在提交">确认提交</button>
             </div>
         </div>
@@ -93,7 +95,8 @@ layout("/layouts/platform-xm.html"){
         <div class="cd-panel-content shadow">
             <div class="form-group">
                 <label for="authorname">项目经理名称</label>
-                <input type="text" id="authorname" name="authorname" class="form-control" placeholder="请输入要查询的项目经理名称" autofocus>
+                <input type="text" id="authorname" name="authorname" class="form-control" placeholder="请输入要查询的项目经理名称"
+                       autofocus>
             </div>
             <button id="searchBtn" type="button" class="btn btn-default">查询</button>
         </div>
@@ -102,9 +105,9 @@ layout("/layouts/platform-xm.html"){
 <script language="JavaScript">
     var datatable;
 
-    function xminfset(id,name) {
-        if(name == "" || name == null){
-            name ="查看全部";
+    function xminfset(id, name) {
+        if (name == "" || name == null) {
+            name = "查看全部";
         }
         $('#xmid').val(id);
         $('#currentxmname').text(name);
@@ -114,7 +117,7 @@ layout("/layouts/platform-xm.html"){
     function initDatatable() {
         datatable = $('.datatable').DataTable({
             "dom": '<"toolbar">frtip',
-            "searching":false,
+            "searching": false,
             "processing": false,
             "serverSide": true,
             "select": true,
@@ -137,37 +140,46 @@ layout("/layouts/platform-xm.html"){
             },
             "order": [[2, "desc"]],
             "columns": [
-                    {"data": "code", "bSortable": true},
-                    {"data": "taskname", "bSortable": true},
-                    {"data": "at", "bSortable": true},
-                    {"data": "fileurl", "bSortable": true},
-                    {"data": "realname", "bSortable": true},
-                    {"data": "authorrealname", "bSortable": true},
-                    {"data": "xmfeedbackstatus", "bSortable": true},
+                {"data": "code", "bSortable": true},
+                {"data": "taskname", "bSortable": true},
+                {"data": "at", "bSortable": true},
+                {"data": "fileurl", "bSortable": true},
+                {"data": "realname", "bSortable": true},
+                {"data": "authorrealname", "bSortable": true},
+                {"data": "xmfeedbackstatus", "bSortable": true},
             ],
             "columnDefs": [
                 {
                     "render": function (data, type, row) {
-                        if(row.status != 2 && row.status != 1){
+                        if (row.status == 1) {
                             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
-                                    ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-                                    '<li><a href="${base}/platform/xm/feedback/detail/' + row.code + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
-                                    '</ul></div>';
-                        }
-                        return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
                                 ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
                                 '<li><a href="${base}/platform/xm/feedback/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
-                                '<li><a href="${base}/platform/xm/feedback/edit/' + row.id + '" data-pjax>意见反馈</a></li>' +
-                                '<li class="divider"></li>' +
-                                '<li><a href="javascript:;" onclick="commit(\'' + row.id + '\')">提 交</a></li>' +
+                                '<li><a href="${base}/platform/xm/feedback/edit/' + row.id + '" data-pjax>反 馈</a></li>' +
                                 '</ul></div>';
+                        }
+                        if (row.status == 2){
+                            return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
+                                ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
+                                '<li><a href="${base}/platform/xm/feedback/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
+                                '<li><a href="${base}/platform/xm/feedback/edit/' + row.id + '" data-pjax>反 馈</a></li>' +
+                                '<li class="divider"></li>' +
+                                '<li><a href="javascript:;" onclick="commit(\'' + row.id + '\',false)">提 交</a></li>' +
+                                '<li><a href="javascript:;" onclick="commit(\'' + row.id + '\',true)">完 结</a></li>' +
+                                '</ul></div>';
+                        }
+                        return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
+                            ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
+                            '<li><a href="${base}/platform/xm/feedback/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
+                            '</ul></div>';
+
                     },
                     "targets": 7
                 },
                 {
                     "render": function (data, type, row) {
                         if (data) {
-                            return moment(parseInt(data*1000)).format("YYYY-MM-DD HH:mm:ss");
+                            return moment(parseInt(data * 1000)).format("YYYY-MM-DD HH:mm:ss");
                         }
                         return '';
                     },
@@ -175,8 +187,8 @@ layout("/layouts/platform-xm.html"){
                 },
                 {
                     "render": function (data, type, row) {
-                        if(data.length == 0) return '暂无附件';
-                        return '<a href="'+data+'" class="btn btn-default btn-sm mr5">附件下载</a>'
+                        if (data.length == 0) return '暂无附件';
+                        return '<a href="' + data + '" class="btn btn-default btn-sm mr5">附件下载</a>'
                     },
                     "targets": 3
                 },
@@ -190,16 +202,17 @@ layout("/layouts/platform-xm.html"){
         });
     }
 
-    function commit(id) {
+    function commit(id, flag) {
         var dialog = $("#dialogCommit");
         dialog.modal("show");
         dialog.find("#doCommit").unbind("click");
         dialog.find("#doCommit").bind("click", function (event) {
             var btn = $(this);
             btn.button("loading");
-            $.post("${base}/platform/xm/feedback/feedbackcommit/"+id,{} , function (data) {
+            $.post("${base}/platform/xm/feedback/feedbackcommit?&xmfeedbackid=" + id + "&flag=" + flag, {}, function (data) {
                 if (data.code == 0) {
-                    datatable.ajax.reload(null,false);
+                    datatable.ajax.reload(null, false);
+                    Toast.error(data.msg);
                 } else {
                     Toast.error(data.msg);
                 }

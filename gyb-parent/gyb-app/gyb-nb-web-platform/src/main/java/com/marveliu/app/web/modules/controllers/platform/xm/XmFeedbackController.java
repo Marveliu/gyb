@@ -63,7 +63,7 @@ import java.util.Map;
 
 @IocBean
 @At("/platform/xm/feedback")
-public class XmFeedbackController{
+public class XmFeedbackController {
     private static final Log log = Logs.get();
 
     @Inject
@@ -105,12 +105,12 @@ public class XmFeedbackController{
             @Param("::columns") List<DataTableColumn> columns) {
 
 
-        Cnd cnd = Cnd.NEW();
-        if(!Strings.isEmpty(xminfid)){
-            cnd.and("xminfid","=",xminfid);
+        Cnd cnd = Cnd.where("status", "!=", 0);
+        if (!Strings.isEmpty(xminfid)) {
+            cnd.and("xminfid", "=", xminfid);
         }
-        if(!Strings.isEmpty(authorname)){
-            cnd.and("authorrealname","like","%" + authorname + "%");
+        if (!Strings.isEmpty(authorname)) {
+            cnd.and("authorrealname", "like", "%" + authorname + "%");
         }
 
         return xmFeedbackService.data(length, start, draw, order, columns, cnd, null);
@@ -121,10 +121,10 @@ public class XmFeedbackController{
     @Ok("beetl:/platform/xm/feedback/edit.html")
     @RequiresPermissions("platform.xm.feedback")
     public View edit(int id, HttpServletRequest req) {
-        String author = xmFeedbackService.fetch(Cnd.where("id","=",id)).getAuthor();
-        if(author.equals(sysUserinfService.getSysuserinfid(StringUtil.getPlatformUid()))){
+        String author = xmFeedbackService.fetch(Cnd.where("id", "=", id)).getAuthor();
+        if (author.equals(sysUserinfService.getSysuserinfid(StringUtil.getPlatformUid()))) {
             req.setAttribute("obj", xmFeedbackService.fetch(id));
-        }else {
+        } else {
             return new ViewWrapper(new UTF8JsonView(), "It is not your bussiness!");
         }
         return null;
@@ -135,20 +135,18 @@ public class XmFeedbackController{
     @Ok("json")
     @RequiresPermissions("platform.xm.feedback.edit")
     @AdaptBy(type = WhaleAdaptor.class)
-    @SLog(type = "xm",tag = "项目经理审核反馈", msg = "申请编号:${args[2].getId()},是否为最终反馈:${isFinal}")
+    @SLog(type = "xm", tag = "项目经理审核反馈", msg = "申请编号:${args[1].getId()}}")
     public Object editDo(
-            @Param("final") boolean isFinal,
             @Param("nextcommitat") String nextcommit,
-            @Param("..")xm_feedback xmFeedback, HttpServletRequest req) {
+            @Param("..") xm_feedback xmFeedback,
+            HttpServletRequest req) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            if(isFinal){
-                if(xmFeedbackService.commitXmfeedback(xmFeedback.getId())) return Result.success("system.success");
-            }else {
-                // 反馈内容，下次反馈deadline时间
-                int nextcommitat = (int) (sdf.parse(nextcommit).getTime() / 1000);
-                xmFeedback.setNextcommit(nextcommitat);
-                if(xmFeedbackService.checkXmfeedback(xmFeedback)) return Result.success("system.success");
+            // 反馈内容，下次反馈deadline时间
+            int nextcommitat = (int) (sdf.parse(nextcommit).getTime() / 1000);
+            xmFeedback.setNextcommit(nextcommitat);
+            if (xmFeedbackService.checkXmfeedback(xmFeedback)){
+                return Result.success("system.success");
             }
         } catch (Exception e) {
             return Result.error("system.error");
@@ -159,21 +157,36 @@ public class XmFeedbackController{
     @At("/detail/?")
     @Ok("beetl:/platform/xm/feedback/detail.html")
     @RequiresPermissions("platform.xm.feedback")
-    @SLog(type = "xm",tag = "查看任务反馈详细信息", msg = "任务反馈编号:${args[0]}")
-    public void detail(String xmfeedbackid, HttpServletRequest req) {
-        if (!Strings.isBlank(xmfeedbackid) && isAllowForFeedback(xmfeedbackid)) {
-            Cnd cnd = Cnd.NEW();
-            cnd.and("code","=",xmfeedbackid);
-            xm_feedback feedback = xmFeedbackService.fetch(cnd);
+    @SLog(type = "xm", tag = "查看任务反馈详细信息", msg = "任务反馈编号:${args[0]}")
+    public void detail(long xmfeedbackid, HttpServletRequest req) {
+        if (isAllowForFeedback(xmfeedbackid)) {
+            xm_feedback feedback = xmFeedbackService.fetch(xmfeedbackid);
             req.setAttribute("obj", feedback);
-        }else{
+        } else {
             req.setAttribute("obj", null);
         }
     }
 
+
+    @At("/feedbackcommit")
+    @Ok("json")
+    @RequiresPermissions("platform.xm.feedback.edit")
+    @SLog(type = "xm", tag = "提交反馈信息", msg = "任务反馈编号:${args[0]},是否为最终反馈：${flag}")
+    public Object feedbackcommit(
+            @Param("xmfeedbackid") long xmfeedbackid,
+            @Param("flag") boolean flag,
+            HttpServletRequest req) {
+        if (isAllowForFeedback(xmfeedbackid)) {
+            if (xmFeedbackService.confirmXmfeedback(xmfeedbackid, flag)) return Result.success("提交反馈信息成功，请刷新界面!");
+        }else {
+            return Result.error("你没有权限进行操作！");
+        }
+        return Result.error("system.error");
+    }
+
     // 能否对某一任务书进行修改等操作
-    private boolean isAllowForFeedback(String xmfeedbackid) {
-        if(shiroUtil.isSuper()) return true;
+    private boolean isAllowForFeedback(long xmfeedbackid) {
+        if (shiroUtil.isSuper()) return true;
         xm_task xmTask = xmFeedbackService.getXmtaskByXmfeedbackid(xmfeedbackid);
         if (!Lang.isEmpty(xmTask)) {
             return xmTask.getAuthor().equals(sysUserinfService.getSysuserinfid(StringUtil.getPlatformUid()));
