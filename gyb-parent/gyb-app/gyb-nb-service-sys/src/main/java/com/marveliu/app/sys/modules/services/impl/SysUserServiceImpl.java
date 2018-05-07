@@ -1,5 +1,6 @@
 package com.marveliu.app.sys.modules.services.impl;
 
+<<<<<<< HEAD:gyb-parent/gyb-app/gyb-nb-service-sys/src/main/java/com/marveliu/app/sys/modules/services/impl/SysUserServiceImpl.java
 import com.alibaba.dubbo.config.annotation.Service;
 import com.marveliu.framework.model.sys.Sys_menu;
 import com.marveliu.framework.model.sys.Sys_role;
@@ -7,6 +8,19 @@ import com.marveliu.framework.model.sys.Sys_user;
 import com.marveliu.framework.services.base.BaseServiceImpl;
 import com.marveliu.framework.services.sys.SysMenuService;
 import com.marveliu.framework.services.sys.SysUserService;
+=======
+import cn.wizzer.app.sys.modules.models.Sys_menu;
+import cn.wizzer.app.sys.modules.models.Sys_role;
+import cn.wizzer.app.sys.modules.models.Sys_user;
+import cn.wizzer.app.sys.modules.services.SysMenuService;
+import cn.wizzer.app.sys.modules.services.SysUserService;
+import cn.wizzer.app.web.commons.services.email.EmailService;
+import cn.wizzer.framework.base.service.BaseServiceImpl;
+import cn.wizzer.framework.util.StringUtil;
+import org.apache.shiro.crypto.RandomNumberGenerator;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.crypto.hash.Sha256Hash;
+>>>>>>> master:wk-parent/wk-app/wk-web/src/main/java/cn/wizzer/app/sys/modules/services/impl/SysUserServiceImpl.java
 import org.nutz.aop.interceptor.ioc.TransAop;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
@@ -17,6 +31,7 @@ import org.nutz.ioc.aop.Aop;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
+import org.nutz.lang.random.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +50,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
 
     @Inject
     private SysMenuService sysMenuService;
+<<<<<<< HEAD:gyb-parent/gyb-app/gyb-nb-service-sys/src/main/java/com/marveliu/app/sys/modules/services/impl/SysUserServiceImpl.java
+=======
+
+    @Inject
+    private EmailService emailService;
+
+>>>>>>> master:wk-parent/wk-app/wk-web/src/main/java/cn/wizzer/app/sys/modules/services/impl/SysUserServiceImpl.java
     /**
      * 查询用户角色code列表
      *
@@ -157,4 +179,27 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
         dao().clear("sys_user", Cnd.where("id", "in", userIds));
     }
 
+<<<<<<< HEAD:gyb-parent/gyb-app/gyb-nb-service-sys/src/main/java/com/marveliu/app/sys/modules/services/impl/SysUserServiceImpl.java
+=======
+    public String resetPassword(String userId){
+        Sys_user user = dao().fetch(Sys_user.class,Cnd.where("id","=",userId));
+        RandomNumberGenerator rng = new SecureRandomNumberGenerator();
+        String salt = rng.nextBytes().toBase64();
+        String pwd = R.captchaNumber(6);
+        String hashedPasswordBase64 = new Sha256Hash(pwd, salt, 1024).toBase64();
+        dao().update(Sys_user.class,Chain.make("salt", salt).add("password", hashedPasswordBase64), Cnd.where("id", "=", userId));
+        emailService.send(user.getEmail(),"临时密码","您的雇佣帮临时密码为:"+pwd);
+        return pwd;
+    }
+
+    public boolean setEmail(String userid,String email){
+        Chain chain = Chain.make("email",email);
+        Cnd cnd = Cnd.where("id","=",userid);
+        if(this.dao().update(Sys_user.class,chain,cnd)!=0){
+            return true;
+        }
+        return  false;
+    }
+
+>>>>>>> master:wk-parent/wk-app/wk-web/src/main/java/cn/wizzer/app/sys/modules/services/impl/SysUserServiceImpl.java
 }

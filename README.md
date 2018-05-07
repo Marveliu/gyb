@@ -1,8 +1,9 @@
 ### 协作须知
 
 1. checkout 分支
-2. pr 分支到master
+2. pr 分支到masterdoc
 3. 具体查看gitflow的协作模式。
+4. terminal下：sh ./bin/apidoc.sh 生成apidoc文件
 
 ### 分支说明
 

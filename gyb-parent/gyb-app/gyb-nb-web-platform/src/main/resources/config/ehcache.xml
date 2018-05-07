@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="false"
+<<<<<<< HEAD:gyb-parent/gyb-app/gyb-nb-web-platform/src/main/resources/config/ehcache.xml
     monitoring="autodetect" dynamicConfig="true" name="gyb">
     <diskStore path="ehcache/gyb"/>
+=======
+    monitoring="autodetect" dynamicConfig="true" name="nutzwk">
+    <diskStore path="ehcache.disk.store.dir/gyb"/>
+>>>>>>> master:wk-parent/wk-app/wk-web/src/main/resources/ehcache.xml
     <cache name="shiro-activeSessionCache"
            maxElementsInMemory="1000"
            overflowToDisk="true"

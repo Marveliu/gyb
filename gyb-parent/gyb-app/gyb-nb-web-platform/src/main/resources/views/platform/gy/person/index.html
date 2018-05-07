@@ -288,8 +288,13 @@ layout("/layouts/platform.html"){
         methods: {
             askActiviEmail: function (id) {
                 console.log("vue ajax begin");
+<<<<<<< HEAD:gyb-parent/gyb-app/gyb-nb-web-platform/src/main/resources/views/platform/gy/person/index.html
                 var url = "${base}/open/api/email/mail/activeMail?userid=" + id;
                 $.post(url, function (data) {
+=======
+                var url= "${base}/open/api/email/activeMail?userId="+id;
+                $.post(url,function(data){
+>>>>>>> master:wk-parent/wk-app/wk-web/src/main/webapp/WEB-INF/views/platform/gy/person/index.html
                     if (data.code == 0) {
                         Toast.success(data.msg);
                     } else {

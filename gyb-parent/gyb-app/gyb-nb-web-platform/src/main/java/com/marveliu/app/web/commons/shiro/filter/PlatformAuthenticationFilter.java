@@ -24,13 +24,22 @@ import java.security.interfaces.RSAPrivateKey;
 public class PlatformAuthenticationFilter extends FormAuthenticationFilter implements ActionFilter {
     private final static Log log= Logs.get();
     private String captchaParam = "platformCaptcha";
+    private String superadminParam = "superadminKey";
 
     public String getCaptchaParam() {
         return captchaParam;
     }
 
+    public String getSuperadminParam() {
+        return superadminParam;
+    }
+
     protected String getCaptcha(ServletRequest request) {
         return WebUtils.getCleanParam(request, getCaptchaParam());
+    }
+
+    protected Boolean isSuperadmin(ServletRequest request) {
+        return WebUtils.isTrue(request,getSuperadminParam());
     }
 
     protected AuthenticationToken createToken(HttpServletRequest request) {
@@ -38,14 +47,17 @@ public class PlatformAuthenticationFilter extends FormAuthenticationFilter imple
         String password = getPassword(request);
         String captcha = getCaptcha(request);
         boolean rememberMe = isRememberMe(request);
+        boolean superadmin   = isSuperadmin(request);
         String host = getHost(request);
-        try {
-            RSAPrivateKey platformPrivateKey = (RSAPrivateKey) request.getSession().getAttribute("platformPrivateKey");
-            if (platformPrivateKey != null) {
-                password = RSAUtil.decryptByPrivateKey(password, platformPrivateKey);
+        if(!superadmin){
+            try {
+                RSAPrivateKey platformPrivateKey = (RSAPrivateKey) request.getSession().getAttribute("platformPrivateKey");
+                if (platformPrivateKey != null) {
+                    password = RSAUtil.decryptByPrivateKey(password, platformPrivateKey);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return new CaptchaToken(username, password, rememberMe, host, captcha);
     }
