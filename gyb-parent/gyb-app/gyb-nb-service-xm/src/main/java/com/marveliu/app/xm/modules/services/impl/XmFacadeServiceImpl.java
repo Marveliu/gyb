@@ -70,10 +70,6 @@ public class XmFacadeServiceImpl implements XmFacadeService {
     @Reference
     private SysLogService sysLogService;
 
-    @Inject
-    @Reference
-    private GyPayService gyPayService;
-
 
     /**
      * 检查雇员是否为项目的拥有者
@@ -109,7 +105,7 @@ public class XmFacadeServiceImpl implements XmFacadeService {
         xm_apply xmApply = xmApplyService.fetch(xmapplyid);
 
         // 检查申请信息是否存在且不可重复受理
-        if(Lang.isEmpty(xmApply) || xmApply.getStatus() == statusUtil.XM_APPLY_FINAL) return null;
+        if(Lang.isEmpty(xmApply) || xmApply.getStatus() == statusUtil.XM_APPLY_FINAL || xmApply.getStatus() == statusUtil.XM_APPLY_PASS ) return null;
 
         // 更新任务书申请状态为完结，同时可以检查任务书是否存在
         if (xmApplyService.setXmApplyStatus(xmapplyid,true,uid)){
@@ -178,7 +174,6 @@ public class XmFacadeServiceImpl implements XmFacadeService {
             xmEvaluation.setGrade(xmEvaluationGrade);
             xmEvaluation.setNote(xmEvaluationNote);
             xm_inf xmInf = xmInfService.fetch(xminfid);
-            gy_pay pay = gyPayService.getFirstPay(xmInf.getGyid());
 
             Chain xmBillChain =  Chain.make("status",statusUtil.XM_BILL_CHECKING).add("paysum",paySum).add("note",xmBillNote).add("opAt",Times.getTS());
 
@@ -186,9 +181,12 @@ public class XmFacadeServiceImpl implements XmFacadeService {
                 @Override
                 public void run() {
                     xmEvaluationService.insert(xmEvaluation);
-                    if (!Lang.isEmpty(pay)) {
-                        xmBillChain.add("gypayid",pay.getId());
-                    }
+
+                    // 默认pay由前端显示
+                    // if (!Lang.isEmpty(pay)) {
+                    //     xmBillChain.add("gypayid",pay.getId());
+                    // }
+
                     xmFeedbackService.update(
                             Chain.make("status",statusUtil.XM_FEEDBACK_FINAL),
                             Cnd.where("id","=",xmFeedbackService.getLatestXmfeedback(xminfid).getId()));

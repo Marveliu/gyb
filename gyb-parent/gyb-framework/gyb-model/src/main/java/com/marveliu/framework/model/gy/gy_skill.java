@@ -31,11 +31,7 @@ public class gy_skill extends BaseModel implements Serializable {
 
     @Column
     @Comment("技能等级")
-<<<<<<< HEAD:gyb-parent/gyb-framework/gyb-model/src/main/java/com/marveliu/framework/model/gy/gy_skill.java
-    @ColDefine(type = ColType.INT)
-=======
     @ColDefine(type = ColType.FLOAT)
->>>>>>> master:wk-parent/wk-app/wk-web/src/main/java/cn/wizzer/app/gy/modules/models/gy_skill.java
     private float skilllevel;
 
     // 参照 技能和系统雇员

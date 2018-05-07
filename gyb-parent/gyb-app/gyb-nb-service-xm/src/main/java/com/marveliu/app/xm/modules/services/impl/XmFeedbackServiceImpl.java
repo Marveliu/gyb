@@ -18,6 +18,7 @@ package com.marveliu.app.xm.modules.services.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.marveliu.framework.model.xm.xm_feedback;
 import com.marveliu.framework.model.xm.xm_inf;
+import com.marveliu.framework.model.xm.xm_task;
 import com.marveliu.framework.services.base.BaseServiceImpl;
 import com.marveliu.framework.services.xm.XmFeedbackService;
 import com.marveliu.framework.util.statusUtil;
@@ -26,6 +27,7 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
+import org.nutz.lang.Strings;
 import org.nutz.lang.Times;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
@@ -96,13 +98,17 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
         if (!isXmeedbackAllowed(xmFeedback.getXminfid())) return null;
         try {
             xm_feedback parent = getLatestXmfeedback(xmFeedback.getXminfid());
-
             xmFeedback.setParentid(0);
+            xmFeedback.setCode("fk_"+xmFeedback.getXminfid().split("_")[1]+"_0");
             if(!Lang.isEmpty(parent)){
                 xmFeedback.setParentid(parent.getId());
+                int count = Integer.valueOf(parent.getCode().split("_")[2])+1;
+                xmFeedback.setCode("fk_"+xmFeedback.getXminfid().split("_")[1]+"_"+count);
             }
+            xmFeedback.setFileurl(Strings.sBlank(xmFeedback.getFileurl(),""));
             xmFeedback.setStatus(statusUtil.XM_FEEDBACK_INIT);
             xmFeedback.setAt(Times.getTS());
+
             return this.insert(xmFeedback);
         } catch (Exception e) {
             log.error("雇员添加项目反馈失败", e);
@@ -118,6 +124,7 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
      */
     @Override
     public boolean commitXmfeedback(long xmfeedbackid) {
+        if(getXmfeedbackStatus(xmfeedbackid) != statusUtil.XM_FEEDBACK_INIT) return false;
         Chain chain = Chain.make("status", statusUtil.XM_FEEDBACK_COMMIT);
         Cnd cnd = Cnd.where("id", "=", xmfeedbackid);
         // todo:邮件通知对应项目经理
@@ -132,11 +139,14 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
      */
     @Override
     public boolean checkXmfeedback(xm_feedback xmFeedback) {
+        if(getXmfeedbackStatus(xmFeedback.getId()) != statusUtil.XM_FEEDBACK_COMMIT) return false;
         try {
             xmFeedback.setStatus(statusUtil.XM_FEEDBACK_CHECKING);
-            return this.update(xmFeedback) != 0;
+            // deadline 添加定时任务
+            // updateIgnoreNull
+            return this.updateIgnoreNull(xmFeedback) != 0;
         } catch (Exception e) {
-            log.error("雇员添加项目反馈失败", e);
+            log.error("项目经理审批失败", e);
         }
         return false;
     }
@@ -150,6 +160,7 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
      */
     @Override
     public boolean confirmXmfeedback(long xmfeedbackid, Boolean flag) {
+        if(getXmfeedbackStatus(xmfeedbackid) != statusUtil.XM_FEEDBACK_CHECKING) return false;
         Chain chain = null;
         if(flag){
             chain = Chain.make("status",statusUtil.XM_FEEDBACK_FINAL);
@@ -177,5 +188,22 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
             log.error("getLatestXmfeedback fail", e);
         }
         return null;
+    }
+
+    /**
+     * 根据项目反馈编号获得任务书
+     *
+     * @param xmfeedbackid
+     * @return
+     */
+    @Override
+    public xm_task getXmtaskByXmfeedbackid(String xmfeedbackid) {
+        return this.dao().fetch(xm_task.class,Cnd.where("id","=",this.fetch(xmfeedbackid)));
+    }
+
+    public int getXmfeedbackStatus(long xmfeedbackid){
+        xm_feedback xmFeedback =  this.fetch(xmfeedbackid);
+        if(Lang.isEmpty(xmFeedback)) return -1;
+        return xmFeedback.getStatus();
     }
 }

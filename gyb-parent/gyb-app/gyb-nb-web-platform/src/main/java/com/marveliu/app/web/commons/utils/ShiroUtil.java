@@ -23,6 +23,17 @@ public class ShiroUtil {
     private static final String PERMISSION_NAMES_DELIMETER = ",";
     private static final Logger logger = LoggerFactory.getLogger(ShiroUtil.class);
     private static final String GY_ROLE_NAMES="gy0,gy1,gy2,gy3,gy4";
+    private static final String SUPER_ROLES="sysadmin,sys.superpm";
+
+
+    // 检查是否有超级权限
+    public boolean isSuper() {
+        // 权限验证
+        if (hasAnyRoles(SUPER_ROLES)) {
+            return true;
+        }
+        return false;
+    }
 
     /**
      * 获得系统用户

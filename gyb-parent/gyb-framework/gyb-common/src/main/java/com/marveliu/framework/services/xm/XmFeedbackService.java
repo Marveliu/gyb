@@ -2,6 +2,7 @@ package com.marveliu.framework.services.xm;
 
 
 import com.marveliu.framework.model.xm.xm_feedback;
+import com.marveliu.framework.model.xm.xm_task;
 import com.marveliu.framework.services.base.BaseService;
 
 public interface XmFeedbackService extends BaseService<xm_feedback> {
@@ -65,6 +66,14 @@ public interface XmFeedbackService extends BaseService<xm_feedback> {
      * @return
      */
     public xm_feedback getLatestXmfeedback(String xminfid);
+
+
+    /**
+     * 根据项目反馈编号获得任务书
+     * @param xmfeedbackid
+     * @return
+     */
+    public xm_task getXmtaskByXmfeedbackid(String xmfeedbackid);
 
 
 

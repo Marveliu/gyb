@@ -136,7 +136,6 @@ public class SysUserController {
     @SLog(tag = "重置密码", msg = "用户名:${args[1].getAttribute('loginname')}")
     public Object resetPwd(String id, HttpServletRequest req) {
         try {
-<<<<<<< HEAD:gyb-parent/gyb-app/gyb-nb-web-platform/src/main/java/com/marveliu/app/web/modules/controllers/platform/sys/SysUserController.java
             Sys_user user = sysUserService.fetch(id);
             String salt = R.UU32();
             String pwd = R.captchaNumber(6);
@@ -144,7 +143,7 @@ public class SysUserController {
             sysUserService.update(Chain.make("salt", salt).add("password", hashedPasswordBase64), Cnd.where("id", "=", id));
             req.setAttribute("loginname", user.getLoginname());
             return Result.success("system.success", pwd);
-=======
+
             // Sys_user user = userService.fetch(id);
             // RandomNumberGenerator rng = new SecureRandomNumberGenerator();
             // String salt = rng.nextBytes().toBase64();
@@ -152,8 +151,7 @@ public class SysUserController {
             // String hashedPasswordBase64 = new Sha256Hash(pwd, salt, 1024).toBase64();
             // userService.update(Chain.make("salt", salt).add("password", hashedPasswordBase64), Cnd.where("id", "=", id));
             // req.setAttribute("loginname", user.getLoginname());
-            return Result.success("system.success", userService.resetPassword(id));
->>>>>>> master:wk-parent/wk-app/wk-web/src/main/java/cn/wizzer/app/web/modules/controllers/platform/sys/SysUserController.java
+            // return Result.success("system.success", userService.resetPassword(id));
         } catch (Exception e) {
             return Result.error("system.error");
         }

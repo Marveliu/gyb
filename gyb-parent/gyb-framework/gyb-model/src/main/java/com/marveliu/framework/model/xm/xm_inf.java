@@ -398,7 +398,7 @@ public class xm_inf extends BaseModel implements Serializable {
     public String xminfid() {
         StringBuilder str = new StringBuilder();
         try {
-            String prefix = "xm_";
+            String prefix = "rw_";
             String temp = this.getXmtaskid().split("_")[1];
             str.append(prefix);
             str.append(temp);

@@ -43,9 +43,6 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
 
     private final static Log log = Logs.getLog(XmBillService.class);
 
-    @Inject
-    @Reference
-    private GyPayService gyPayService;
 
     public XmBillServiceImpl(Dao dao) {
         super(dao);
@@ -90,8 +87,8 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
     @Override
     public boolean checkXmbillByGy(String xmbillid, String payid, String gyid) {
         xm_bill xmBill = this.fetch(xmbillid);
-        // 检查 账单存在，账单状态，以及雇员收款方式核验
-        if(!Lang.isEmpty(xmBill) && xmBill.getStatus() == statusUtil.XM_BILL_CHECKING && gyid.equals(gyPayService.getGyidByPayid(payid))){
+        // 检查 账单存在，账单状态
+        if(!Lang.isEmpty(xmBill) && xmBill.getStatus() == statusUtil.XM_BILL_CHECKING){
             Cnd cnd = Cnd.where("id","=",xmbillid);
             Chain chain = Chain.make("gypayid",payid).add("status",statusUtil.XM_BILL_PAYING).add("opAt",Times.getTS());
             return this.update(chain,cnd)!=0;

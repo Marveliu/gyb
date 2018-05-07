@@ -25,6 +25,7 @@ import com.marveliu.framework.model.xm.xm_inf;
 import com.marveliu.framework.model.xm.xm_task;
 import com.marveliu.framework.page.datatable.DataTableColumn;
 import com.marveliu.framework.page.datatable.DataTableOrder;
+import com.marveliu.framework.services.sys.SysUserinfService;
 import com.marveliu.framework.services.xm.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Chain;
@@ -70,6 +71,10 @@ public class XmApplyController{
     @Reference
     private XmFacadeService xmFacadeService;
 
+    @Inject
+    @Reference
+    private SysUserinfService sysUserinfService;
+
 
 
     @Inject
@@ -87,17 +92,25 @@ public class XmApplyController{
     @RequiresPermissions("platform.xm.apply")
     public Object data(
             @Param("xmtaskid") String xmtaskid,
-            @Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
+            @Param("status") int status,
+            @Param("length") int length,
+            @Param("start") int start,
+            @Param("draw") int draw,
+            @Param("::order") List<DataTableOrder> order,
+            @Param("::columns") List<DataTableColumn> columns) {
 
+        // Cnd cnd = Cnd.where("disabled","=",false);
         Cnd cnd = Cnd.NEW();
-        String sysuserid=StringUtil.getPlatformUid();
 
-        // 权限管理
-
-        //项目总监:项目总监的权限标识为sys.allpm,超管权限标识platform.xm.task.add.allpm
-        if(!shiroUtil.hasAnyPermissions("platform.xm.task.add.allpm")){
-            cnd.and("author","=", sysuserid);
+        if(!shiroUtil.isSuper()){
+            cnd.and("author","=", sysUserinfService.getSysuserinfid(StringUtil.getPlatformUid()));
         }
+
+        // 其他描述
+        if(4!= status){
+            cnd.and("status","=",status);
+        }
+
         // xmtaskid不为空
         if( xmtaskid != null && !xmtaskid.isEmpty()){
             cnd.and("xmtaskid","=",xmtaskid);
@@ -133,13 +146,24 @@ public class XmApplyController{
             if(flag){
                 xm_inf xmInf = xmFacadeService.acceptXmapply(xmapplyid,StringUtil.getPlatformUid());
                 if (Lang.isEmpty(xmInf))  return Result.error("任务书已经认领");
+            }else{
+                if(!xmApplyService.setXmApplyStatus(xmapplyid,false,StringUtil.getPlatformUid())) return Result.error("system.error");
             }
-            // 拒绝申请
-            xmApplyService.setXmApplyStatus(xmapplyid,false,StringUtil.getPlatformUid());
-            return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");
         }
+        return Result.success("审批成功，请刷新界面!");
+    }
+
+
+    // 能否对某一任务书进行修改等操作
+    private boolean isAllowForXmtask(String xmtaskid) {
+        if(shiroUtil.isSuper()) return true;
+        xm_task xmTask = xmTaskService.fetch(xmtaskid);
+        if (!Lang.isEmpty(xmTask)) {
+            return xmTask.getAuthor().equals(sysUserinfService.getSysuserinfid(StringUtil.getPlatformUid()));
+        }
+        return false;
     }
 
 

@@ -19,7 +19,6 @@ layout("/layouts/platform.html"){
     <header class="header navbar bg-white shadow">
         <div class="btn-group tool-button">
             <a class="btn btn-primary navbar-btn" href="${base}/platform/cms/article/add" data-pjax id="addLink"><i class="ti-plus"></i> 添加任务书</a>
-            <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> 删除任务书</button>
         </div>
         <div class="pull-right offscreen-right">
             <button class="btn btn-primary navbar-btn" onclick="sublime.toggleFilter('.cd-panel')"><i
@@ -83,12 +82,13 @@ layout("/layouts/platform.html"){
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">删除任务书吗</h4>
+                <h4 class="modal-title">删除任务书</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12">
-                        删除任务书后无法恢复，确定删除吗？ <br/>
+                        1. 删除任务书后无法恢复,谨慎操作。<br/>
+                        2. 已经处于申请阶段以上状态的任务书是无法删除的，你只能撤销发布进行修改。<br/>
                     </div>
                 </div>
             </div>

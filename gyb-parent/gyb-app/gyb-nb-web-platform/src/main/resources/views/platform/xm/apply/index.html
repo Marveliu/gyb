@@ -17,29 +17,10 @@ layout("/layouts/platform.html"){
                             <input id="searchTaskname" type="text" class="form-control" placeholder="查询任务书">
                             <span class="input-group-btn"><button class="btn btn-default" type="button" onclick="initxmtask()">Go!</button></span>
                         </div>
-
-                        <ul class="nav nav-stacked" >
-                            <li>
-                                <!--弹窗支持通过任务类别进行查询-->
-                                <button class="dropdown-toggle form-control" data-toggle="dropdown" aria-expanded="true" value="0" >
-                                    <i class="ti-arrow-down text-success pull-right"></i>查询条件
-                                </button>
-                                <ul class="dropdown-menu" style="width:100%; text-align: center; cursor: pointer" >
-                                    <li>
-                                        <a id="type1" onclick="setSearchFilter(1)">申请中</a>
-                                    </li>
-                                    <li>
-                                        <a id="type2" onclick="setSearchFilter(2)">已认领</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-
                         <!--项目列表-->
                         <ul class="nav nav-stacked" id="xmtasklist">
 
                         </ul>
-
                     </div>
                 </nav>
             </div>
@@ -51,6 +32,11 @@ layout("/layouts/platform.html"){
     <header class="header navbar bg-white shadow">
         <div class="btn-group">
             <button id="currentxmtaskname" class="btn btn-primary navbar-btn" ></i> 全部申请</button>
+        </div>
+        <div class="pull-right offscreen-right">
+            <button class="btn btn-primary navbar-btn" onclick="sublime.toggleFilter('#applyPanel')"><i
+                    class="fa fa-sliders"></i> 筛选
+            </button>
         </div>
     </header>
     <div class=panel-body style="padding-top: 50px;">
@@ -73,6 +59,29 @@ layout("/layouts/platform.html"){
         </div>
     </div>
 </section>
+
+<div class="cd-panel from-right" id="applyPanel">
+    <header class="cd-panel-header">
+        <h4>高级筛选</h4>
+    </header>
+    <div class="cd-panel-container">
+        <div class="cd-panel-content shadow">
+            <div class="form-group">
+                <label for="status">任务申请状态</label>
+                <select id="status" class="form-control">
+                    <option value="4" selected="true">全部</option>
+                    <option value="0">等待审核</option>
+                    <option value="1">审核通过</option>
+                    <option value="2">申请不通过</option>
+                    <option value="3">申请完结</option>
+                </select>
+            </div>
+            <button id="searchBtn" type="button" class="btn btn-default">查询</button>
+        </div>
+    </div>
+</div>
+
+
 <div id="dialogDelete" class="modal fade bs-modal-sm" tabindex="-2" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -151,9 +160,10 @@ layout("/layouts/platform.html"){
                 "type": "post",
                 "data": function (d) {
                     d.xmtaskid = $('#xmtaskid').val();
+                    d.status = $('#status').val();
                 }
             },
-            "order": [[0, "desc"]],
+            "order": [[2, "desc"]],
             "columns": [
                     {"data": "gyid", "bSortable": true},
                     {"data": "xmtaskid", "bSortable": true},
@@ -169,8 +179,8 @@ layout("/layouts/platform.html"){
                                 ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
                                 '<li><a href="${base}/platform/xm/apply/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">${msg["globals.button.detail"]}</a></li>' +
                                 '<li class="divider"></li>' +
-                                '<li><a href="javascript:;" onclick="deal(\'' + row.id + '\',false)">${msg["globals.button.pass"]}</a></li>' +
-                                '<li><a href="javascript:;" onclick="deal(\'' + row.id + '\',true)">${msg["globals.button.nopass"]}</a></li>' +
+                                '<li><a href="javascript:;" onclick="deal(\'' + row.id + '\',true)">${msg["globals.button.pass"]}</a></li>' +
+                                '<li><a href="javascript:;" onclick="deal(\'' + row.id + '\',false)">${msg["globals.button.nopass"]}</a></li>' +
                                 '</ul></div>';
                     },
                     "targets": 6
@@ -232,13 +242,13 @@ layout("/layouts/platform.html"){
                 $('#xmtasklist').append(resultitem);
                 //i表示在data中的索引位置，n表示包含的信息的对象
                 for (var key in data) {
-                    console.log(key, data[key]);
-                    var taskname = key;
-                    var taskid = data[key];
+                    // console.log(key, data[key]);
+                    var taskname = data[key].taskname;
+                    var taskid = data[key].id;
                     var item =
                         '<li>' +
                         '<a onclick="xmapplyset(' + "'" + taskid + "'"+",'"+taskname+"'" + ')">' +
-                        '<i class="ti-control-record text-success pull-right"></i>' + taskname +
+                        '<i class="ti-control-record text-success pull-right"></i>'+key+":" + taskname +
                         '</a>' +
                         '</li>';
                     $('#xmtasklist').append(item);

@@ -27,7 +27,7 @@ import java.util.Map;
 
 
 public class BaseServiceImpl<T> extends EntityService<T> implements BaseService<T> {
-    private static int DEFAULT_PAGE_NUMBER = 10;
+    private static int DEFAULT_PAGE_NUMBER = 20;
 
     public BaseServiceImpl(Dao dao) {
         super(dao);

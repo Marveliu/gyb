@@ -75,10 +75,15 @@ public class XmFacadeServiceImplTest {
     // 项目完结
     @Test
     public void initXmFinal() {
+
+
         xm_feedback xmFeedback = new xm_feedback();
         xmFeedback.setGyid(GY_ID);
         xmFeedback.setNote("test gy reply");
         xmFeedback.setXminfid(XMINF_ID);
+        xmFeedback.setFileurl("");
+
+
         xmFeedback = xmFeedbackService.addXmfeedback(xmFeedback);
         assertEquals(statusUtil.XM_FEEDBACK_INIT, xmFeedback.getStatus());
         assertEquals(true, xmFeedbackService.commitXmfeedback(xmFeedback.getId()));

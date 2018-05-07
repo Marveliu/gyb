@@ -167,7 +167,6 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
     public Boolean addXmApply(String xmtaskid, String gyid,Boolean async) {
 
         if(isApplyAllow(xmtaskid,gyid)) return false;
-
         xm_apply  xmApply = new xm_apply();
         xmApply.setGyid(gyid);
         xmApply.setXmtaskid(xmtaskid);
@@ -208,16 +207,17 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
         Chain chain = Chain.make("opAt",opAt).add("opBy",uid);
         // 通过
         if(flag){
+            String xmtaskid = this.fetch(xmapplyid).getXmtaskid();
             chain.add("status",statusUtil.XM_APPLY_PASS);
             // 之前所有的申请全部标记结束
             this.dao().execute(Sqls.create("update xm_apply set status = @status where id = @xmapplyid")
-                    .setParam("status",statusUtil.XM_APPLY_FAIL)
-                    .setParam("xmapplyid",xmapplyid)
+                    .setParam("status",statusUtil.XM_APPLY_FINAL)
+                    .setParam("xmtaskid",xmtaskid)
             );
         }else{
             chain.add("status",statusUtil.XM_APPLY_FAIL);
         }
-        if(this.dao().update(gy_inf.class,chain,cnd)!=0)
+        if(this.update(chain,cnd)!=0)
         {
             return true;
         }

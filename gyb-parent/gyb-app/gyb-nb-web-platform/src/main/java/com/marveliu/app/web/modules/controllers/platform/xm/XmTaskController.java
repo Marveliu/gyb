@@ -66,14 +66,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class XmTaskController {
     private static final Log log = Logs.get();
 
-
-    // XmTaskServiceImpl aslo has
-    private static final int XM_TASK_INIT = 0;
-    private static final int XM_TASK_PUBLISH = 1;
-    private static final int XM_TASK_APPLYING = 2;
-    private static final int XM_TASK_DOING = 3;
-    private static final int XM_TASK_FINISH = 4;
-
     @Inject
     @Reference
     private XmTaskService xmTaskService;
@@ -146,6 +138,7 @@ public class XmTaskController {
     public Object data(
             @Param("libtaskId") String libtaskid,
             @Param("title") String title,
+            @Param("status") int status,
             @Param("length") int length,
             @Param("start") int start,
             @Param("draw") int draw,
@@ -153,30 +146,30 @@ public class XmTaskController {
             @Param("::columns") List<DataTableColumn> columns) {
 
         Cnd cnd = Cnd.NEW();
-        String sysuserid = StringUtil.getPlatformUid();
 
-        // 权限标识，可以从配置文件里面读
-        String[] permissions = {
-                "platform.xm.task.add.manager",
-                "platform.xm.task.add.allpm"
-        };
-
-        // 权限验证
-        if (!shiroUtil.hasAnyPermissions(permissions)) {
-            cnd.and("author", "=", sysuserid);
+        // 超级权限判定
+        if (!shiroUtil.isSuper()) {
+            cnd.and("author", "=", sysUserinfService.getSysuserinfid(StringUtil.getPlatformUid()));
         }
 
-        if (!Strings.isBlank(libtaskid) && !"0".equals(libtaskid)) {
-            //显示全部子菜单
-            List<lib_task> libtask = ChildTaskID(libtaskid);
-            for (lib_task Lib_Task : libtask) {
-                cnd.or("category", "like", "%" + Lib_Task.getId() + "%");
-            }
-            cnd.or("category", "like", "%" + libtaskid + "%");
-        }
+        // 任务书名称
         if (!Strings.isBlank(title)) {
             cnd.and("taskname", "like", "%" + title + "%");
+        }else{
+            // 其他描述
+            if(5!= status){
+                cnd.and("status","=",status);
+            }
+            // 任务类别
+            if (!Strings.isBlank(libtaskid) && !"0".equals(libtaskid)) {
+                List<lib_task> libtask = ChildTaskID(libtaskid);
+                for (lib_task Lib_Task : libtask) {
+                    cnd.and("category", "like", "%" + Lib_Task.getId() + "%");
+                }
+                cnd.and("category", "like", "%" + libtaskid + "%");
+            }
         }
+
         return xmTaskService.data(length, start, draw, order, columns, cnd, null);
     }
 
@@ -217,8 +210,7 @@ public class XmTaskController {
             xmtask.setEndtime(endtimeAt);
             xmtask.setApplyendtime(applyendtimeAt);
             //初始编辑者和阅读数量
-            xmtask.setAuthor(sysuserid);
-            xmtask.setReadnum(XM_TASK_INIT);
+            xmtask.setAuthor(sysUserinfService.getSysuserinfid(StringUtil.getPlatformUid()));
             // 默认不发布
             xmtask.setDisabled(true);
             xmtask.setStatus(statusUtil.XM_TASK_INIT);
@@ -269,7 +261,7 @@ public class XmTaskController {
             xmtask.setFirstcommit(firstcommitAt);
             xmtask.setEndtime(endtimeAt);
             xmtask.setApplyendtime(applyendtimeAt);
-            xmtask.setStatus(XM_TASK_INIT);
+            xmtask.setStatus(statusUtil.XM_TASK_INIT);
             xmtask.setDisabled(true);
             if (xmTaskService.updateXmtask(xmtask)) {
                 return Result.success("system.success");
@@ -378,45 +370,30 @@ public class XmTaskController {
         String sysuserinfid = sysUserinfService.getSysuserinfid(sysuserid);
         Cnd cnd = Cnd.where("disabled", "=", "false");
         if (Lang.isEmpty(xmtaskname)) {
-            if(!isSuper()){
+            if(!shiroUtil.isSuper()){
                 cnd.and("author", "=", sysuserinfid);
             }
         } else {
             cnd.and("taskname", "like", "%" + xmtaskname + "%");
         }
-        List<xm_task> tasks = xmTaskService.query(cnd);
-        Map<String, String> obj = new HashMap<>();
-        for (xm_task task : tasks) {
-            String taskname = task.getTaskname();
-            obj.put(taskname, task.getId());
-        }
-        return obj;
+        List<xm_task> tasks = xmTaskService.query(cnd.desc("publishAt"));
+        // Map<String, String> obj = new HashMap<>();
+        // for (xm_task task : tasks) {
+        //     String taskname = task.getTaskname();
+        //     obj.put(taskname, task.getId());
+        // }
+        return tasks;
     }
 
 
     // 能否对某一任务书进行修改等操作
     private boolean isAllowForXmtask(String xmtaskid) {
-        if(isSuper()) return true;
+        if(shiroUtil.isSuper()) return true;
         xm_task xmTask = xmTaskService.fetch(xmtaskid);
         if (!Lang.isEmpty(xmTask)) {
             return xmTask.getAuthor().equals(sysUserinfService.getSysuserinfid(StringUtil.getPlatformUid()));
         }
         return false;
     }
-
-    // 检查是否有超级权限
-    private boolean isSuper() {
-        // 权限验证
-        String[] permissions = {
-                "platform.xm.task.add.manager",
-                "platform.xm.task.add.allpm"
-        };
-        // 权限验证
-        if (!shiroUtil.hasAnyPermissions(permissions)) {
-            return true;
-        }
-        return false;
-    }
-
 
 }

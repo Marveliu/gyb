@@ -16,7 +16,7 @@ public class xm_feedback extends BaseModel implements Serializable {
     //版本信息
     @Column
     @Id
-    @Comment("反馈编号")
+    @Comment("反馈id")
     private long id;
 
     @Column
