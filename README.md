@@ -8,7 +8,10 @@
 ### 分支说明
 
 master：主分支，即d服务器运行的分支。
-dev：开发分支，开发者进行开发的分支。
+gyb-boot：微服务分支。
+    - gy-nb-service-sys:dubbo-55010
+    - gy-nb-service-library:dubbo-55011
+    - gy-nb-service-platform:consumer
 
 ### 提交说明
 
