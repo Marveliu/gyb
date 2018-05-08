@@ -114,7 +114,7 @@ public class XmFinalController {
             @Param("::columns") List<DataTableColumn> columns) {
         Cnd cnd = Cnd.NEW();
         cnd.and("status",">=",1);
-        if(shiroUtil.isSuper()){
+        if(!shiroUtil.isSuper()){
             cnd.and("author","=",sysUserinfService.getSysuserinfid(StringUtil.getPlatformUid()));
         }
         return xmInfService.data(length, start, draw, order, columns, cnd, null);
