@@ -123,7 +123,8 @@ public class XmFeedbackController {
     public View edit(int id, HttpServletRequest req) {
         String author = xmFeedbackService.fetch(Cnd.where("id", "=", id)).getAuthor();
         if (author.equals(sysUserinfService.getSysuserinfid(StringUtil.getPlatformUid()))) {
-            req.setAttribute("obj", xmFeedbackService.fetch(id));
+            xm_feedback xmFeedback = xmFeedbackService.fetch(id);
+            req.setAttribute("obj", xmFeedback);
         } else {
             return new ViewWrapper(new UTF8JsonView(), "It is not your bussiness!");
         }
@@ -135,17 +136,16 @@ public class XmFeedbackController {
     @Ok("json")
     @RequiresPermissions("platform.xm.feedback.edit")
     @AdaptBy(type = WhaleAdaptor.class)
-    @SLog(type = "xm", tag = "项目经理审核反馈", msg = "申请编号:${args[1].getId()}}")
+    @SLog(type = "xm", tag = "项目经理审核反馈", msg = "申请编号:}")
     public Object editDo(
+            @Param("xmfeedbackid") long xmfeedbackid,
             @Param("nextcommitat") String nextcommit,
-            @Param("..") xm_feedback xmFeedback,
+            @Param("reply") String reply,
             HttpServletRequest req) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            // 反馈内容，下次反馈deadline时间
             int nextcommitat = (int) (sdf.parse(nextcommit).getTime() / 1000);
-            xmFeedback.setNextcommit(nextcommitat);
-            if (xmFeedbackService.checkXmfeedback(xmFeedback)){
+            if (xmFeedbackService.checkXmfeedback(xmfeedbackid,nextcommitat,reply,StringUtil.getPlatformUid())){
                 return Result.success("system.success");
             }
         } catch (Exception e) {

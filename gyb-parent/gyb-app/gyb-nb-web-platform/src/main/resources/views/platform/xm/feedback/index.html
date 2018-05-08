@@ -212,7 +212,7 @@ layout("/layouts/platform-xm.html"){
             $.post("${base}/platform/xm/feedback/feedbackcommit?&xmfeedbackid=" + id + "&flag=" + flag, {}, function (data) {
                 if (data.code == 0) {
                     datatable.ajax.reload(null, false);
-                    Toast.error(data.msg);
+                    Toast.success(data.msg);
                 } else {
                     Toast.error(data.msg);
                 }

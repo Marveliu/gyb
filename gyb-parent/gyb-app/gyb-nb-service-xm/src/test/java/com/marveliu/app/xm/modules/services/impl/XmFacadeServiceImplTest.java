@@ -89,7 +89,7 @@ public class XmFacadeServiceImplTest {
         assertEquals(true, xmFeedbackService.commitXmfeedback(xmFeedback.getId()));
         xmFeedback.setReply("done well");
         xmFeedback.setNextcommit((int) Times.getTS());
-        assertEquals(true,xmFeedbackService.checkXmfeedback(xmFeedback));
+        assertEquals(true,xmFeedbackService.checkXmfeedback(xmFeedback.getId(),xmFeedback.getNextcommit(),xmFeedback.getReply(),UID));
         assertEquals(true,xmFeedbackService.confirmXmfeedback(xmFeedback.getId(),true));
 
         // xmApplyService.setXmApplyStatus();

@@ -25,6 +25,7 @@ import com.marveliu.framework.util.statusUtil;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
+import org.nutz.dao.Sqls;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
@@ -132,19 +133,33 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
     }
 
     /**
-     * 项目经理审批项目反馈
+     * 项目经理审核反馈
      *
-     * @param xmFeedback
+     * @param xmfeedbackid
+     * @param nextcommitat
+     * @param reply
+     * @param uid
      * @return
      */
     @Override
-    public boolean checkXmfeedback(xm_feedback xmFeedback) {
-        if(getXmfeedbackStatus(xmFeedback.getId()) != statusUtil.XM_FEEDBACK_COMMIT) return false;
-        try {
-            xmFeedback.setStatus(statusUtil.XM_FEEDBACK_CHECKING);
-            return this.updateIgnoreNull(xmFeedback) != 0;
-        } catch (Exception e) {
-            log.error("项目经理审批失败", e);
+    public boolean checkXmfeedback(
+            long xmfeedbackid,
+            int nextcommitat,
+            String reply,
+            String uid) {
+        int currentstatus = getXmfeedbackStatus(xmfeedbackid);
+        if(currentstatus == statusUtil.XM_FEEDBACK_COMMIT || currentstatus == statusUtil.XM_FEEDBACK_CHECKING){
+            try {
+                Cnd cnd = Cnd.where("id","=",xmfeedbackid);
+                Chain chain = Chain.make("nextcommit",nextcommitat)
+                        .add("reply",reply)
+                        .add("status",statusUtil.XM_FEEDBACK_CHECKING)
+                        .add("opBy",uid)
+                        .add("opAt",Times.getTS());
+                return this.update(chain,cnd)!= 0;
+            } catch (Exception e) {
+                log.error("项目经理审批失败", e);
+            }
         }
         return false;
     }

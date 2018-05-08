@@ -9,6 +9,7 @@ public interface XmFeedbackService extends BaseService<xm_feedback> {
 
     /**
      * 获得项目反馈总数
+     *
      * @param xminfid
      * @return
      */
@@ -17,6 +18,7 @@ public interface XmFeedbackService extends BaseService<xm_feedback> {
 
     /**
      * 是否运行进行反馈
+     *
      * @param xminfid
      * @return
      */
@@ -42,12 +44,19 @@ public interface XmFeedbackService extends BaseService<xm_feedback> {
 
 
     /**
-     * 项目经理审批项目反馈
+     * 项目经理审核反馈
      *
-     * @param xmFeedback
+     * @param xmfeedbackid
+     * @param nextcommitat
+     * @param reply
+     * @param uid
      * @return
      */
-    public boolean checkXmfeedback(xm_feedback xmFeedback);
+    public boolean checkXmfeedback(
+            long xmfeedbackid,
+            int nextcommitat,
+            String reply,
+            String uid);
 
 
     /**
@@ -62,6 +71,7 @@ public interface XmFeedbackService extends BaseService<xm_feedback> {
 
     /**
      * 获得项目最新一次的反馈
+     *
      * @param xminfid
      * @return
      */
@@ -70,12 +80,11 @@ public interface XmFeedbackService extends BaseService<xm_feedback> {
 
     /**
      * 根据项目反馈编号获得任务书
+     *
      * @param xmfeedbackid
      * @return
      */
     public xm_task getXmtaskByXmfeedbackid(long xmfeedbackid);
-
-
 
 
 }

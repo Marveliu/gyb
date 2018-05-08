@@ -35,6 +35,6 @@ public class XmFeedbackServiceImplTest {
 
     @Test
     public void commitXmfeedback() {
-        assertEquals(true, xmFeedbackService.commitXmfeedback(48));
+        assertEquals(true, xmFeedbackService.commitXmfeedback(50));
     }
 }

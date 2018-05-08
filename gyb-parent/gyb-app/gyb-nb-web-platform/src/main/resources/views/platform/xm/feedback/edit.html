@@ -10,6 +10,9 @@ layout("/layouts/platform.html"){
         <a class="btn btn-primary navbar-btn" href="${base}/platform/xm/feedback" id="goBack" data-pjax><i
                 class="ti-angle-left"></i>${msg['globals.button.back']}</a>
     </div>
+    <div class="btn-group tool-button pull-right">
+        <button onclick="submitFeedback()" class="btn btn-primary navbar-btn">保存反馈</button>
+    </div>
 </header>
 
 <div class="content-wrap">
@@ -21,14 +24,10 @@ layout("/layouts/platform.html"){
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="parentid"
-                                   class="col-sm-2 control-label">${msg['xm.feedback.column.parentid']}</label>
+                                   class="col-sm-2 control-label">${msg['xm.feedback.column.id']}</label>
                             <div class="col-sm-8">
                                 <input type="text" id="parentid" class="form-control"
-                                <%if(obj.parentid == 0){ %>
-                                value="初次提交反馈" disabled="disabled" >
-                                <%}else{%>
-                                value="${obj.code}" >
-                                <%}%>
+                                       value="${obj.code}" disabled>
                             </div>
                         </div>
 
@@ -112,25 +111,23 @@ layout("/layouts/platform.html"){
     <div class="content-wrap">
         <div class="wrapper">
             <div class="p15 clearfix">
-                <form role="form" id="editForm" method="post" class="form-horizontal parsley-form"
-                      action="${base}/platform/xm/feedback/editDo">
-                    <input name="id" type="hidden" value="${obj.id}">
-
+                <form role="form" class="form-horizontal parsley-form">
+                    <input id="xmfeedbackid" type="hidden" value="${obj.id}">
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary">保存反馈</button>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="nextcommit">下一次提交时间</label>
+                        <label for="nextcommitat">下一次提交时间</label>
                         <div class="input-group date form_datetime " data-date="1979-09-16T05:25:07Z"
-                             data-date-format="dd MM yyyy - HH:ii p" data-link-field="nextcommit">
-                            <input type="text" size="16" readonly class="form-control" value="${@date.getDateTime()}"
-                                   data-parsley-required="true">
+                             data-date-format="dd MM yyyy - HH:ii p" data-link-field="nextcommitat">
+                            <input type="text" size="16" readonly class="form-control"
+                            <% if(obj.nextcommit == 0){%>
+                            value="${@date.getDateTime()}"
+                            <% }else{%>
+                            value="${@date.getDate(obj.nextcommit)}"
+                            <% }%>
+                            data-parsley-required="true">
                             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                             <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                         </div>
-
-                        <input type="hidden" id="nextcommit" name="nextcommitat"
+                        <input type="hidden" id="nextcommitat" name="nextcommitat"
                         <% if(obj.nextcommit == 0){%>
                         value="${@date.getDateTime()}" />
                         <% }else{%>
@@ -150,6 +147,7 @@ layout("/layouts/platform.html"){
 
 <script language="JavaScript">
     $(document).ready(function () {
+        console.log(${obj});
         setTimeout(function () {
             ue = new baidu.editor.ui.Editor();
             ue.render('reply');
@@ -166,6 +164,7 @@ layout("/layouts/platform.html"){
             forceParse: 0,
             showMeridian: 1
         });
+
         $('#editForm').ajaxForm({
             dataType: 'json',
             beforeSubmit: function (arr, form, options) {
@@ -182,5 +181,28 @@ layout("/layouts/platform.html"){
             }
         });
     });
+
+    // 审批项目反馈
+    function submitFeedback() {
+        var xmfeedbackid = $('#xmfeedbackid').val();
+        var nextcommitat = $('#nextcommitat').val();
+        var reply = $("[name='reply']").val();
+        $.ajax({
+            url: "/platform/xm/feedback/editDo?xmfeedbackid=" + xmfeedbackid + "&nextcommitat=" + nextcommitat + "&reply=" + reply,
+            type: "get",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (data, statusText, xhr, form) {
+                if (data.code == 0) {
+                    Toast.success(data.msg);
+                } else {
+                    Toast.error(data.msg);
+                }
+            },
+            error: function () {
+                Toast.error("加载出错！")
+            }
+        });
+    }
 </script>
 <%}%>
