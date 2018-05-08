@@ -4,7 +4,7 @@ layout("/layouts/platform.html"){
 
 <header class="header navbar bg-white shadow">
     <div class="btn-group tool-button">
-        <a class="btn btn-primary navbar-btn" href="${base}/platform/xm/apply" id="goBack" data-pjax><i
+        <a class="btn btn-primary navbar-btn" href="${base}/platform/xm/final" id="goBack" data-pjax><i
                 class="ti-angle-left"></i>${msg['globals.button.back']}</a>
     </div>
 </header>
@@ -12,16 +12,15 @@ layout("/layouts/platform.html"){
 
 <div class="row content-wrap">
 
-    <div class="col-md-6">
+    <div class="col-md-5 ">
         <div class="wrapper" style="min-height:500px;">
-            <section class="panel panel-form">
+            <section class="panel panel-form shadow">
                 <div class="content-wrap">
                     <section class="panel no-m">
                         <div class="panel-body">
                             <div class="mb25 clearfix">
                                 <div class="">
                                     <!--<i class="ti-microphone fa-5x"></i>-->
-
                                     <h3 class="text-uppercase">${obj.taskname!}</h3>
                                     项目编号:${obj.id!}<br>
                                     ${@date.getDateTime()}
@@ -91,9 +90,9 @@ layout("/layouts/platform.html"){
         </div>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-7">
         <div class="wrapper" style="min-height:500px;">
-            <section class="panel panel-form">
+            <section class="panel panel-form shadow">
                 <div class="content-wrap">
                     <div class="p15 clearfix">
                         <section class="panel">
@@ -107,26 +106,26 @@ layout("/layouts/platform.html"){
                                         <label for="grade">评分</label>
                                         <input type="number" id="grade" class="form-control" name="grade"
                                                data-parsley-type="number" data-parsley-required="true"
-                                               value="" placeholder="请输入评分！">
+                                               value="${obj.xmevagrade}" placeholder="请输入评分！">
                                     </div>
 
                                     <div class="form-group">
                                         <label for="evanote">评价意见</label>
                                         <textarea id="evanote" name="evanote" style="width:100%;" rows="5"
-                                                  data-parsley-required="true" placeholder="请输入200以内的评价！"></textarea>
+                                                  data-parsley-required="true" placeholder="请输入200以内的评价！">${obj.xmevanote}</textarea>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="paysum">结算金额</label>
                                         <input type="number" id="paysum" class="form-control" name="paysum"
                                                data-parsley-type="number" data-parsley-required="true"
-                                               value="" placeholder="请输入最终结算金额！">
+                                               value="${obj.paysum}" placeholder="请输入最终结算金额！">
                                     </div>
 
                                     <div class="form-group">
                                         <label for="billnote">付款补充说明</label>
                                         <textarea id="billnote" name="billnote" style="width:100%;" rows="5"
-                                                  data-parsley-required="true" placeholder="请输入200以内的评价！"></textarea>
+                                                  data-parsley-required="true" placeholder="请输入200以内的评价！">${obj.xmbillnote}</textarea>
                                     </div>
 
                                     <div class="row">

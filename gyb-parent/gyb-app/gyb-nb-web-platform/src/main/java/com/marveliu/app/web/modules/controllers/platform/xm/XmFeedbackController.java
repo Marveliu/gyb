@@ -136,7 +136,7 @@ public class XmFeedbackController {
     @Ok("json")
     @RequiresPermissions("platform.xm.feedback.edit")
     @AdaptBy(type = WhaleAdaptor.class)
-    @SLog(type = "xm", tag = "项目经理审核反馈", msg = "申请编号:}")
+    @SLog(type = "xm", tag = "项目经理审核反馈", msg = "反馈编号:{args[0]}")
     public Object editDo(
             @Param("xmfeedbackid") long xmfeedbackid,
             @Param("nextcommitat") String nextcommit,
