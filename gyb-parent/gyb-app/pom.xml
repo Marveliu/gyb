@@ -22,6 +22,7 @@
         <module>gyb-nb-service-gy</module>
         <module>gyb-nb-service-xm</module>
         <module>gyb-nb-service-msg</module>
+        <module>gyb-nb-web-api</module>
     </modules>
 
     <dependencies>
