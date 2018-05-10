@@ -20,7 +20,7 @@ package com.marveliu.framework.util;
  * @since 05/05/2018
  **/
 
-public class statusUtil {
+public class ConfigUtil {
 
     public final static int XM_APPLY_INIT = 0;
     public final static int XM_APPLY_PASS = 1;
@@ -53,4 +53,9 @@ public class statusUtil {
     public static final int XM_INF_PAYING = 3;
     public static final int XM_INF_PAYED = 4;
     public static final int XM_INF_ERROR = 5;
+
+
+    public static final int SYS_MSG_TYPE_ALL = 0;
+    public static final int SYS_MSG_TYPE_EMAIL = 0;
+
 }

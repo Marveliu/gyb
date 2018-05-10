@@ -16,12 +16,11 @@ package com.marveliu.app.xm.modules.services.impl;
  */
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.marveliu.framework.model.xm.xm_apply;
 import com.marveliu.framework.model.xm.xm_inf;
 import com.marveliu.framework.model.xm.xm_task;
 import com.marveliu.framework.services.base.BaseServiceImpl;
 import com.marveliu.framework.services.xm.XmInfService;
-import com.marveliu.framework.util.statusUtil;
+import com.marveliu.framework.util.ConfigUtil;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Times;
@@ -58,7 +57,7 @@ public class XmInfServiceImpl extends BaseServiceImpl<xm_inf> implements XmInfSe
             xmInf.setAt(Times.getTS());
             xmInf.setOpAt(Times.getTS());
             xmInf.setOpBy(uid);
-            xmInf.setStatus(statusUtil.XM_INF_DOING);
+            xmInf.setStatus(ConfigUtil.XM_INF_DOING);
             return this.insert(xmInf);
         }catch (Exception e){
 

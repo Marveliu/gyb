@@ -17,10 +17,8 @@ package com.marveliu.app.xm.modules.services.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
-import com.marveliu.framework.model.gy.gy_pay;
 import com.marveliu.framework.model.xm.*;
-import com.marveliu.framework.services.gy.GyPayService;
-import com.marveliu.framework.util.statusUtil;
+import com.marveliu.framework.util.ConfigUtil;
 import com.marveliu.framework.model.sys.Sys_log;
 import com.marveliu.framework.services.sys.SysLogService;
 import com.marveliu.framework.services.xm.*;
@@ -30,7 +28,6 @@ import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
-import org.nutz.lang.Strings;
 import org.nutz.lang.Times;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
@@ -105,7 +102,7 @@ public class XmFacadeServiceImpl implements XmFacadeService {
         xm_apply xmApply = xmApplyService.fetch(xmapplyid);
 
         // 检查申请信息是否存在且不可重复受理
-        if(Lang.isEmpty(xmApply) || xmApply.getStatus() == statusUtil.XM_APPLY_FINAL || xmApply.getStatus() == statusUtil.XM_APPLY_PASS ) return null;
+        if(Lang.isEmpty(xmApply) || xmApply.getStatus() == ConfigUtil.XM_APPLY_FINAL || xmApply.getStatus() == ConfigUtil.XM_APPLY_PASS ) return null;
 
         // 更新任务书申请状态为完结，同时可以检查任务书是否存在
         if (xmApplyService.setXmApplyStatus(xmapplyid,true,uid)){
@@ -114,7 +111,7 @@ public class XmFacadeServiceImpl implements XmFacadeService {
             try {
                 xm_task xmTask = xmApplyService.getXmTaskByAppyid(xmapplyid);
                 // 更新任务书状态
-                xmTask.setStatus(statusUtil.XM_TASK_DOING);
+                xmTask.setStatus(ConfigUtil.XM_TASK_DOING);
                 xmTaskService.updateXmtask(xmTask);
                 // 建立项目
                 xmInf = xmInfService.initXminf(xmTask, xmApplyService.fetch(xmapplyid).getGyid(), uid);
@@ -166,7 +163,7 @@ public class XmFacadeServiceImpl implements XmFacadeService {
         int currentStatus = xmInfService.fetch(xminfid).getStatus();
 
         // 如果已经结算，返回失败
-        if( currentStatus != statusUtil.XM_INF_DONE) return false;
+        if( currentStatus != ConfigUtil.XM_INF_DONE) return false;
 
         try{
             xm_evaluation xmEvaluation = new xm_evaluation();
@@ -175,7 +172,7 @@ public class XmFacadeServiceImpl implements XmFacadeService {
             xmEvaluation.setNote(xmEvaluationNote);
             xm_inf xmInf = xmInfService.fetch(xminfid);
 
-            Chain xmBillChain =  Chain.make("status",statusUtil.XM_BILL_CHECKING).add("paysum",paySum).add("note",xmBillNote).add("opAt",Times.getTS());
+            Chain xmBillChain =  Chain.make("status",ConfigUtil.XM_BILL_CHECKING).add("paysum",paySum).add("note",xmBillNote).add("opAt",Times.getTS());
 
             Trans.exec(new Atom() {
                 @Override
@@ -188,14 +185,14 @@ public class XmFacadeServiceImpl implements XmFacadeService {
                     // }
 
                     xmFeedbackService.update(
-                            Chain.make("status",statusUtil.XM_FEEDBACK_FINAL),
+                            Chain.make("status",ConfigUtil.XM_FEEDBACK_FINAL),
                             Cnd.where("id","=",xmFeedbackService.getLatestXmfeedback(xminfid).getId()));
                     // 任务书更新为: 完结
-                    xmTaskService.update(Chain.make("status",statusUtil.XM_TASK_FINISH),Cnd.where("id","=",xmInf.getXmtaskid()));
+                    xmTaskService.update(Chain.make("status",ConfigUtil.XM_TASK_FINISH),Cnd.where("id","=",xmInf.getXmtaskid()));
                     // 项目账单更新为: 雇员审查
                     xmBillService.update(xmBillChain,Cnd.where("xminfid","=",xminfid));
                     // 项目信息更新为: 雇员审查
-                    xmInfService.update(Chain.make("status",statusUtil.XM_INF_CHECKING),Cnd.where("id","=",xminfid));
+                    xmInfService.update(Chain.make("status",ConfigUtil.XM_INF_CHECKING),Cnd.where("id","=",xminfid));
                 }
             });
             return true;

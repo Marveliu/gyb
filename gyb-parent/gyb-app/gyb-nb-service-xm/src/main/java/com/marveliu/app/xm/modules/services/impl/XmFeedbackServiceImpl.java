@@ -21,18 +21,16 @@ import com.marveliu.framework.model.xm.xm_inf;
 import com.marveliu.framework.model.xm.xm_task;
 import com.marveliu.framework.services.base.BaseServiceImpl;
 import com.marveliu.framework.services.xm.XmFeedbackService;
-import com.marveliu.framework.util.statusUtil;
+import com.marveliu.framework.util.ConfigUtil;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
-import org.nutz.dao.Sqls;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.lang.Times;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import sun.tools.jconsole.inspector.XMBean;
 
 /**
  * @author Marveliu
@@ -80,7 +78,7 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
             return true;
         } else {
             // 上次的反馈完成
-            if (xmFeedback.getStatus() == statusUtil.XM_FEEDBACK_FINISH) {
+            if (xmFeedback.getStatus() == ConfigUtil.XM_FEEDBACK_FINISH) {
                 return true;
             }
         }
@@ -107,7 +105,7 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
                 xmFeedback.setCode("fk_"+xmFeedback.getXminfid().split("_")[1]+"_"+count);
             }
             xmFeedback.setFileurl(Strings.sBlank(xmFeedback.getFileurl(),""));
-            xmFeedback.setStatus(statusUtil.XM_FEEDBACK_INIT);
+            xmFeedback.setStatus(ConfigUtil.XM_FEEDBACK_INIT);
             xmFeedback.setAt(Times.getTS());
 
             return this.insert(xmFeedback);
@@ -125,8 +123,8 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
      */
     @Override
     public boolean commitXmfeedback(long xmfeedbackid) {
-        if(getXmfeedbackStatus(xmfeedbackid) != statusUtil.XM_FEEDBACK_INIT) return false;
-        Chain chain = Chain.make("status", statusUtil.XM_FEEDBACK_COMMIT);
+        if(getXmfeedbackStatus(xmfeedbackid) != ConfigUtil.XM_FEEDBACK_INIT) return false;
+        Chain chain = Chain.make("status", ConfigUtil.XM_FEEDBACK_COMMIT);
         Cnd cnd = Cnd.where("id", "=", xmfeedbackid);
         // todo:邮件通知对应项目经理
         return this.update(chain, cnd) != 0;
@@ -148,12 +146,12 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
             String reply,
             String uid) {
         int currentstatus = getXmfeedbackStatus(xmfeedbackid);
-        if(currentstatus == statusUtil.XM_FEEDBACK_COMMIT || currentstatus == statusUtil.XM_FEEDBACK_CHECKING){
+        if(currentstatus == ConfigUtil.XM_FEEDBACK_COMMIT || currentstatus == ConfigUtil.XM_FEEDBACK_CHECKING){
             try {
                 Cnd cnd = Cnd.where("id","=",xmfeedbackid);
                 Chain chain = Chain.make("nextcommit",nextcommitat)
                         .add("reply",reply)
-                        .add("status",statusUtil.XM_FEEDBACK_CHECKING)
+                        .add("status",ConfigUtil.XM_FEEDBACK_CHECKING)
                         .add("opBy",uid)
                         .add("opAt",Times.getTS());
                 return this.update(chain,cnd)!= 0;
@@ -173,17 +171,17 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
      */
     @Override
     public boolean confirmXmfeedback(long xmfeedbackid, Boolean flag) {
-        if(getXmfeedbackStatus(xmfeedbackid) != statusUtil.XM_FEEDBACK_CHECKING) return false;
+        if(getXmfeedbackStatus(xmfeedbackid) != ConfigUtil.XM_FEEDBACK_CHECKING) return false;
         Chain chain = null;
         if(flag){
             // deadline 添加定时任务
             // updateIgnoreNull
-            chain = Chain.make("status",statusUtil.XM_FEEDBACK_FINAL);
+            chain = Chain.make("status",ConfigUtil.XM_FEEDBACK_FINAL);
             // 设置xm_inf状态
-            this.dao().update(xm_inf.class,Chain.make("status",statusUtil.XM_INF_DONE),Cnd.where("id","=",this.fetch(xmfeedbackid).getXminfid()));
+            this.dao().update(xm_inf.class,Chain.make("status",ConfigUtil.XM_INF_DONE),Cnd.where("id","=",this.fetch(xmfeedbackid).getXminfid()));
             // todo: 通知进行项目结算流程
         }else {
-            chain = Chain.make("status",statusUtil.XM_FEEDBACK_FINISH);
+            chain = Chain.make("status",ConfigUtil.XM_FEEDBACK_FINISH);
         }
         Cnd cnd = Cnd.where("id","=",xmfeedbackid);
         // todo:邮件通知对应项目经理

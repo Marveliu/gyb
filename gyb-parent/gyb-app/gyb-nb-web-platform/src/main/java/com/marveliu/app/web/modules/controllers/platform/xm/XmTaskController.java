@@ -21,7 +21,6 @@ import com.marveliu.app.web.commons.utils.ShiroUtil;
 import com.marveliu.app.web.commons.utils.StringUtil;
 import com.marveliu.framework.model.base.Result;
 import com.marveliu.framework.model.library.lib_task;
-import com.marveliu.framework.model.xm.xm_limit;
 import com.marveliu.framework.model.xm.xm_task;
 import com.marveliu.framework.page.datatable.DataTableColumn;
 import com.marveliu.framework.page.datatable.DataTableOrder;
@@ -29,27 +28,20 @@ import com.marveliu.framework.services.library.LibSkillService;
 import com.marveliu.framework.services.library.LibTaskService;
 import com.marveliu.framework.services.sys.SysUserinfService;
 import com.marveliu.framework.services.xm.XmTaskService;
-import com.marveliu.framework.util.statusUtil;
-import org.apache.shiro.SecurityUtils;
+import com.marveliu.framework.util.ConfigUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.subject.Subject;
-import org.apache.shiro.util.StringUtils;
 import org.nutz.dao.Cnd;
-import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import org.nutz.mvc.Mvcs;
 import org.nutz.mvc.adaptor.WhaleAdaptor;
 import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
-import org.nutz.trans.Atom;
-import org.nutz.trans.Trans;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
@@ -213,7 +205,7 @@ public class XmTaskController {
             xmtask.setAuthor(sysUserinfService.getSysuserinfid(StringUtil.getPlatformUid()));
             // 默认不发布
             xmtask.setDisabled(true);
-            xmtask.setStatus(statusUtil.XM_TASK_INIT);
+            xmtask.setStatus(ConfigUtil.XM_TASK_INIT);
             //插入任务书，和任务书的技能要求
             xmTaskService.insertWith(xmtask, "xmlimits");
             return Result.success("system.success");
@@ -261,7 +253,7 @@ public class XmTaskController {
             xmtask.setFirstcommit(firstcommitAt);
             xmtask.setEndtime(endtimeAt);
             xmtask.setApplyendtime(applyendtimeAt);
-            xmtask.setStatus(statusUtil.XM_TASK_INIT);
+            xmtask.setStatus(ConfigUtil.XM_TASK_INIT);
             xmtask.setDisabled(true);
             if (xmTaskService.updateXmtask(xmtask)) {
                 return Result.success("system.success");
@@ -300,7 +292,7 @@ public class XmTaskController {
         try {
             xm_task xmTask = xmTaskService.fetch(oneId);
             if(Lang.isEmpty(xmTask)) return Result.success("没有该任务书信息");
-            if(xmTask.getStatus() >= statusUtil.XM_TASK_APPLYING) return Result.success("任务书已经在申请了，无法删除");
+            if(xmTask.getStatus() >= ConfigUtil.XM_TASK_APPLYING) return Result.success("任务书已经在申请了，无法删除");
             if(xmTaskService.deleteXmtask(oneId)){
                 req.setAttribute("id", oneId);
                 return Result.success("system.success");

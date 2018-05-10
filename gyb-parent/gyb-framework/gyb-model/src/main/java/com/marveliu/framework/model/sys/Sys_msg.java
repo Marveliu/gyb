@@ -25,25 +25,28 @@ public class Sys_msg extends BaseModel implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 100)
     private String username;
 
-    @Column// aop.before aop.after aop.error
+    // ConfigUtil SYS_MSG_TYPE_* 对应
+    @Column
     @Comment("推送方式")
     @ColDefine(type = ColType.INT)
     private Integer type;
 
+    // 雇员，系统，任务三大消息标识
     @Column
-    @Comment("推送标示")
-    @ColDefine(type = ColType.INT)
-    private Integer tag;
+    @Comment("消息标识")
+    @ColDefine(type = ColType.VARCHAR, width = 50)
+    private String tag;
 
+    // sys_usr id 可以获得联系方式
     @Column
     @Comment("消息接受人")
     @ColDefine(type = ColType.VARCHAR, width = 50)
     private String revid;
 
-    @Column
-    @Comment("消息接受账号")
-    @ColDefine(type = ColType.VARCHAR, width = 100)
-    private String revaccount;
+    // @Column
+    // @Comment("消息接受账号")
+    // @ColDefine(type = ColType.VARCHAR, width = 100)
+    // private String revaccount;
 
     @Column
     @Comment("消息发送人")
@@ -55,6 +58,7 @@ public class Sys_msg extends BaseModel implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 255)
     private String ip;
 
+    // json数据
     @Column
     @Comment("推送内容")
     @ColDefine(type = ColType.TEXT)
@@ -89,11 +93,12 @@ public class Sys_msg extends BaseModel implements Serializable {
         this.type = type;
     }
 
-    public Integer getTag() {
+
+    public String getTag() {
         return tag;
     }
 
-    public void setTag(Integer tag) {
+    public void setTag(String tag) {
         this.tag = tag;
     }
 
@@ -137,11 +142,4 @@ public class Sys_msg extends BaseModel implements Serializable {
         this.checked = checked;
     }
 
-    public String getRevaccount() {
-        return revaccount;
-    }
-
-    public void setRevaccount(String revaccount) {
-        this.revaccount = revaccount;
-    }
 }

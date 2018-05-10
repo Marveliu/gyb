@@ -3,7 +3,7 @@ package com.marveliu.app.xm.modules.services.impl;
 import com.marveliu.framework.model.xm.xm_feedback;
 import com.marveliu.framework.model.xm.xm_inf;
 import com.marveliu.framework.services.xm.*;
-import com.marveliu.framework.util.statusUtil;
+import com.marveliu.framework.util.ConfigUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nutz.boot.test.junit4.NbJUnit4Runner;
@@ -85,7 +85,7 @@ public class XmFacadeServiceImplTest {
 
 
         xmFeedback = xmFeedbackService.addXmfeedback(xmFeedback);
-        assertEquals(statusUtil.XM_FEEDBACK_INIT, xmFeedback.getStatus());
+        assertEquals(ConfigUtil.XM_FEEDBACK_INIT, xmFeedback.getStatus());
         assertEquals(true, xmFeedbackService.commitXmfeedback(xmFeedback.getId()));
         xmFeedback.setReply("done well");
         xmFeedback.setNextcommit((int) Times.getTS());

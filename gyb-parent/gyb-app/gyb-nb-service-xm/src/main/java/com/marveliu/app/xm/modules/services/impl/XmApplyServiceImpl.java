@@ -16,8 +16,7 @@ package com.marveliu.app.xm.modules.services.impl;
  */
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.marveliu.framework.util.statusUtil;
-import com.marveliu.framework.model.gy.gy_inf;
+import com.marveliu.framework.util.ConfigUtil;
 import com.marveliu.framework.model.xm.xm_apply;
 import com.marveliu.framework.model.xm.xm_task;
 import com.marveliu.framework.services.base.BaseServiceImpl;
@@ -171,7 +170,7 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
         xmApply.setGyid(gyid);
         xmApply.setXmtaskid(xmtaskid);
         xmApply.setId(R.UU32().toLowerCase());
-        xmApply.setStatus(statusUtil.XM_APPLY_INIT);
+        xmApply.setStatus(ConfigUtil.XM_APPLY_INIT);
         xmApply.setAt(Times.getTS());
         if(async){
             LinkedBlockingQueue<xm_apply> queue = this.queue;
@@ -208,14 +207,14 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
         // 通过
         if(flag){
             String xmtaskid = this.fetch(xmapplyid).getXmtaskid();
-            chain.add("status",statusUtil.XM_APPLY_PASS);
+            chain.add("status",ConfigUtil.XM_APPLY_PASS);
             // 之前所有的申请全部标记结束
             this.dao().execute(Sqls.create("update xm_apply set status = @status where id = @xmapplyid")
-                    .setParam("status",statusUtil.XM_APPLY_FINAL)
+                    .setParam("status",ConfigUtil.XM_APPLY_FINAL)
                     .setParam("xmtaskid",xmtaskid)
             );
         }else{
-            chain.add("status",statusUtil.XM_APPLY_FAIL);
+            chain.add("status",ConfigUtil.XM_APPLY_FAIL);
         }
         if(this.update(chain,cnd)!=0)
         {
@@ -270,7 +269,7 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
     public boolean isApplyAllow(String xmtaskid, String gyid) {
         xm_task xmTask = this.dao().fetch(xm_task.class,Cnd.where("id","=",xmtaskid));
         xm_apply xmApply = this.fetch(Cnd.where("xmtaskid","=",xmtaskid).and("gyid","=",gyid));
-        if(!Lang.isEmpty(xmTask)&& xmTask.getStatus() == statusUtil.XM_TASK_APPLYING){
+        if(!Lang.isEmpty(xmTask)&& xmTask.getStatus() == ConfigUtil.XM_TASK_APPLYING){
             if (Lang.isEmpty(xmApply)){
                 return true;
             }

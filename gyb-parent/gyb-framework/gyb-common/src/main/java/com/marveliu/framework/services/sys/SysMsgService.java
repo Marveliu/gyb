@@ -9,6 +9,10 @@ import com.marveliu.framework.services.base.BaseService;
  */
 public interface SysMsgService extends BaseService<Sys_msg> {
 
-    // 推送消息
+    /**
+     * 消息推送
+     * @param sysMsg
+     */
+    public void pushMsg(Sys_msg sysMsg);
 
 }

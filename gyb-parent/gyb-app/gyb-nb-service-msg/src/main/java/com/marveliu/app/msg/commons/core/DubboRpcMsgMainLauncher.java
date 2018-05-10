@@ -54,6 +54,7 @@ public class DubboRpcMsgMainLauncher {
     }
 
     public void init() throws Exception {
+        // todo:参考taskmodules 实现初始化
         // 进行队列声明
     }
 

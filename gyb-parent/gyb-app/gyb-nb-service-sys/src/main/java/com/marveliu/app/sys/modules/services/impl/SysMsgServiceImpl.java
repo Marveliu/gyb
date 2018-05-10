@@ -16,4 +16,15 @@ public class SysMsgServiceImpl extends BaseServiceImpl<Sys_msg> implements SysMs
     public SysMsgServiceImpl(Dao dao) {
         super(dao);
     }
+
+
+    /**
+     * 消息推送
+     *
+     * @param sysMsg
+     */
+    @Override
+    public void pushMsg(Sys_msg sysMsg) {
+        //todo: 业务实现
+    }
 }

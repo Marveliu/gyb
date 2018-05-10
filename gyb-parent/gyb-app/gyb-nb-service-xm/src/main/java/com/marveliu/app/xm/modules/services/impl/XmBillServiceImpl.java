@@ -16,16 +16,13 @@ package com.marveliu.app.xm.modules.services.impl;
  */
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.marveliu.framework.services.gy.GyPayService;
-import com.marveliu.framework.util.statusUtil;
+import com.marveliu.framework.util.ConfigUtil;
 import com.marveliu.framework.model.xm.xm_bill;
 import com.marveliu.framework.services.base.BaseServiceImpl;
 import com.marveliu.framework.services.xm.XmBillService;
-import jdk.nashorn.internal.ir.annotations.Reference;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
-import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Times;
@@ -66,7 +63,7 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
             // 账单信息
             xm_bill bill = new xm_bill();
             bill.setXminfid(xminfid);
-            bill.setStatus(statusUtil.XM_BILL_INIT);
+            bill.setStatus(ConfigUtil.XM_BILL_INIT);
             bill.setOpBy(uid);
             bill.setAt(Times.getTS());
             return this.insert(bill);
@@ -88,9 +85,9 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
     public boolean checkXmbillByGy(String xmbillid, String payid, String gyid) {
         xm_bill xmBill = this.fetch(xmbillid);
         // 检查 账单存在，账单状态
-        if(!Lang.isEmpty(xmBill) && xmBill.getStatus() == statusUtil.XM_BILL_CHECKING){
+        if(!Lang.isEmpty(xmBill) && xmBill.getStatus() == ConfigUtil.XM_BILL_CHECKING){
             Cnd cnd = Cnd.where("id","=",xmbillid);
-            Chain chain = Chain.make("gypayid",payid).add("status",statusUtil.XM_BILL_PAYING).add("opAt",Times.getTS());
+            Chain chain = Chain.make("gypayid",payid).add("status",ConfigUtil.XM_BILL_PAYING).add("opAt",Times.getTS());
             return this.update(chain,cnd)!=0;
         }
         return false;
@@ -106,9 +103,9 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
     @Override
     public boolean commitXmbill(String xmbillid, String sysuserinfid) {
         xm_bill xmBill = this.fetch(xmbillid);
-        if(!Lang.isEmpty(xmBill) && xmBill.getStatus() == statusUtil.XM_BILL_PAYING){
+        if(!Lang.isEmpty(xmBill) && xmBill.getStatus() == ConfigUtil.XM_BILL_PAYING){
             Cnd cnd = Cnd.where("id","=",xmbillid);
-            Chain chain = Chain.make("realgypayid",xmBill.getGypayid()).add("status",statusUtil.XM_BILL_PAYED).add("payby",sysuserinfid).add("opAt",Times.getTS());
+            Chain chain = Chain.make("realgypayid",xmBill.getGypayid()).add("status",ConfigUtil.XM_BILL_PAYED).add("payby",sysuserinfid).add("opAt",Times.getTS());
             return this.update(chain,cnd)!=0;
         }
         return false;

@@ -22,7 +22,7 @@ import com.marveliu.framework.model.xm.xm_task;
 import com.marveliu.framework.services.base.BaseServiceImpl;
 import com.marveliu.framework.services.library.LibSkillService;
 import com.marveliu.framework.services.xm.XmTaskService;
-import com.marveliu.framework.util.statusUtil;
+import com.marveliu.framework.util.ConfigUtil;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
@@ -64,9 +64,9 @@ public class XmTaskServiceImpl extends BaseServiceImpl<xm_task> implements XmTas
         Cnd cnd = Cnd.where("id","=",xmtaskid);
         Chain chain = Chain.make("disabled",!flag);
         if(flag){
-            chain.add("status",statusUtil.XM_TASK_APPLYING);
+            chain.add("status",ConfigUtil.XM_TASK_APPLYING);
         }else {
-            chain.add("status",statusUtil.XM_TASK_PUBLISH);
+            chain.add("status",ConfigUtil.XM_TASK_PUBLISH);
         }
         if(this.update(chain,cnd)!=0)
         {
