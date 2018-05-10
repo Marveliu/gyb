@@ -30,7 +30,7 @@ import java.util.List;
  * Created by wizzer on 2018/3/19.
  */
 @IocBean(create = "init", depose = "depose")
-@Modules(packages = "cn.wizzer")
+@Modules(packages = "com.marveliu")
 public class TaskMainLauncher {
     private static final Log log = Logs.get();
     @Inject
@@ -45,7 +45,7 @@ public class TaskMainLauncher {
 
     public static void main(String[] args) throws Exception {
         NbApp nb = new NbApp().setArgs(args).setPrintProcDoc(true);
-        nb.getAppContext().setMainPackage("cn.wizzer");
+        nb.getAppContext().setMainPackage("com.marveliu");
         nb.run();
     }
 
@@ -66,7 +66,7 @@ public class TaskMainLauncher {
             Sys_task task = new Sys_task();
             task.setDisabled(true);
             task.setName("测试任务");
-            task.setJobClass("TestJob");
+            task.setJobClass("com.marveliu.app.task.commons.ext.quartz.job.TestJob");
             task.setCron("*/5 * * * * ?");
             task.setData("{\"hi\":\"Wechat:wizzer | send red packets of support,thank u\"}");
             task.setNote("微信号：wizzer | 欢迎发送红包以示支持，多谢。。");

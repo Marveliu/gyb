@@ -21,11 +21,12 @@ public class Globals {
 
     public void init(SysTaskService sysTaskService) {
         taskPlatformService.clear();
+        // 从数据库获得cron任务
         List<Sys_task> taskList = sysTaskService.query();
         for (Sys_task sysTask : taskList) {
             try {
-                if (!sysTask.isDisabled())//不存在则新建
-                    taskPlatformService.add(sysTask.getId(), sysTask.getId(), sysTask.getJobClass(), sysTask.getCron()
+                if (!sysTask.isDisabled())
+                    taskPlatformService.addCron(sysTask.getId(), sysTask.getId(), sysTask.getJobClass(), sysTask.getCron()
                             , sysTask.getNote(), sysTask.getData());
             } catch (Exception e) {
                 log.error(e.getMessage(), e);

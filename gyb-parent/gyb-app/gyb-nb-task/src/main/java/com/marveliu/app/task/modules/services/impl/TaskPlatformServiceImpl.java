@@ -29,7 +29,7 @@ public class TaskPlatformServiceImpl implements TaskPlatformService {
     }
 
     /**
-     * 添加新任务
+     * 添加Cron任务
      *
      * @param jobName
      * @param jobGroup
@@ -38,7 +38,7 @@ public class TaskPlatformServiceImpl implements TaskPlatformService {
      * @param comment
      * @param dataMap
      */
-    public void add(String jobName, String jobGroup, String className, String cron, String comment, String dataMap) {
+    public void addCron(String jobName, String jobGroup, String className, String cron, String comment, String dataMap) {
         QuartzJob qj = new QuartzJob();
         qj.setJobName(jobName);
         qj.setJobGroup(jobGroup);
@@ -48,6 +48,29 @@ public class TaskPlatformServiceImpl implements TaskPlatformService {
         qj.setDataMap(dataMap);
         quartzManager.add(qj);
     }
+
+
+    /**
+     * 添加Simple任务
+     *
+     * @param jobName
+     * @param jobGroup
+     * @param className
+     * @param scheduled
+     * @param comment
+     * @param dataMap
+     */
+    public void addSimple(String jobName, String jobGroup, String className, String scheduled, String comment, String dataMap) {
+        QuartzJob qj = new QuartzJob();
+        qj.setJobName(jobName);
+        qj.setJobGroup(jobGroup);
+        qj.setClassName(className);
+        qj.setScheduled(scheduled);
+        qj.setComment(comment);
+        qj.setDataMap(dataMap);
+        quartzManager.add(qj);
+    }
+
 
     /**
      * 删除任务

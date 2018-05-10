@@ -17,19 +17,12 @@ import org.quartz.JobExecutionException;
  * Created by Wizzer.cn on 2015/6/27.
  */
 @IocBean
-public class TestJob implements Job {
+public class SimpleJob implements Job {
 
     private static final Log log = Logs.get();
 
-    @Inject
-    @Reference
-    protected SysTaskService sysTaskService;
 
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        JobDataMap data = context.getJobDetail().getJobDataMap();
-        String taskId = context.getJobDetail().getKey().getName();
-        String hi = data.getString("hi");
-        log.info("Test Job hi::" + hi);
-        sysTaskService.update(Chain.make("exeAt", (int) (System.currentTimeMillis() / 1000)).add("exeResult", "执行成功"), Cnd.where("id", "=", taskId));
+       System.out.println("hello world#############################!");
     }
 }

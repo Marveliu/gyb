@@ -13,7 +13,7 @@ public interface TaskPlatformService {
     boolean isExist(String jobName,String jobGroup);
 
     /**
-     * 添加新任务
+     * 添加Cron 任务
      * @param jobName
      * @param jobGroup
      * @param className
@@ -21,7 +21,22 @@ public interface TaskPlatformService {
      * @param comment
      * @param dataMap
      */
-    void add(String jobName,String jobGroup,String className,String cron,String comment,String dataMap);
+    void addCron(String jobName,String jobGroup,String className,String cron,String comment,String dataMap);
+
+
+    /**
+     * 添加Simple 任务
+     * @param jobName
+     * @param jobGroup
+     * @param className
+     * @param scheduled
+     * @param comment
+     * @param dataMap
+     */
+    void addSimple(String jobName,String jobGroup,String className,String scheduled,String comment,String dataMap);
+
+
+
 
     /**
      * 删除任务

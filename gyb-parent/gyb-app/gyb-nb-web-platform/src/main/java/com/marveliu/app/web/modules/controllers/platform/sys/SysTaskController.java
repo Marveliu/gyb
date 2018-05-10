@@ -27,9 +27,11 @@ import java.util.List;
 @At("/platform/sys/task")
 public class SysTaskController {
     private static final Log log = Logs.get();
+
     @Inject
     @Reference
     private SysTaskService sysTaskService;
+
     @Inject
     @Reference
     private TaskPlatformService taskPlatformService;
@@ -63,7 +65,7 @@ public class SysTaskController {
     public Object addDo(@Param("..") Sys_task task, HttpServletRequest req) {
         try {
             Sys_task sysTask=sysTaskService.insert(task);
-            taskPlatformService.add(sysTask.getId(), sysTask.getId(), sysTask.getJobClass(), sysTask.getCron(),
+            taskPlatformService.addCron(sysTask.getId(), sysTask.getId(), sysTask.getJobClass(), sysTask.getCron(),
                     sysTask.getNote(), sysTask.getData());
             return Result.success("system.success");
         } catch (Exception e) {
@@ -91,7 +93,7 @@ public class SysTaskController {
                 taskPlatformService.delete(task.getId(), task.getId());
             }
             if (!task.isDisabled()) {
-                taskPlatformService.add(task.getId(), task.getId(), task.getJobClass(), task.getCron(),
+                taskPlatformService.addCron(task.getId(), task.getId(), task.getJobClass(), task.getCron(),
                         task.getNote(), task.getData());
             }
             return Result.success("system.success");
@@ -148,7 +150,7 @@ public class SysTaskController {
             req.setAttribute("name", sysTask.getName());
             sysTaskService.update(org.nutz.dao.Chain.make("disabled", false), Cnd.where("id", "=", id));
             if (!taskPlatformService.isExist(sysTask.getId(), sysTask.getId())) {
-                taskPlatformService.add(sysTask.getId(), sysTask.getId(), sysTask.getJobClass(), sysTask.getCron(),
+                taskPlatformService.addCron(sysTask.getId(), sysTask.getId(), sysTask.getJobClass(), sysTask.getCron(),
                         sysTask.getNote(), sysTask.getData());
             }
             return Result.success("system.success");
