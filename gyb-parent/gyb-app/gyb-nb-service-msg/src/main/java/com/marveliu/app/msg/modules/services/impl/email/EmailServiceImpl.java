@@ -16,7 +16,6 @@ package com.marveliu.app.msg.modules.services.impl.email;
  */
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.marveliu.framework.model.xm.xm_apply;
 import com.marveliu.framework.services.msg.email.EmailService;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.HtmlEmail;
@@ -158,7 +157,7 @@ public class EmailServiceImpl implements EmailService,Runnable {
             path.append(resourceLoader.getRoot());
             Configuration cfg = Configuration.defaultConfiguration();
             GroupTemplate gt = new GroupTemplate(resourceLoader, cfg);
-            Template t = gt.getTemplate("/templates/"+templateName+".html");
+            Template t = gt.getTemplate("/template/" +templateName+".html");
             String str = t.render();
             log.debug(str);
             this.send(to,subject,str);

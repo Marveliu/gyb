@@ -15,7 +15,6 @@ package com.marveliu.app.msg.modules.services.impl;
  * limitations under the License.
  */
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.rabbitmq.client.BasicProperties;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;

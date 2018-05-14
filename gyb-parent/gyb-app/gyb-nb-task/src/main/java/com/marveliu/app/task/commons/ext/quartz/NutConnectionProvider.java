@@ -1,9 +1,7 @@
 package com.marveliu.app.task.commons.ext.quartz;
 
 import org.nutz.boot.AppContext;
-import org.nutz.dao.Dao;
 import org.nutz.ioc.Ioc;
-import org.nutz.mvc.Mvcs;
 import org.quartz.utils.ConnectionProvider;
 
 import javax.sql.DataSource;

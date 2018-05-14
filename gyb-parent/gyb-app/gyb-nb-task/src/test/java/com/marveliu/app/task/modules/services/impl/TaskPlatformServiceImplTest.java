@@ -6,11 +6,8 @@ import com.marveliu.framework.services.task.TaskPlatformService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nutz.boot.AppContext;
-import org.nutz.boot.NbApp;
 import org.nutz.boot.test.junit4.NbJUnit4Runner;
-import org.nutz.integration.quartz.QuartzJob;
 import org.nutz.integration.quartz.QuartzManager;
-import org.nutz.integration.quartz.Quartzs;
 import org.nutz.ioc.Ioc;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -18,15 +15,10 @@ import org.nutz.json.Json;
 import org.nutz.lang.util.NutMap;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
-import org.quartz.SchedulerFactory;
 import org.quartz.SimpleTrigger;
-import org.quartz.impl.StdSchedulerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-
-import static org.junit.Assert.*;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
 

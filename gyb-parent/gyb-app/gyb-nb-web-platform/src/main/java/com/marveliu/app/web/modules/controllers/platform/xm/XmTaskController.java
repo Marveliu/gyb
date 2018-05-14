@@ -54,7 +54,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  **/
 
 @IocBean
-@At("/platform/xm/task")
+@At("/platform/xm/tmsg")
 public class XmTaskController {
     private static final Log log = Logs.get();
 
@@ -75,14 +75,14 @@ public class XmTaskController {
     private ShiroUtil shiroUtil;
 
     @At("")
-    @Ok("beetl:/platform/xm/task/index.html")
-    @RequiresPermissions("platform.xm.task")
+    @Ok("beetl:/platform/xm/tmsg/index.html")
+    @RequiresPermissions("platform.xm.tmsg")
     public void index() {
     }
 
     @At
     @Ok("json")
-    @RequiresPermissions("platform.xm.task")
+    @RequiresPermissions("platform.xm.tmsg")
     public Object tree(@Param("pid") String pid) {
         List<lib_task> list = libTaskService.query(Cnd.where("parentId", "=", Strings.sBlank(pid)).asc("location").asc("path"));
         List<Map<String, Object>> tree = new ArrayList<>();
@@ -126,7 +126,7 @@ public class XmTaskController {
      */
     @At
     @Ok("json:full")
-    @RequiresPermissions("platform.xm.task")
+    @RequiresPermissions("platform.xm.tmsg")
     public Object data(
             @Param("libtaskId") String libtaskid,
             @Param("title") String title,
@@ -167,8 +167,8 @@ public class XmTaskController {
 
 
     @At
-    @Ok("beetl:/platform/xm/task/add.html")
-    @RequiresPermissions("platform.xm.task.add")
+    @Ok("beetl:/platform/xm/tmsg/add.html")
+    @RequiresPermissions("platform.xm.tmsg.add")
     public void add(@Param("libtaskId") String libtaskid, HttpServletRequest req) {
         String sysuserinfid = sysUserinfService.getSysuserinfid(StringUtil.getPlatformUid());
         req.setAttribute("authorid", sysuserinfid);
@@ -178,7 +178,7 @@ public class XmTaskController {
 
     @At
     @Ok("json")
-    @RequiresPermissions("platform.xm.task.add")
+    @RequiresPermissions("platform.xm.tmsg.add")
     @SLog(type = "xm", tag = "添加任务书", msg = "任务书标题:${args[0].taskname}")
     @AdaptBy(type = WhaleAdaptor.class)
     public Object addDo(
@@ -215,8 +215,8 @@ public class XmTaskController {
     }
 
     @At("/edit/?")
-    @Ok("beetl:/platform/xm/task/edit.html")
-    @RequiresPermissions("platform.xm.task.edit")
+    @Ok("beetl:/platform/xm/tmsg/edit.html")
+    @RequiresPermissions("platform.xm.tmsg.edit")
     public Object edit(String xmtaskid, HttpServletRequest req) {
         if (isAllowForXmtask(xmtaskid)) {
             xm_task xmTask = xmTaskService.getXmtaskDetail(xmtaskid);
@@ -231,7 +231,7 @@ public class XmTaskController {
 
     @At
     @Ok("json")
-    @RequiresPermissions("platform.xm.task.edit")
+    @RequiresPermissions("platform.xm.tmsg.edit")
     @SLog(type = "xm", tag = "修改任务书", msg = "任务书标题:${args[0].taskname}")
     @AdaptBy(type = WhaleAdaptor.class)
     public Object editDo(
@@ -266,7 +266,7 @@ public class XmTaskController {
 
     @At("/setXmtaskStatus")
     @Ok("json")
-    @RequiresPermissions("platform.xm.task.edit")
+    @RequiresPermissions("platform.xm.tmsg.edit")
     @SLog(type = "xm", tag = "修改任务书状态", msg = "任务书编号：${args[0]},启用状态：${args[1]}")
     public Object setXmtaskStatus(
             @Param("xmtaskid") String xmtaskid,
@@ -286,7 +286,7 @@ public class XmTaskController {
     // 只允许一次删除一个任务书
     @At({"/delete/?"})
     @Ok("json")
-    @RequiresPermissions("platform.xm.task.delete")
+    @RequiresPermissions("platform.xm.tmsg.delete")
     @SLog(type = "xm", tag = "删除任务书", msg = "ID:${args[0]}")
     public Object delete(String oneId, HttpServletRequest req) {
         try {
@@ -311,7 +311,7 @@ public class XmTaskController {
      */
     @At
     @Ok("json:full")
-    @RequiresPermissions("platform.xm.task")
+    @RequiresPermissions("platform.xm.tmsg")
     public Object limitdata(@Param("libtaskid") String libtaskid) {
         lib_task libtask = libTaskService.fetch(libtaskid);
         libtask = libTaskService.fetchLinks(libtask, "skills");
@@ -320,8 +320,8 @@ public class XmTaskController {
 
 
     @At("/detail/?")
-    @Ok("beetl:/platform/xm/task/detail.html")
-    @RequiresPermissions("platform.xm.task")
+    @Ok("beetl:/platform/xm/tmsg/detail.html")
+    @RequiresPermissions("platform.xm.tmsg")
     @SLog(type = "xm", tag = "查看任务书", msg = "任务书编号：${args[0]}")
     public void detail(String xmtaskid, HttpServletRequest req) {
         if (!Strings.isBlank(xmtaskid)) {
@@ -330,7 +330,7 @@ public class XmTaskController {
             String sysuserid = StringUtil.getPlatformUid();
 
             // Subject subject = SecurityUtils.getSubject();
-            // if (!subject.isPermitted("platform.xm.task.manager")) {
+            // if (!subject.isPermitted("platform.xm.tmsg.manager")) {
             //     cnd.and("author", "=", sysuserid);
             // }
 
@@ -353,7 +353,7 @@ public class XmTaskController {
      */
     @At("/xmtasklist")
     @Ok("json")
-    @RequiresPermissions("platform.xm.task")
+    @RequiresPermissions("platform.xm.tmsg")
     public Object xmtasklist(
             @Param("xmtaskname") String xmtaskname,
             HttpServletRequest req
@@ -370,9 +370,9 @@ public class XmTaskController {
         }
         List<xm_task> tasks = xmTaskService.query(cnd.desc("publishAt"));
         // Map<String, String> obj = new HashMap<>();
-        // for (xm_task task : tasks) {
-        //     String taskname = task.getTaskname();
-        //     obj.put(taskname, task.getId());
+        // for (xm_task tmsg : tasks) {
+        //     String taskname = tmsg.getTaskname();
+        //     obj.put(taskname, tmsg.getId());
         // }
         return tasks;
     }

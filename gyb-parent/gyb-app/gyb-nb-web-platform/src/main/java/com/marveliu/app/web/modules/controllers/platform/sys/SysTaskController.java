@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @IocBean
-@At("/platform/sys/task")
+@At("/platform/sys/tmsg")
 public class SysTaskController {
     private static final Log log = Logs.get();
 
@@ -37,23 +37,23 @@ public class SysTaskController {
     private TaskPlatformService taskPlatformService;
 
     @At("")
-    @Ok("beetl:/platform/sys/task/index.html")
-    @RequiresPermissions("sys.manager.task")
+    @Ok("beetl:/platform/sys/tmsg/index.html")
+    @RequiresPermissions("sys.manager.tmsg")
     public void index() {
 
     }
 
     @At
     @Ok("json:full")
-    @RequiresPermissions("sys.manager.task")
+    @RequiresPermissions("sys.manager.tmsg")
     public Object data(@Param("length") int length, @Param("start") int start, @Param("draw") int draw, @Param("::order") List<DataTableOrder> order, @Param("::columns") List<DataTableColumn> columns) {
         Cnd cnd = Cnd.NEW();
         return sysTaskService.data(length, start, draw, order, columns, cnd, null);
     }
 
     @At
-    @Ok("beetl:/platform/sys/task/add.html")
-    @RequiresPermissions("sys.manager.task")
+    @Ok("beetl:/platform/sys/tmsg/add.html")
+    @RequiresPermissions("sys.manager.tmsg")
     public void add() {
 
     }
@@ -61,7 +61,7 @@ public class SysTaskController {
     @At
     @Ok("json")
     @SLog(tag = "新建任务", msg = "任务名:${args[0].name}")
-    @RequiresPermissions("sys.manager.task.add")
+    @RequiresPermissions("sys.manager.tmsg.add")
     public Object addDo(@Param("..") Sys_task task, HttpServletRequest req) {
         try {
             Sys_task sysTask=sysTaskService.insert(task);
@@ -74,8 +74,8 @@ public class SysTaskController {
     }
 
     @At("/edit/?")
-    @Ok("beetl:/platform/sys/task/edit.html")
-    @RequiresPermissions("sys.manager.task")
+    @Ok("beetl:/platform/sys/tmsg/edit.html")
+    @RequiresPermissions("sys.manager.tmsg")
     public Object edit(String id) {
         return sysTaskService.fetch(id);
     }
@@ -83,7 +83,7 @@ public class SysTaskController {
     @At
     @Ok("json")
     @SLog(tag = "修改任务", msg = "任务名:${args[0].name}")
-    @RequiresPermissions("sys.manager.task.edit")
+    @RequiresPermissions("sys.manager.tmsg.edit")
     public Object editDo(@Param("..") Sys_task task, HttpServletRequest req) {
         try {
             task.setOpBy(StringUtil.getPlatformUid());
@@ -106,7 +106,7 @@ public class SysTaskController {
     @At({"/delete", "/delete/?"})
     @Ok("json")
     @SLog(tag = "删除任务", msg = "任务ID:${args[2].getAttribute('id')}")
-    @RequiresPermissions("sys.manager.task.delete")
+    @RequiresPermissions("sys.manager.tmsg.delete")
     public Object delete(String id, @Param("ids") String[] ids, HttpServletRequest req) {
         try {
             if (ids != null && ids.length > 0) {
@@ -142,7 +142,7 @@ public class SysTaskController {
 
     @At("/enable/?")
     @Ok("json")
-    @RequiresPermissions("sys.manager.task.edit")
+    @RequiresPermissions("sys.manager.tmsg.edit")
     @SLog(tag = "启用任务", msg = "任务名:${args[1].getAttribute('name')}")
     public Object enable(String id, HttpServletRequest req) {
         try {
@@ -161,7 +161,7 @@ public class SysTaskController {
 
     @At("/disable/?")
     @Ok("json")
-    @RequiresPermissions("sys.manager.task.edit")
+    @RequiresPermissions("sys.manager.tmsg.edit")
     @SLog(tag = "禁用任务", msg = "任务名:${args[1].getAttribute('name')}")
     public Object disable(String id, HttpServletRequest req) {
         try {

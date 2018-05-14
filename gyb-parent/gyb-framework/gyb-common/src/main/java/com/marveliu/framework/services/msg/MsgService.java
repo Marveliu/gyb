@@ -23,7 +23,7 @@ import com.marveliu.framework.model.sys.Sys_msg;
  **/
 
 // 消息接口实现
-public interface MsgService {
+public interface MsgService  {
 
     // 聚合发送消息
     public boolean send(Sys_msg sysMsg);

@@ -412,10 +412,10 @@ public class DubboRpcSysMainLauncher {
             menu.setName("定时任务");
             menu.setAliasName("Task");
             menu.setLocation(0);
-            menu.setHref("/platform/sys/task");
+            menu.setHref("/platform/sys/tmsg");
             menu.setTarget("data-pjax");
             menu.setIsShow(true);
-            menu.setPermission("sys.manager.task");
+            menu.setPermission("sys.manager.tmsg");
             menu.setParentId(m1.getId());
             menu.setType("menu");
             Sys_menu m8 = dao.insert(menu);
@@ -426,7 +426,7 @@ public class DubboRpcSysMainLauncher {
             menu.setAliasName("Add");
             menu.setLocation(1);
             menu.setIsShow(false);
-            menu.setPermission("sys.manager.task.add");
+            menu.setPermission("sys.manager.tmsg.add");
             menu.setParentId(m8.getId());
             menu.setType("data");
             Sys_menu m81 = dao.insert(menu);
@@ -437,7 +437,7 @@ public class DubboRpcSysMainLauncher {
             menu.setAliasName("Edit");
             menu.setLocation(2);
             menu.setIsShow(false);
-            menu.setPermission("sys.manager.task.edit");
+            menu.setPermission("sys.manager.tmsg.edit");
             menu.setParentId(m8.getId());
             menu.setType("data");
             Sys_menu m82 = dao.insert(menu);
@@ -448,7 +448,7 @@ public class DubboRpcSysMainLauncher {
             menu.setAliasName("Delete");
             menu.setLocation(3);
             menu.setIsShow(false);
-            menu.setPermission("sys.manager.task.delete");
+            menu.setPermission("sys.manager.tmsg.delete");
             menu.setParentId(m8.getId());
             menu.setType("data");
             Sys_menu m83 = dao.insert(menu);

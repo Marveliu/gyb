@@ -66,7 +66,7 @@ public class TaskMainLauncher {
             Sys_task task = new Sys_task();
             task.setDisabled(true);
             task.setName("测试任务");
-            task.setJobClass("com.marveliu.app.task.commons.ext.quartz.job.TestJob");
+            task.setJobClass("com.marveliu.app.tmsg.commons.ext.quartz.job.TestJob");
             task.setCron("*/5 * * * * ?");
             task.setData("{\"hi\":\"Wechat:wizzer | send red packets of support,thank u\"}");
             task.setNote("微信号：wizzer | 欢迎发送红包以示支持，多谢。。");

@@ -4,6 +4,7 @@ import com.marveliu.framework.model.gy.gy_auth;
 import com.marveliu.framework.services.gy.GyAuthService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.nutz.boot.NbApp;
 import org.nutz.boot.test.junit4.NbJUnit4Runner;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -32,7 +33,12 @@ public class GyAuthServiceImplTest {
         assertEquals("测试认证成功", gyAuthService.fetch(
                 Cnd.where("gyid","=","gyTest")).getNote());
         gyAuthService.delete(result.getId());
-
     }
+
+    // public static NbApp createNbApp() {
+    //     NbApp nb = new NbApp().setMainClass(TaskMainLauncher.class).setPrintProcDoc(false);
+    //     nb.getAppContext().setMainPackage("com.marveliu");
+    //     return nb;
+    // }
 
 }

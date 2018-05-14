@@ -17,6 +17,7 @@ package com.marveliu.app.msg.commons.core;
 
 import com.marveliu.app.msg.modules.services.impl.RabbitTestService;
 import com.marveliu.framework.model.sys.Sys_user;
+import org.beetl.core.GroupTemplate;
 import org.nutz.boot.NbApp;
 import org.nutz.dao.Dao;
 import org.nutz.dao.util.Daos;
@@ -54,6 +55,11 @@ public class DubboRpcMsgMainLauncher {
     }
 
     public void init() throws Exception {
+        // for (String name :ioc.getNames()){
+        //     System.out.println("********:::"+name);
+        //
+        // }
+        GroupTemplate gt = ioc.get(GroupTemplate.class);
         // todo:参考taskmodules 实现初始化
         // 进行队列声明
     }
