@@ -62,4 +62,7 @@ public abstract class BaseTMsg implements TMsg {
         this.email = email;
     }
 
+    public String getTemplatePath() {
+        return "";
+    }
 }

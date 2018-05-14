@@ -15,6 +15,7 @@ package com.marveliu.framework.services.msg.email;
  * limitations under the License.
  */
 
+import com.marveliu.framework.services.msg.TMsg;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 /**
@@ -26,6 +27,6 @@ public interface EmailService{
 
     public boolean send(String to, String subject, String html) ;
 
-    public boolean sendHtmlTemplateByTemplateName(String to, String subject,String templateName);
+    public boolean sendHtmlTemplateByTemplateName(String to, String subject,TMsg tMsg);
 
 }

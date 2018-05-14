@@ -16,6 +16,9 @@ package com.marveliu.app.msg.modules.services.impl.email;
  */
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.marveliu.app.msg.commons.tmsg.passwordTMsg;
+import com.marveliu.app.msg.commons.utils.TemplateUtil;
+import com.marveliu.framework.services.msg.TMsg;
 import com.marveliu.framework.services.msg.email.EmailService;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.HtmlEmail;
@@ -53,6 +56,8 @@ public class EmailServiceImpl implements EmailService,Runnable {
     @Inject("refer:$ioc")
     protected Ioc ioc;
 
+    @Inject
+    private TemplateUtil templateUtil;
 
     public void init() {
         // 创建阻塞队列
@@ -147,20 +152,14 @@ public class EmailServiceImpl implements EmailService,Runnable {
      *
      * @param to
      * @param subject
-     * @param templateName
+     * @param tMsg
      * @return
      */
-    public boolean sendHtmlTemplateByTemplateName(String to, String subject,String templateName){
+    public boolean sendHtmlTemplateByTemplateName(String to, String subject,TMsg tMsg){
         StringBuilder path = new StringBuilder();
         try {
-            WebAppResourceLoader resourceLoader = new WebAppResourceLoader();
-            path.append(resourceLoader.getRoot());
-            Configuration cfg = Configuration.defaultConfiguration();
-            GroupTemplate gt = new GroupTemplate(resourceLoader, cfg);
-            Template t = gt.getTemplate("/template/" +templateName+".html");
-            String str = t.render();
-            log.debug(str);
-            this.send(to,subject,str);
+            Template t =  templateUtil.buildTemplate(tMsg);
+            this.send(to,subject,t.render());
             return true;
         }catch (Exception e){
             log.error("template not found:"+path);
@@ -169,17 +168,4 @@ public class EmailServiceImpl implements EmailService,Runnable {
         return false;
     }
 
-    private boolean sendHtmlTemplate(String to, String subject,Template t) {
-        try {
-            String content = t.render();
-            if(content.isEmpty()){
-                log.debug(t);
-            }
-            return this.send(to,subject,content);
-        }catch (Exception e){
-            log.error("render error");
-        }
-
-        return false;
-    }
 }

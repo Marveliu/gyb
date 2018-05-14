@@ -16,23 +16,15 @@ package com.marveliu.app.msg.commons.utils;
  */
 
 import com.marveliu.framework.services.msg.TMsg;
-import org.beetl.core.Configuration;
-import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;
-import org.beetl.core.resource.WebAppResourceLoader;
 import org.nutz.boot.AppContext;
-import org.nutz.boot.NbApp;
-import org.nutz.ioc.Ioc;
-import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Marveliu
@@ -46,21 +38,15 @@ public class TemplateUtil {
     private HashMap<String,String> dataMap = new HashMap<>();
 
 
-    private String templateName;
-
-    public TemplateUtil(String templateName) {
-        this.templateName = templateName;
+    public TemplateUtil() {
     }
 
-    public Template buildTemplate() {
+
+    public Template buildTemplate(TMsg tMsg) {
         StringBuilder path = new StringBuilder();
         try {
-            // WebAppResourceLoader resourceLoader = new WebAppResourceLoader();
-            // path.append(resourceLoader.getRoot());
-            // Configuration cfg = Configuration.defaultConfiguration();
-            // GroupTemplate gt = new GroupTemplate(resourceLoader, cfg);
-            // Template t = gt.getTemplate("/template/" +templateName+".html");
-            Template t =  AppContext.getDefault().getIoc().get(GroupTemplate.class).getTemplate( templateName+".html");
+            addDate(tMsg);
+            Template t =  AppContext.getDefault().getIoc().get(GroupTemplate.class).getTemplate( tMsg.getTemplatePath());
             t.binding(dataMap);
             return t;
         }catch (Exception e){
@@ -73,8 +59,8 @@ public class TemplateUtil {
         this.dataMap.put(key,value);
     }
 
-    
-    public Boolean addDate(TMsg msg) {
+
+    private Boolean addDate(TMsg msg) {
         Field[] fields = msg.getClass().getDeclaredFields();
         Field[] basefields = msg.getClass().getSuperclass().getDeclaredFields();
         try {
@@ -105,4 +91,13 @@ public class TemplateUtil {
             }
         }
     }
+
+    public HashMap<String, String> getDataMap() {
+        return dataMap;
+    }
+
+    private void setDataMap(HashMap<String, String> dataMap) {
+        this.dataMap = dataMap;
+    }
+
 }

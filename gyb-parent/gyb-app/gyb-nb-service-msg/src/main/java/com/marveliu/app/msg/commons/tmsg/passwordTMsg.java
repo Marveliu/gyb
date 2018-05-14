@@ -28,6 +28,7 @@ import java.util.Map;
 
 public class passwordTMsg extends BaseTMsg implements TMsg {
 
+    private final static String  TEMPLATE_PATH = "password.html";
 
     private String username;
 
@@ -52,5 +53,10 @@ public class passwordTMsg extends BaseTMsg implements TMsg {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+
+    public String getTemplatePath() {
+        return TEMPLATE_PATH;
     }
 }

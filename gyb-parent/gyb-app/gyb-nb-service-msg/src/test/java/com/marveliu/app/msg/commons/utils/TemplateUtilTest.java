@@ -17,13 +17,12 @@ import static org.junit.Assert.*;
 @RunWith(NbJUnit4Runner.class)
 public class TemplateUtilTest {
 
-    TemplateUtil templateUtil = new TemplateUtil("password");
+    TemplateUtil templateUtil = new TemplateUtil();
 
     @Test
     public void addDate() {
         TMsg tMsg = new passwordTMsg("刘尚nan","www.baidu.com");
-        templateUtil.addDate(tMsg);
-        Template t =  templateUtil.buildTemplate();
+        Template t =  templateUtil.buildTemplate(tMsg);
         System.out.println("html:"+t.render());
     }
 

@@ -4,4 +4,6 @@ import java.util.Map;
 
 public interface TMsg {
 
+    public String getTemplatePath();
+
 }
