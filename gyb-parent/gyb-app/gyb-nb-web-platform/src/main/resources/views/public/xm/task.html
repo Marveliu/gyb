@@ -1,0 +1,141 @@
+<%
+layout("/layouts/platform.html"){
+%>
+<aside class="sidebar-250 canvas-right bg-default ">
+    <header class="header navbar clearfix bb bg-default pl0 pr0">
+        <p class="navbar-text">摘要</p>
+        <div class="btn-group pull-right mr10">
+            <button type="button" class="btn btn-sm btn-primary navbar-btn">
+                <i class="ti-comment-alt"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-primary navbar-btn">
+                <i class="ti-help-alt"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="content-wrap">
+        <div class="wrapper">
+            <div class="m15">
+                <%
+                if(obj.status == 1){
+                %>
+                <button id="xmapply" onclick="xmapply('${obj.id}')" class="btn btn-primary btn-block navbar-btn">
+                    报名
+                </button>
+                <% }%>
+            </div>
+            <nav role="navigation">
+                <div class="no-padding">
+                    <p class="navbar-text">编号:${obj.id!}</p>
+                    <ul class="nav nav-stacked">
+                        <li class="disabled text-uppercase">
+                            <a href="javascript:;">
+                                <b>重要信息</b>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">
+                                <span class="badge pull-right bg-success">${obj.award}</span>
+                                <i class="ti-import mr5"></i>酬金
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">
+                                <span class="badge pull-right bg-primary">${@date.getDate(obj.applyendtime)}</span>
+                                <i class="ti-pin-alt mr5"></i>申报
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">
+                                <span class="badge pull-right bg-warning">${@date.getDate(obj.firstcommit)}</span>
+                                <i class="ti-pin-alt mr5"></i>初稿
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">
+                                <span class="badge pull-right bg-danger">${@date.getDate(obj.endtime)}</span>
+                                <i class="ti-share mr5"></i>完成
+                            </a>
+                        </li>
+                    </ul>
+
+                    <ul class="nav nav-stacked">
+                        <li class="disabled text-uppercase">
+                            <a href="javascript:;">
+                                <b>技能限制</b>
+                            </a>
+                        </li>
+                        <%
+                        for(limit in obj.xmlimits){
+                        %>
+                        <li class="item">
+                            <a href="javascript:;">
+                                <i class="ti-control-record text-warning pull-right"></i> ${@status.getSkillNameById(limit.skillid)}:${limit.skilllevel}
+                            </a>
+                        </li>
+                        <%
+                        }
+                        %>
+                    </ul>
+                </div>
+            </nav>
+
+        </div>
+    </div>
+</aside>
+
+<section class="main-content bg-white ">
+
+    <!--<header class="header navbar clearfix bb bg-default pl0">-->
+    <!--<p class="navbar-text">任务书编号:${obj.id!}</p>-->
+    <!--<div class="btn-group pull-right">-->
+    <!--<button type="button" class="btn btn-default navbar-btn btn-sm" onclick="window.history.back()">-->
+    <!--<i class="fa fa-mail-reply"></i>-->
+    <!--</button>-->
+    <!--&lt;!&ndash;<button type="button" class="btn btn-default navbar-btn btn-sm">&ndash;&gt;-->
+    <!--&lt;!&ndash;<i class="fa fa-mail-reply"></i>&ndash;&gt;-->
+    <!--&lt;!&ndash;</button>&ndash;&gt;-->
+    <!--&lt;!&ndash;<button type="button" class="btn btn-default navbar-btn btn-sm">&ndash;&gt;-->
+    <!--&lt;!&ndash;<i class="fa fa-mail-forward"></i>&ndash;&gt;-->
+    <!--&lt;!&ndash;</button>&ndash;&gt;-->
+    <!--&lt;!&ndash;<button type="button" class="btn btn-default  navbar-btn btn-sm" onclick="location='${obj.fileurl}'" >附件下载&ndash;&gt;-->
+    <!--&lt;!&ndash;</button>&ndash;&gt;-->
+    <!--</div>-->
+    <!--</header>-->
+
+    <!-- content wrapper -->
+    <div class="content-wrap bl">
+        <!-- inner content wrapper -->
+        <div class="wrapper" style="bottom: 50px;">
+            <h3> ${obj.taskname!}</h3>
+            <div class="mb15">
+                <em id="post-date" class="">发布时间:${@date.getDate(obj.publishAt,"yyyy-MM-dd")}</em>
+                <em class="">项目经理:${obj.authorrealname!}</em>
+            </div>
+            <hr>
+            <div class="rich_media_content " id="js_content">
+                ${obj.content!}
+            </div>
+        </div>
+        <!-- /inner content wrapper -->
+    </div>
+    <!-- /content wrapper -->
+    <a class="exit-offscreen"></a>
+</section>
+
+<script>
+    function xmapply(id) {
+        $("#xmapply").button("loading");
+        $.post("${base}/platform/xm/person/apply?xmtaskid=" + id, function (data) {
+            if (data.code == 0) {
+                Toast.success(data.msg);
+            } else {
+                Toast.error(data.msg);
+            }
+            btn.button("reset");
+        }, "json");
+        $("#xmapply").button("reset");
+    }
+</script>
+<%}%>

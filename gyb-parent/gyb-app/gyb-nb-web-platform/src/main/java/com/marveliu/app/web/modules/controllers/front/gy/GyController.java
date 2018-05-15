@@ -50,7 +50,7 @@ import javax.servlet.http.HttpServletRequest;
  **/
 
 @IocBean
-@At("/front/gy")
+@At("/platform/gy/person")
 public class GyController {
 
     private static final Log log = Logs.get();
