@@ -17,4 +17,13 @@ public interface XmInfService extends BaseService<xm_inf> {
      * @return
      */
     public xm_inf initXminf(xm_task xmTask,String gyid,String uid);
+
+
+    /**
+     * 对雇员以及任务书的状态进行统计
+     * @param status
+     * @param gyid
+     * @return
+     */
+    public int countGyByStatus(int status,String gyid);
 }

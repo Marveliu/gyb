@@ -2,8 +2,10 @@ package com.marveliu.app.web.commons.base;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.marveliu.framework.model.sys.Sys_config;
+import com.marveliu.framework.model.sys.Sys_dict;
 import com.marveliu.framework.model.sys.Sys_route;
 import com.marveliu.framework.services.sys.SysConfigService;
+import com.marveliu.framework.services.sys.SysDictService;
 import com.marveliu.framework.services.sys.SysRouteService;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -29,6 +31,8 @@ public class Globals {
     public static String AppShrotName = "GYB";
     //项目域名
     public static String AppDomain = "http://127.0.0.1";
+    //项目域名
+    public static String AppApiDomain = "http://127.0.0.1";
     //文件上传路径
     public static String AppUploadPath = "upload";
     //文件上传路径
@@ -39,17 +43,24 @@ public class Globals {
     public static Map<String, String> MyConfig = new HashMap<>();
     //自定义路由
     public static Map<String, Sys_route> RouteMap = new HashMap<>();
+    // 数据字典<code name>
+    public static Map<String, String> MyDict = new HashMap<>();
     //微信map
     public static Map<String, WxApi2Impl> WxMap = new HashMap<>();
+
     @Inject
     @Reference
     private SysConfigService sysConfigService;
     @Inject
     @Reference
     private SysRouteService sysRouteService;
+    @Inject
+    @Reference
+    private SysDictService sysDictService;
 
     public void init() {
         initSysConfig(sysConfigService);
+        initSysDict(sysDictService);
         initRoute(sysRouteService);
     }
 
@@ -60,6 +71,9 @@ public class Globals {
             switch (sysConfig.getConfigKey()) {
                 case "AppName":
                     Globals.AppName = sysConfig.getConfigValue();
+                    break;
+                case "AppApiDomain":
+                    Globals.AppApiDomain = sysConfig.getConfigValue();
                     break;
                 case "AppShrotName":
                     Globals.AppShrotName = sysConfig.getConfigValue();
@@ -80,6 +94,15 @@ public class Globals {
         }
     }
 
+
+    public static void initSysDict(SysDictService sysDictService) {
+        Globals.MyDict.clear();
+        List<Sys_dict> sysDictList = sysDictService.query();
+        for (Sys_dict dict : sysDictList) {
+            Globals.MyDict.put(dict.getCode(), dict.getName());
+        }
+    }
+
     public static void initRoute(SysRouteService sysRouteService) {
         Globals.RouteMap.clear();
         List<Sys_route> routeList = sysRouteService.query(Cnd.where("disabled", "=", false));
@@ -87,6 +110,8 @@ public class Globals {
             Globals.RouteMap.put(route.getUrl(), route);
         }
     }
+
+
 
     public static void initWx() {
         Globals.WxMap.clear();

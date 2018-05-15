@@ -83,6 +83,7 @@ public class XmFacadeServiceImpl implements XmFacadeService {
         }
     }
 
+
     public xm_task getTaskByAppyid(String xmapplyid) {
         String xmtaskid = xmApplyService.fetch(xmapplyid).getXmtaskid();
         if (Lang.isEmpty(xmtaskid)) return null;
@@ -201,6 +202,7 @@ public class XmFacadeServiceImpl implements XmFacadeService {
         }
         return false;
     }
+
 
 
 }

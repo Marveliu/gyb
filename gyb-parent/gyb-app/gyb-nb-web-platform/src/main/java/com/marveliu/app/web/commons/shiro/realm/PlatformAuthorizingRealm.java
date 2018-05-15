@@ -98,9 +98,7 @@ public class PlatformAuthorizingRealm extends AuthorizingRealm {
         return null;
     }
 
-    /**
-     * 授权查询回调函数, 进行鉴权但缓存中无用户的授权信息时调用.
-     */
+
     /**
      * 授权查询回调函数, 进行鉴权但缓存中无用户的授权信息时调用.
      */

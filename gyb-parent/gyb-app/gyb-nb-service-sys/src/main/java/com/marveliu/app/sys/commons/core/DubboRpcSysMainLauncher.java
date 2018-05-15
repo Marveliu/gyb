@@ -63,6 +63,11 @@ public class DubboRpcSysMainLauncher {
             conf.setNote("系统名称");
             dao.insert(conf);
             conf = new Sys_config();
+            conf.setConfigKey("AppApiDomain");
+            conf.setConfigValue("http://localhost:9001");
+            conf.setNote("系统Api域名");
+            dao.insert(conf);
+            conf = new Sys_config();
             conf.setConfigKey("AppShrotName");
             conf.setConfigValue("NutzWk");
             conf.setNote("系统短名称");

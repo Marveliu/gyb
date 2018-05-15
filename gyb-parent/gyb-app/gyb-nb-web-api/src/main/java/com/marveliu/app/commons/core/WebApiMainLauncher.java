@@ -30,7 +30,7 @@ import org.nutz.mvc.annotation.Modules;
  **/
 
 @IocBean(create = "init", depose = "depose")
-@Modules(packages = "cn.wizzer")
+@Modules(packages = "com.marveliu")
 public class WebApiMainLauncher {
     private static final Log log = Logs.get();
     @Inject("refer:$ioc")
@@ -40,7 +40,7 @@ public class WebApiMainLauncher {
 
     public static void main(String[] args) throws Exception {
         NbApp nb = new NbApp().setArgs(args).setPrintProcDoc(true);
-        nb.getAppContext().setMainPackage("com.marveliu.app");
+        nb.getAppContext().setMainPackage("com.marveliu");
         nb.run();
     }
 

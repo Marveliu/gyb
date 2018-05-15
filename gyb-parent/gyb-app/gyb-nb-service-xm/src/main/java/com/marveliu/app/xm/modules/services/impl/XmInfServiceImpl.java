@@ -21,8 +21,10 @@ import com.marveliu.framework.model.xm.xm_task;
 import com.marveliu.framework.services.base.BaseServiceImpl;
 import com.marveliu.framework.services.xm.XmInfService;
 import com.marveliu.framework.util.ConfigUtil;
+import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Strings;
 import org.nutz.lang.Times;
 
 /**
@@ -36,8 +38,6 @@ public class XmInfServiceImpl extends BaseServiceImpl<xm_inf> implements XmInfSe
     public XmInfServiceImpl(Dao dao) {
         super(dao);
     }
-
-
 
 
     /**
@@ -63,5 +63,25 @@ public class XmInfServiceImpl extends BaseServiceImpl<xm_inf> implements XmInfSe
 
         }
         return null;
+    }
+
+
+    /**
+     * 对雇员以及任务书的状态进行统计
+     *
+     * @param status
+     * @param gyid
+     * @return
+     */
+    @Override
+    public int countGyByStatus(int status, String gyid) {
+        Cnd cnd = Cnd.NEW();
+        if(Strings.isEmpty(gyid)){
+            cnd.and("gyid","=",gyid);
+        }
+        if(status != -1){
+            cnd.and("status","=",status);
+        }
+        return this.count(cnd);
     }
 }

@@ -3,6 +3,7 @@ package com.marveliu.app.web.commons.processor;
 import com.marveliu.app.web.commons.base.Globals;
 import com.marveliu.app.web.commons.utils.DateUtil;
 import com.marveliu.app.web.commons.utils.ShiroUtil;
+import com.marveliu.app.web.commons.utils.StatusCodeUtil;
 import com.marveliu.app.web.commons.utils.StringUtil;
 import org.nutz.lang.Strings;
 import org.nutz.mvc.ActionContext;
@@ -18,11 +19,13 @@ public class GlobalsSettingProcessor extends AbstractProcessor {
     private ShiroUtil shiroUtil;
     private DateUtil dateUtil;
     private StringUtil stringUtil;
+    private StatusCodeUtil statusCodeUtil;
 
     public void init(NutConfig config, ActionInfo ai) throws Throwable {
         shiroUtil = config.getIoc().get(ShiroUtil.class);
         dateUtil = config.getIoc().get(DateUtil.class);
         stringUtil = config.getIoc().get(StringUtil.class);
+        statusCodeUtil = config.getIoc().get(StatusCodeUtil.class);
     }
 
     @SuppressWarnings("rawtypes")
@@ -32,9 +35,11 @@ public class GlobalsSettingProcessor extends AbstractProcessor {
         ac.getRequest().setAttribute("AppName", Globals.AppName);
         ac.getRequest().setAttribute("AppDomain", Globals.AppDomain);
         ac.getRequest().setAttribute("AppShrotName", Globals.AppShrotName);
+        ac.getRequest().setAttribute("AppApiDomain", Globals.AppApiDomain);
         ac.getRequest().setAttribute("shiro", shiroUtil);
         ac.getRequest().setAttribute("date", dateUtil);
         ac.getRequest().setAttribute("string", stringUtil);
+        ac.getRequest().setAttribute("status", statusCodeUtil);
         // 如果url中有语言属性则设置
         String lang = ac.getRequest().getParameter("lang");
         if (!Strings.isEmpty(lang)) {

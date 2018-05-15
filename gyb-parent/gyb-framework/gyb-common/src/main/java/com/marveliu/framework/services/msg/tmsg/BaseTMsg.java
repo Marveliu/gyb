@@ -65,4 +65,5 @@ public abstract class BaseTMsg implements TMsg {
     public String getTemplatePath() {
         return "";
     }
+    
 }

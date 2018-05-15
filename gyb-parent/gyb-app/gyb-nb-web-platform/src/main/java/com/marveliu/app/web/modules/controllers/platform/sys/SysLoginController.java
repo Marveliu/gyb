@@ -63,9 +63,9 @@ public class SysLoginController {
     @Filters
     public String login(HttpServletRequest req, HttpSession session) {
         Subject subject = SecurityUtils.getSubject();
-//        if (subject.isAuthenticated()) {
-//            return "redirect:/platform/home";
-//        } else {
+       // if (subject.isAuthenticated()) {
+       //     return "redirect:/platform/home";
+       // } else {
             try {
                 HashMap<String, Object> map = RSAUtil.getKeys();
                 //生成公钥和私钥
@@ -162,6 +162,8 @@ public class SysLoginController {
             Subject subject = SecurityUtils.getSubject();
             ThreadContext.bind(subject);
             subject.login(token);
+            //进入shiro
+            session.setAttribute("sysUserToken", token);
             Sys_user user = (Sys_user) subject.getPrincipal();
             int count = user.getLoginCount() == null ? 0 : user.getLoginCount();
             sysUserService.update(Chain.make("loginIp", user.getLoginIp()).add("loginAt", (int) (System.currentTimeMillis() / 1000))

@@ -16,16 +16,12 @@ package com.marveliu.app.msg.modules.services.impl.email;
  */
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.marveliu.app.msg.commons.tmsg.passwordTMsg;
 import com.marveliu.app.msg.commons.utils.TemplateUtil;
 import com.marveliu.framework.services.msg.TMsg;
 import com.marveliu.framework.services.msg.email.EmailService;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.HtmlEmail;
-import org.beetl.core.Configuration;
-import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;
-import org.beetl.core.resource.WebAppResourceLoader;
 import org.nutz.ioc.Ioc;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;

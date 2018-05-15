@@ -47,7 +47,7 @@ public class SysHomeController {
     public String home(HttpServletRequest req) {
         // 角色：管理员和雇员
         if(shiroUtil.isGy()){
-            return "forward:/platform/gy/person";
+            return "forward:/front/gy";
         }
         return null;
     }

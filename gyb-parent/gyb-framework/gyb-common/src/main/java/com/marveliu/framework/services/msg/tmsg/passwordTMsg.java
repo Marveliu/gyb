@@ -1,4 +1,4 @@
-package com.marveliu.app.msg.commons.tmsg;
+package com.marveliu.framework.services.msg.tmsg;
 /*
  * Copyright [2018] [Marveliu]
  *
@@ -16,10 +16,7 @@ package com.marveliu.app.msg.commons.tmsg;
  */
 
 import com.marveliu.framework.services.msg.TMsg;
-import com.marveliu.framework.services.msg.tmsg.BaseTMsg;
 
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Marveliu
@@ -54,7 +51,6 @@ public class passwordTMsg extends BaseTMsg implements TMsg {
     public void setUrl(String url) {
         this.url = url;
     }
-
 
     public String getTemplatePath() {
         return TEMPLATE_PATH;
