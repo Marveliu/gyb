@@ -80,17 +80,18 @@ public class XmController {
             @Param("SearchType") int SearchType,
             @Param("taskName") String taskname
     ) {
-        // TODO: 24/03/2018 根据技能种类选择对应的项目
+
         Cnd cnd = Cnd.NEW();
         if(length == 0 ){
             length = 5;     // 当前页大小
         }
         String linkName = null;
         NutMap re = new NutMap();
-        Pager pager = new OffsetPager(start, length);
+        Pager pager = new Pager(start, length);
         // 处于申请阶段并且发布的任务书
         // cnd.and("disabled","=","false").and("status","=",1);
         // todo: for test
+        // cnd.and("disabled","=","false");
         // 查询名称
         if (!Strings.isBlank(taskname)) {
             cnd.and("taskName", "like", "%" + taskname + "%");
@@ -102,9 +103,11 @@ public class XmController {
                 case 1:
                     // 时间发布
                     cnd.asc("applyendtime");
+                    break;
                 case 2:
                     // 金额
                     cnd.desc("award");
+                    break;
                 case 3:
                     // 技能匹配
                 default:
@@ -116,10 +119,10 @@ public class XmController {
         if (!Strings.isBlank(linkName)) {
             xmTaskService.fetchLinks(list, linkName);
         }
-
-
+        float count  = xmTaskService.count(cnd);
         re.put("data", list);
-        re.put("listCount", xmTaskService.count(cnd));
+        re.put("listCount", count);
+        re.put("pageCount", Math.ceil(count/length));
         re.put("recordsTotal", length);
         return re;
     }

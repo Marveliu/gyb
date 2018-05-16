@@ -15,7 +15,6 @@ layout("/layouts/platform.html"){
     </header>
 
     <div class="content-wrap">
-        <div class="wrapper">
             <div class="m15">
                 <%
                 if(obj.status == 1){
@@ -25,13 +24,14 @@ layout("/layouts/platform.html"){
                 </button>
                 <% }%>
             </div>
+
             <nav role="navigation">
                 <div class="no-padding">
-                    <p class="navbar-text">编号:${obj.id!}</p>
                     <ul class="nav nav-stacked">
-                        <li class="disabled text-uppercase">
+                        <li>
                             <a href="javascript:;">
-                                <b>重要信息</b>
+                                <span class="badge pull-right bg-success">${obj.id!}</span>
+                                <i class="ti-tag mr5"></i>编号
                             </a>
                         </li>
                         <li>
@@ -74,37 +74,14 @@ layout("/layouts/platform.html"){
                                 <i class="ti-control-record text-warning pull-right"></i> ${@status.getSkillNameById(limit.skillid)}:${limit.skilllevel}
                             </a>
                         </li>
-                        <%
-                        }
-                        %>
+                        <% } %>
                     </ul>
                 </div>
             </nav>
-
-        </div>
     </div>
 </aside>
 
 <section class="main-content bg-white ">
-
-    <!--<header class="header navbar clearfix bb bg-default pl0">-->
-    <!--<p class="navbar-text">任务书编号:${obj.id!}</p>-->
-    <!--<div class="btn-group pull-right">-->
-    <!--<button type="button" class="btn btn-default navbar-btn btn-sm" onclick="window.history.back()">-->
-    <!--<i class="fa fa-mail-reply"></i>-->
-    <!--</button>-->
-    <!--&lt;!&ndash;<button type="button" class="btn btn-default navbar-btn btn-sm">&ndash;&gt;-->
-    <!--&lt;!&ndash;<i class="fa fa-mail-reply"></i>&ndash;&gt;-->
-    <!--&lt;!&ndash;</button>&ndash;&gt;-->
-    <!--&lt;!&ndash;<button type="button" class="btn btn-default navbar-btn btn-sm">&ndash;&gt;-->
-    <!--&lt;!&ndash;<i class="fa fa-mail-forward"></i>&ndash;&gt;-->
-    <!--&lt;!&ndash;</button>&ndash;&gt;-->
-    <!--&lt;!&ndash;<button type="button" class="btn btn-default  navbar-btn btn-sm" onclick="location='${obj.fileurl}'" >附件下载&ndash;&gt;-->
-    <!--&lt;!&ndash;</button>&ndash;&gt;-->
-    <!--</div>-->
-    <!--</header>-->
-
-    <!-- content wrapper -->
     <div class="content-wrap bl">
         <!-- inner content wrapper -->
         <div class="wrapper" style="bottom: 50px;">

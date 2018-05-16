@@ -6,10 +6,6 @@ layout("/layouts/platform.html"){
 
 <!-- content wrapper -->
 <div class="content-wrap">
-
-    <!-- inner content wrapper -->
-    <div class="wrapper">
-
         <!-- 项目列表 -->
         <div class="row mb15">
             <div class="col-xs-6">
@@ -18,23 +14,22 @@ layout("/layouts/platform.html"){
                     <div class="input-group mb15">
                         <input id="searchtaskname" type="text" class="form-control" placeholder="请输入任务书名称">
                         <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" onclick="searchTaskByName()">Go!</button>
+                                <button class="btn btn-default" type="button" onclick="searchTaskByName()">查询</button>
                             </span>
                     </div>
-
-
                 </div>
 
             </div>
 
             <div class="col-xs-6 text-right">
                 <div class="btn-group mr5 mt10">
-                    <button type="button" id="SearchType" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown"
+                    <button type="button" id="SearchType" class="btn btn-primary btn-sm dropdown-toggle"
+                            data-toggle="dropdown"
                             aria-expanded="false" value="0">
                         <span id="search">查询条件</span>
                         <span class="ti-angle-down ml10"></span>
                     </button>
-                    <ul class="dropdown-menu text-left" >
+                    <ul class="dropdown-menu text-left">
                         <li>
                             <a id="type0" onclick="setSearchFilter(0)">全部</a>
                             <a id="type1" onclick="setSearchFilter(1)">申报截止</a>
@@ -43,29 +38,13 @@ layout("/layouts/platform.html"){
                         </li>
                     </ul>
                 </div>
-
-                <!--图片切换-->
-                <!--<div class="btn-group view-options mt10" data-toggle="buttons">-->
-                <!--<label class="btn btn-primary btn-sm active" data-view="grid">-->
-                <!--<input type="radio" name="options" id="option1">-->
-                <!--<i class="ti-view-grid"></i>-->
-                <!--</label>-->
-                <!--<label class="btn btn-primary btn-sm" data-view="list">-->
-                <!--<input type="radio" name="options" id="option2">-->
-                <!--<i class="ti-view-list"></i>-->
-                <!--</label>-->
-                <!--</div>-->
-
-
             </div>
         </div>
-
 
         <div class="switcher view-list">
-            <div class="row feed" id="result" style="position: relative;">
+            <div class="row feed p5" id="result" style="position: relative;">
             </div>
         </div>
-
         <!-- 索引 -->
         <section class="panel bg-none">
             <div class="text-center ">
@@ -73,8 +52,6 @@ layout("/layouts/platform.html"){
                 </ul>
             </div>
         </section>
-    </div>
-    <!-- /inner content wrapper -->
 
 </div>
 <!-- /content wrapper -->
@@ -82,185 +59,131 @@ layout("/layouts/platform.html"){
 <script src="${base!}/assets/js/jquery.pagination.js"></script>
 <script type="text/javascript">
 
-    var pagecount    = 0;                                //页码总数
-    var perpage      = 4;                                //每页项目数量
+    var pagecount = 0;                                //页码总数
+    var perpage = 10;                                //每页项目数量
     var defaultstart = 0;                                //默认页
-    var SearchType   = 0;                                //默认过滤类型
-    var taskName     = "";                               //默认项目名称
+    var SearchType = 0;                                //默认过滤类型
+    var taskName = "";                               //默认项目名称
 
-    function initxmlist(){
+    function initxmlist() {
         $('#result').html("");
         $.ajax({
-            url:"/public/xm/data?pageIndex="+defaultstart+"&pageCount="+perpage+"&SearchType="+SearchType+"&taskName="+taskName,
-            type:"get",
-            contentType:"application/json;charset=utf-8",
-            dataType:"json",
-            success:function(data){
-                var count = 0;
-                console.log(data);
-                console.log(data.listCount)
-                console.log(data.recordsTotal)
-                $.each(data["data"],function(i,n) {
-                    count++;
-                    if(count > perpage) return 0;
-                    //获取对象中属性为value的值
-                    var xmtaskid = n.id;                //编号
-                    var xmtitle = n.taskname;           //名称
-                    var xminfo = n.info;                //简介
-                    var award = n.award;                //奖金
-                    var firstcommit = moment(parseInt(n.firstcommit * 1000)).format("YYYY-MM-DD HH:mm:ss");     //初稿时间
-                    var endtime = moment(parseInt(n.endtime * 1000)).format("YYYY-MM-DD HH:mm:ss");             //截止时间
-                    var applyendtime = moment(parseInt(n.applyendtime * 1000)).format("YYYY-MM-DD HH:mm:ss");   //申请截止时间
-                    var at = moment(parseInt(n.publishAt * 1000)).format("YYYY-MM-DD HH:mm:ss");                //发布时间
-                    var resultitem = '<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 switch-item">' +
-                        '<section class="panel">' +
-                        '<div class="panel-body">' +
-                        '<div class="switcher-content">' +
-                        '<div class="tile-title h4 mt5 mb5">' +
-                        '<b><a href="/public/xm/task/' + xmtaskid + '">' + xmtitle + '</a></b>' +
-                        '</div>' +
-                        '<p>' + xminfo + '</p>' +
-                        '<div class="mb10">' +
-                        '<a href="javascript:;" class="mr15">' +
-                        '<i class="ti-file text-warning mr5"></i>初稿提交：' + firstcommit +
-                        '</a>' +
-                        '<a href="javascript:;" class="mr15">' +
-                        '<i class="ti-alarm-clock  text-danger mr5"></i>项目完成：' + endtime +
-                        '</a>' +
-                        '<a href="javascript:;" class="mr15">' +
-                        '<i class="ti-bolt  text-danger mr5"></i>申报截止：' + applyendtime +
-                        '</a>' +
-                        '<a href="javascript:;">' +
-                        '<i class="ti-wallet  text-danger mr5"></i><b>' + award + '</b> RMB' +
-                        '</a>' +
-                        '</div>' +
-                        '<p class=" mg-b">';
-                    $.each(data["data"], function (i, n) {
-                        switch (n.skilllevel) {
-                            case 1:
-                                resultitem = resultitem + '<span class="label label-default">' + n.skilllevel + '</span>';
-                                break;
-                            case 2:
-                                resultitem = resultitem + '<span class="label label-default">' + n.skilllevel + '</span>';
-                                break;
-                            case 3:
-                                resultitem = resultitem + '<span class="label label-default">' + n.skilllevel + '</span>';
-                                break;
-                            case 4:
-                                resultitem = resultitem + '<span class="label label-default">' + n.skilllevel + '</span>';
-                                break;
-                            case 5:
-                                resultitem = resultitem + '<span class="label label-default">' + n.skilllevel + '</span>';
-                                break;
-                            default:
-                                break;
-                        }
-                    }),
-
-                    resultitem = resultitem + '</p></div> </div> <small class="pull-right mr15 mb5">' + at + '</small></section></div>';
-                    $('#result').append(resultitem);
-                        $('.M-box3').pagination({
-                            pageCount: data.listCount,    //pagecount,
-                            showData: data.recordsTotal,       //eachpage,
-                        })
-                    // pagecount = data.listCount;
-                    // perpage = data.recordsTotal;
-                })
+            url: "/public/xm/data?pageIndex=" + defaultstart + "&pageCount=" + perpage + "&SearchType=" + SearchType + "&taskName=" + taskName,
+            type: "get",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                bind(data);
+                $('.M-box3').pagination({
+                    pageCount: data.pageCount,          //pagecount,
+                    showData: data.recordsTotal,       //eachpage,
+                    jump: true,
+                    coping: false,
+                    homePage: '首页',
+                    endPage: '末页',
+                    prevContent: '<<',
+                    nextContent: '>>',
+                    isHide: 'false',
+                    jump: true,
+                    callback: function (api) {
+                        var index = api.getCurrent();
+                        $.ajax({
+                            url: "/public/xm/data?pageIndex=" + index + "&pageCount=" + perpage + "&SearchType=" + SearchType + "&taskName=" + taskName,
+                            type: "get",
+                            contentType: "application/json;charset=utf-8",
+                            dataType: "json",
+                            success: function (data) {
+                                console.log(data);
+                                bind(data);
+                            },
+                            error: function () {
+                                Toast.error("加载失败！");
+                            }
+                        });
+                    }
+                });
             },
-            error:function(){
+            error: function () {
                 alert("error");
             }
         });
     }
 
-    $(function() {
-        if( pagecount%1 != 0) {
-            pagecount = parseInt(pagecount) + 1;
-        }
-        initxmlist();
-
-
-        $('.M-box3').pagination({
-            // pageCount: pagecount,    //pagecount,
-            // showData: perpage,       //eachpage,
-            jump: true,
-            coping: false,
-            homePage: '首页',
-            endPage: '末页',
-            prevContent: '<<',
-            nextContent: '>>',
-            isHide: 'false',
-            jump: true,
-            callback: function (api) {
-                var data = {
-                    start: api.getCurrent(),
-                    SearchFilter: $('SearchType').val(),
-                    taskName: taskName
-                };
-                var realstart = (api.getCurrent()-1)*perpage;
-                var count = 0;
-                $.ajax({
-                    url:"/public/xm/data?pageIndex="+defaultstart+"&pageCount="+perpage,
-                    type:"get",
-                    contentType:"application/json;charset=utf-8",
-                    dataType:"json",
-                    success:function(data){
-                        //清空项目列表
-                        $('#result').empty();
-                        // console.log(data);
-                        //i表示在data中的索引位置，n表示包含的信息的对象
-                        $.each(data["data"],function(i,n) {
-                            count++;
-                            if(count > perpage)
-                                return 0;
-                            //获取对象中属性为value的值
-                            var xmtaskid = n.id;                //编号
-                            var xmtitle = n.taskname;           //名称
-                            var xminfo = n.info;                //简介
-                            var award = n.award;                //奖金
-                            var firstcommit = moment(parseInt(n.firstcommit * 1000)).format("YYYY-MM-DD HH:mm:ss");     //初稿时间
-                            var endtime = moment(parseInt(n.endtime * 1000)).format("YYYY-MM-DD HH:mm:ss");             //截止时间
-                            var at = moment(parseInt(n.publishAt * 1000)).format("YYYY-MM-DD HH:mm:ss");                //发布时间
-                            var resultitem = '<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 switch-item">' +
-                                '<section class="panel">' +
-                                '<div class="panel-body">' +
-                                '<div class="switcher-content">' +
-                                '<div class="tile-title h4 mt5 mb5">' +
-                                '<b><a href="/public/xm/task/' + xmtaskid + '">' + xmtitle + '</a></b>' +
-                                '</div>' +
-                                '<p>' + xminfo + '</p>' +
-                                '<div class="mb10">' +
-                                '<a href="javascript:;" class="mr15">' +
-                                '<i class="ti-file text-warning mr5"></i>' + firstcommit +
-                                '</a>' +
-                                '<a href="javascript:;" class="mr15">' +
-                                '<i class="ti-alarm-clock  text-danger mr5"></i>' + endtime +
-                                '</a>' +
-                                '<a href="javascript:;">' +
-                                '<i class="ti-wallet  text-danger mr5"></i><b>' + award + '</b> RMB' +
-                                '</a>' +
-                                '</div>' +
-                                '<p class=" mg-b">';
-                            resultitem = resultitem + '</p></div> </div> <small class="pull-right mr15 mb5">' + at + '</small></section></div>';
-                            $('#result').append(resultitem);
-                            this.pagecount = data.listCount;
-                            this.perpage = data.recordsTotal;
-                        })
-                    },
-                    error:function(){
-                        alert("error");
-                    }
-                });
-            }
-        });
+    $(function () {
+        initxmlist()
     });
 
     function setSearchFilter(type) {
         var typeid = "type" + type;
-        var SearchName = $('#'+typeid).text();
+        var SearchName = $('#' + typeid).text();
         $('#search').text(SearchName);
         SearchType = type;
         initxmlist();
+    }
+
+    function bind(data) {
+        $('#result').empty();
+        $.each(data["data"], function (i, n) {
+            var count = 0;
+            count++;
+            if (count > perpage) return 0;
+            var xmtaskid = n.id;                //编号
+            var xmtitle = n.taskname;           //名称
+            var xminfo = n.info;                //简介
+            var award = n.award;                //奖金
+            var firstcommit = moment(parseInt(n.firstcommit * 1000)).format("YYYY-MM-DD HH:mm:ss");     //初稿时间
+            var endtime = moment(parseInt(n.endtime * 1000)).format("YYYY-MM-DD HH:mm:ss");             //截止时间
+            var applyendtime = moment(parseInt(n.applyendtime * 1000)).format("YYYY-MM-DD HH:mm:ss");   //申请截止时间
+            var at = moment(parseInt(n.publishAt * 1000)).format("YYYY-MM-DD HH:mm:ss");                //发布时间
+            var resultitem =
+                '<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 switch-item">' +
+                '<section class="panel no-p">' +
+                '<div class="panel-body">' +
+                '<div class="switcher-content">' +
+                '<div class="tile-title h4 mt5 mb5">' +
+                '<b><a href="/public/xm/task/' + xmtaskid + '">' + xmtitle + '</a></b>' +
+                '</div>' +
+                '<p>' + xminfo + '</p>' +
+                '<div class="mb10">' +
+                '<a href="javascript:;" class="mr15">' +
+                '<i class="ti-file text-warning mr5"></i>初稿提交：' + firstcommit +
+                '</a>' +
+                '<a href="javascript:;" class="mr15">' +
+                '<i class="ti-alarm-clock  text-danger mr5"></i>项目完成：' + endtime +
+                '</a>' +
+                '<a href="javascript:;" class="mr15">' +
+                '<i class="ti-bolt  text-danger mr5"></i>申报截止：' + applyendtime +
+                '</a>' +
+                '<a href="javascript:;">' +
+                '<i class="ti-wallet  text-danger mr5"></i><b>' + award + '</b> RMB' +
+                '</a>' +
+                '</div>' +
+                '<p class=" mg-b">';
+            $.each(data["data"], function (i, n) {
+                switch (n.skilllevel) {
+                    case 1:
+                        resultitem = resultitem + '<span class="label label-default">' + n.skilllevel + '</span>';
+                        break;
+                    case 2:
+                        resultitem = resultitem + '<span class="label label-default">' + n.skilllevel + '</span>';
+                        break;
+                    case 3:
+                        resultitem = resultitem + '<span class="label label-default">' + n.skilllevel + '</span>';
+                        break;
+                    case 4:
+                        resultitem = resultitem + '<span class="label label-default">' + n.skilllevel + '</span>';
+                        break;
+                    case 5:
+                        resultitem = resultitem + '<span class="label label-default">' + n.skilllevel + '</span>';
+                        break;
+                    default:
+                        break;
+                }
+            }),
+                resultitem = resultitem + '</p></div> </div> <small class="pull-right mr15 mb5">' + at + '</small></section></div>';
+            $('#result').append(resultitem);
+
+        })
     }
 
     function searchTaskByName() {
