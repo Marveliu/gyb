@@ -39,14 +39,22 @@ import java.util.List;
 public interface GyFacadeService {
 
 
-    /************ 用户相关 ************/
+    /************ 雇员信息相关 ************/
+
+    /**
+     * 雇员注册
+     * @param gyInf
+     * @param gyAuth
+     * @return
+     */
+    public boolean regInfo(gy_inf gyInf,gy_auth gyAuth);
 
     /**
      * 检查指定联系方式是否被验证
      * @param gyid
      * @return
      */
-    public boolean ifEmailChecked(String gyid,String[] contactWay);
+    public boolean isContactChecked(String gyid,String[] contactWay);
 
     /**
      * 修改联系方式,迁移联系方式
@@ -93,9 +101,6 @@ public interface GyFacadeService {
 
 
     /************ 技能相关 ************/
-
-
-
 
     /**
      * 给雇员发送消息

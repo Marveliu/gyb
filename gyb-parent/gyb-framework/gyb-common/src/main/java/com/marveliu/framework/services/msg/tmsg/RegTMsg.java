@@ -17,21 +17,25 @@ package com.marveliu.framework.services.msg.tmsg;
 
 import com.marveliu.framework.services.msg.TMsg;
 
-
 /**
  * @author Marveliu
- * @since 14/05/2018
+ * @since 17/05/2018
  **/
 
-public class passwordTMsg extends BaseTMsg implements TMsg {
+public class RegTMsg extends BaseTMsg implements TMsg {
 
-    private final static String  TEMPLATE_PATH = "password.html";
+    private final static String  TEMPLATE_PATH = "reg.html";
+    private final static String  SUBJECT = "雇员注册";
 
     private String username;
 
     private String url;
 
-    public passwordTMsg(String username, String url) {
+    // 必须要有无参构造
+    public RegTMsg() {
+    }
+
+    public RegTMsg(String username, String url) {
         this.username = username;
         this.url = url;
     }
@@ -52,7 +56,13 @@ public class passwordTMsg extends BaseTMsg implements TMsg {
         this.url = url;
     }
 
+    @Override
     public String getTemplatePath() {
         return TEMPLATE_PATH;
+    }
+
+    @Override
+    public String getSubject(){
+        return SUBJECT;
     }
 }

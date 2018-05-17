@@ -7,6 +7,7 @@ import com.marveliu.framework.model.sys.Sys_route;
 import com.marveliu.framework.services.sys.SysConfigService;
 import com.marveliu.framework.services.sys.SysDictService;
 import com.marveliu.framework.services.sys.SysRouteService;
+import com.marveliu.framework.util.ConfigUtil;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -22,21 +23,21 @@ import java.util.Map;
 @IocBean(create = "init")
 public class Globals {
     //项目路径
-    public static String AppRoot = "";
+    public static String AppRoot = ConfigUtil.AppRoot;
     //项目目录
-    public static String AppBase = "";
+    public static String AppBase = ConfigUtil.AppBase;
     //项目名称
-    public static String AppName = "雇佣帮";
+    public static String AppName = ConfigUtil.AppName;
     //项目短名称
-    public static String AppShrotName = "GYB";
+    public static String AppShrotName = ConfigUtil.AppShrotName;
     //项目域名
-    public static String AppDomain = "http://127.0.0.1";
+    public static String AppDomain = ConfigUtil.AppDomain;
     //项目域名
-    public static String AppApiDomain = "http://127.0.0.1";
+    public static String AppApiDomain = ConfigUtil.AppApiDomain;
     //文件上传路径
-    public static String AppUploadPath = "upload";
+    public static String AppUploadPath = ConfigUtil.AppUploadPath;
     //文件上传路径
-    public static String AppUploadBase = "";
+    public static String AppUploadBase = ConfigUtil.AppUploadBase;
     // 是否启用了队列
     public static boolean RabbitMQEnabled = false;
     //系统自定义参数

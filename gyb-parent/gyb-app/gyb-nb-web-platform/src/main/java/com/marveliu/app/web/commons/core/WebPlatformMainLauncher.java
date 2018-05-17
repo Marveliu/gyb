@@ -24,6 +24,7 @@ import org.nutz.mvc.annotation.*;
 @SessionBy(ShiroSessionProvider.class)
 public class WebPlatformMainLauncher {
     private static final Log log = Logs.get();
+
     @Inject("refer:$ioc")
     private Ioc ioc;
     @Inject

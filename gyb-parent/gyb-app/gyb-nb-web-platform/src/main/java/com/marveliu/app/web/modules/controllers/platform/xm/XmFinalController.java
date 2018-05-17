@@ -20,9 +20,6 @@ import com.marveliu.app.web.commons.slog.annotation.SLog;
 import com.marveliu.app.web.commons.utils.ShiroUtil;
 import com.marveliu.app.web.commons.utils.StringUtil;
 import com.marveliu.framework.model.base.Result;
-import com.marveliu.framework.model.gy.gy_pay;
-import com.marveliu.framework.model.xm.xm_evaluation;
-import com.marveliu.framework.model.xm.xm_inf;
 import com.marveliu.framework.page.datatable.DataTableColumn;
 import com.marveliu.framework.page.datatable.DataTableOrder;
 import com.marveliu.framework.services.gy.GyPayService;
@@ -41,8 +38,6 @@ import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
-import org.nutz.trans.Atom;
-import org.nutz.trans.Trans;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

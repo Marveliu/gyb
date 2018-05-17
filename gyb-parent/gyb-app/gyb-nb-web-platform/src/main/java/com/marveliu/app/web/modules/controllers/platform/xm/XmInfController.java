@@ -16,22 +16,18 @@ package com.marveliu.app.web.modules.controllers.platform.xm;
  */
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.marveliu.app.web.commons.slog.annotation.SLog;
 import com.marveliu.app.web.commons.utils.ShiroUtil;
 import com.marveliu.app.web.commons.utils.StringUtil;
-import com.marveliu.framework.model.base.Result;
 import com.marveliu.framework.model.xm.xm_inf;
 import com.marveliu.framework.page.datatable.DataTableColumn;
 import com.marveliu.framework.page.datatable.DataTableOrder;
 import com.marveliu.framework.services.sys.SysUserinfService;
 import com.marveliu.framework.services.xm.XmInfService;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
-import org.nutz.lang.Times;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.At;
@@ -39,9 +35,7 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Marveliu

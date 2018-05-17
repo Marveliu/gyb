@@ -17,18 +17,29 @@ package com.marveliu.app.gy.modules.services.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.marveliu.framework.model.gy.gy_auth;
 import com.marveliu.framework.model.gy.gy_inf;
 import com.marveliu.framework.model.gy.gy_pay;
 import com.marveliu.framework.model.sys.Sys_msg;
+import com.marveliu.framework.model.sys.Sys_user;
 import com.marveliu.framework.services.gy.*;
+import com.marveliu.framework.services.msg.TMsg;
+import com.marveliu.framework.services.msg.tmsg.RegTMsg;
+import com.marveliu.framework.services.sys.SysMsgService;
 import com.marveliu.framework.services.sys.SysRoleService;
 import com.marveliu.framework.services.sys.SysUserService;
+import com.marveliu.framework.util.ConfigUtil;
+import com.marveliu.framework.util.Toolkit;
+import com.sun.javaws.Globals;
+import org.jboss.netty.util.internal.StringUtil;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.json.Json;
 import org.nutz.lang.Lang;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
+import javax.security.auth.Subject;
 import java.util.List;
 
 /**
@@ -57,8 +68,51 @@ public class GyFacadeServiceImpl implements GyFacadeService {
 
     @Inject
     @Reference
+    private SysMsgService sysMsgService;
+
+    @Inject
+    @Reference
     private SysRoleService sysRoleService;
 
+
+    /**
+     * 雇员注册
+     *
+     * @param gyInf
+     * @param gyAuth
+     * @return
+     */
+    @Override
+    public boolean regInfo(gy_inf gyInf, gy_auth gyAuth) {
+        try {
+
+            gy_inf gy_inf = gyInfService.insertOrUpdate(gyInf);
+            // 修改角色
+            this.updateGyRoleByGyid(gy_inf.getId(),"gy2");
+            gyAuth.setGyid(gy_inf.getId());
+            gyAuthService.insertOrUpdate(gyAuth);
+
+            // 平台消息
+            Sys_user user = sysUserService.fetch(gy_inf.getUserid());
+            String token = String.format("%s,%s", user.getEmail(), System.currentTimeMillis());
+            token = Toolkit._3DES_encode(user.getSalt().getBytes(), token.getBytes());
+            String url = ConfigUtil.AppDomain + "/open/api/sys/email/checkActiveMail?token=" + token +"&userId=" + user.getId();
+
+            Sys_msg sysMsg = new Sys_msg();
+            TMsg tMsg = new RegTMsg(gy_inf.getRealname(),url);
+
+            sysMsg.setRevid(gy_inf.getUserid());
+            sysMsg.setMsg(Json.toJson(tMsg));
+            sysMsg.setType(ConfigUtil.SYS_MSG_TYPE_EMAIL);
+            sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_GY);
+            sysMsgService.pushMsg(sysMsg);
+
+            return true;
+        }catch (Exception e){
+            log.error("雇员信息注册失败",e);
+        }
+        return false;
+    }
 
     /**
      * 修改雇员角色
@@ -129,6 +183,7 @@ public class GyFacadeServiceImpl implements GyFacadeService {
         return gy.getGypays();
     }
 
+
     /**
      * 检查指定联系方式是否被验证
      *
@@ -137,7 +192,7 @@ public class GyFacadeServiceImpl implements GyFacadeService {
      * @return
      */
     @Override
-    public boolean ifEmailChecked(String gyid, String[] contactWay) {
+    public boolean isContactChecked(String gyid, String[] contactWay) {
         return false;
     }
 

@@ -15,7 +15,18 @@ package com.marveliu.app.modules.controllers.open;
  * limitations under the License.
  */
 
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.marveliu.app.commons.slog.annotation.SLog;
+import com.marveliu.framework.model.base.Result;
+import com.marveliu.framework.services.sys.SysUserService;
+import com.marveliu.framework.util.Toolkit;
+import org.nutz.dao.Chain;
+import org.nutz.dao.Cnd;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Strings;
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.At;
 
 /**
@@ -24,7 +35,43 @@ import org.nutz.mvc.annotation.At;
  **/
 
 @IocBean
-@At("/open/api/xm")
+@At("/open/api/sys")
 public class ApiSysController {
+
+    private final static Log log = Logs.get();
+
+    @Inject
+    @Reference
+    private SysUserService sysUserService;
+
+
+    /**
+     * 验证邮箱
+     * @param token
+     * @param userId
+     * @return
+     */
+    @SLog(type = "sys",tag = "邮箱验证",param = true,result = true)
+    public Object checkActiveMail(String token,String userId) {
+
+        if (Strings.isBlank(token)) return Result.error("请不要直接访问这个链接!!!");
+        if (token.length() < 10) return Result.error("非法token");
+        try {
+            token = Toolkit._3DES_decode(sysUserService.fetch(userId).getSalt().getBytes(), Toolkit.hexstr2bytearray(token));
+            if (token == null) return Result.error("非法token");
+            String[] tmp = token.split(",", 2);
+            if (tmp.length != 2 || tmp[0].length() == 0 || tmp[1].length() == 0) return Result.error("非法token");
+            long time = Long.parseLong(tmp[1]);
+            if (System.currentTimeMillis() - time > 10 * 60 * 1000) return Result.error("该验证链接已经超时");
+            Cnd cnd = Cnd.where("id", "=", userId);
+            if (1 ==  sysUserService.update(Chain.make("emailChecked",true),cnd)) {
+                return Result.success("验证成功");
+            }
+            return Result.error("验证失败!!请重新验证!!");
+        } catch (Throwable e) {
+            log.debug("检查token时出错", e);
+            return Result.error("非法token");
+        }
+    }
 
 }

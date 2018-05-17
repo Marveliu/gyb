@@ -36,7 +36,7 @@ public abstract class BaseTMsg implements TMsg {
 
     private String email = "gyb@guyongbang.cn";
 
-    private String  opAt = Times.formatForRead(new Date());
+    private String  opAt = Times.format("yyyy-MM-dd hh:mm:ss",new Date());
 
     public String getOpBy() {
         return opBy;
@@ -64,6 +64,14 @@ public abstract class BaseTMsg implements TMsg {
 
     public String getTemplatePath() {
         return "";
+    }
+
+    public String getSubject(){
+        return "";
+    }
+
+    public String getTMsgClass(){
+        return this.getClass().getName();
     }
     
 }

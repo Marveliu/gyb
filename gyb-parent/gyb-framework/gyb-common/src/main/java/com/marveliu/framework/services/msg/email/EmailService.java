@@ -27,6 +27,6 @@ public interface EmailService{
 
     public boolean send(String to, String subject, String html) ;
 
-    public boolean sendHtmlTemplateByTemplateName(String to, String subject,TMsg tMsg);
+    public boolean sendHtmlTemplateByTemplateName(String to,TMsg tMsg);
 
 }

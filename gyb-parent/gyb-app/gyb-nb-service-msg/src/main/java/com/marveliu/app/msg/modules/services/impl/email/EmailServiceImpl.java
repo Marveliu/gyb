@@ -147,15 +147,14 @@ public class EmailServiceImpl implements EmailService,Runnable {
      * 发送模板邮件
      *
      * @param to
-     * @param subject
      * @param tMsg
      * @return
      */
-    public boolean sendHtmlTemplateByTemplateName(String to, String subject,TMsg tMsg){
+    public boolean sendHtmlTemplateByTemplateName(String to,TMsg tMsg){
         StringBuilder path = new StringBuilder();
         try {
             Template t =  templateUtil.buildTemplate(tMsg);
-            this.send(to,subject,t.render());
+            this.send(to,tMsg.getSubject(),t.render());
             return true;
         }catch (Exception e){
             log.error("template not found:"+path);

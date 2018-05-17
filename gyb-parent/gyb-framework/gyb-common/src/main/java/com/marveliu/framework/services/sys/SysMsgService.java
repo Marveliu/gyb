@@ -13,6 +13,6 @@ public interface SysMsgService extends BaseService<Sys_msg> {
      * 消息推送
      * @param sysMsg
      */
-    public void pushMsg(Sys_msg sysMsg);
+    public boolean pushMsg(Sys_msg sysMsg);
 
 }

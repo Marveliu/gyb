@@ -15,6 +15,7 @@ package com.marveliu.app.msg.commons.core;
  * limitations under the License.
  */
 
+import com.marveliu.app.msg.commons.base.Globals;
 import com.marveliu.app.msg.modules.services.impl.RabbitTestService;
 import com.marveliu.framework.model.sys.Sys_user;
 import org.beetl.core.GroupTemplate;
@@ -44,9 +45,11 @@ public class DubboRpcMsgMainLauncher {
 
     private static final Log log = Logs.get();
 
-
     @Inject("refer:$ioc")
     protected Ioc ioc;
+
+    @Inject
+    private Globals globals; // 注入为了初始化
 
     public static void main(String[] args) throws Exception {
         NbApp nb = new NbApp().setArgs(args).setPrintProcDoc(true);
@@ -55,13 +58,7 @@ public class DubboRpcMsgMainLauncher {
     }
 
     public void init() throws Exception {
-        // for (String name :ioc.getNames()){
-        //     System.out.println("********:::"+name);
-        //
-        // }
         GroupTemplate gt = ioc.get(GroupTemplate.class);
-        // todo:参考taskmodules 实现初始化
-        // 进行队列声明
     }
 
     public void depose() {

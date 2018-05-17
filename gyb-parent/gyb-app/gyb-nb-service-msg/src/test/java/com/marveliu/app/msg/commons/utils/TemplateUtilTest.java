@@ -1,7 +1,7 @@
 package com.marveliu.app.msg.commons.utils;
 
 import com.marveliu.app.msg.commons.core.DubboRpcMsgMainLauncher;
-import com.marveliu.framework.services.msg.tmsg.passwordTMsg;
+import com.marveliu.framework.services.msg.tmsg.PasswordTMsg;
 import com.marveliu.framework.services.msg.TMsg;
 import org.beetl.core.Template;
 import org.junit.Test;
@@ -19,7 +19,7 @@ public class TemplateUtilTest {
 
     @Test
     public void addDate() {
-        TMsg tMsg = new passwordTMsg("刘尚nan","www.baidu.com");
+        TMsg tMsg = new PasswordTMsg("刘尚nan","www.baidu.com");
         Template t =  templateUtil.buildTemplate(tMsg);
         System.out.println("html:"+t.render());
     }

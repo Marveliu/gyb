@@ -29,7 +29,7 @@ public class gy_auth extends BaseModel implements Serializable {
     @Column
     @Comment("认证时间")
     @ColDefine(type = ColType.INT)
-    private Integer reAuthTime;
+    private Long reAuthTime;
 
     @Column
     @Comment("身份证正面")
@@ -80,11 +80,11 @@ public class gy_auth extends BaseModel implements Serializable {
         this.gyid = gyid;
     }
 
-    public Integer getReAuthTime() {
+    public Long getReAuthTime() {
         return reAuthTime;
     }
 
-    public void setReAuthTime(Integer reAuthTime) {
+    public void setReAuthTime(Long reAuthTime) {
         this.reAuthTime = reAuthTime;
     }
 

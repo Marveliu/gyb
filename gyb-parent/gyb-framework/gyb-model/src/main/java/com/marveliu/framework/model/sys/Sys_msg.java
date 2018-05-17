@@ -20,10 +20,10 @@ public class Sys_msg extends BaseModel implements Serializable {
 //    })
     private long id;
 
-    @Column
-    @Comment("创建昵称")
-    @ColDefine(type = ColType.VARCHAR, width = 100)
-    private String username;
+    // @Column
+    // @Comment("创建昵称")
+    // @ColDefine(type = ColType.VARCHAR, width = 100)
+    // private String username;
 
     // ConfigUtil SYS_MSG_TYPE_* 对应
     @Column
@@ -43,26 +43,32 @@ public class Sys_msg extends BaseModel implements Serializable {
     @ColDefine(type = ColType.VARCHAR, width = 50)
     private String revid;
 
-    // @Column
-    // @Comment("消息接受账号")
-    // @ColDefine(type = ColType.VARCHAR, width = 100)
-    // private String revaccount;
+    @Column
+    @Comment("消息接受账号")
+    @ColDefine(type = ColType.VARCHAR, width = 100)
+    private String revaccount;
 
     @Column
     @Comment("消息发送人")
     @ColDefine(type = ColType.VARCHAR, width = 50)
+    @Default("sysadmin")
     private String sendid;
 
-    @Column
-    @Comment("来源IP")
-    @ColDefine(type = ColType.VARCHAR, width = 255)
-    private String ip;
+    // @Column
+    // @Comment("来源IP")
+    // @ColDefine(type = ColType.VARCHAR, width = 255)
+    // private String ip;
 
-    // json数据
+    // Tmsg
     @Column
     @Comment("推送内容")
     @ColDefine(type = ColType.TEXT)
     private String msg;
+
+    @Column
+    @Comment("TMsg名称")
+    @ColDefine(type = ColType.VARCHAR,width = 100)
+    private String tmsgclass;
 
     @Column
     @Comment("是否查阅")
@@ -76,14 +82,14 @@ public class Sys_msg extends BaseModel implements Serializable {
     public void setId(long id) {
         this.id = id;
     }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    //
+    // public String getUsername() {
+    //     return username;
+    // }
+    //
+    // public void setUsername(String username) {
+    //     this.username = username;
+    // }
 
     public Integer getType() {
         return type;
@@ -118,13 +124,6 @@ public class Sys_msg extends BaseModel implements Serializable {
         this.sendid = sendid;
     }
 
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
 
     public String getMsg() {
         return msg;
@@ -142,4 +141,19 @@ public class Sys_msg extends BaseModel implements Serializable {
         this.checked = checked;
     }
 
+    public String getRevaccount() {
+        return revaccount;
+    }
+
+    public void setRevaccount(String revaccount) {
+        this.revaccount = revaccount;
+    }
+
+    public String getTmsgclass() {
+        return tmsgclass;
+    }
+
+    public void setTmsgclass(String tmsgclass) {
+        this.tmsgclass = tmsgclass;
+    }
 }

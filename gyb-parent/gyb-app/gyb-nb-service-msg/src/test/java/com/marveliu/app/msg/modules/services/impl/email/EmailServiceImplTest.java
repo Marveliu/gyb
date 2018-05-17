@@ -1,7 +1,7 @@
 package com.marveliu.app.msg.modules.services.impl.email;
 
 import com.marveliu.app.msg.commons.core.DubboRpcMsgMainLauncher;
-import com.marveliu.framework.services.msg.tmsg.passwordTMsg;
+import com.marveliu.framework.services.msg.tmsg.PasswordTMsg;
 import com.marveliu.framework.services.msg.TMsg;
 import com.marveliu.framework.services.msg.email.EmailService;
 import org.junit.Test;
@@ -39,8 +39,8 @@ public class EmailServiceImplTest {
 
     @Test
     public void sendTemplate() throws Exception {
-        TMsg msg = new passwordTMsg("刘尚楠","www.baidu.com");
-        assertEquals(true,emailService.sendHtmlTemplateByTemplateName(TO,SUBJECT,msg));
+        TMsg msg = new PasswordTMsg("刘尚楠","www.baidu.com");
+        assertEquals(true,emailService.sendHtmlTemplateByTemplateName(TO,msg));
     }
 
     public static NbApp createNbApp() {

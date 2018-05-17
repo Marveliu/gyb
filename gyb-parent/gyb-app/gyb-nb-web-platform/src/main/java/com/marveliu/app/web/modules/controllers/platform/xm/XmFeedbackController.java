@@ -21,7 +21,6 @@ import com.marveliu.app.web.commons.utils.ShiroUtil;
 import com.marveliu.app.web.commons.utils.StringUtil;
 import com.marveliu.framework.model.base.Result;
 import com.marveliu.framework.model.xm.xm_feedback;
-import com.marveliu.framework.model.xm.xm_inf;
 import com.marveliu.framework.model.xm.xm_task;
 import com.marveliu.framework.page.datatable.DataTableColumn;
 import com.marveliu.framework.page.datatable.DataTableOrder;
@@ -30,9 +29,7 @@ import com.marveliu.framework.services.xm.XmFeedbackService;
 import com.marveliu.framework.services.xm.XmInfService;
 import com.marveliu.framework.services.xm.XmTaskService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
-import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
@@ -47,14 +44,10 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 import org.nutz.mvc.view.UTF8JsonView;
 import org.nutz.mvc.view.ViewWrapper;
-import org.nutz.trans.Atom;
-import org.nutz.trans.Trans;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Marveliu

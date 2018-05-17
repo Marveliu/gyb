@@ -56,6 +56,33 @@ public class ConfigUtil {
 
 
     public static final int SYS_MSG_TYPE_ALL = 0;
-    public static final int SYS_MSG_TYPE_EMAIL = 0;
+    public static final int SYS_MSG_TYPE_EMAIL = 1;
+
+
+    public static final String SYS_MSG_TAG_SYS = "sys";
+    public static final String SYS_MSG_TAG_GY = "gy";
+    public static final String SYS_MSG_TAG_XM = "xm";
+
+
+
+    public static String AppRoot = "";
+    //项目目录
+    public static String AppBase = "";
+    //项目名称
+    public static String AppName = "雇佣帮";
+    //项目短名称
+    public static String AppShrotName = "GYB";
+    //项目域名
+    public static String AppDomain = "http://127.0.0.1";
+    //项目域名
+    public static String AppApiDomain = "http://127.0.0.1";
+    //文件上传路径
+    public static String AppUploadPath = "upload";
+    //文件上传路径
+    public static String AppUploadBase = "";
+
+
+
+
 
 }
