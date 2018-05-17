@@ -1,0 +1,20 @@
+<div>
+    <p>亲爱的<b>${username}</b>, 您的任务${xminfname}有了新的进展。</p>
+    <p>项目经理:${authername},将您的编号为${feedbackid}</p>
+    <strong >标记为:${statuname}</strong>
+    <%if(final){%>
+    <p>下一次反馈时间:${nexttime}</p>
+    <%}%>
+    <p>反馈内容如下:</p>
+    <div>${reply}</div>
+
+    <br>
+    <p>您可以访问以下链接即使对信息处理：）</p>
+    <p>${url}</p>
+    <br>
+    <p>如果您在使用过程中遇到问题，请联系管理员 ${email}</p>
+    <p>希望您在雇佣帮度过快乐的时光!</p>
+    <p>-----------------------</p>
+    <p></p>
+    <p>(这是一封自动产生的email，请勿回复。)</p>
+</div>

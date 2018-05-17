@@ -16,12 +16,15 @@ package com.marveliu.app.gy.modules.services.impl;
  */
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.marveliu.framework.model.base.Result;
 import com.marveliu.framework.model.gy.gy_pay;
 import com.marveliu.framework.services.base.BaseServiceImpl;
 import com.marveliu.framework.services.gy.GyPayService;
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Strings;
 
 /**
  * @author Marveliu
@@ -60,5 +63,27 @@ public class GyPayServiceImpl extends BaseServiceImpl<gy_pay> implements GyPaySe
     }
 
 
+    @Override
+    public gy_pay addOrUpdateGypay(gy_pay gyPay) {
 
+        if(Strings.isEmpty(gyPay.getId())){
+            //检查是否已经添加了
+            if (null != this.fetch(
+                    Cnd.where("gyid", "=", gyPay.getGyid()).and("type", "=", gyPay.getType())
+                            .and("payid", "=", gyPay.getPayid()))) {
+                return null;
+            }
+        }else {
+            this.updateIgnoreNull(gyPay);
+            return this.fetch(gyPay.getId());
+        }
+
+        //检查是否未首要支付方式
+        if (gyPay.isFirst()) {
+            //取消其他首要支付
+            this.update(Chain.make("first", false), Cnd.where("gyid", "=", gyPay.getGyid()).and("first", "=", true));
+        }
+
+        return this.insert(gyPay);
+    }
 }

@@ -77,12 +77,12 @@ public class gy_inf extends BaseModel implements Serializable {
     @Column
     @Comment("最高学历")
     @ColDefine(type = ColType.INT)
-    private int stuLevel;
+    private Integer stuLevel;
 
     @Column
     @Comment("状态")
     @ColDefine(type = ColType.INT)
-    private int status;
+    private Integer status;
 
     @Column
     @Comment("是否禁用")
@@ -158,12 +158,12 @@ public class gy_inf extends BaseModel implements Serializable {
 
     @Column("reAuthTime")
     @Readonly
-    private int reAuthTime;
+    private Long reAuthTime;
 
 
     @Column("gyauthstatus")
     @Readonly
-    private int gyauthstatus;
+    private Long gyauthstatus;
 
 
     @Column("gyauthstatusname")
@@ -278,19 +278,19 @@ public class gy_inf extends BaseModel implements Serializable {
         this.regYear = regYear;
     }
 
-    public int getStuLevel() {
+    public Integer getStuLevel() {
         return stuLevel;
     }
 
-    public void setStuLevel(int stuLevel) {
+    public void setStuLevel(Integer stuLevel) {
         this.stuLevel = stuLevel;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -422,19 +422,19 @@ public class gy_inf extends BaseModel implements Serializable {
         this.stuCardB = stuCardB;
     }
 
-    public int getReAuthTime() {
+    public Long getReAuthTime() {
         return reAuthTime;
     }
 
-    public void setReAuthTime(int reAuthTime) {
+    public void setReAuthTime(Long reAuthTime) {
         this.reAuthTime = reAuthTime;
     }
 
-    public int getGyauthstatus() {
+    public Long getGyauthstatus() {
         return gyauthstatus;
     }
 
-    public void setGyauthstatus(int gyauthstatus) {
+    public void setGyauthstatus(Long gyauthstatus) {
         this.gyauthstatus = gyauthstatus;
     }
 

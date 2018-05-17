@@ -24,7 +24,7 @@ public interface GyInfService extends BaseService<gy_inf> {
      * @param gyid
      * @return
      */
-    public String getUserByGyid(String gyid);
+    public String getUidByGyid(String gyid);
 
 
     /**

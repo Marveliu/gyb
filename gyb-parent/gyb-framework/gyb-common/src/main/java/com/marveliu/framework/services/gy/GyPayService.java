@@ -21,4 +21,7 @@ public interface GyPayService extends BaseService<gy_pay> {
      */
     public String getGyidByPayid(String payid);
 
+
+    public gy_pay addOrUpdateGypay(gy_pay gyPay);
+
 }

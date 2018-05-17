@@ -17,7 +17,11 @@ package com.marveliu.app.xm.modules.services.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.marveliu.framework.model.gy.gy_inf;
+import com.marveliu.framework.model.sys.Sys_msg;
 import com.marveliu.framework.model.xm.*;
+import com.marveliu.framework.services.msg.TMsg;
+import com.marveliu.framework.services.msg.tmsg.RegTMsg;
 import com.marveliu.framework.util.ConfigUtil;
 import com.marveliu.framework.model.sys.Sys_log;
 import com.marveliu.framework.services.sys.SysLogService;
@@ -27,6 +31,7 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.json.Json;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Times;
 import org.nutz.log.Log;
@@ -203,6 +208,40 @@ public class XmFacadeServiceImpl implements XmFacadeService {
         return false;
     }
 
-
-
+    /**
+     * 雇员确认项目结算
+     *
+     * @param xminfid
+     * @param payid
+     * @return
+     */
+    @Override
+    public boolean checkXmFinal(String xminfid, String payid) {
+        try {
+            Trans.exec(new Atom() {
+                @Override
+                public void run() {
+                    //账单转入财务，更新账单时间
+                    xmBillService.update(
+                            Chain.make("status", ConfigUtil.XM_BILL_PAYING).add("realgypayid", payid).add("at", Times.getTS()),
+                            Cnd.where("xminfid", "=", xminfid));
+                    //项目完结
+                    xmInfService.update(
+                            Chain.make("status", ConfigUtil.XM_INF_PAYING),
+                            Cnd.where("id", "=", xminfid));
+                }
+                // Sys_msg sysMsg = new Sys_msg();
+                // TMsg tMsg = new (gy_inf.getRealname(),url);
+                // sysMsg.setRevid(gy_inf.getUserid());
+                // sysMsg.setMsg(Json.toJson(tMsg));
+                // sysMsg.setType(ConfigUtil.SYS_MSG_TYPE_EMAIL);
+                // sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_GY);
+                // sysMsgService.pushMsg(sysMsg);
+            });
+            return true;
+        }catch (Exception e){
+            log.error("雇员确认项目结算失败,任务编号:"+xminfid,e);
+        }
+        return false;
+    }
 }

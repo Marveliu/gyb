@@ -19,6 +19,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.marveliu.framework.model.gy.gy_auth;
 import com.marveliu.framework.services.base.BaseServiceImpl;
 import com.marveliu.framework.services.gy.GyAuthService;
+import com.marveliu.framework.util.ConfigUtil;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
@@ -33,10 +34,6 @@ import org.nutz.lang.Lang;
 @Service(interfaceClass = GyAuthService.class)
 public class GyAuthServiceImpl extends BaseServiceImpl<gy_auth> implements GyAuthService {
 
-    private static final int GY_AUTH_DECLINE = 3;
-    private static final int GY_AUTH_PASS = 2;
-    private static final int GY_AUTH_CHECKING = 1;
-    private static final int GY_AUTH_WAIT = 0;
     private static final String GY_AUTH_DECLINE_NOTE = "很遗憾您的雇员身份未能认证通过！";
     private static final String GY_AUTH_PASS_NOTE = "恭喜您雇员身份认证通过！";
 
@@ -66,7 +63,7 @@ public class GyAuthServiceImpl extends BaseServiceImpl<gy_auth> implements GyAut
         gy_auth auth = this.getGyAuthByGyid(gyid);
         if (Lang.isEmpty(auth)) return false;
 
-        if (auth.getStatus() == GY_AUTH_PASS) {
+        if (auth.getStatus() == ConfigUtil.GY_AUTH_PASS) {
             return true;
         }
 
@@ -89,7 +86,7 @@ public class GyAuthServiceImpl extends BaseServiceImpl<gy_auth> implements GyAut
         if(Lang.isEmpty(note)) note = GY_AUTH_DECLINE_NOTE;
 
         if (flag) {
-            status = GY_AUTH_PASS;
+            status = ConfigUtil.GY_AUTH_PASS;
             if(Lang.isEmpty(note)) note = GY_AUTH_PASS_NOTE;
         }
         int count =  this.dao().update(gy_auth.class, Chain.make("status", status).add("note",note),cnd);

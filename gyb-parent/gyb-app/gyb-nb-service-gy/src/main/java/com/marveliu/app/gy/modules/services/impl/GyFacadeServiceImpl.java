@@ -76,7 +76,7 @@ public class GyFacadeServiceImpl implements GyFacadeService {
 
 
     /**
-     * 雇员注册
+     * 雇员基本信息注册
      *
      * @param gyInf
      * @param gyAuth
@@ -114,6 +114,20 @@ public class GyFacadeServiceImpl implements GyFacadeService {
         return false;
     }
 
+
+    public boolean editInfo(gy_inf gyInf, gy_auth gyAuth) {
+        try {
+            gyInfService.updateIgnoreNull(gyInf);
+            this.updateGyRoleByGyid(gyInf.getId(),"gy2");
+            gyAuth.setGyid(gyInf.getId());
+            gyAuthService.updateIgnoreNull(gyAuth);
+            return true;
+        }catch (Exception e){
+            log.error("雇员信息注册失败",e);
+        }
+        return false;
+    }
+
     /**
      * 修改雇员角色
      *
@@ -125,7 +139,7 @@ public class GyFacadeServiceImpl implements GyFacadeService {
     public boolean updateGyRoleByGyid(String gyid, String rolecode) {
         try {
             String roleid =  sysRoleService.getRoleFromCode(rolecode).getId();
-            String userid = gyInfService.getUserByGyid(gyid);
+            String userid = gyInfService.getUidByGyid(gyid);
             return sysRoleService.setUserRoleByRoleid(userid,roleid);
         }catch (Exception e){
             log.error("修改雇员角色出错:",e);

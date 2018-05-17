@@ -49,6 +49,11 @@ public interface GyFacadeService {
      */
     public boolean regInfo(gy_inf gyInf,gy_auth gyAuth);
 
+
+    public boolean editInfo(gy_inf gyInf,gy_auth gyAuth);
+
+
+
     /**
      * 检查指定联系方式是否被验证
      * @param gyid

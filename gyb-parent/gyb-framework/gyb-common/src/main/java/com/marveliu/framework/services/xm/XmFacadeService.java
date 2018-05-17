@@ -68,5 +68,15 @@ public interface XmFacadeService {
     public boolean initXmFinal(String xminfid, float xmEvaluationGrade,float paySum,String xmEvaluationNote, String xmBillNote, String uid);
 
 
+    /**
+     * 雇员确认项目结算
+     *
+     * @param xminfid
+     * @param payid
+     * @return
+     */
+    public boolean checkXmFinal(String xminfid ,String payid);
+
+
 
 }
