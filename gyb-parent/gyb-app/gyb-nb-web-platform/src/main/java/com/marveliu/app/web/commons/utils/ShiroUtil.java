@@ -1,9 +1,15 @@
 package com.marveliu.app.web.commons.utils;
 
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.marveliu.framework.model.gy.gy_inf;
 import com.marveliu.framework.model.sys.Sys_user;
+import com.marveliu.framework.services.gy.GyInfService;
+import com.marveliu.framework.services.sys.SysUserinfService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.subject.Subject;
+import org.nutz.dao.Cnd;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +31,14 @@ public class ShiroUtil {
     private static final String GY_ROLE_NAMES="gy0,gy1,gy2,gy3,gy4";
     private static final String SUPER_ROLES="sysadmin,sys.superpm";
 
+
+    @Inject
+    @Reference
+    private GyInfService gyInfService;
+
+    @Inject
+    @Reference
+    private SysUserinfService sysUserinfService;
 
     // 检查是否有超级权限
     public boolean isSuper() {
@@ -67,6 +81,23 @@ public class ShiroUtil {
     public boolean isGy(){
         return this.hasAnyRoles(GY_ROLE_NAMES,ROLE_NAMES_DELIMETER);
     }
+
+
+
+    // 查询当前登陆的雇员信息
+    public gy_inf getCurrentGy(){
+        Subject currentUser = SecurityUtils.getSubject();
+        Sys_user user = (Sys_user) currentUser.getPrincipal();
+        gy_inf gy = gyInfService.fetch(Cnd.where("userid","=",user.getId()));
+        return gy;
+    }
+
+    public String getCurrentGyid(){
+        return this.getCurrentGy().getId();
+    }
+
+
+
 
     /**
      * 验证是否为已认证通过的用户，不包含已记住的用户，这是与 isUser 标签方法的区别所在。

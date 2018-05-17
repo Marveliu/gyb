@@ -143,7 +143,7 @@ public class XmPersonController {
             @Param("draw") int draw,
             @Param("::order") List<DataTableOrder> order,
             @Param("::columns") List<DataTableColumn> columns) {
-        String gyid = gyInfService.getGyByUserId(StringUtil.getPlatformUid()).getId();
+        String gyid =  shiroUtil.getCurrentGyid();
         //查询雇员
         Cnd cnd = Cnd.NEW();
         cnd.and("gyid", "=", gyid);
@@ -171,7 +171,7 @@ public class XmPersonController {
             @Param("::order") List<DataTableOrder> order,
             @Param("::columns") List<DataTableColumn> columns) {
         Cnd cnd = Cnd.NEW();
-        String gyid = gyInfService.getGyByUserId(StringUtil.getPlatformUid()).getId();
+        String gyid =  shiroUtil.getCurrentGyid();
         if (Strings.isBlank(xminfid)) {
             cnd.and("gyid", "=", gyid);
         } else {
@@ -187,7 +187,7 @@ public class XmPersonController {
     @RequiresPermissions("platform.xm.person")
     public void feedbackdetail(int id, HttpServletRequest req) {
         xm_feedback xfd = xmFeedbackService.fetch(id);
-        String gyid = gyInfService.getGyByUserId(StringUtil.getPlatformUid()).getId();
+        String gyid =  shiroUtil.getCurrentGyid();
         if (xmFacadeService.isGyForXm(xfd.getXminfid(), gyid)) {
             if (id != 0) {
                 req.setAttribute("obj", xmFeedbackService.fetch(Cnd.where("id", "=", id)));
@@ -202,7 +202,7 @@ public class XmPersonController {
     @Ok("beetl:/platform/xm/person/xmfeedbackadd.html")
     @RequiresPermissions("platform.xm.person")
     public void feedbackadd(String id, HttpServletRequest req) {
-        String gyid = gyInfService.getGyByUserId(StringUtil.getPlatformUid()).getId();
+        String gyid =  shiroUtil.getCurrentGyid();
         Cnd cnd = Cnd.NEW();
         cnd.and("xminfid", "=", id).and("gyid", "=", gyid);
         if (xmFacadeService.isGyForXm(id, gyid)) {
@@ -226,7 +226,7 @@ public class XmPersonController {
     @AdaptBy(type = WhaleAdaptor.class)
     @SLog(type = "xm",tag = "雇员添加项目反馈", msg = "${args[0]}")
     public Object feedbackaddDo(@Param("..") xm_feedback xmFeedback, HttpServletRequest req) {
-        String gyid = gyInfService.getGyByUserId(StringUtil.getPlatformUid()).getId();
+        String gyid =  shiroUtil.getCurrentGyid();
         if (xmFacadeService.isGyForXm(xmFeedback.getXminfid(), gyid)) {
             try {
                 xmFeedback.setGyid(gyid);
@@ -281,7 +281,7 @@ public class XmPersonController {
     @RequiresPermissions("platform.xm.person")
     public void edit(int id, HttpServletRequest req) {
         xm_feedback xfd = xmFeedbackService.fetch(id);
-        String gyid = gyInfService.getGyByUserId(StringUtil.getPlatformUid()).getId();
+        String gyid =  shiroUtil.getCurrentGyid();
         if (xmFacadeService.isGyForXm(xfd.getXminfid(), gyid)) {
             req.setAttribute("obj", xfd);
         }
@@ -323,7 +323,7 @@ public class XmPersonController {
             @Param("::order") List<DataTableOrder> order,
             @Param("::columns") List<DataTableColumn> columns) {
         Cnd cnd = Cnd.NEW();
-        String gyid = gyInfService.getGyByUserId(StringUtil.getPlatformUid()).getId();
+        String gyid =  shiroUtil.getCurrentGyid();
         cnd.and("status", "=", ConfigUtil.XM_INF_CHECKING);
         cnd.and("gyid", "=", gyid);
         return xmInfService.data(length, start, draw, order, columns, cnd, null);
@@ -382,7 +382,7 @@ public class XmPersonController {
     @Ok("json")
     @RequiresPermissions("platform.xm.person")
     public Object xminflist() {
-        String gyid = gyInfService.getGyByUserId(StringUtil.getPlatformUid()).getId();
+        String gyid =  shiroUtil.getCurrentGyid();
         List<xm_inf> xm_infs = xmInfService.query(Cnd.where("gyid", "=", gyid));
         Map<String, String> obj = new HashMap<>();
         for (xm_inf inf : xm_infs) {
