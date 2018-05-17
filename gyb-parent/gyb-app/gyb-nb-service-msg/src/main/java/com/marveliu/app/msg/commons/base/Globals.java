@@ -23,6 +23,8 @@ import com.marveliu.framework.services.sys.SysTaskService;
 import com.marveliu.framework.services.task.TaskPlatformService;
 import com.marveliu.framework.util.ConfigUtil;
 import com.rabbitmq.client.*;
+import org.nutz.boot.NbApp;
+import org.nutz.ioc.Ioc;
 import org.nutz.ioc.aop.Aop;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -49,6 +51,10 @@ public class Globals {
     @Inject
     private EmailService emailService;
 
+    @Inject
+    ConnectionFactory rabbitmq_cf;
+
+
     public void init() {
         try {
             initChannelRecive();
@@ -57,38 +63,37 @@ public class Globals {
         }
     }
 
-    @Aop("rabbitmq")
+
     public void initChannelRecive() throws Exception {
         // 创建一个通道(一个轻量级的连接)
-        Channel channel = channel();
+        Channel channel = rabbitmq_cf.newConnection().createChannel();
         //每次从队列获取的数量
         channel.basicQos(1);
         // 声明一个队列
         String QUEUE_NAME = "gy";
-        channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-        System.out.println("Consumer Wating Receive Message begin!");
+        channel.queueDeclare(QUEUE_NAME, true, false, false, null);
+        log.info("Consumer Wating Receive Message begin!");
         Consumer consumer = new DefaultConsumer(channel) {
             @Override
-            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body){
+            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) {
                 try {
                     Sys_msg sysMsg = Lang.fromBytes(body, Sys_msg.class);
-                    // Object obj = Json.fromJson(sysMsg.getMsg());
-                    // Class klazz = Class.forName(sysMsg.getTmsgclass());
-                    Object obj =  Json.fromJson(Class.forName(sysMsg.getTmsgclass()),sysMsg.getMsg());
+                    Object obj = Json.fromJson(Class.forName(sysMsg.getTmsgclass()), sysMsg.getMsg());
                     if (sysMsg.getType() == ConfigUtil.SYS_MSG_TYPE_EMAIL) {
                         emailService.sendHtmlTemplateByTemplateName(sysMsg.getRevaccount(), (TMsg) obj);
                     }
-                }catch (Exception e){
+                    channel.basicAck(envelope.getDeliveryTag(), false);
+                    log.info("Msg Done!");
+                } catch (Exception e) {
                     System.out.println(e);
+                } finally {
+
                 }
             }
         };
-
-        boolean autoAck=false;
+        boolean autoAck = false;
         // 订阅消息
         channel.basicConsume(QUEUE_NAME, autoAck, consumer);
     }
-
-
 }
 

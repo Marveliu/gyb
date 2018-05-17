@@ -43,9 +43,9 @@ public class Globals {
     @Aop("rabbitmq")
     public  void initMqChannel(){
         try {
-            channel().queueDeclare(ConfigUtil.SYS_MSG_TAG_GY, false, false, false, null);
-            channel().queueDeclare(ConfigUtil.SYS_MSG_TAG_SYS, false, false, false, null);
-            channel().queueDeclare(ConfigUtil.SYS_MSG_TAG_XM, false, false, false, null);
+            channel().queueDeclare(ConfigUtil.SYS_MSG_TAG_GY, true, false, false, null);
+            channel().queueDeclare(ConfigUtil.SYS_MSG_TAG_SYS, true, false, false, null);
+            channel().queueDeclare(ConfigUtil.SYS_MSG_TAG_XM, true, false, false, null);
         }catch (Exception e){
             log.error(e);
         }
