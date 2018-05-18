@@ -1,7 +1,7 @@
 {
-  "name": "gyb",
+  "name": "Gyb",
   "version": "1.0.0",
-  "description": "gyb Http API",
-  "title": "gyb Http API",
-  "url" : "http://api.guyongbang.cn"
+  "description": "Gyb Http API",
+  "title": "Gyb Http API",
+  "url" : "https://api.guyongbang.cn"
 }
