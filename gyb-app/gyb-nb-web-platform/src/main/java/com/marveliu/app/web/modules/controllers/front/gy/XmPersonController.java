@@ -125,7 +125,7 @@ public class XmPersonController {
         } catch (Exception e) {
             log.error("申请任务书失败",e);
         }
-        return Result.error("system.error");
+        return Result.error("您已经申请过任务书了，后台正在积极审批!");
     }
 
 

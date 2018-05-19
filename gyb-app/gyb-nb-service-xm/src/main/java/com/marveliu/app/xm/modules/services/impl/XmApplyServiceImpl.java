@@ -45,11 +45,9 @@ import java.util.concurrent.TimeUnit;
  **/
 
 
-@IocBean(args = {"refer:dao"},create = "init", depose = "close")
+@IocBean(args = {"refer:dao"}, create = "init", depose = "close")
 @Service(interfaceClass = XmApplyService.class)
-public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmApplyService,Runnable {
-
-
+public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmApplyService, Runnable {
 
 
     private final static Log log = Logs.get();
@@ -105,6 +103,7 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
 
     /**
      * 异步处理任务申请
+     *
      * @param xmApply 任务对象
      */
     public void async(xm_apply xmApply) {
@@ -121,30 +120,30 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
 
     /**
      * 批量同步项目申请
+     *
      * @param xmApply
      */
     public Boolean sync(xm_apply xmApply) {
-        if(!Lang.isEmpty(this.fetch(
-                Cnd.where("gyid","=",xmApply.getGyid())
-                        .and("xmtaskid","=",xmApply.getXmtaskid())))){
+        if (!Lang.isEmpty(this.fetch(Cnd.where("gyid", "=", xmApply.getGyid()).and("xmtaskid", "=", xmApply.getXmtaskid())))) {
             return false;
         }
         try {
-             return Lang.isEmpty(this.fastInsert(xmApply));
+            this.fastInsert(xmApply);
+            return true;
         } catch (Throwable e) {
             log.info("insert xmApply sync fail", e);
         }
-
         return false;
     }
 
 
     /**
      * 生成xmAp
+     *
      * @param xmtaskid
      * @return
      */
-    public String generateId(String xmtaskid){
+    public String generateId(String xmtaskid) {
         StringBuilder str = new StringBuilder("apply_");
         str.append(xmtaskid.split("_")[1]);
         // 使用阻塞队列，失效
@@ -163,61 +162,61 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
      * @return
      */
     @Override
-    public Boolean addXmApply(String xmtaskid, String gyid,Boolean async) {
-
-        if(isApplyAllow(xmtaskid,gyid)) return false;
-        xm_apply  xmApply = new xm_apply();
+    public Boolean addXmApply(String xmtaskid, String gyid, Boolean async) {
+        if (!isApplyAllow(xmtaskid, gyid)) return false;
+        xm_apply xmApply = new xm_apply();
         xmApply.setGyid(gyid);
         xmApply.setXmtaskid(xmtaskid);
         xmApply.setId(R.UU32().toLowerCase());
         xmApply.setStatus(ConfigUtil.XM_APPLY_INIT);
         xmApply.setAt(Times.getTS());
-        if(async){
+        if (async) {
             LinkedBlockingQueue<xm_apply> queue = this.queue;
             // 添加队列
             if (queue != null)
                 try {
                     // 失效时间
+                    if(queue.contains(xmApply)) return false;
                     boolean re = queue.offer(xmApply, 50, TimeUnit.MILLISECONDS);
                     if (!re) {
                         log.error("xmApply queue is full, drop it ...");
                     }
                     return re;
                 } catch (InterruptedException e) {
+                log.error("something wroing:",e);
                 }
-        }else{
+        } else {
             return sync(xmApply);
         }
         return false;
     }
 
 
-
     /**
      * 受理项目申请
+     *
      * @param xmapplyid
-     * @param flag true 通过 false 不通过
+     * @param flag      true 通过 false 不通过
      * @param uid
      * @return
      */
-    public Boolean setXmApplyStatus(String xmapplyid, Boolean flag,String uid) {
-        Cnd cnd = Cnd.where("id","=",xmapplyid);
+    public Boolean setXmApplyStatus(String xmapplyid, Boolean flag, String uid) {
+        Cnd cnd = Cnd.where("id", "=", xmapplyid);
         long opAt = Times.getTS();
-        Chain chain = Chain.make("opAt",opAt).add("opBy",uid);
+        Chain chain = Chain.make("opAt", opAt).add("opBy", uid);
         // 通过
-        if(flag){
+        if (flag) {
             String xmtaskid = this.fetch(xmapplyid).getXmtaskid();
-            chain.add("status",ConfigUtil.XM_APPLY_PASS);
+            chain.add("status", ConfigUtil.XM_APPLY_PASS);
             // 之前所有的申请全部标记结束
             this.dao().execute(Sqls.create("update xm_apply set status = @status where id = @xmapplyid")
-                    .setParam("status",ConfigUtil.XM_APPLY_FINAL)
-                    .setParam("xmtaskid",xmtaskid)
+                    .setParam("status", ConfigUtil.XM_APPLY_FINAL)
+                    .setParam("xmtaskid", xmtaskid)
             );
-        }else{
-            chain.add("status",ConfigUtil.XM_APPLY_FAIL);
+        } else {
+            chain.add("status", ConfigUtil.XM_APPLY_FAIL);
         }
-        if(this.update(chain,cnd)!=0)
-        {
+        if (this.update(chain, cnd) != 0) {
             return true;
         }
         return false;
@@ -232,7 +231,7 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
      */
     @Override
     public xm_task getXmTaskByAppyid(String xmapplyid) {
-        return this.dao().fetch(xm_task.class,this.fetch(xmapplyid).getXmtaskid());
+        return this.dao().fetch(xm_task.class, this.fetch(xmapplyid).getXmtaskid());
     }
 
 
@@ -244,17 +243,18 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
      */
     @Override
     public List<xm_apply> getXmApplyListByGyid(String gyid) {
-        return this.query(Cnd.where("gyid","=",gyid));
+        return this.query(Cnd.where("gyid", "=", gyid));
     }
 
     /**
      * 通过任务书编号获得所有的申请信息
+     *
      * @param xmtaskid
      * @return
      */
     @Override
     public List<xm_apply> getXmApplyListByXmtaskid(String xmtaskid) {
-        return this.query(Cnd.where("xmtaskid","=",xmtaskid));
+        return this.query(Cnd.where("xmtaskid", "=", xmtaskid));
     }
 
 
@@ -267,10 +267,11 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
      */
     @Override
     public boolean isApplyAllow(String xmtaskid, String gyid) {
-        xm_task xmTask = this.dao().fetch(xm_task.class,Cnd.where("id","=",xmtaskid));
-        xm_apply xmApply = this.fetch(Cnd.where("xmtaskid","=",xmtaskid).and("gyid","=",gyid));
-        if(!Lang.isEmpty(xmTask)&& xmTask.getStatus() == ConfigUtil.XM_TASK_APPLYING){
-            if (Lang.isEmpty(xmApply)){
+        xm_task xmTask = this.dao().fetch(xm_task.class, Cnd.where("id", "=", xmtaskid));
+        xm_apply xmApply = this.fetch(Cnd.where("xmtaskid", "=", xmtaskid).and("gyid", "=", gyid));
+        // 任务书存在，并且任务书状态出于申请阶段
+        if (!Lang.isEmpty(xmTask) && xmTask.getStatus() == ConfigUtil.XM_TASK_APPLYING) {
+            if (Lang.isEmpty(xmApply)) {
                 return true;
             }
         }

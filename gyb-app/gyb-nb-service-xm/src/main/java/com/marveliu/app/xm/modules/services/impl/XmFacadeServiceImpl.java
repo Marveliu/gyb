@@ -106,10 +106,8 @@ public class XmFacadeServiceImpl implements XmFacadeService {
     public xm_inf acceptXmapply(String xmapplyid, String uid) {
 
         xm_apply xmApply = xmApplyService.fetch(xmapplyid);
-
         // 检查申请信息是否存在且不可重复受理
         if(Lang.isEmpty(xmApply) || xmApply.getStatus() == ConfigUtil.XM_APPLY_FINAL || xmApply.getStatus() == ConfigUtil.XM_APPLY_PASS ) return null;
-
         // 更新任务书申请状态为完结，同时可以检查任务书是否存在
         if (xmApplyService.setXmApplyStatus(xmapplyid,true,uid)){
             xm_inf xmInf = null;
@@ -132,12 +130,14 @@ public class XmFacadeServiceImpl implements XmFacadeService {
                     sysLog.setTag("项目建立");
                     sysLog.setSrc(this.getClass().getName() + "#acceptXmapply");
                     sysLog.setMsg("任务：" + xmapplyid + "->项目：" + xmInf.getId());
-                    ;
                     sysLog.setOpBy(uid);
                     sysLog.setOpAt(Times.getTS());
                     sysLog.setUsername(uid);
                     sysLogService.insert(sysLog);
+
                     // todo：邮件类信息通知
+
+
                     return xmInf;
                 }
             }catch (Exception e){

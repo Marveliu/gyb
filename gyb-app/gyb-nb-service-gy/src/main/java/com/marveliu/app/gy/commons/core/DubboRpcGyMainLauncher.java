@@ -38,7 +38,7 @@ import java.util.Enumeration;
 
 @IocBean(create = "init", depose = "depose")
 @Modules(packages = "com.marveliu")
-public class DubboRpcGyMainLauncher {
+public class    DubboRpcGyMainLauncher {
 
     private static final Log log = Logs.get();
 

@@ -1,8 +1,6 @@
-<%
-layout("/layouts/platform.html"){
-%>
+<% layout("/layouts/platform.html"){%>
 <aside class="sidebar-250 canvas-right bg-default ">
-    <header class="header navbar clearfix bb bg-default pl0 pr0">
+    <header>
         <p class="navbar-text">摘要</p>
         <div class="btn-group pull-right mr10">
             <button type="button" class="btn btn-sm btn-primary navbar-btn">
@@ -16,9 +14,7 @@ layout("/layouts/platform.html"){
 
     <div class="content-wrap">
             <div class="m15">
-                <%
-                if(obj.status == 1){
-                %>
+                <% if(obj.status == 2){ %>
                 <button id="xmapply" onclick="xmapply('${obj.id}')" class="btn btn-primary btn-block navbar-btn">
                     报名
                 </button>
@@ -66,9 +62,7 @@ layout("/layouts/platform.html"){
                                 <b>技能限制</b>
                             </a>
                         </li>
-                        <%
-                        for(limit in obj.xmlimits){
-                        %>
+                        <% for(limit in obj.xmlimits){ %>
                         <li class="item">
                             <a href="javascript:;">
                                 <i class="ti-control-record text-warning pull-right"></i> ${@status.getSkillNameById(limit.skillid)}:${limit.skilllevel}

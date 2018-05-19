@@ -40,11 +40,11 @@ public class ConfigUtil {
     public static final int XM_BILL_PAYED = 3;
     public static final int XM_BILL_ERROR = 4;
 
-    public static final int XM_TASK_INIT = 0;
-    public static final int XM_TASK_PUBLISH = 1;
-    public static final int XM_TASK_APPLYING = 2;
-    public static final int XM_TASK_DOING = 3;
-    public static final int XM_TASK_FINISH = 4;
+    public static final int XM_TASK_INIT = 0;           // 任务书编辑中
+    public static final int XM_TASK_PUBLISH = 1;        // 任务书发布
+    public static final int XM_TASK_APPLYING = 2;       // 任务书申请
+    public static final int XM_TASK_DOING = 3;          // 任务书进行中
+    public static final int XM_TASK_FINISH = 4;         // 任务书完成
 
     public static final int XM_FEEDBACK_INIT = 0;
     public static final int XM_FEEDBACK_COMMIT = 1;

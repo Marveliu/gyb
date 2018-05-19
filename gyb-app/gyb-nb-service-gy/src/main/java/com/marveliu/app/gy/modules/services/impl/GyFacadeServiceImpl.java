@@ -31,6 +31,7 @@ import com.marveliu.framework.services.sys.SysUserService;
 import com.marveliu.framework.util.ConfigUtil;
 import com.marveliu.framework.util.Toolkit;
 import org.jboss.netty.util.internal.StringUtil;
+import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
@@ -191,9 +192,7 @@ public class GyFacadeServiceImpl implements GyFacadeService {
      * @return
      */
     public List<gy_pay> getPaysByGyid(String gyid){
-        gy_inf gy = gyInfService.fetch(gyid);
-        gy = gyInfService.fetchLinks(gy,"gy_pays");
-        return gy.getGypays();
+        return gyPayService.query(Cnd.where("gyid","=",gyid));
     }
 
 

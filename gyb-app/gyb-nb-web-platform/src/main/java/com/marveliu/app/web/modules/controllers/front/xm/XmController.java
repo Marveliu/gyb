@@ -22,6 +22,7 @@ import com.marveliu.framework.services.library.LibSkillService;
 import com.marveliu.framework.services.library.LibTaskService;
 import com.marveliu.framework.services.xm.XmLimitService;
 import com.marveliu.framework.services.xm.XmTaskService;
+import com.marveliu.framework.util.ConfigUtil;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.pager.Pager;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -82,24 +83,26 @@ public class XmController {
     ) {
 
         Cnd cnd = Cnd.NEW();
-        if(length == 0 ){
+        if (length == 0) {
             length = 5;     // 当前页大小
         }
         String linkName = null;
         NutMap re = new NutMap();
         Pager pager = new Pager(start, length);
         // 处于申请阶段并且发布的任务书
-        // cnd.and("disabled","=","false").and("status","=",1);
+        cnd.and("disabled", "=", "false").and("status", "=", ConfigUtil.XM_TASK_APPLYING);
         // todo: for test
         // cnd.and("disabled","=","false");
         // 查询名称
         if (!Strings.isBlank(taskname)) {
             cnd.and("taskName", "like", "%" + taskname + "%");
-        }else{
+        } else {
             // 查询方式
             switch (SearchType) {
                 case 0:
                     //全部
+                    cnd.desc("publishAt");
+                    break;
                 case 1:
                     // 时间发布
                     cnd.asc("applyendtime");
@@ -111,18 +114,19 @@ public class XmController {
                 case 3:
                     // 技能匹配
                 default:
+                    // 时间降序排列
+                    cnd.desc("publishAt");
             }
         }
-
 
         List<?> list = xmTaskService.query(cnd, pager);
         if (!Strings.isBlank(linkName)) {
             xmTaskService.fetchLinks(list, linkName);
         }
-        float count  = xmTaskService.count(cnd);
+        float count = xmTaskService.count(cnd);
         re.put("data", list);
         re.put("listCount", count);
-        re.put("pageCount", Math.ceil(count/length));
+        re.put("pageCount", Math.ceil(count / length));
         re.put("recordsTotal", length);
         return re;
     }
@@ -131,7 +135,7 @@ public class XmController {
     @At("/task/?")
     @Ok("beetl:/public/xm/task.html")
     public Object task(String id, HttpServletRequest req) {
-        xm_task task = xmTaskService.fetchLinks(xmTaskService.fetch(id),"xmlimits");
+        xm_task task = xmTaskService.fetchLinks(xmTaskService.fetch(id), "xmlimits");
         return task;
     }
 }

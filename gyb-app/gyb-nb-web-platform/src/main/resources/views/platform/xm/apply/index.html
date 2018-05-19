@@ -211,7 +211,7 @@ layout("/layouts/platform.html"){
         dialog.find("#okDeal").bind("click", function (event) {
             var btn = $(this);
             btn.button("loading");
-            $.post("${base}/platform/xm/apply/deal?xmapplyid=" + xmapplyid+"&flag="+flag, {}, function (data) {
+            $.post("${base}/platform/xm/apply/deal?xm=" + xmapplyid+"&flag="+flag, {}, function (data) {
                 if (data.code == 0) {
                     datatable.ajax.reload(null,false);
                     Toast.success(data.msg);

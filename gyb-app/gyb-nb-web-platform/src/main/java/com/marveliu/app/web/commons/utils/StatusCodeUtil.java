@@ -21,6 +21,10 @@ package com.marveliu.app.web.commons.utils;
  **/
 
 import com.marveliu.app.web.commons.base.Globals;
+import com.marveliu.framework.model.library.lib_skill;
+import com.marveliu.framework.services.library.LibSkillService;
+import jdk.nashorn.internal.ir.annotations.Reference;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 /**
@@ -33,6 +37,10 @@ import org.nutz.ioc.loader.annotation.IocBean;
 @IocBean
 public class StatusCodeUtil
 {
+
+    @Inject
+    @Reference
+    private LibSkillService libSkillService;
 
     public static String bind(String code){
         return  Globals.MyDict.get(code);
@@ -65,8 +73,8 @@ public class StatusCodeUtil
         return  Globals.MyDict.get(code);
     }
 
-    // public String getSkillNameById(String id){
-    //     lib_skill skill = libSkillService.fetch(id);
-    //     return skill.getName();
-    // }
+    public String getSkillNameById(String id){
+        lib_skill skill = libSkillService.fetch(id);
+        return skill.getName();
+    }
 }

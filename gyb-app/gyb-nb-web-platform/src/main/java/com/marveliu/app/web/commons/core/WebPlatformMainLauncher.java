@@ -13,6 +13,8 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.*;
 
+import java.security.Security;
+
 /**
  * Created by wizzer on 2018/3/16.
  */
@@ -43,7 +45,6 @@ public class WebPlatformMainLauncher {
     }
 
     public void init() {
-
     }
 
     public void depose() {

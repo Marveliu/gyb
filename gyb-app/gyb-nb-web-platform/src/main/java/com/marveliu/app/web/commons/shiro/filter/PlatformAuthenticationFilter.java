@@ -56,7 +56,7 @@ public class PlatformAuthenticationFilter extends FormAuthenticationFilter imple
                     password = RSAUtil.decryptByPrivateKey(password, platformPrivateKey);
                 }
             } catch (Exception e) {
-                            /*
+                /*
             若程序抛异常：java.lang.SecurityException: JCE cannot authenticate the provider BC
             1、编辑文件 /usr/java/jdk1.8.0_162/jre/lib/security/java.security
             在9下面添加 security.provider.10=org.bouncycastle.jce.provider.BouncyCastleProvider
