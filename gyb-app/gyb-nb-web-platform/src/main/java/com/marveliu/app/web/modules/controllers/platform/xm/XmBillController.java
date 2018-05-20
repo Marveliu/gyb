@@ -79,7 +79,7 @@ public class XmBillController{
             @Param("::order") List<DataTableOrder> order,
             @Param("::columns") List<DataTableColumn> columns) {
         Cnd cnd = Cnd.NEW();
-        if(Lang.isEmpty(xminfid)){
+        if(Strings.isEmpty(xminfid)){
             if(status!= 5){
                 cnd.and("status","=",status);
             }

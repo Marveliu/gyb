@@ -113,13 +113,13 @@ public class XmPersonController {
             if (!shiroUtil.hasAnyRoles("gy4")) {
                 return Result.error("您不是正式会员，暂时不能申请任务!");
             }
-            gy_inf gyInf = gyInfService.getGyByUserId(StringUtil.getPlatformUid());
-            List<gy_pay> gyPayList = gyFacadeService.getPaysByGyid(gyInf.getId());
+            String gyid = shiroUtil.getCurrentGyid();
+            List<gy_pay> gyPayList = gyFacadeService.getPaysByGyid(gyid);
             if (Lang.isEmpty(gyPayList)) {
                 return Result.error("请先设置您的收款方式!");
             }
 
-            if (xmApplyService.addXmApply(xmtaskid, gyInf.getId(), true)) {
+            if (xmApplyService.addXmApply(xmtaskid,gyid, true)) {
                 return Result.success("system.success");
             }
         } catch (Exception e) {

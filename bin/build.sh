@@ -14,7 +14,7 @@ rm -r ${buildPath}
 mkdir ${buildPath}
 
 cd gyb-app
-#mvn clean package -DskipTests nutzboot:shade
+mvn clean package -DskipTests nutzboot:shade
 
 for module in ${modules[@]}
 do

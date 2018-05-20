@@ -1,5 +1,19 @@
 # 雇佣帮进化史
 
+## 2.0 Mico Services
+
+* 时间: 2018-5-20
+* 事件: 基于微服务架构，完善功能
+
+* 变更:
+
+    * add:面向NutzBoot重构代码
+	* add:Quartz任务调度支持
+	* add:基于RabbitMq实现面向Tmsg模板消息推送
+	* add:统计数据Echarts数据可视化
+	* add:自动化构建运行shell脚本
+
+
 ## 1.0 Modules
 
 * 时间: 2018-1-3

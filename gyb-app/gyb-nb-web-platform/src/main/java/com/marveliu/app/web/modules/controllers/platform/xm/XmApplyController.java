@@ -134,7 +134,7 @@ public class XmApplyController{
     @At({"/deal"})
     @Ok("json")
     @RequiresPermissions("platform.xm.apply.deal")
-    @SLog(type = "xm",tag = "审批任务申请", msg = "任务申请编号:${args[0]},处理结果:${flag}")
+    @SLog(type = "xm",tag = "审批任务申请", msg = "任务申请编号:${args[0]},处理结果:${args[1]}")
     public Object deal(
             @Param("xmapplyid") String xmapplyid,
             @Param("flag") boolean flag,
@@ -147,10 +147,12 @@ public class XmApplyController{
             }else{
                 if(!xmApplyService.setXmApplyStatus(xmapplyid,false,StringUtil.getPlatformUid())) return Result.error("system.error");
             }
+            return Result.success("审批成功，请刷新界面!");
         } catch (Exception e) {
-            return Result.error("system.error");
+            log.error("审批任务申请失败",e);
+
         }
-        return Result.success("审批成功，请刷新界面!");
+        return Result.error("system.error");
     }
 
 

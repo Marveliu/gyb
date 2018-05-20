@@ -339,7 +339,7 @@ public class xm_task extends BaseModel implements Serializable {
         String dateString = formatter.format(date);
         StringBuilder str = new StringBuilder();
         String categorycode = dao.fetch(lib_task.class,this.category).getUnitcode();
-        int count = dao.count(xm_task.class, Cnd.where("category","=",categorycode))+1;
+        int count = dao.count(xm_task.class, Cnd.where("category","=",this.category))+1;
         str.append("rws_");
         // 任务书类别码
         str.append(categorycode);

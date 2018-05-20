@@ -46,7 +46,6 @@ public class SysMsgServiceImpl extends BaseServiceImpl<Sys_msg> implements SysMs
         }catch (Exception e){
             log.error("插入消息队列失败");
         }
-
         return false;
     }
 }

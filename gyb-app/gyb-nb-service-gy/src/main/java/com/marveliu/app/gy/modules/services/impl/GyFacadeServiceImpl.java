@@ -100,13 +100,12 @@ public class GyFacadeServiceImpl implements GyFacadeService {
 
             Sys_msg sysMsg = new Sys_msg();
             TMsg tMsg = new RegTMsg(gy_inf.getRealname(),url);
-
             sysMsg.setRevid(gy_inf.getUserid());
             sysMsg.setMsg(Json.toJson(tMsg));
             sysMsg.setType(ConfigUtil.SYS_MSG_TYPE_EMAIL);
             sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_GY);
+            sysMsg.setTmsgclass(RegTMsg.class.getName());
             sysMsgService.pushMsg(sysMsg);
-
             return true;
         }catch (Exception e){
             log.error("雇员信息注册失败",e);

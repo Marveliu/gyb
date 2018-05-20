@@ -125,7 +125,7 @@ layout("/layouts/platform.html"){
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">${msg['globals.button.cancel']}</button>
-                <button id="okDeal" type="button" class="btn btn-primary" data-loading-text="${msg['globals.button.delete.tip']}">${msg['globals.button.confirm']}</button>
+                <button id="okDeal" type="button" class="btn btn-primary" data-loading-text="${msg['globals.button.submit.tip']}">${msg['globals.button.confirm']}</button>
             </div>
         </div>
     </div>
@@ -211,7 +211,7 @@ layout("/layouts/platform.html"){
         dialog.find("#okDeal").bind("click", function (event) {
             var btn = $(this);
             btn.button("loading");
-            $.post("${base}/platform/xm/apply/deal?xm=" + xmapplyid+"&flag="+flag, {}, function (data) {
+            $.post("${base}/platform/xm/apply/deal?xmapplyid=" + xmapplyid+"&flag="+flag, {}, function (data) {
                 if (data.code == 0) {
                     datatable.ajax.reload(null,false);
                     Toast.success(data.msg);

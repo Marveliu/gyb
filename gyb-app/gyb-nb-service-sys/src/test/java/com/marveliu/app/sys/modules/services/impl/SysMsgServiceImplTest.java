@@ -5,10 +5,12 @@ import com.marveliu.framework.model.gy.gy_inf;
 import com.marveliu.framework.model.sys.Sys_msg;
 import com.marveliu.framework.model.sys.Sys_user;
 import com.marveliu.framework.services.msg.TMsg;
+import com.marveliu.framework.services.msg.tmsg.ApplyTMsg;
 import com.marveliu.framework.services.msg.tmsg.RegTMsg;
 import com.marveliu.framework.services.sys.SysMsgService;
 import com.marveliu.framework.services.sys.SysUserService;
 import com.marveliu.framework.util.ConfigUtil;
+import com.marveliu.framework.util.DateUtil;
 import com.marveliu.framework.util.Toolkit;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,19 +36,20 @@ public class SysMsgServiceImplTest {
 
     @Test
     public void pushMsg() {
-        Sys_user sysUser = sysUserService.fetch(UID);
-        Sys_msg sysMsg = new Sys_msg();
-        String token = String.format("%s,%s", sysUser.getEmail(), System.currentTimeMillis());
-        token = Toolkit._3DES_encode(sysUser.getSalt().getBytes(), token.getBytes());
-        String url = ConfigUtil.AppDomain + "/open/api/sys/email/checkActiveMail?token=" + token +"&userId=" + sysUser.getId();
-        System.out.println("url:"+url);
-        TMsg tMsg = new RegTMsg(sysUser.getUsername(),url);
-        sysMsg.setRevid(sysUser.getId());
-        sysMsg.setRevaccount(sysUser.getEmail());
-        sysMsg.setMsg(Json.toJson(tMsg));
-        sysMsg.setType(ConfigUtil.SYS_MSG_TYPE_EMAIL);
-        sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_GY);
-        sysMsg.setTmsgclass(tMsg.getTMsgClass());
+        // Sys_user sysUser = sysUserService.fetch(UID);
+        // Sys_msg sysMsg = new Sys_msg();
+        // String token = String.format("%s,%s", sysUser.getEmail(), System.currentTimeMillis());
+        // token = Toolkit._3DES_encode(sysUser.getSalt().getBytes(), token.getBytes());
+        // String url = ConfigUtil.AppDomain + "/open/api/sys/email/checkActiveMail?token=" + token +"&userId=" + sysUser.getId();
+        // System.out.println("url:"+url);
+        // TMsg tMsg = new RegTMsg(sysUser.getUsername(),url);
+        // sysMsg.setRevid(sysUser.getId());
+        // sysMsg.setRevaccount(sysUser.getEmail());
+        // sysMsg.setMsg(Json.toJson(tMsg));
+        // sysMsg.setType(ConfigUtil.SYS_MSG_TYPE_EMAIL);
+        // sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_GY);
+        // sysMsg.setTmsgclass(tMsg.getTMsgClass());
+        Sys_msg sysMsg = sysMsgService.fetch(8);
         assertEquals(true,sysMsgService.pushMsg(sysMsg));
     }
 

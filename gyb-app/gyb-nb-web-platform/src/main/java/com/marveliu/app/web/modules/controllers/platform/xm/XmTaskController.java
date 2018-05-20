@@ -210,8 +210,9 @@ public class XmTaskController {
             xmTaskService.insertWith(xmtask, "xmlimits");
             return Result.success("system.success");
         } catch (Exception e) {
-            return Result.error("system.error");
+            log.error("添加任务书失败",e);
         }
+        return Result.error("system.error");
     }
 
     @At("/edit/?")

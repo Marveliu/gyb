@@ -73,5 +73,5 @@ public abstract class BaseTMsg implements TMsg {
     public String getTMsgClass(){
         return this.getClass().getName();
     }
-    
+
 }

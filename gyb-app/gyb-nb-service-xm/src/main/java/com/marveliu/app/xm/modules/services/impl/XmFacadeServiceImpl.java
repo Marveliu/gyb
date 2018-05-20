@@ -21,11 +21,14 @@ import com.marveliu.framework.model.gy.gy_inf;
 import com.marveliu.framework.model.sys.Sys_msg;
 import com.marveliu.framework.model.xm.*;
 import com.marveliu.framework.services.msg.TMsg;
+import com.marveliu.framework.services.msg.tmsg.ApplyTMsg;
 import com.marveliu.framework.services.msg.tmsg.RegTMsg;
+import com.marveliu.framework.services.sys.SysMsgService;
 import com.marveliu.framework.util.ConfigUtil;
 import com.marveliu.framework.model.sys.Sys_log;
 import com.marveliu.framework.services.sys.SysLogService;
 import com.marveliu.framework.services.xm.*;
+import com.marveliu.framework.util.DateUtil;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
@@ -71,6 +74,9 @@ public class XmFacadeServiceImpl implements XmFacadeService {
     @Inject
     @Reference
     private SysLogService sysLogService;
+    @Inject
+    @Reference
+    private SysMsgService sysMsgService;
 
 
     /**
@@ -104,7 +110,6 @@ public class XmFacadeServiceImpl implements XmFacadeService {
      * @return
      */
     public xm_inf acceptXmapply(String xmapplyid, String uid) {
-
         xm_apply xmApply = xmApplyService.fetch(xmapplyid);
         // 检查申请信息是否存在且不可重复受理
         if(Lang.isEmpty(xmApply) || xmApply.getStatus() == ConfigUtil.XM_APPLY_FINAL || xmApply.getStatus() == ConfigUtil.XM_APPLY_PASS ) return null;
@@ -134,10 +139,22 @@ public class XmFacadeServiceImpl implements XmFacadeService {
                     sysLog.setOpAt(Times.getTS());
                     sysLog.setUsername(uid);
                     sysLogService.insert(sysLog);
-
                     // todo：邮件类信息通知
-
-
+                    Sys_msg sysMsg = new Sys_msg();
+                    TMsg tMsg = new ApplyTMsg(
+                            xmApply.getGyrealname(),
+                            xmApply.getTaskname(),
+                            xmApply.getXmtaskid(),
+                            xmApply.getAuthorrealname(),
+                            DateUtil.getDate(xmTask.getFirstcommit()));
+                    gy_inf gyInf = dao.fetch(gy_inf.class,xmApply.getGyid());
+                    sysMsg.setRevid(gyInf.getUserid());
+                    sysMsg.setRevaccount(gyInf.getEmail());
+                    sysMsg.setMsg(Json.toJson(tMsg));
+                    sysMsg.setType(ConfigUtil.SYS_MSG_TYPE_EMAIL);
+                    sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_XM);
+                    sysMsg.setTmsgclass(tMsg.getTMsgClass());
+                    sysMsgService.pushMsg(sysMsg);
                     return xmInf;
                 }
             }catch (Exception e){
