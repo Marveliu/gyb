@@ -13,6 +13,9 @@ touch ${log}
 rm -r ${buildPath}
 mkdir ${buildPath}
 
+cd gyb-framework
+mvn clean install -DskipTests
+cd ../
 cd gyb-app
 mvn clean package -DskipTests nutzboot:shade
 
