@@ -1,6 +1,9 @@
 package com.marveliu.framework.model.xm;
 
 import com.marveliu.framework.model.base.BaseModel;
+import com.marveliu.framework.model.gy.gy_inf;
+import com.marveliu.framework.model.sys.Sys_user;
+import com.marveliu.framework.model.sys.Sys_userinf;
 import org.nutz.dao.entity.annotation.*;
 
 import java.io.Serializable;
@@ -99,6 +102,14 @@ public class xm_feedback extends BaseModel implements Serializable {
     // 参照
     @One(field = "xminfid")
     public xm_inf xmInf;
+
+    // 参照
+    @One(field = "gyid")
+    public gy_inf gyInf;
+
+    // 参照
+    @One(field = "author")
+    public Sys_userinf sys_userinf;
 
 
     public long getId() {
@@ -243,5 +254,21 @@ public class xm_feedback extends BaseModel implements Serializable {
 
     public void setXmInf(xm_inf xmInf) {
         this.xmInf = xmInf;
+    }
+
+    public gy_inf getGyInf() {
+        return gyInf;
+    }
+
+    public void setGyInf(gy_inf gyInf) {
+        this.gyInf = gyInf;
+    }
+
+    public Sys_userinf getSys_userinf() {
+        return sys_userinf;
+    }
+
+    public void setSys_userinf(Sys_userinf sys_userinf) {
+        this.sys_userinf = sys_userinf;
     }
 }

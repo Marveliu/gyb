@@ -6,6 +6,7 @@ import com.marveliu.framework.model.sys.Sys_role;
 import com.marveliu.framework.model.sys.Sys_user;
 import com.marveliu.framework.services.base.BaseServiceImpl;
 import com.marveliu.framework.services.sys.SysMenuService;
+import com.marveliu.framework.services.sys.SysRoleService;
 import com.marveliu.framework.services.sys.SysUserService;
 import org.nutz.aop.interceptor.ioc.TransAop;
 import org.nutz.dao.Chain;
@@ -37,6 +38,11 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
 
     @Inject
     private SysMenuService sysMenuService;
+
+    @Inject
+    private SysRoleService sysRoleService;
+
+
 
 
     /**

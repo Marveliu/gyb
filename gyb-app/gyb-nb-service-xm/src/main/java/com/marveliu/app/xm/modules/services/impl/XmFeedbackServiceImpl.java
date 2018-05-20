@@ -15,17 +15,30 @@ package com.marveliu.app.xm.modules.services.impl;
  * limitations under the License.
  */
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.marveliu.framework.model.sys.Sys_msg;
+import com.marveliu.framework.model.sys.Sys_user;
+import com.marveliu.framework.model.xm.xm_bill;
 import com.marveliu.framework.model.xm.xm_feedback;
 import com.marveliu.framework.model.xm.xm_inf;
 import com.marveliu.framework.model.xm.xm_task;
 import com.marveliu.framework.services.base.BaseServiceImpl;
+import com.marveliu.framework.services.msg.TMsg;
+import com.marveliu.framework.services.msg.tmsg.XmbillCheckTMsg;
+import com.marveliu.framework.services.msg.tmsg.XmfdbCommitTMsg;
+import com.marveliu.framework.services.msg.tmsg.XmfdbRelpyTMsg;
+import com.marveliu.framework.services.sys.SysMsgService;
+import com.marveliu.framework.services.sys.SysUserService;
 import com.marveliu.framework.services.xm.XmFeedbackService;
 import com.marveliu.framework.util.ConfigUtil;
+import com.marveliu.framework.util.DateUtil;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
+import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.json.Json;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.lang.Times;
@@ -49,6 +62,17 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
     }
 
 
+    @Inject
+    @Reference
+    private SysUserService sysUserService;
+
+
+    @Inject
+    @Reference
+    private SysMsgService sysMsgService;
+
+
+
     /**
      * 获得项目反馈总数
      *
@@ -64,7 +88,7 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
     }
 
     /**
-     * 是否运行进行反馈
+     * 是否允许进行反馈
      *
      * @param xminfid
      * @return
@@ -124,10 +148,44 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
     @Override
     public boolean commitXmfeedback(long xmfeedbackid) {
         if(getXmfeedbackStatus(xmfeedbackid) != ConfigUtil.XM_FEEDBACK_INIT) return false;
-        Chain chain = Chain.make("status", ConfigUtil.XM_FEEDBACK_COMMIT);
-        Cnd cnd = Cnd.where("id", "=", xmfeedbackid);
-        // todo:邮件通知对应项目经理
-        return this.update(chain, cnd) != 0;
+
+        try {
+
+
+            Chain chain = Chain.make("status", ConfigUtil.XM_FEEDBACK_COMMIT);
+            Cnd cnd = Cnd.where("id", "=", xmfeedbackid);
+
+            if(this.update(chain, cnd) != 0) {
+                xm_feedback xmFeedback = this.dao().fetchLinks(this.dao().fetch(xm_feedback.class, xmfeedbackid), "");
+                Thread t = new Thread(new Runnable() {
+                    public void run() {
+                        TMsg tMsg = new XmfdbCommitTMsg(
+                                xmFeedback.getAuthorrealname(),
+                                xmFeedback.getXminfid(),
+                                xmFeedback.getXmInf().getTaskname(),
+                                xmFeedback.getGyInf().getRealname(),
+                                xmFeedback.getGyInf().getId(),
+                                xmFeedback.getCode(),
+                                xmFeedback.getNote()
+                        );
+                        Sys_msg sysMsg = new Sys_msg();
+                        Sys_user sysUser = sysUserService.fetch(xmFeedback.getSys_userinf().getUserid());
+                        sysMsg.setRevid(sysUser.getId());
+                        sysMsg.setRevaccount(sysUser.getEmail());
+                        sysMsg.setMsg(Json.toJson(tMsg));
+                        sysMsg.setType(ConfigUtil.SYS_MSG_TYPE_EMAIL);
+                        sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_XM);
+                        sysMsg.setTmsgclass(tMsg.getTMsgClass());
+                        sysMsgService.pushMsg(sysMsg);
+                    }
+                });
+                t.start();
+                return true;
+            }
+        }catch (Exception e){
+            log.error("雇员提交项目反馈失败",e);
+        }
+        return false;
     }
 
     /**
@@ -171,23 +229,51 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
      */
     @Override
     public boolean confirmXmfeedback(long xmfeedbackid, Boolean flag) {
-        if(getXmfeedbackStatus(xmfeedbackid) != ConfigUtil.XM_FEEDBACK_CHECKING) return false;
-        Chain chain = null;
-        if(flag){
-            // deadline 添加定时任务
-            // updateIgnoreNull
-            chain = Chain.make("status",ConfigUtil.XM_FEEDBACK_FINAL);
-            // 设置xm_inf状态
-            this.dao().update(xm_inf.class,Chain.make("status",ConfigUtil.XM_INF_DONE),Cnd.where("id","=",this.fetch(xmfeedbackid).getXminfid()));
-            // todo: 通知进行项目结算流程
-        }else {
-            chain = Chain.make("status",ConfigUtil.XM_FEEDBACK_FINISH);
+        try {
+            if(getXmfeedbackStatus(xmfeedbackid) != ConfigUtil.XM_FEEDBACK_CHECKING) return false;
+            Chain chain = null;
+            if(flag){
+                // deadline 添加定时任务
+                // updateIgnoreNull
+                chain = Chain.make("status",ConfigUtil.XM_FEEDBACK_FINAL);
+                // 设置xm_inf状态
+                this.dao().update(xm_inf.class,Chain.make("status",ConfigUtil.XM_INF_DONE),Cnd.where("id","=",this.fetch(xmfeedbackid).getXminfid()));
+            }else {
+                chain = Chain.make("status",ConfigUtil.XM_FEEDBACK_FINISH);
+            }
+            Cnd cnd = Cnd.where("id","=",xmfeedbackid);
+            if(this.update(chain,cnd)!=0){
+                xm_feedback xmFeedback = this.dao().fetchLinks(this.dao().fetch(xm_feedback.class,xmfeedbackid),"");
+                Thread t = new Thread(new Runnable(){
+                    public void run(){
+                        TMsg tMsg = new XmfdbRelpyTMsg(
+                                xmFeedback.getGyInf().getRealname(),
+                                xmFeedback.getXmInf().getId(),
+                                xmFeedback.getXmInf().getTaskname(),
+                                xmFeedback.getAuthorrealname(),
+                                xmFeedback.getCode(),
+                                xmFeedback.getXmfeedbackstatus(),
+                                DateUtil.getDate(xmFeedback.getNextcommit()),
+                                xmFeedback.getReply(),
+                                flag.toString()
+                        );
+                        Sys_msg sysMsg = new Sys_msg();
+                        sysMsg.setRevid(xmFeedback.getGyInf().getUserid());
+                        sysMsg.setRevaccount(xmFeedback.getGyInf().getEmail());
+                        sysMsg.setMsg(Json.toJson(tMsg));
+                        sysMsg.setType(ConfigUtil.SYS_MSG_TYPE_EMAIL);
+                        sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_XM);
+                        sysMsg.setTmsgclass(tMsg.getTMsgClass());
+                        sysMsgService.pushMsg(sysMsg);
+                    }});
+                t.start();
+                return true;
+            }
+        }catch (Exception e){
+            log.error("项目经理确认项目反馈失败",e);
         }
-        Cnd cnd = Cnd.where("id","=",xmfeedbackid);
-        // todo:邮件通知对应项目经理
-        return this.update(chain,cnd)!=0;
+        return false;
     }
-
 
     /**
      * 获得项目最新一次的反馈

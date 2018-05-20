@@ -1,24 +1,15 @@
 package com.marveliu.app.sys.modules.services.impl;
 
 import com.marveliu.app.sys.commons.core.DubboRpcSysMainLauncher;
-import com.marveliu.framework.model.gy.gy_inf;
 import com.marveliu.framework.model.sys.Sys_msg;
-import com.marveliu.framework.model.sys.Sys_user;
-import com.marveliu.framework.services.msg.TMsg;
-import com.marveliu.framework.services.msg.tmsg.ApplyTMsg;
-import com.marveliu.framework.services.msg.tmsg.RegTMsg;
 import com.marveliu.framework.services.sys.SysMsgService;
 import com.marveliu.framework.services.sys.SysUserService;
-import com.marveliu.framework.util.ConfigUtil;
-import com.marveliu.framework.util.DateUtil;
-import com.marveliu.framework.util.Toolkit;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nutz.boot.NbApp;
 import org.nutz.boot.test.junit4.NbJUnit4Runner;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.json.Json;
 
 import static org.junit.Assert.*;
 
@@ -49,7 +40,7 @@ public class SysMsgServiceImplTest {
         // sysMsg.setType(ConfigUtil.SYS_MSG_TYPE_EMAIL);
         // sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_GY);
         // sysMsg.setTmsgclass(tMsg.getTMsgClass());
-        Sys_msg sysMsg = sysMsgService.fetch(8);
+        Sys_msg sysMsg = sysMsgService.fetch(31);
         assertEquals(true,sysMsgService.pushMsg(sysMsg));
     }
 

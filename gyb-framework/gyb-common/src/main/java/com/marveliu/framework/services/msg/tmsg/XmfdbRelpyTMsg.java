@@ -18,35 +18,43 @@ package com.marveliu.framework.services.msg.tmsg;
 import com.marveliu.framework.services.msg.TMsg;
 
 /**
- * 任务账单
+ * 任务反馈审批
  * @author Marveliu
  * @since 17/05/2018
  **/
 
-public class XmbillTMsg extends BaseTMsg implements TMsg {
+public class XmfdbRelpyTMsg extends BaseTMsg implements TMsg {
 
-    private final static String  TEMPLATE_PATH = "xmbill.html";
-    private final static String  SUBJECT = "任务账单";
+    private final static String  TEMPLATE_PATH = "xmfdbReply.html";
+    private final static String  SUBJECT = "任务反馈审批";
 
     private String username;
-    private String billid;
     private String xminfid;
-    private String paysum;
-    private String payname;
-    private String typename;
+    private String xminfname;
+    private String authername;
+    private String xmfeedbackcode;
+    private String statuname;
+    private String nexttime;
+    private String reply;
+    private String isfinal;
+
+
 
     // 必须要有无参构造
-    public XmbillTMsg() {
+    public XmfdbRelpyTMsg() {
     }
 
 
-    public XmbillTMsg(String username, String billid, String xminfid, String paysum, String payname, String typename) {
+    public XmfdbRelpyTMsg(String username, String xminfid, String xminfname, String authername, String xmfeedbackcode, String statuname, String nexttime, String reply, String isfinal) {
         this.username = username;
-        this.billid = billid;
         this.xminfid = xminfid;
-        this.paysum = paysum;
-        this.payname = payname;
-        this.typename = typename;
+        this.xminfname = xminfname;
+        this.authername = authername;
+        this.xmfeedbackcode = xmfeedbackcode;
+        this.statuname = statuname;
+        this.nexttime = nexttime;
+        this.reply = reply;
+        this.isfinal = isfinal;
     }
 
     public String getUsername() {
@@ -57,14 +65,6 @@ public class XmbillTMsg extends BaseTMsg implements TMsg {
         this.username = username;
     }
 
-    public String getBillid() {
-        return billid;
-    }
-
-    public void setBillid(String billid) {
-        this.billid = billid;
-    }
-
     public String getXminfid() {
         return xminfid;
     }
@@ -73,28 +73,60 @@ public class XmbillTMsg extends BaseTMsg implements TMsg {
         this.xminfid = xminfid;
     }
 
-    public String getPaysum() {
-        return paysum;
+    public String getXminfname() {
+        return xminfname;
     }
 
-    public void setPaysum(String paysum) {
-        this.paysum = paysum;
+    public void setXminfname(String xminfname) {
+        this.xminfname = xminfname;
     }
 
-    public String getPayname() {
-        return payname;
+    public String getAuthername() {
+        return authername;
     }
 
-    public void setPayname(String payname) {
-        this.payname = payname;
+    public void setAuthername(String authername) {
+        this.authername = authername;
     }
 
-    public String getTypename() {
-        return typename;
+    public String getXmfeedbackcode() {
+        return xmfeedbackcode;
     }
 
-    public void setTypename(String typename) {
-        this.typename = typename;
+    public void setXmfeedbackcode(String xmfeedbackcode) {
+        this.xmfeedbackcode = xmfeedbackcode;
+    }
+
+    public String getStatuname() {
+        return statuname;
+    }
+
+    public void setStatuname(String statuname) {
+        this.statuname = statuname;
+    }
+
+    public String getNexttime() {
+        return nexttime;
+    }
+
+    public void setNexttime(String nexttime) {
+        this.nexttime = nexttime;
+    }
+
+    public String getReply() {
+        return reply;
+    }
+
+    public void setReply(String reply) {
+        this.reply = reply;
+    }
+
+    public String getIsfinal() {
+        return isfinal;
+    }
+
+    public void setIsfinal(String isfinal) {
+        this.isfinal = isfinal;
     }
 
     @Override

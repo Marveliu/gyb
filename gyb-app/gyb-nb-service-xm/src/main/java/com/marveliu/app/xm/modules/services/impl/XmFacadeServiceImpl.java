@@ -19,15 +19,20 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.marveliu.framework.model.gy.gy_inf;
 import com.marveliu.framework.model.sys.Sys_msg;
+import com.marveliu.framework.model.sys.Sys_role;
+import com.marveliu.framework.model.sys.Sys_user;
 import com.marveliu.framework.model.xm.*;
 import com.marveliu.framework.services.msg.TMsg;
 import com.marveliu.framework.services.msg.tmsg.ApplyTMsg;
-import com.marveliu.framework.services.msg.tmsg.RegTMsg;
+import com.marveliu.framework.services.msg.tmsg.XmbillCheckTMsg;
+import com.marveliu.framework.services.msg.tmsg.XmfinalTMsg;
 import com.marveliu.framework.services.sys.SysMsgService;
+import com.marveliu.framework.services.sys.SysRoleService;
+import com.marveliu.framework.services.sys.SysUserService;
+import com.marveliu.framework.services.xm.*;
 import com.marveliu.framework.util.ConfigUtil;
 import com.marveliu.framework.model.sys.Sys_log;
 import com.marveliu.framework.services.sys.SysLogService;
-import com.marveliu.framework.services.xm.*;
 import com.marveliu.framework.util.DateUtil;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
@@ -77,6 +82,12 @@ public class XmFacadeServiceImpl implements XmFacadeService {
     @Inject
     @Reference
     private SysMsgService sysMsgService;
+    @Inject
+    @Reference
+    private SysUserService sysUserService;
+    @Inject
+    @Reference
+    private SysRoleService sysRoleService;
 
 
     /**
@@ -130,31 +141,38 @@ public class XmFacadeServiceImpl implements XmFacadeService {
                 }
                 // 建立日志
                 if (!Lang.isEmpty(xmBill)) {
-                    Sys_log sysLog = new Sys_log();
-                    sysLog.setType("xm");
-                    sysLog.setTag("项目建立");
-                    sysLog.setSrc(this.getClass().getName() + "#acceptXmapply");
-                    sysLog.setMsg("任务：" + xmapplyid + "->项目：" + xmInf.getId());
-                    sysLog.setOpBy(uid);
-                    sysLog.setOpAt(Times.getTS());
-                    sysLog.setUsername(uid);
-                    sysLogService.insert(sysLog);
-                    // todo：邮件类信息通知
-                    Sys_msg sysMsg = new Sys_msg();
-                    TMsg tMsg = new ApplyTMsg(
-                            xmApply.getGyrealname(),
-                            xmApply.getTaskname(),
-                            xmApply.getXmtaskid(),
-                            xmApply.getAuthorrealname(),
-                            DateUtil.getDate(xmTask.getFirstcommit()));
-                    gy_inf gyInf = dao.fetch(gy_inf.class,xmApply.getGyid());
-                    sysMsg.setRevid(gyInf.getUserid());
-                    sysMsg.setRevaccount(gyInf.getEmail());
-                    sysMsg.setMsg(Json.toJson(tMsg));
-                    sysMsg.setType(ConfigUtil.SYS_MSG_TYPE_EMAIL);
-                    sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_XM);
-                    sysMsg.setTmsgclass(tMsg.getTMsgClass());
-                    sysMsgService.pushMsg(sysMsg);
+                    Thread t = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Sys_log sysLog = new Sys_log();
+                            sysLog.setType("xm");
+                            sysLog.setTag("项目建立");
+                            sysLog.setSrc(this.getClass().getName() + "#acceptXmapply");
+                            sysLog.setMsg("任务：" + xmapplyid + "->项目");
+                            sysLog.setOpBy(uid);
+                            sysLog.setOpAt(Times.getTS());
+                            sysLog.setUsername(uid);
+                            sysLogService.insert(sysLog);
+
+                            // 任务申请成功 > 雇员
+                            Sys_msg sysMsg = new Sys_msg();
+                            TMsg tMsg = new ApplyTMsg(
+                                    xmApply.getGyrealname(),
+                                    xmApply.getTaskname(),
+                                    xmApply.getXmtaskid(),
+                                    xmApply.getAuthorrealname(),
+                                    DateUtil.getDate(xmTask.getFirstcommit()));
+                            gy_inf gyInf = dao.fetch(gy_inf.class,xmApply.getGyid());
+                            sysMsg.setRevid(gyInf.getUserid());
+                            sysMsg.setRevaccount(gyInf.getEmail());
+                            sysMsg.setMsg(Json.toJson(tMsg));
+                            sysMsg.setType(ConfigUtil.SYS_MSG_TYPE_EMAIL);
+                            sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_XM);
+                            sysMsg.setTmsgclass(tMsg.getTMsgClass());
+                            sysMsgService.pushMsg(sysMsg);
+                        }
+                    });
+                    t.start();
                     return xmInf;
                 }
             }catch (Exception e){
@@ -218,6 +236,30 @@ public class XmFacadeServiceImpl implements XmFacadeService {
                     xmInfService.update(Chain.make("status",ConfigUtil.XM_INF_CHECKING),Cnd.where("id","=",xminfid));
                 }
             });
+
+            Lang.runInAnThread(new Runnable() {
+                @Override
+                public void run() {
+                    // 任务结算消息
+                    gy_inf gyInf = dao.fetch(gy_inf.class,xmInf.getGyid());
+                    Sys_msg sysMsg = new Sys_msg();
+                    TMsg tMsg = new XmfinalTMsg(
+                            gyInf.getRealname(),
+                            xmInf.getId(),
+                            xmInf.getTaskname(),
+                            String.valueOf(xmEvaluationGrade),
+                            xmEvaluationNote,
+                            String.valueOf(paySum),
+                            xmBillNote);
+                    sysMsg.setRevid(gyInf.getUserid());
+                    sysMsg.setRevaccount(gyInf.getEmail());
+                    sysMsg.setMsg(Json.toJson(tMsg));
+                    sysMsg.setType(ConfigUtil.SYS_MSG_TYPE_EMAIL);
+                    sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_XM);
+                    sysMsg.setTmsgclass(tMsg.getTMsgClass());
+                    sysMsgService.pushMsg(sysMsg);
+                }
+            });
             return true;
         }catch (Exception e){
             log.error("项目结算出错:"+xminfid,e);
@@ -247,14 +289,34 @@ public class XmFacadeServiceImpl implements XmFacadeService {
                             Chain.make("status", ConfigUtil.XM_INF_PAYING),
                             Cnd.where("id", "=", xminfid));
                 }
-                // Sys_msg sysMsg = new Sys_msg();
-                // TMsg tMsg = new (gy_inf.getRealname(),url);
-                // sysMsg.setRevid(gy_inf.getUserid());
-                // sysMsg.setMsg(Json.toJson(tMsg));
-                // sysMsg.setType(ConfigUtil.SYS_MSG_TYPE_EMAIL);
-                // sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_GY);
-                // sysMsgService.pushMsg(sysMsg);
             });
+            // 任务账单审批 > 财务经理
+            Sys_role sysRole = sysRoleService.getRoleFromCode("sys.fn");
+            sysRole = sysRoleService.fetchLinks(sysRole,"users");
+
+
+            if(!Lang.isEmpty(sysRole.getUsers())){
+                xm_inf xmInf = xmInfService.fetch(xminfid);
+                xm_bill xmBill = xmBillService.fetch(Cnd.where("xminfid","=",xminfid));
+                xmBill = xmBillService.fetchLinks(xmBill,"");
+                Sys_user sysUser = sysRole.getUsers().get(0);
+                Sys_msg sysMsg = new Sys_msg();
+                TMsg tMsg = new XmbillCheckTMsg(
+                        sysUser.getUsername(),
+                        xmBill.getId(),
+                        xmInf.getId(),
+                        String.valueOf(xmBill.getPaysum()),
+                        xmBill.getRealgypay().getId(),
+                        xmBill.getRealgypay().getTypename()
+                );
+                sysMsg.setRevid(sysUser.getId());
+                sysMsg.setRevaccount(sysUser.getEmail());
+                sysMsg.setMsg(Json.toJson(tMsg));
+                sysMsg.setType(ConfigUtil.SYS_MSG_TYPE_EMAIL);
+                sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_XM);
+                sysMsg.setTmsgclass(tMsg.getTMsgClass());
+                sysMsgService.pushMsg(sysMsg);
+            }
             return true;
         }catch (Exception e){
             log.error("雇员确认项目结算失败,任务编号:"+xminfid,e);

@@ -154,12 +154,12 @@ public class EmailServiceImpl implements EmailService,Runnable {
         StringBuilder path = new StringBuilder();
         try {
             Template t =  templateUtil.buildTemplate(tMsg);
-            this.send(to,tMsg.getSubject(),t.render());
+            String sw = t.render();
+            this.send(to,tMsg.getSubject(),sw);
             return true;
         }catch (Exception e){
-            log.error("template not found:"+path);
+            log.error("模板邮件发送失败",e);
         }
-
         return false;
     }
 

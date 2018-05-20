@@ -11,6 +11,8 @@ import java.util.List;
  * Created by wizzer on 2016/12/22.
  */
 public interface SysUserService extends BaseService<Sys_user> {
+
+
     /**
      * 查询用户的角色
      * @param user

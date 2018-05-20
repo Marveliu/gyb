@@ -43,7 +43,6 @@ public class DubboRpcXmMainLauncher {
     @Inject
     private Dao dao;
 
-
     public static void main(String[] args) throws Exception {
         NbApp nb = new NbApp().setArgs(args).setPrintProcDoc(true);
         nb.getAppContext().setMainPackage("com.marveliu");

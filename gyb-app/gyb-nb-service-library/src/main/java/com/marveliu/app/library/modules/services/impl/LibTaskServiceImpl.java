@@ -1,12 +1,10 @@
 package com.marveliu.app.library.modules.services.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.marveliu.framework.model.base.Result;
 import com.marveliu.framework.model.library.lib_skill;
 import com.marveliu.framework.model.library.lib_task;
 import com.marveliu.framework.services.base.BaseServiceImpl;
 import com.marveliu.framework.services.library.LibTaskService;
-import org.apache.commons.lang3.StringUtils;
 import org.nutz.aop.interceptor.ioc.TransAop;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
@@ -114,7 +112,7 @@ public class LibTaskServiceImpl extends BaseServiceImpl<lib_task> implements Lib
     @Override
     public boolean editSkillsForTask(String skillIds, String taskid) {
         try {
-            String[] ids = StringUtils.split(skillIds, ",");
+            String[] ids = skillIds.split(",");
             this.clear("lib_task_skill", Cnd.where("taskid", "=", taskid));
             for (String s : ids) {
                 if (!Strings.isEmpty(s)) {

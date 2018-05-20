@@ -1,8 +1,8 @@
 <div>
-    <p>亲爱的<b>${username}</b>, 您的任务${xminfname}有了新的进展。</p>
-    <p>项目经理:${authername},将您的编号为${feedbackid}</p>
+    <p>亲爱的<b>${username}</b>, 编号为${xminfid}的任务${xminfname}有了新的进展。</p>
+    <p>项目经理:${authername},将您的编号为${xmfeedbackcode}</p>
     <strong >标记为:${statuname}</strong>
-    <%if(final){%>
+    <%if(isfinal == "false"){%>
     <p>下一次反馈时间:${nexttime}</p>
     <%}%>
     <p>反馈内容如下:</p>

@@ -23,9 +23,9 @@ import com.marveliu.framework.services.msg.TMsg;
  * @since 17/05/2018
  **/
 
-public class XmbillTMsg extends BaseTMsg implements TMsg {
+public class XmbillCheckTMsg extends BaseTMsg implements TMsg {
 
-    private final static String  TEMPLATE_PATH = "xmbill.html";
+    private final static String  TEMPLATE_PATH = "xmbillCheck.html";
     private final static String  SUBJECT = "任务账单";
 
     private String username;
@@ -36,11 +36,11 @@ public class XmbillTMsg extends BaseTMsg implements TMsg {
     private String typename;
 
     // 必须要有无参构造
-    public XmbillTMsg() {
+    public XmbillCheckTMsg() {
     }
 
 
-    public XmbillTMsg(String username, String billid, String xminfid, String paysum, String payname, String typename) {
+    public XmbillCheckTMsg(String username, String billid, String xminfid, String paysum, String payname, String typename) {
         this.username = username;
         this.billid = billid;
         this.xminfid = xminfid;

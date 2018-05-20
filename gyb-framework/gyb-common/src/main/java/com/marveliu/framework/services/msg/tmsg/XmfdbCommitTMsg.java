@@ -23,35 +23,41 @@ import com.marveliu.framework.services.msg.TMsg;
  * @since 17/05/2018
  **/
 
-public class XmfdbRelpyTMsg extends BaseTMsg implements TMsg {
+public class XmfdbCommitTMsg extends BaseTMsg implements TMsg {
 
-    private final static String  TEMPLATE_PATH = "xmfdbReply.html";
-    private final static String  SUBJECT = "任务反馈审批";
+    private final static String  TEMPLATE_PATH = "xmfdbCommit.html";
+    private final static String  SUBJECT = "任务反馈提交";
 
     private String username;
     private String xminfid;
     private String xminfname;
-    private String authername;
-    private String xmfeedbackid;
-    private String statuname;
-    private String nexttime;
-    private String reply;
+    private String gyrealname;
+    private String gyid;
+    private String xmfeedbackcode;
+    private String note;
 
 
 
     // 必须要有无参构造
-    public XmfdbRelpyTMsg() {
+    public XmfdbCommitTMsg() {
     }
 
-    public XmfdbRelpyTMsg(String username, String xminfid, String xminfname, String authername, String xmfeedbackid, String statuname, String nexttime, String reply) {
+    public XmfdbCommitTMsg(String username, String xminfid, String xminfname, String gyrealname, String gyid, String xmfeedbackcode, String note) {
         this.username = username;
         this.xminfid = xminfid;
         this.xminfname = xminfname;
-        this.authername = authername;
-        this.xmfeedbackid = xmfeedbackid;
-        this.statuname = statuname;
-        this.nexttime = nexttime;
-        this.reply = reply;
+        this.gyrealname = gyrealname;
+        this.gyid = gyid;
+        this.xmfeedbackcode = xmfeedbackcode;
+        this.note = note;
+    }
+
+    public String getGyid() {
+        return gyid;
+    }
+
+    public void setGyid(String gyid) {
+        this.gyid = gyid;
     }
 
     public String getUsername() {
@@ -78,44 +84,28 @@ public class XmfdbRelpyTMsg extends BaseTMsg implements TMsg {
         this.xminfname = xminfname;
     }
 
-    public String getAuthername() {
-        return authername;
+    public String getGyrealname() {
+        return gyrealname;
     }
 
-    public void setAuthername(String authername) {
-        this.authername = authername;
+    public void setGyrealname(String gyrealname) {
+        this.gyrealname = gyrealname;
     }
 
-    public String getXmfeedbackid() {
-        return xmfeedbackid;
+    public String getXmfeedbackcode() {
+        return xmfeedbackcode;
     }
 
-    public void setXmfeedbackid(String xmfeedbackid) {
-        this.xmfeedbackid = xmfeedbackid;
+    public void setXmfeedbackcode(String xmfeedbackcode) {
+        this.xmfeedbackcode = xmfeedbackcode;
     }
 
-    public String getStatuname() {
-        return statuname;
+    public String getNote() {
+        return note;
     }
 
-    public void setStatuname(String statuname) {
-        this.statuname = statuname;
-    }
-
-    public String getNexttime() {
-        return nexttime;
-    }
-
-    public void setNexttime(String nexttime) {
-        this.nexttime = nexttime;
-    }
-
-    public String getReply() {
-        return reply;
-    }
-
-    public void setReply(String reply) {
-        this.reply = reply;
+    public void setNote(String note) {
+        this.note = note;
     }
 
     @Override

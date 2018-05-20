@@ -13,6 +13,10 @@
     <artifactId>gyb-app</artifactId>
     <groupId>com.marveliu.app</groupId>
 
+    <properties>
+        <commons-lang3.version>3.7</commons-lang3.version>
+    </properties>
+
     <modules>
         <module>gyb-nb-task</module>
         <module>gyb-nb-service-sys</module>
@@ -35,6 +39,11 @@
             <groupId>com.marveliu.framework</groupId>
             <artifactId>gyb-common</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
         </dependency>
     </dependencies>
 

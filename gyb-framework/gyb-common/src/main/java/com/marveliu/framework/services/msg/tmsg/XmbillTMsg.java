@@ -18,32 +18,35 @@ package com.marveliu.framework.services.msg.tmsg;
 import com.marveliu.framework.services.msg.TMsg;
 
 /**
- * 项目申请邮件
+ * 任务账单
  * @author Marveliu
  * @since 17/05/2018
  **/
 
-public class ApplyTMsg extends BaseTMsg implements TMsg {
+public class XmbillTMsg extends BaseTMsg implements TMsg {
 
-    private final static String  TEMPLATE_PATH = "apply.html";
-    private final static String  SUBJECT = "任务书申请";
+    private final static String  TEMPLATE_PATH = "xmbill.html";
+    private final static String  SUBJECT = "任务账单结算完成";
 
     private String username;
-    private String xmtaskname;
-    private String xmtaskid;
-    private String authorname;
-    private String firstcommitat;
+    private String billid;
+    private String xminfid;
+    private String paysum;
+    private String payname;
+    private String typename;
 
     // 必须要有无参构造
-    public ApplyTMsg() {
+    public XmbillTMsg() {
     }
 
-    public ApplyTMsg(String username, String xmtaskname, String xmtaskid, String authorname, String firstcommitat) {
+
+    public XmbillTMsg(String username, String billid, String xminfid, String paysum, String payname, String typename) {
         this.username = username;
-        this.xmtaskname = xmtaskname;
-        this.xmtaskid = xmtaskid;
-        this.authorname = authorname;
-        this.firstcommitat = firstcommitat;
+        this.billid = billid;
+        this.xminfid = xminfid;
+        this.paysum = paysum;
+        this.payname = payname;
+        this.typename = typename;
     }
 
     public String getUsername() {
@@ -54,36 +57,44 @@ public class ApplyTMsg extends BaseTMsg implements TMsg {
         this.username = username;
     }
 
-    public String getXmtaskname() {
-        return xmtaskname;
+    public String getBillid() {
+        return billid;
     }
 
-    public void setXmtaskname(String xmtaskname) {
-        this.xmtaskname = xmtaskname;
+    public void setBillid(String billid) {
+        this.billid = billid;
     }
 
-    public String getXmtaskid() {
-        return xmtaskid;
+    public String getXminfid() {
+        return xminfid;
     }
 
-    public void setXmtaskid(String xmtaskid) {
-        this.xmtaskid = xmtaskid;
+    public void setXminfid(String xminfid) {
+        this.xminfid = xminfid;
     }
 
-    public String getAuthorname() {
-        return authorname;
+    public String getPaysum() {
+        return paysum;
     }
 
-    public void setAuthorname(String authorname) {
-        this.authorname = authorname;
+    public void setPaysum(String paysum) {
+        this.paysum = paysum;
     }
 
-    public String getFirstcommitat() {
-        return firstcommitat;
+    public String getPayname() {
+        return payname;
     }
 
-    public void setFirstcommitat(String firstcommitat) {
-        this.firstcommitat = firstcommitat;
+    public void setPayname(String payname) {
+        this.payname = payname;
+    }
+
+    public String getTypename() {
+        return typename;
+    }
+
+    public void setTypename(String typename) {
+        this.typename = typename;
     }
 
     @Override

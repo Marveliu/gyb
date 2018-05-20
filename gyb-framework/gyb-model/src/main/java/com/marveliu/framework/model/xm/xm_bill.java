@@ -76,8 +76,11 @@ public class xm_bill extends BaseModel implements Serializable {
     @One(field = "realgypayid")
     private gy_pay realgypay;
 
-    // 视图
+    //参照
+    @One(field = "xminfid")
+    private xm_inf xmInf;
 
+    // 视图
     @Column
     @Readonly
     private Float award;
@@ -262,6 +265,13 @@ public class xm_bill extends BaseModel implements Serializable {
         this.realgypay = realgypay;
     }
 
+    public xm_inf getXmInf() {
+        return xmInf;
+    }
+
+    public void setXmInf(xm_inf xmInf) {
+        this.xmInf = xmInf;
+    }
 
     /**
      * 项目账单编号

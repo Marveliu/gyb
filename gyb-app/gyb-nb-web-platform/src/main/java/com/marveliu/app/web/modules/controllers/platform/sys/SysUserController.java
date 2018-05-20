@@ -387,8 +387,9 @@ public class SysUserController {
             }
             return Result.success("system.success");
         } catch (Exception e) {
-            return Result.error("system.error");
+            log.error("菜单设置失败",e);
         }
+        return Result.error("system.error");
     }
 
     @At

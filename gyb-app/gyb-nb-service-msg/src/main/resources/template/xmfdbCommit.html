@@ -1,12 +1,7 @@
 <div>
-    <p>亲爱的<b>${username}</b>, 您的任务${xminfname}有了新的进展。</p>
-    <p>项目经理:${authername},将您的编号为${feedbackid}</p>
-    <strong >标记为:${statuname}</strong>
-    <%if(final){%>
-    <p>下一次反馈时间:${nexttime}</p>
-    <%}%>
-    <p>反馈内容如下:</p>
-    <div>${reply}</div>
+    <p>亲爱的项目经理<b>${username}</b>, 编号为${xminfid}的任务${xminfname}有了新的进展。</p>
+    <p>雇员:${gyrealname},编号:${gyid},提交了任务反馈,编号:${xmfeedbackcode}</p>
+    <div>${note}</div>
     <br>
     <p>请及时在系统上进行处理：）</p>
     <p>如果您在使用过程中遇到问题，请联系管理员 ${email}</p>

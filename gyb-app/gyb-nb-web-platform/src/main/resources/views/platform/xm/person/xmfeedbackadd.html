@@ -42,7 +42,7 @@ layout("/layouts/platform.html"){
                                 <%if(count == 0){ %>
                                 value="初次提交反馈" disabled="disabled" >
                                 <%}else{%>
-                                value="${xmfeedbackparentid}" name="parentid" >
+                                value="${xmfeedbackcode}" name="code" >
                                 <%}%>
                             </div>
                         </div>
@@ -75,7 +75,7 @@ layout("/layouts/platform.html"){
                     <div class="form-group text-center">
                         <label></label>
                         <div>
-                            <button id="save" class="btn btn-primary btn-block btn-lg btn-parsley" data-loading-text="${msg['globals.button.submit.tip']}">${msg['globals.button.save']}</button>
+                            <button id="save" class="btn btn-primary btn-block btn-lg btn-parsley" data-loading-text="${msg['globals.button.submit.tip']}">${msg['globals.button.submit']}</button>
                         </div>
                     </div>
                 </div>
@@ -92,7 +92,7 @@ layout("/layouts/platform.html"){
     }
     var ue;
     $("#save").click(function(){
-        Toast.success("请在反馈列表页确认提交")
+        Toast.info("请在反馈列表页确认提交")
     });
 
     $(document).ready(function () {

@@ -198,6 +198,22 @@ public class XmPersonController {
     }
 
 
+    // 反馈添加检查
+    @At("/addcheck/?")
+    @Ok("json")
+    @RequiresPermissions("platform.xm.person")
+    public Object addcheck(String id,HttpServletRequest req) {
+        //检查最新的反馈提交状态，如果未完结则不允许提交反馈
+        String gyid = shiroUtil.getCurrentGyid();
+
+        if(xmFeedbackService.isXmeedbackAllowed(id)){
+            return Result.success("允许添加");
+        }else {
+            return Result.error("当前状态无法进行任务反馈,可能有未完结的任务反馈或者任务已经完成!");
+        }
+    }
+
+
     @At("/feedbackadd/?")
     @Ok("beetl:/platform/xm/person/xmfeedbackadd.html")
     @RequiresPermissions("platform.xm.person")
@@ -211,7 +227,7 @@ public class XmPersonController {
             //设置父id
             if (count != 0) {
                 List<xm_feedback> xfd = xmFeedbackService.query(cnd.desc("at"));
-                req.setAttribute("xmfeedbackparentid", xfd.get(0).getId());
+                req.setAttribute("xmfeedbackcode", xfd.get(0).getCode());
             }
             req.setAttribute("count", count);
             req.setAttribute("xmid", id);
@@ -381,9 +397,21 @@ public class XmPersonController {
     @At("/xminflist")
     @Ok("json")
     @RequiresPermissions("platform.xm.person")
-    public Object xminflist() {
+    public Object xminflist(
+            @Param("xmname") String xminfname,
+            @Param("status") int status
+    ) {
         String gyid =  shiroUtil.getCurrentGyid();
-        List<xm_inf> xm_infs = xmInfService.query(Cnd.where("gyid", "=", gyid));
+        Cnd cnd = Cnd.where("gyid", "=", gyid);
+
+        if(null !=xminfname && !xminfname.isEmpty()){
+            cnd.and("taskname","like","%"+xminfname+"%");
+        }else {
+            if(status != 6){
+                cnd.and("status","=",status);
+            }
+        }
+        List<xm_inf> xm_infs = xmInfService.query(cnd);
         Map<String, String> obj = new HashMap<>();
         for (xm_inf inf : xm_infs) {
             xm_task task = xmTaskService.fetch(inf.getXmtaskid());

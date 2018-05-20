@@ -17,7 +17,7 @@ public interface XmFeedbackService extends BaseService<xm_feedback> {
 
 
     /**
-     * 是否运行进行反馈
+     * 是否允许进行反馈
      *
      * @param xminfid
      * @return
