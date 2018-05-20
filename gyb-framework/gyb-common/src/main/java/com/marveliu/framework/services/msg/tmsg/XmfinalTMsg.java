@@ -30,7 +30,7 @@ public class XmfinalTMsg extends BaseTMsg implements TMsg {
 
     private String username;
     private String xminfid;
-    private String xminfanme;
+    private String xminfname;
     private String evagrade;
     private String evanote;
     private String paysum;
@@ -39,10 +39,10 @@ public class XmfinalTMsg extends BaseTMsg implements TMsg {
     public XmfinalTMsg() {
     }
 
-    public XmfinalTMsg(String username, String xminfid, String xminfanme, String evagrade, String evanote, String paysum, String paynote) {
+    public XmfinalTMsg(String username, String xminfid, String xminfname, String evagrade, String evanote, String paysum, String paynote) {
         this.username = username;
         this.xminfid = xminfid;
-        this.xminfanme = xminfanme;
+        this.xminfname = xminfname;
         this.evagrade = evagrade;
         this.evanote = evanote;
         this.paysum = paysum;
@@ -65,12 +65,12 @@ public class XmfinalTMsg extends BaseTMsg implements TMsg {
         this.xminfid = xminfid;
     }
 
-    public String getXminfanme() {
-        return xminfanme;
+    public String getXminfname() {
+        return xminfname;
     }
 
-    public void setXminfanme(String xminfanme) {
-        this.xminfanme = xminfanme;
+    public void setXminfname(String xminfname) {
+        this.xminfname = xminfname;
     }
 
     public String getEvagrade() {

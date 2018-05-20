@@ -89,23 +89,23 @@ layout("/layouts/platform.html"){
                 <form id="fianlForm" role="form" class="form-horizontal parsley-form" data-parsley-validate
                       action="${base}/platform/xm/person/xmcompletedcommit" method="post">
                     <input name="id" type="hidden" value="${obj.id}">
-                    <input  id="gypayid" name="gypayid" type="hidden" value="${bill.gypayid}">
+                    <input  id="gypayid" name="gypayid" type="hidden" value="${gypay.id}">
                     <div class="row mb10">
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label for="payid" class="control-label">收款账户</label>
                                     <input type="text" id="payid" class="form-control" name="payid" data-parsley-required="true"
-                                           placeholder="${msg['gy.pay.column.payname']}" value="${bill.gypay.payid}" readonly >
+                                           placeholder="${msg['gy.pay.column.payname']}" value="${gypay.payid}" readonly >
                             </div>
                             <div class="form-group">
                                 <label for="payname" class="control-label">收款人</label>
                                     <input type="text" id="payname" class="form-control" name="payname" data-parsley-required="true"
-                                           placeholder="${msg['gy.pay.column.payname']}" value="${bill.gypay.payname}" readonly >
+                                           placeholder="${msg['gy.pay.column.payname']}" value="${gypay.payname}" readonly >
                             </div>
                             <div class="form-group">
                                 <label for="paytype" class="control-label">支付方式</label>
                                     <input type="text" id="paytype" class="form-control" name="type" data-parsley-required="true"
-                                           placeholder="${msg['gy.pay.column.payname']}" value="${@status.bind('pay'+ bill.gypay.type)}"  readonly>
+                                           placeholder="${msg['gy.pay.column.payname']}" value="${@status.bind('pay'+ gypay.type)}"  readonly>
                             </div>
                         </div>
                     </div>
@@ -135,10 +135,10 @@ layout("/layouts/platform.html"){
             <div class="modal-body">
                 <div class="row">
                     <div id="commitmessage" class="col-xs-12">
-                        提交您的确认之后，您的支付信息将无法修改，请您确认您的支付信息是否正确！<br>
-                        收款方式：${@status.bind("pay"+ bill.gypay.type)}<br>
-                        收款人名称：${bill.gypay.payname}<br>
-                        收款人账户：${bill.gypay.payid}<br>
+                        提交您的确认之后，您的收款信息将无法修改，请您务必确认，填写错误导致财务损失平台概不负责!！<br>
+                        收款方式：${@status.bind("pay"+ gypay.type)}<br>
+                        收款人名称：${gypay.payname}<br>
+                        收款人账户：${gypay.payid}<br>
                     </div>
                 </div>
             </div>
@@ -192,23 +192,19 @@ layout("/layouts/platform.html"){
             Toast.warning("只能选择一种您的收款方式");
         } else if (pay.length = 1) {
             console.log(pay.data()[0]["id"]);
-
             var payid = pay.data()[0]["payid"];
             var payname = pay.data()[0]["payname"];
             var gypayid = pay.data()[0]["id"];
             var paytypename = pay.data()[0]["typename"];
-
             $("#payid ").val(payid);
             $("#payname ").val(payname);
             $("#gypayid ").val(gypayid);
             $("#paytype ").val(paytypename);
-
             $("#dialogPaySelect").modal("hide");
             $("#payway").show();
-
             $("#commitmessage").html("");
             $("#commitmessage").append(
-                    '提交您的确认之后，您的支付信息将无法修改，请您确认您的支付信息是否正确！'+
+                    '提交您的确认之后，您的收款信息将无法修改，请您务必确认，填写错误导致财务损失平台概不负责!！'+
                     '<br>收款方式：' + paytypename +
                     '<br>收款人名称：' + payname +
                     '<br>收款账号：' + payid

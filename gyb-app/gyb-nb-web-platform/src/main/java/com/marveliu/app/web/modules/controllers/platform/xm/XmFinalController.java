@@ -28,6 +28,7 @@ import com.marveliu.framework.services.xm.XmBillService;
 import com.marveliu.framework.services.xm.XmEvaluationService;
 import com.marveliu.framework.services.xm.XmFacadeService;
 import com.marveliu.framework.services.xm.XmInfService;
+import com.marveliu.framework.util.ConfigUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -79,7 +80,7 @@ public class XmFinalController {
     private ShiroUtil shiroUtil;
 
     @At("")
-    @Ok("beetl:/platform//xm/final/index.html")
+    @Ok("beetl:/platform/xm/final/index.html")
     @RequiresPermissions("platform.xm.final")
     public void index( HttpServletRequest req) {
         int total = 0;
@@ -100,15 +101,23 @@ public class XmFinalController {
     @Ok("json")
     @RequiresPermissions("platform.xm.final")
     public Object data(
-            @Param("xminfid") int xminfd,
-            @Param("status") int status,
+            @Param("xminfid") String xminfd,
+            @Param("xminfstatus") int status,
             @Param("length") int length,
             @Param("start") int start,
             @Param("draw") int draw,
             @Param("::order") List<DataTableOrder> order,
             @Param("::columns") List<DataTableColumn> columns) {
         Cnd cnd = Cnd.NEW();
-        cnd.and("status",">=",1);
+        cnd.and("status",">=",ConfigUtil.XM_INF_DONE);
+        if(!Strings.isEmpty(xminfd)){
+            cnd.and("id","=",xminfd);
+        }
+
+        if(status != 0){
+            cnd.and("status","=",status);
+        }
+
         if(!shiroUtil.isSuper()){
             cnd.and("author","=",sysUserinfService.getSysuserinfid(StringUtil.getPlatformUid()));
         }

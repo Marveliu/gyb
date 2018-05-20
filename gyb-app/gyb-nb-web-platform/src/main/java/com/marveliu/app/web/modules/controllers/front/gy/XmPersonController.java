@@ -333,6 +333,7 @@ public class XmPersonController {
     @Ok("json")
     @RequiresPermissions("platform.xm.person")
     public Object xmcompleteddata(
+            @Param("xminfid") String xminfid,
             @Param("length") int length,
             @Param("start") int start,
             @Param("draw") int draw,
@@ -340,8 +341,12 @@ public class XmPersonController {
             @Param("::columns") List<DataTableColumn> columns) {
         Cnd cnd = Cnd.NEW();
         String gyid =  shiroUtil.getCurrentGyid();
-        cnd.and("status", "=", ConfigUtil.XM_INF_CHECKING);
         cnd.and("gyid", "=", gyid);
+
+        if(!Strings.isEmpty(xminfid)){
+            cnd.and("id","=",xminfid);
+        }
+        // cnd.and("status", "=", ConfigUtil.XM_INF_CHECKING);
         return xmInfService.data(length, start, draw, order, columns, cnd, null);
     }
 
@@ -353,9 +358,11 @@ public class XmPersonController {
             Cnd cnd = Cnd.where("xminfid", "=", id);
             xm_bill bill = xmBillService.fetch(cnd);
             xm_inf xf = xmInfService.fetch(id);
-            bill = xmBillService.fetchLinks(bill, "gypay");
+            bill = xmBillService.fetchLinks(bill, "");
+            gy_pay gyPay = gyPayService.getFirstPay(shiroUtil.getCurrentGyid());
             req.setAttribute("obj", xf);
             req.setAttribute("bill", bill);
+            req.setAttribute("gypay", gyPay);
         } else {
             req.setAttribute("obj", null);
         }
@@ -372,7 +379,7 @@ public class XmPersonController {
         }
     }
 
-    // 雇员提交任务
+    // 雇员结算确认
     @At("/xmcompletedcommit")
     @Ok("json")
     @RequiresPermissions("platform.xm.person")

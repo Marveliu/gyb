@@ -58,6 +58,7 @@ layout("/layouts/platform-xm.html"){
     <div class=panel-body style="padding-top: 15px;">
         <div class="table-responsive no-border">
             <table class="table table-bordered table-striped mg-t datatable">
+                <input id="xminfid" type="hidden">
                 <thead>
                 <tr>
                     <th>${msg['xm.evaluation.column.xminfid']}</th>
@@ -104,7 +105,7 @@ layout("/layouts/platform-xm.html"){
                 "url": "${base}/platform/xm/final/data",
                 "type": "post",
                 "data": function (d) {
-
+                    d.xminfid = $('#xminfid').val();
                 }
             },
             "order": [[4, "desc"]],
@@ -135,51 +136,7 @@ layout("/layouts/platform-xm.html"){
             datatable.ajax.reload();
         });
     }
-    function del(id) {
-        var dialog = $("#dialogDelete");
-        dialog.modal("show");
-        dialog.find("#okDel").unbind("click");
-        dialog.find("#okDel").bind("click", function (event) {
-            var btn = $(this);
-            btn.button("loading");
-            $.post("${base}/platform/xm/evaluation/delete/" + id, {}, function (data) {
-                if (data.code == 0) {
-                    datatable.ajax.reload(null, false);
-                } else {
-                    Toast.error(data.msg);
-                }
-                btn.button("reset");
-                dialog.modal("hide");
-            }, "json");
-        });
-    }
-    function delCheck() {
-        var chks = datatable.rows('.selected').data();
-        if (chks.length > 0) {
-            var ids = [];
-            $.each(datatable.rows('.selected').data(), function (i, n) {
-                ids.push(n.id);
-            });
-            var dialog = $("#dialogDelete");
-            dialog.modal("show");
-            dialog.find("#okDel").unbind("click");
-            dialog.find("#okDel").bind("click", function (event) {
-                var btn = $(this);
-                btn.button("loading");
-                $.post("${base}/platform/xm/evaluation/delete", {ids: ids.toString()}, function (data) {
-                    if (data.code == 0) {
-                        datatable.ajax.reload(null, false);
-                    } else {
-                        Toast.error(data.msg);
-                    }
-                    btn.button("reset");
-                    dialog.modal("hide");
-                }, "json");
-            });
-        } else {
-            Toast.warning("${msg['globals.button.delete.select']}");
-        }
-    }
+
     $(function () {
         myForm.init();
         initDatatable();
@@ -189,7 +146,7 @@ layout("/layouts/platform-xm.html"){
     });
 
     function xminfset(id) {
-        $('#xmid').val(id);
+        $('#xminfid').val(id);
         datatable.ajax.reload();
     }
 

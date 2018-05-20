@@ -131,6 +131,7 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
                                     xmbillid,
                                     xmBill.getXminfid(),
                                     String.valueOf(xmBill.getPaysum()),
+                                    xmBill.getGypay().getPayid(),
                                     xmBill.getGypay().getPayname(),
                                     xmBill.getGypay().getTypename()
                             );

@@ -2,20 +2,43 @@
 layout("/layouts/platform.html"){
 %>
 
+<aside class="sidebar-250 canvas-right bg-default ">
+    <div class="content-wrap no-p">
+        <div class="wrapper2">
+            <div class="m5">
+                <nav role="navigation">
+                    <div class="no-padding">
+                        <button class="btn btn-success btn-block" type="button"
+                                onclick="sublime.toggleFilter('#xminfPanel')"><i
+                                class="fa fa-sliders"></i> 任务列表-筛选
+                        </button>
+                        <ul class="nav nav-stacked bg-white mt5" id="xminflist">
+
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</aside>
+
+
 <section class="content-wrap bg-white">
     <header class="header navbar bg-white shadow">
             <div class="col-md-6 bg-none">
                 <ol class="breadcrumb mt10" style="margin-bottom: 0px;">
                     <li>
-                        <a href="javascript:;">雇佣项目</a>
+                        <a href="javascript:;">任务结算</a>
                     </li>
-                    <li class="active">待结算项目</li>
+                    <li class="active">任务结算</li>
                 </ol>
             </div>
     </header>
     <div class=panel-body style="padding-top: 50px;">
         <div class="table-responsive no-border">
             <table class="table table-bordered table-striped mg-t datatable">
+                <input id="xminfid" type="hidden" value="">
+                <input id="xminfstatus" type="hidden" value="">
                 <thead>
                 <tr>
                 <tr>
@@ -23,6 +46,7 @@ layout("/layouts/platform.html"){
                     <th>项目名称</th>
                     <th>雇员编号</th>
                     <th>雇员名称</th>
+                    <th>任务状态</th>
                     <th>${msg['globals.table.column.operation']}</th>
                 </tr>
                 </tr>
@@ -40,6 +64,34 @@ layout("/layouts/platform.html"){
     </div>
 </div>
 
+
+<div class="cd-panel from-right" id="xminfPanel">
+    <header class="cd-panel-header">
+        <h4>任务筛选</h4>
+    </header>
+    <div class="cd-panel-container">
+        <div class="cd-panel-content shadow">
+            <div class="form-group">
+                <label for="status">任务申请状态</label>
+                <select id="status" class="form-control">
+                    <option value="6" selected="true">全部</option>
+                    <option value="0">进行中</option>
+                    <option value="1">待结算</option>
+                    <option value="2">待确认</option>
+                    <option value="3">待支付</option>
+                    <option value="4">已支付</option>
+                    <option value="5">任务异常</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="name">任务标题</label>
+                <input type="text" id="name" name="name" onclick="this.value=''" class="form-control"
+                       placeholder="请输入要查询的任务书标题">
+            </div>
+            <button onclick="initxmlist()" type="button" class="btn btn-default">查询</button>
+        </div>
+    </div>
+</div>
 
 <script language="JavaScript">
     var datatable;
@@ -64,7 +116,7 @@ layout("/layouts/platform.html"){
                 "url": "${base}/platform/xm/person/xmcompleteddata",
                 "type": "post",
                 "data": function (d) {
-
+                    d.xminfid = $("#xminfid").val();
                 }
             },
             "order": [[0, "desc"]],
@@ -73,6 +125,7 @@ layout("/layouts/platform.html"){
                 {"data": "taskname", "bSortable": true},
                 {"data": "gyid", "bSortable": true},
                 {"data": "author", "bSortable": true},
+                {"data": "xminfstatus", "bSortable": true},
             ],
             "columnDefs": [
                 {
@@ -83,7 +136,7 @@ layout("/layouts/platform.html"){
                                 '<li><a href="${base}/platform/xm/person/xmcompleteddetail/' + row.id + '">结 算</a></li>' +
                                 '</ul></div>';
                     },
-                    "targets": 4
+                    "targets": 5
                 }
             ]
         });
@@ -96,11 +149,59 @@ layout("/layouts/platform.html"){
     }
     $(function () {
         myForm.init();
+        initxmlist();
         initDatatable();
         $("#dialogDetail").on("hidden.bs.modal", function () {
             $(this).removeData("bs.modal");
         });
     });
+
+
+    function initxmlist() {
+        var xmname = $('#name').val();
+        var status = $('#status').val();
+        $('#xminflist').empty();
+        $.ajax({
+            url: "/platform/xm/person/xminflist?xmname=" + xmname + "&status=" + status,
+            type: "get",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                var resultitem =
+                    '<li class="text-info">' +
+                    '<a onclick="xmfinal()">' +
+                    '<i class="ti-control-record text-success pull-right"></i>' + '全部任务' +
+                    '</a>' +
+                    '</li>';
+                $('#xminflist').append(resultitem);
+                //i表示在data中的索引位置，n表示包含的信息的对象
+                for (var key in data) {
+                    console.log(key, data[key]);
+                    var xmname = key;
+                    var xmid = data[key];
+                    var item =
+                        '<li >' +
+                        '<a onclick="xmfinal(' + "'" + xmid + "'" + ",'" + xmname + "'" + ')">' +
+                        '<i class="ti-control-record text-success pull-right"></i>' + xmname +
+                        '</a>' +
+                        '</li>';
+                    $('#xminflist').append(item);
+                }
+            },
+            error: function () {
+                Toast.error("加载出错！")
+            }
+        });
+    }
+
+    function xmfinal(id, xmname) {
+        if (xmname == "" || xmname == null) {
+            xmname = "全部任务";
+        }
+        $('#xminfid').val(id);
+        $('#currentxmname').text(xmname);
+        datatable.ajax.reload();
+    }
 
 </script>
 <%}%>

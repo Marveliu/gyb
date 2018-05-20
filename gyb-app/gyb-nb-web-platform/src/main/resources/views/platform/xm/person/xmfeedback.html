@@ -21,28 +21,7 @@ layout("/layouts/platform.html"){
     </div>
 </aside>
 
-<!--<aside class="sidebar-250 canvas-right bg-default ">-->
-<!--<header class="header navbar clearfix bb bg-default pl0 pr0">-->
-<!--<p class="navbar-text"><i class="fa fa-sitemap mr5"></i> 跟踪项目列表</p>-->
-<!--</header>-->
-<!--<div class="content-wrap no-p">-->
-<!--<div class="wrapper2">-->
-<!--<div class="m5">-->
-<!--<nav role="navigation">-->
-<!--<div class="no-padding">-->
-<!--<ul class="nav nav-stacked" id="xminflist">-->
-<!--<li>-->
-<!--<a onclick="xmfeedback(null,'全部跟踪项目')">-->
-<!--<i class="ti-control-record text-success pull-right"></i> 全部跟踪项目-->
-<!--</a>-->
-<!--</li>-->
-<!--</ul>-->
-<!--</div>-->
-<!--</nav>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</aside>-->
+
 
 
 <section class="content-wrap bg-white">
@@ -56,7 +35,7 @@ layout("/layouts/platform.html"){
             <!--<button class="btn btn-primary navbar-btn" onclick="sublime.toggleFilter('.cd-panel')"><i-->
             <!--class="fa fa-sliders"></i> 筛选-->
             <!--</button>-->
-            <button id="currentxmname" class="btn btn-primary navbar-btn"></i> 全部跟踪项目</button>
+            <button id="currentxmname" class="btn btn-primary navbar-btn"></i> 全部跟踪任务</button>
         </div>
 
     </header>
@@ -68,7 +47,7 @@ layout("/layouts/platform.html"){
                 <thead>
                 <tr>
                     <th>反馈编号</th>
-                    <th>项目名称</th>
+                    <th>任务名称</th>
                     <th>${msg['xm.feedback.column.at']}</th>
                     <th>${msg['xm.feedback.column.gyid']}</th>
                     <th>${msg['xm.feedback.column.status']}</th>
@@ -135,7 +114,7 @@ layout("/layouts/platform.html"){
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12">
-                        提交您的项目反馈之后，原来的项目反馈将不能进行修改，请确认！
+                        提交您的任务反馈之后，原来的任务反馈将不能进行修改，请确认！
                     </div>
                 </div>
             </div>
@@ -397,8 +376,8 @@ layout("/layouts/platform.html"){
 
 
     function xmfeedback(id, xmname) {
-        if (name == "" || name == null) {
-            name = "全部跟踪项目";
+        if (xmname == "" || xmname == null) {
+            xmname = "全部跟踪任务";
         }
         $('#xmid').val(id);
         $('#currentxmname').text(xmname);

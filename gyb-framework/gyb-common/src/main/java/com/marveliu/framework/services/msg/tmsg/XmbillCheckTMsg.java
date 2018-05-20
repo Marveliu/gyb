@@ -32,6 +32,7 @@ public class XmbillCheckTMsg extends BaseTMsg implements TMsg {
     private String billid;
     private String xminfid;
     private String paysum;
+    private String payid;
     private String payname;
     private String typename;
 
@@ -39,12 +40,12 @@ public class XmbillCheckTMsg extends BaseTMsg implements TMsg {
     public XmbillCheckTMsg() {
     }
 
-
-    public XmbillCheckTMsg(String username, String billid, String xminfid, String paysum, String payname, String typename) {
+    public XmbillCheckTMsg(String username, String billid, String xminfid, String paysum, String payid, String payname, String typename) {
         this.username = username;
         this.billid = billid;
         this.xminfid = xminfid;
         this.paysum = paysum;
+        this.payid = payid;
         this.payname = payname;
         this.typename = typename;
     }
@@ -79,6 +80,14 @@ public class XmbillCheckTMsg extends BaseTMsg implements TMsg {
 
     public void setPaysum(String paysum) {
         this.paysum = paysum;
+    }
+
+    public String getPayid() {
+        return payid;
+    }
+
+    public void setPayid(String payid) {
+        this.payid = payid;
     }
 
     public String getPayname() {

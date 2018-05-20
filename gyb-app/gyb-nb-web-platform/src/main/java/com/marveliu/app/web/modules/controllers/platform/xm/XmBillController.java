@@ -127,26 +127,21 @@ public class XmBillController{
     @At("/check/?")
     @Ok("json")
     @RequiresPermissions("platform.xm.bill")
-    @SLog(tag = "xm_bill", msg = "${req.getAttribute('id')}")
+    @SLog(type = "xm",tag = "账单支付确认", msg = "${req.getAttribute('id')}")
     public Object check(String id, HttpServletRequest req) {
         try {
             String sysuerid = StringUtil.getPlatformUid();
             if(!Strings.isBlank(id)){
-                int flag = xmBillService.update(
-                        org.nutz.dao.Chain.make("status",3)
-                                .add("payby",sysuerid)
-                                .add("at",(int) (System.currentTimeMillis() / 1000)),
-                        Cnd.where("id","=",id));
-                if(flag!=0)
+                if(xmBillService.commitXmbill(id,StringUtil.getPlatformUid()))
                 {
                     req.setAttribute("id",id);
                     return Result.success("system.success");
                 }
             }
-            return Result.error("system.error");
         } catch (Exception e) {
-            return Result.error("system.error");
+            log.error("确认支付失败",e);
         }
+        return Result.error("system.error");
     }
 
 

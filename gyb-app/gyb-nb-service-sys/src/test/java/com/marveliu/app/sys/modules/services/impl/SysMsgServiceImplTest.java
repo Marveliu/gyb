@@ -40,7 +40,7 @@ public class SysMsgServiceImplTest {
         // sysMsg.setType(ConfigUtil.SYS_MSG_TYPE_EMAIL);
         // sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_GY);
         // sysMsg.setTmsgclass(tMsg.getTMsgClass());
-        Sys_msg sysMsg = sysMsgService.fetch(31);
+        Sys_msg sysMsg = sysMsgService.fetch(59);
         assertEquals(true,sysMsgService.pushMsg(sysMsg));
     }
 

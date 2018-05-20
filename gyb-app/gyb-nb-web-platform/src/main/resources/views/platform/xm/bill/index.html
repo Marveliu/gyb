@@ -149,5 +149,24 @@ layout("/layouts/platform-xm.html"){
             $(this).removeData("bs.modal");
         });
     });
+    
+    function check(id) {
+        $.ajax({
+            url: "/platform/xm/bill/check/" + id,
+            type: "get",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if(data.code == 0){
+                    Toast.success(data.msg);
+                }else {
+                    Toast.error(data.msg);
+                }
+            },
+            error: function () {
+                Toast.error("加载出错！")
+            }
+        });
+    }
 </script>
 <%}%>

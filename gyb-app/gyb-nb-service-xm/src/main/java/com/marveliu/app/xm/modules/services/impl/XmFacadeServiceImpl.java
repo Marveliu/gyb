@@ -212,7 +212,6 @@ public class XmFacadeServiceImpl implements XmFacadeService {
             xmEvaluation.setGrade(xmEvaluationGrade);
             xmEvaluation.setNote(xmEvaluationNote);
             xm_inf xmInf = xmInfService.fetch(xminfid);
-
             Chain xmBillChain =  Chain.make("status",ConfigUtil.XM_BILL_CHECKING).add("paysum",paySum).add("note",xmBillNote).add("opAt",Times.getTS());
 
             Trans.exec(new Atom() {
@@ -294,7 +293,6 @@ public class XmFacadeServiceImpl implements XmFacadeService {
             Sys_role sysRole = sysRoleService.getRoleFromCode("sys.fn");
             sysRole = sysRoleService.fetchLinks(sysRole,"users");
 
-
             if(!Lang.isEmpty(sysRole.getUsers())){
                 xm_inf xmInf = xmInfService.fetch(xminfid);
                 xm_bill xmBill = xmBillService.fetch(Cnd.where("xminfid","=",xminfid));
@@ -307,6 +305,7 @@ public class XmFacadeServiceImpl implements XmFacadeService {
                         xmInf.getId(),
                         String.valueOf(xmBill.getPaysum()),
                         xmBill.getRealgypay().getId(),
+                        xmBill.getRealgypay().getPayname(),
                         xmBill.getRealgypay().getTypename()
                 );
                 sysMsg.setRevid(sysUser.getId());
