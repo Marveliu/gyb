@@ -85,27 +85,11 @@ public class GyFacadeServiceImpl implements GyFacadeService {
     @Override
     public boolean regInfo(gy_inf gyInf, gy_auth gyAuth) {
         try {
-
             gy_inf gy_inf = gyInfService.insertOrUpdate(gyInf);
             // 修改角色
             this.updateGyRoleByGyid(gy_inf.getId(),"gy2");
             gyAuth.setGyid(gy_inf.getId());
             gyAuthService.insertOrUpdate(gyAuth);
-
-            // 平台消息
-            Sys_user user = sysUserService.fetch(gy_inf.getUserid());
-            String token = String.format("%s,%s", user.getEmail(), System.currentTimeMillis());
-            token = Toolkit._3DES_encode(user.getSalt().getBytes(), token.getBytes());
-            String url = ConfigUtil.AppDomain + "/open/api/sys/email/checkActiveMail?token=" + token +"&userId=" + user.getId();
-
-            Sys_msg sysMsg = new Sys_msg();
-            TMsg tMsg = new RegTMsg(gy_inf.getRealname(),url);
-            sysMsg.setRevid(gy_inf.getUserid());
-            sysMsg.setMsg(Json.toJson(tMsg));
-            sysMsg.setType(ConfigUtil.SYS_MSG_TYPE_EMAIL);
-            sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_GY);
-            sysMsg.setTmsgclass(RegTMsg.class.getName());
-            sysMsgService.pushMsg(sysMsg);
             return true;
         }catch (Exception e){
             log.error("雇员信息注册失败",e);
@@ -140,9 +124,6 @@ public class GyFacadeServiceImpl implements GyFacadeService {
             String roleid =  sysRoleService.getRoleFromCode(rolecode).getId();
             String userid = gyInfService.getUidByGyid(gyid);
             return sysRoleService.setUserRoleByRoleid(userid,roleid);
-
-
-
         }catch (Exception e){
             log.error("修改雇员角色出错:",e);
         }

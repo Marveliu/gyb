@@ -27,19 +27,19 @@ layout("/layouts/platform.html"){
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="mt10 mb10">
-                                            <a href="${base}/platform/gy/person/infedit" class="btn btn-social btn-xs btn-facebook mr5" data-toggle="modal" data-target="#dialogDeal"><i class="fa fa-info"></i>个人信息 </a>
-
-                                            <a href="${base}/platform/gy/person/payindex" class="btn btn-social btn-xs btn-google-plus mr5"><i class="fa fa-rmb"></i>交易方式 </a>
-
-
-                                            <!--<a id="emailchecked" class="btn btn-social btn-xs btn-twitter mr5"-->
-                                               <!--v-if="!emailchecked" v-on:click="askActiviEmail('${obj.id}')"><i-->
-                                                    <!--class="fa fa-mail-forward"></i>邮箱未激活，发送激活邮件 </a>-->
+                                        <div class="mt10 mb10 row">
+                                                    <a href="${base}/platform/gy/person/infedit"
+                                                       class="btn btn-social btn-xs btn-facebook mr5"
+                                                       data-toggle="modal" data-target="#dialogDeal"><i
+                                                            class="fa fa-info"></i>账号信息</a>
+                                                    <a href="${base}/platform/gy/person/payindex"
+                                                       class="btn btn-social btn-xs btn-google-plus mr5"><i
+                                                            class="fa fa-rmb"></i>交易方式 </a>
                                             <% if(!obj.emailChecked){ %>
-                                                <a id="emailchecked" class="btn btn-social btn-xs btn-twitter mr5" onclick="askActiviEmail('${obj.id}')">
-                                                    <i class="fa fa-mail-forward"></i>邮箱未激活，发送激活邮件
-                                                </a>
+                                                    <p id="emailchecked" class="btn btn-social btn-xs btn-twitter mr5 mt5"
+                                                       onclick="askActiviEmail('${obj.id}')">
+                                                        <i class="fa fa-mail-forward"></i>发送激活邮件
+                                                    </p>
                                             <%}%>
                                         </div>
                                     </div>
@@ -109,14 +109,16 @@ layout("/layouts/platform.html"){
                         <div class="panel-body no-p">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div class="chat-user" id="gyauth" onclick="gyauthedit()">
+                                    <div class="chat-user" id="gyauth"
+                                         onclick="window.open('/platform/gy/person/authedit')">
                                         <a class="user-avatar">
                                             <img src="/assets/img/face5.jpg" class="avatar avatar-sm img-circle" alt="">
                                             <div class="status bg-danger"></div>
                                         </a>
                                         <div class="user-details">
                                             <p>身份认证</p>
-                                            <small class="user-department">${@status.bind('gyauth'+ gyauth.status!)}</small>
+                                            <small class="user-department">${@status.bind('gyauth'+ gyauth.status!)}
+                                            </small>
                                         </div>
                                     </div>
                                 </div>
@@ -125,7 +127,8 @@ layout("/layouts/platform.html"){
                                 <div class="col-sm-12">
                                     <div class="chat-user">
                                         <a href="javascript:;" class="user-avatar">
-                                            <img src="/assets/img/avatar.jpg" class="avatar avatar-sm img-circle" alt="">
+                                            <img src="/assets/img/avatar.jpg" class="avatar avatar-sm img-circle"
+                                                 alt="">
                                             <div class="status bg-color"></div>
                                         </a>
                                         <div class="user-details">
@@ -154,7 +157,7 @@ layout("/layouts/platform.html"){
                             <span class="small text-uppercase">任务概览</span>
                         </header>
                         <div class="panel-body p10">
-                                    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
                             <div id="main" style="height:300px;width: 100%"></div>
                         </div>
 
@@ -201,42 +204,42 @@ layout("/layouts/platform.html"){
 
     // 显示标题，图例和空的坐标轴
     myChart.setOption({
-        title : {
+        title: {
             text: '任务执行情况概览',
             subtext: '${gy.realname}',
-            x:'center'
+            x: 'center'
         },
-        tooltip : {
-            x : 'center',
-            y : 'bottom',
+        tooltip: {
+            x: 'center',
+            y: 'bottom',
             trigger: 'item',
             formatter: "{a} {b} : {c} ({d}%)"
-         },
+        },
         toolbox: {
-            show : true,
-            feature : {
-                mark : {show: true},
-                dataView : {show: true, readOnly: false},
-                magicType : {
+            show: true,
+            feature: {
+                mark: {show: true},
+                dataView: {show: true, readOnly: false},
+                magicType: {
                     show: true,
                     type: ['pie', 'funnel']
                 },
-                restore : {show: true},
-                saveAsImage : {show: true}
+                restore: {show: true},
+                saveAsImage: {show: true}
             }
         },
-        legend:{
+        legend: {
             orient: 'vertical',
             left: 'left',
             data: []
-         },
-        calculable : true,
-        series : [{
+        },
+        calculable: true,
+        series: [{
             name: '任务状态',
             type: 'pie',
-            radius : '55%',
+            radius: '55%',
             center: ['50%', '60%'],
-            data:[],
+            data: [],
             itemStyle: {
                 emphasis: {
                     shadowBlur: 10,
@@ -249,12 +252,12 @@ layout("/layouts/platform.html"){
     myChart.showLoading();// 加载动画
     // 异步加载数据
     $.post('${AppApiDomain}/open/api/stat/xminf?gyid=${gy.id}').done(function (data) {//jQuery触发ajax 从后台异步获取数据
-        if(data.code == 0){
+        if (data.code == 0) {
             var array = new Array();
             var legendName = new Array();
             console.log(data)
-            for(var i in data.data){//遍历packJson 数组时，i为索引
-                var map ={};
+            for (var i in data.data) {//遍历packJson 数组时，i为索引
+                var map = {};
                 // console.log(i);
                 // console.log(data.data[i]);
                 map.name = i;
@@ -272,14 +275,14 @@ layout("/layouts/platform.html"){
                 legend: {
                     data: legendName
                 },
-                series:[{
+                series: [{
                     // 根据名字对应到相应的系列
                     name: '任务状态',
                     type: 'pie',
-                    data:  array
+                    data: array
                 }],
             });
-        }else{
+        } else {
             Toast.error(data.msg);
         }
     });
@@ -295,22 +298,22 @@ layout("/layouts/platform.html"){
             }
         })
     }
-    
-    function gyauthedit() {
-        // if (${gyauth.status} == 1 || ${gyauth.status} == 2)
-        // {
-        //     Toast.warning("您的身份信息正在she")
-        //     return null;
-        // }
-        // if (!${isAuth}) {
-            $("#dialogAuthDeal").modal({
-                remote: "${base}/platform/gy/person/authedit"
-            });
-            $("#dialogAuthDeal").show();
-        // } else {
-        //     Toast.warning("身份已经验证！")
-        // }
-    }
+
+    // function gyauthedit() {
+    //     // if (${gyauth.status} == 1 || ${gyauth.status} == 2)
+    //     // {
+    //     //     Toast.warning("您的身份信息正在she")
+    //     //     return null;
+    //     // }
+    //     // if (!${isAuth}) {
+    //         $("#dialogAuthDeal").modal({
+    //             remote: "${base}/platform/gy/person/authedit"
+    //         });
+    //         $("#dialogAuthDeal").show();
+    //     // } else {
+    //     //     Toast.warning("身份已经验证！")
+    //     // }
+    // }
 
     // // 首先,需要创建一个WebSocket连接
     // var ws;

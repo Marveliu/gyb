@@ -201,8 +201,8 @@ public class GyPersonController {
     @Ok("beetl:/platform/gy/person/authedit.html")
     @RequiresPermissions("gy.person")
     public void authedit(HttpServletRequest req) {
-        Object gyinf = gyInfService.getGyByUserId(StringUtil.getPlatformUid());
-        Object auth = gyAuthService.getGyAuthByGyid(((gy_inf) gyinf).gyid());
+        gy_inf gyinf = gyInfService.getGyByUserId(StringUtil.getPlatformUid());
+        gy_auth auth = gyAuthService.getGyAuthByGyid(shiroUtil.getCurrentGyid());
         req.setAttribute("gyauth", auth);
         req.setAttribute("gyinf", gyinf);
     }

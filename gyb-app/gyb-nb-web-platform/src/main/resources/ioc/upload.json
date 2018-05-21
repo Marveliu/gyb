@@ -11,8 +11,8 @@ var ioc={
         fields : {
         // 是否忽略空文件, 默认为 false
         ignoreNull : true,
-        // 单个文件最大尺寸(大约的值，单位为字节，即 2097152 为 2M)
-        maxFileSize : 2097152,
+        // 单个文件最大尺寸(大约的值，单位为字节，即 4M)
+        maxFileSize : 4914400,
         // 正则表达式匹配可以支持的文件名
         nameFilter : '^(.+[.])(gif|jpg|png)$'
         }

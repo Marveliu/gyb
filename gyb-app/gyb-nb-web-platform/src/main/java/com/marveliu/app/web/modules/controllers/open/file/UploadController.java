@@ -114,43 +114,47 @@ public class UploadController {
             } else if (tf == null) {
                 return Result.error("空文件");
             } else {
-
                 // 图片上传路径
-                String filePath = Globals.AppUploadPath
-                        + "/image/"+type+"/" +
-                        DateUtil.format(new Date(), "yyyyMMdd") + "/";
+                String filePath = "/image/"+type+"/" + DateUtil.format(new Date(), "yyyyMMdd") + "/";
                 // 图片名称
                 String fileName = R.UU32()+".jpg";
                 // 图片文件地址
-                String fileurl = Globals.AppRoot+filePath + fileName;
-                File fp = new File(Globals.AppRoot+filePath);
-                // 创建目录
+                String fileurl = Globals.AppRoot+Globals.AppUploadPath+filePath + fileName;
+                File fp = new File(Globals.AppRoot+Globals.AppUploadPath+filePath);
+
+
                 if (!fp.exists()) {
-                    fp.mkdirs();// 目录不存在的情况下，创建目录。
+                    fp.mkdirs();
                 }
                 BufferedImage img = Images.read(tf.getFile());
-                // error: black img
-                //img = Images.zoomScale(img, 160, 180, Color.WHITE);
-                //Images.writeJpeg(img, new File(Globals.AppRoot+filePath + fileName), 0.9f);
-                // using thumbnails
-                if(resize){
-                    Thumbnails.of(img).size(width,height)
-                            .outputFormat("jpg")
-                            .outputQuality(0.8)
-                            .toFile(fileurl);
-                }else{
-                    Thumbnails.of(img).scale(1.0)
-                            .outputFormat("jpg")
-                            .outputQuality(0.8)
-                            .toFile(fileurl);
-                }
+
+                Thumbnails.Builder tb = Thumbnails.of(img);
+                if(img.getWidth() > 1080){
+                    tb.size(1960,1080);
+                }else {
+                    tb.scale(1.0);
+                };
+                if(resize) tb.size(width,height);
+                tb.outputFormat("jpg");
+                tb.outputQuality(0.8);
+                tb.toFile(fileurl);
+                // if(resize){
+                //     Thumbnails.of(img).size(width,height)
+                //             .outputFormat("jpg")
+                //             .outputQuality(0.8)
+                //             .toFile(fileurl);
+                // }else{
+                //     Thumbnails.of(img).scale(1.0)
+                //             .outputFormat("jpg")
+                //             .outputQuality(0.3)
+                //             .toFile(fileurl);
+                // }
                 return Result.success("上传成功", filePath+fileName);
             }
         } catch (Exception e) {
-            return Result.error("系统错误");
-        } catch (Throwable e) {
-            return Result.error("图片格式错误");
+            log.error("图片上传错误",e);
         }
+        return Result.error("系统错误");
     }
 
 

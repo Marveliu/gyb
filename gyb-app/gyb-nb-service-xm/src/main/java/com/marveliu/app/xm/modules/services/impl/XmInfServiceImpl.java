@@ -76,7 +76,7 @@ public class XmInfServiceImpl extends BaseServiceImpl<xm_inf> implements XmInfSe
     @Override
     public int countGyByStatus(int status, String gyid) {
         Cnd cnd = Cnd.NEW();
-        if(Strings.isEmpty(gyid)){
+        if(!Strings.isEmpty(gyid)){
             cnd.and("gyid","=",gyid);
         }
         if(status != -1){
