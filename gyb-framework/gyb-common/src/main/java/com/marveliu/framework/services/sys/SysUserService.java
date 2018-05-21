@@ -51,4 +51,14 @@ public interface SysUserService extends BaseService<Sys_user> {
      * @param userIds
      */
     void deleteByIds(String[] userIds);
+
+
+    /**
+     * 用户注册
+     * @param user
+     * @return
+     */
+    Sys_user regUser(Sys_user user);
+
+
 }

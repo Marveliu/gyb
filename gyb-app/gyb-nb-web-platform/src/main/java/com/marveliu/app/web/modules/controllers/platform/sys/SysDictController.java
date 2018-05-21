@@ -169,4 +169,37 @@ public class SysDictController {
             return Result.error("system.error");
         }
     }
+
+    /**
+     * 开放的数据字典树
+     *
+     * @param pid
+     * @return
+     */
+    @At
+    @Ok("json")
+    public Object opentree(
+            @Param("code") String code,
+            @Param("pid") String pid) {
+        Cnd cnd = Cnd.NEW();
+
+        // TODO: 2018/1/5 0005 指定树根,serveice貌似有
+        if(null != code){
+            cnd.and("code","=",code);
+        }else {
+            cnd.and("parentId", "=", Strings.sBlank(pid)).asc("path");
+        }
+
+        List<Sys_dict> list = dictService.query(cnd);
+        List<Map<String, Object>> tree = new ArrayList<>();
+        for (Sys_dict dict : list) {
+            Map<String, Object> obj = new HashMap<>();
+            obj.put("id", dict.getId());
+            obj.put("code", dict.getCode());
+            obj.put("text", dict.getName());
+            obj.put("children", dict.isHasChildren());
+            tree.add(obj);
+        }
+        return tree;
+    }
 }

@@ -17,28 +17,27 @@ package com.marveliu.framework.services.msg.tmsg;
 
 import com.marveliu.framework.services.msg.TMsg;
 
-
 /**
  * @author Marveliu
- * @since 14/05/2018
+ * @since 17/05/2018
  **/
 
-public class PasswordTMsg extends BaseTMsg implements TMsg {
+public class GyAuthTMsg extends BaseTMsg implements TMsg {
 
-    private final static String  TEMPLATE_PATH = "password.html";
-    private final static String  SUBJECT = "密码找回";
+    private final static String  TEMPLATE_PATH = "gyAuth.html";
+    private final static String  SUBJECT = "雇员身份审核";
 
     private String username;
 
-    private String newpassword;
+    private String result;
 
     // 必须要有无参构造
-    public PasswordTMsg() {
+    public GyAuthTMsg() {
     }
 
-    public PasswordTMsg(String username, String newpassword) {
+    public GyAuthTMsg(String username, String result) {
         this.username = username;
-        this.newpassword = newpassword;
+        this.result = result;
     }
 
     public String getUsername() {
@@ -49,17 +48,21 @@ public class PasswordTMsg extends BaseTMsg implements TMsg {
         this.username = username;
     }
 
-    public String getUrl() {
-        return newpassword;
+    public String getResult() {
+        return result;
     }
 
-    public void setUrl(String newpassword) {
-        this.newpassword = newpassword;
+    public void setResult(String result) {
+        this.result = result;
     }
 
+    @Override
     public String getTemplatePath() {
         return TEMPLATE_PATH;
     }
 
-    public String getSubject(){return SUBJECT;}
+    @Override
+    public String getSubject(){
+        return SUBJECT;
+    }
 }

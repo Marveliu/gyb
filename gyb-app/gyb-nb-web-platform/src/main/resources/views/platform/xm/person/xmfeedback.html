@@ -26,16 +26,17 @@ layout("/layouts/platform.html"){
 
 <section class="content-wrap bg-white">
     <header class="header navbar bg-white shadow">
-        <div class="btn-group tool-button">
-            <button id="add" class="btn btn-primary navbar-btn" onclick="addfeedback()"><i class="ti-plus"></i> 进行反馈
-            </button>
-            <!--<button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> ${msg['globals.button.delete.more']}</button>-->
+        <div class="col-md-6 bg-none">
+            <ol class="breadcrumb mt10" style="margin-bottom: 0px;">
+                <li>
+                    <a href="javascript:;">任务跟踪</a>
+                </li>
+                <li class="active" id="currentxmname">全部跟踪任务</li>
+            </ol>
         </div>
         <div class="pull-right offscreen-right">
-            <!--<button class="btn btn-primary navbar-btn" onclick="sublime.toggleFilter('.cd-panel')"><i-->
-            <!--class="fa fa-sliders"></i> 筛选-->
-            <!--</button>-->
-            <button id="currentxmname" class="btn btn-primary navbar-btn"></i> 全部跟踪任务</button>
+            <button id="add" class="btn btn-primary navbar-btn" onclick="addfeedback()"><i class="ti-plus"></i> 进行反馈
+            </button>
         </div>
 
     </header>
@@ -140,7 +141,7 @@ layout("/layouts/platform.html"){
     <div class="cd-panel-container">
         <div class="cd-panel-content shadow">
             <div class="form-group">
-                <label for="status">任务申请状态</label>
+                <label for="status">任务状态</label>
                 <select id="status" class="form-control">
                     <option value="6" selected="true">全部</option>
                     <option value="0">进行中</option>
@@ -167,7 +168,7 @@ layout("/layouts/platform.html"){
     function addfeedback() {
         var xmid = $('#xmid').val();
         if (xmid.length == 0) {
-            Toast.error("您需要在左侧任务列表中选择一个正在跟踪的任务才能进行反馈哦！")
+            Toast.info("您需要在左侧任务列表中选择一个正在跟踪的任务才能进行反馈哦！")
         }
         else {
             $.post("${base}/platform/xm/person/addcheck/" + xmid, {}, function (data) {

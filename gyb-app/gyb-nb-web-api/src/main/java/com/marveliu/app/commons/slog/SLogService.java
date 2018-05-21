@@ -1,8 +1,9 @@
 package com.marveliu.app.commons.slog;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.marveliu.framework.model.sys.Sys_log;
 import com.marveliu.framework.services.sys.SysLogService;
-import jdk.nashorn.internal.ir.annotations.Reference;
+
 import org.nutz.el.El;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;

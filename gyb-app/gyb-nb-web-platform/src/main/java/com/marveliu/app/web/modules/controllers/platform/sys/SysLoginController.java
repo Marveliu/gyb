@@ -243,6 +243,7 @@ public class SysLoginController {
             w = 200;
             h = 60;
         }
+        // redis 进行缓存操作
         String text = R.captchaNumber(4);
         redisService.set("platformCaptcha:"+session.getId(), text);
         redisService.expire("platformCaptcha:"+session.getId(), 300);

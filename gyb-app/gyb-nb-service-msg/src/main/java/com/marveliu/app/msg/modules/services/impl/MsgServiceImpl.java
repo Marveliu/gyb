@@ -36,7 +36,6 @@ public class MsgServiceImpl implements MsgService {
 
     @Override
     public boolean send(Sys_msg sysMsg) {
-
         //todo: 默认发送邮件
         // emailService.sendHtmlTemplateByTemplateName(sysMsg.getRevid(),);
         return false;

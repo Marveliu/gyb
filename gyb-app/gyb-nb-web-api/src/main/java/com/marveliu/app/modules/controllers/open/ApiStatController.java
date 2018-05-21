@@ -65,7 +65,6 @@ public class ApiStatController {
 
     @At("/xminf")
     @Ok("json")
-    @POST
     @Filters(@By(type=CrossOriginFilter.class))
     public Object getXmStat(@Param("gyid") String gyid) {
         Cnd cnd = Cnd.NEW();

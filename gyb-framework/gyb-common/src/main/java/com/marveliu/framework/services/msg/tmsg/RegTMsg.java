@@ -25,7 +25,7 @@ import com.marveliu.framework.services.msg.TMsg;
 public class RegTMsg extends BaseTMsg implements TMsg {
 
     private final static String  TEMPLATE_PATH = "reg.html";
-    private final static String  SUBJECT = "雇员注册";
+    private final static String  SUBJECT = "用户注册";
 
     private String username;
 

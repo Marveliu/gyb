@@ -121,18 +121,15 @@ public class GyPersonController {
 
         Sys_user user = shiroUtil.getCurrentUser(req);
         req.setAttribute("obj", user);
-
         // 检查是否已经注册
-        if (shiroUtil.hasAnyRoles("gy1")) return "beetl:/front/gy/reginfo.html";
+        if (shiroUtil.hasAnyRoles("gy1")) return "beetl:/platform/gy/person/reginfo.html";
         req.setAttribute("role", user.getRoles().get(0));
         gy_inf gy = gyInfService.getGyByUserId(user.getId());
         gy_auth auth = gyAuthService.getGyAuthByGyid(gy.getId());
         req.getSession().setAttribute("gyid", gy.getId());
-
         req.setAttribute("gyauth", auth);
         req.setAttribute("isAuth", gyAuthService.isAuth(gy.getId()));
         req.setAttribute("gy", gy);
-
         return null;
     }
 
@@ -162,7 +159,7 @@ public class GyPersonController {
             }
             return Result.success("system.success");
         } catch (Exception e) {
-            log.debug(e);
+            log.error("用户信息注册失败",e);
         }
         return Result.success("system.error");
     }

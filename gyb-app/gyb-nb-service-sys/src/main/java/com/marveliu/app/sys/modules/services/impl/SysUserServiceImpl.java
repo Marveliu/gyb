@@ -1,13 +1,20 @@
 package com.marveliu.app.sys.modules.services.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.marveliu.framework.model.sys.Sys_menu;
+import com.marveliu.framework.model.sys.Sys_msg;
 import com.marveliu.framework.model.sys.Sys_role;
 import com.marveliu.framework.model.sys.Sys_user;
 import com.marveliu.framework.services.base.BaseServiceImpl;
+import com.marveliu.framework.services.msg.TMsg;
+import com.marveliu.framework.services.msg.tmsg.RegTMsg;
 import com.marveliu.framework.services.sys.SysMenuService;
+import com.marveliu.framework.services.sys.SysMsgService;
 import com.marveliu.framework.services.sys.SysRoleService;
 import com.marveliu.framework.services.sys.SysUserService;
+import com.marveliu.framework.util.ConfigUtil;
+import com.marveliu.framework.util.Toolkit;
 import org.nutz.aop.interceptor.ioc.TransAop;
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
@@ -18,8 +25,14 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.aop.Aop;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.json.Json;
+import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.lang.random.R;
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
+import org.nutz.trans.Atom;
+import org.nutz.trans.Trans;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,8 +43,11 @@ import java.util.Map;
  * Created by wizzer on 2016/12/22.
  */
 @IocBean(args = {"refer:dao"})
-@Service(interfaceClass=SysUserService.class)
+@Service(interfaceClass = SysUserService.class)
 public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements SysUserService {
+
+    private final static Log log = Logs.get();
+
     public SysUserServiceImpl(Dao dao) {
         super(dao);
     }
@@ -42,7 +58,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
     @Inject
     private SysRoleService sysRoleService;
 
-
+    @Inject
+    @Reference
+    private SysMsgService sysMsgService;
 
 
     /**
@@ -63,6 +81,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
 
     /**
      * 获取用户菜单
+     *
      * @param user
      */
     public Sys_user fillMenu(Sys_user user) {
@@ -98,8 +117,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
         Sql sql = Sqls.create("select distinct a.* from sys_menu a,sys_role_menu b where a.id=b.menuId and " +
                 " b.roleId in(select c.roleId from sys_user_role c,sys_role d where c.roleId=d.id and c.userId=@userId and d.disabled=@f) and a.disabled=@f and a.isShow=@t and a.type='menu' order by a.location ASC,a.path asc");
         sql.params().set("userId", userId);
-        sql.params().set("f",false);
-        sql.params().set("t",true);
+        sql.params().set("f", false);
+        sql.params().set("t", true);
         Entity<Sys_menu> entity = dao().getEntity(Sys_menu.class);
         sql.setEntity(entity);
         sql.setCallback(Sqls.callback.entities());
@@ -117,7 +136,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
         Sql sql = Sqls.create("select distinct a.* from sys_menu a,sys_role_menu b where a.id=b.menuId and " +
                 " b.roleId in(select c.roleId from sys_user_role c,sys_role d where c.roleId=d.id and c.userId=@userId and d.disabled=@f) and a.disabled=@f order by a.location ASC,a.path asc");
         sql.params().set("userId", userId);
-        sql.params().set("f",false);
+        sql.params().set("f", false);
         Entity<Sys_menu> entity = dao().getEntity(Sys_menu.class);
         sql.setEntity(entity);
         sql.setCallback(Sqls.callback.entities());
@@ -135,7 +154,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
         Sql sql = Sqls.create("select distinct a.* from sys_menu a,sys_role_menu b where a.id=b.menuId  and " +
                 " b.roleId in(select c.roleId from sys_user_role c,sys_role d where c.roleId=d.id and c.userId=@userId and d.disabled=@f) and a.disabled=@f and a.type='data' order by a.location ASC,a.path asc");
         sql.params().set("userId", userId);
-        sql.params().set("f",false);
+        sql.params().set("f", false);
         Entity<Sys_menu> entity = dao().getEntity(Sys_menu.class);
         sql.setEntity(entity);
         sql.setCallback(Sqls.callback.entities());
@@ -168,23 +187,40 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
     }
 
 
-    // public String resetPassword(String userId){
-    //     Sys_user user = dao().fetch(Sys_user.class,Cnd.where("id","=",userId));
-    //     RandomNumberGenerator rng = new SecureRandomNumberGenerator();
-    //     String salt = rng.nextBytes().toBase64();
-    //     String pwd = R.captchaNumber(6);
-    //     String hashedPasswordBase64 = new Sha256Hash(pwd, salt, 1024).toBase64();
-    //     dao().update(Sys_user.class,Chain.make("salt", salt).add("password", hashedPasswordBase64), Cnd.where("id", "=", userId));
-    //     emailService.send(user.getEmail(),"临时密码","您的雇佣帮临时密码为:"+pwd);
-    //     return pwd;
-    // }
-    //
-    // public boolean setEmail(String userid,String email){
-    //     Chain chain = Chain.make("email",email);
-    //     Cnd cnd = Cnd.where("id","=",userid);
-    //     if(this.dao().update(Sys_user.class,chain,cnd)!=0){
-    //         return true;
-    //     }
-    //     return  false;
-    // }
+    /**
+     * 用户注册
+     *
+     * @param user
+     * @return
+     */
+    @Override
+    public Sys_user regUser(Sys_user user) {
+        try {
+            Sys_user sysUser = this.insert(user);
+            this.dao().insert("sys_user_role",
+                    Chain.make("userId", user.getId()).add("roleId", sysRoleService.getRoleFromCode("gy1").getId()));
+            Lang.runInAnThread(new Runnable() {
+                @Override
+                public void run() {
+                    Sys_msg sysMsg = new Sys_msg();
+                    String token = String.format("%s,%s", sysUser.getEmail(), System.currentTimeMillis());
+                    token = Toolkit._3DES_encode(sysUser.getSalt().getBytes(), token.getBytes());
+                    String url = ConfigUtil.AppApiDomain + "/open/api/sys/email/checkActiveMail?token=" + token + "&userId=" + sysUser.getId();
+                    System.out.println("url:" + url);
+                    TMsg tMsg = new RegTMsg(sysUser.getUsername(), url);
+                    sysMsg.setRevid(sysUser.getId());
+                    sysMsg.setRevaccount(sysUser.getEmail());
+                    sysMsg.setMsg(Json.toJson(tMsg));
+                    sysMsg.setType(ConfigUtil.SYS_MSG_TYPE_EMAIL);
+                    sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_GY);
+                    sysMsg.setTmsgclass(tMsg.getTMsgClass());
+                    sysMsgService.pushMsg(sysMsg);
+                }
+            });
+            return sysUser;
+        } catch (Exception e) {
+            log.error("用户注册失败", e);
+        }
+        return null;
+    }
 }

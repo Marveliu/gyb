@@ -140,6 +140,9 @@ public class GyFacadeServiceImpl implements GyFacadeService {
             String roleid =  sysRoleService.getRoleFromCode(rolecode).getId();
             String userid = gyInfService.getUidByGyid(gyid);
             return sysRoleService.setUserRoleByRoleid(userid,roleid);
+
+
+
         }catch (Exception e){
             log.error("修改雇员角色出错:",e);
         }

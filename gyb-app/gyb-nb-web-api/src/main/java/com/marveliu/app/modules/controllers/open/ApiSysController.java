@@ -24,10 +24,13 @@ import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.Param;
 
 /**
  * @author Marveliu
@@ -44,21 +47,23 @@ public class ApiSysController {
     @Reference
     private SysUserService sysUserService;
 
-
     /**
      * 验证邮箱
      * @param token
      * @param userId
      * @return
      */
+    @At("/email/checkActiveMail")
     @SLog(type = "sys",tag = "邮箱验证",param = true,result = true)
-    public Object checkActiveMail(String token,String userId) {
-
+    @Ok("json")
+    public Object checkActiveMail(
+           @Param("token") String token,
+           @Param("userId") String userId) {
         if (Strings.isBlank(token)) return Result.error("请不要直接访问这个链接!!!");
         if (token.length() < 10) return Result.error("非法token");
         try {
             token = Toolkit._3DES_decode(sysUserService.fetch(userId).getSalt().getBytes(), Toolkit.hexstr2bytearray(token));
-            if (token == null) return Result.error("非法token");
+            if (Lang.isEmpty(token)) return Result.error("非法token");
             String[] tmp = token.split(",", 2);
             if (tmp.length != 2 || tmp[0].length() == 0 || tmp[1].length() == 0) return Result.error("非法token");
             long time = Long.parseLong(tmp[1]);
@@ -70,8 +75,8 @@ public class ApiSysController {
             return Result.error("验证失败!!请重新验证!!");
         } catch (Throwable e) {
             log.debug("检查token时出错", e);
-            return Result.error("非法token");
         }
+        return Result.error("非法token");
     }
 
 }
