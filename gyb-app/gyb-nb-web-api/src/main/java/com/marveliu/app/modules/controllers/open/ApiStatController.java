@@ -71,12 +71,11 @@ public class ApiStatController {
         if(!Strings.isEmpty(gyid)){
             cnd.where("gyid","=",gyid);
         }
-        String[] xcontent = {"apply","doing","final","finish"};
         Map<String,Integer> data = new HashMap<>();
         // data.put("申请中",xmApplyService.count(cnd));
-        data.put("进行中",xmInfService.countGyByStatus(ConfigUtil.XM_INF_DOING,gyid));
-        data.put("已完成",xmInfService.countGyByStatus(ConfigUtil.XM_INF_DONE,gyid));
-        data.put("待结算",xmInfService.countGyByStatus(ConfigUtil.XM_INF_CHECKING,gyid));
+        data.put("进行中",xmInfService.count(Cnd.where("gyid","=",gyid).and("status","=",ConfigUtil.XM_INF_DOING)));
+        data.put("待结算",xmInfService.count(Cnd.where("gyid","=",gyid).and("status","=",ConfigUtil.XM_INF_CHECKING)));
+        data.put("已完成",xmInfService.count(Cnd.where("gyid","=",gyid).and("status",">",ConfigUtil.XM_INF_CHECKING)));
         return Result.success().addData(data);
     }
 }

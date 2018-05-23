@@ -15,7 +15,7 @@ package com.marveliu.app.sys.commons.base;
  * limitations under the License.
  */
 
-import com.marveliu.framework.services.sys.SysTaskService;
+
 import com.marveliu.framework.util.ConfigUtil;
 import org.nutz.ioc.aop.Aop;
 import org.nutz.ioc.loader.annotation.IocBean;

@@ -130,11 +130,18 @@ layout("/layouts/platform.html"){
             "columnDefs": [
                 {
                     "render": function (data, type, row) {
-                        return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
+                        if(row.status == 2){
+                            return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
                                 ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
                                 '<li><a href="${base}/platform/xm/person/xminfdetail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">查 看</a></li>' +
                                 '<li><a href="${base}/platform/xm/person/xmcompleteddetail/' + row.id + '">结 算</a></li>' +
                                 '</ul></div>';
+                        }else {
+                            return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
+                                ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
+                                '<li><a href="${base}/platform/xm/person/xminfdetail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">查 看</a></li>' +
+                                '</ul></div>';
+                        }
                     },
                     "targets": 5
                 }

@@ -1,6 +1,5 @@
 package com.marveliu.app.sys.modules.services.impl;
 
-
 import com.alibaba.dubbo.config.annotation.Service;
 import com.marveliu.framework.model.sys.Sys_msg;
 import com.marveliu.framework.services.base.BaseServiceImpl;
@@ -15,7 +14,6 @@ import org.nutz.log.Logs;
 import java.io.IOException;
 
 import static org.nutz.integration.rabbitmq.aop.RabbitmqMethodInterceptor.channel;
-
 
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass=SysMsgService.class)

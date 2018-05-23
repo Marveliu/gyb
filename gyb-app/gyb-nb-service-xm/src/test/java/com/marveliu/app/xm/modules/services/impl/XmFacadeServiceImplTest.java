@@ -34,16 +34,12 @@ public class XmFacadeServiceImplTest {
 
     @Inject
     private XmFacadeService xmFacadeService;
-
     @Inject
     private XmApplyService xmApplyService;
-
     @Inject
     private XmBillService xmBillService;
-
     @Inject
     private XmInfService xmInfService;
-
     @Inject
     private XmFeedbackService xmFeedbackService;
 
@@ -52,9 +48,7 @@ public class XmFacadeServiceImplTest {
     private final static String GY_ID = "gy18011";                                    //liushangnan
     private final static String UID = "405a28c9389d4a8581a29c283dc9f5b9";             //liushangnan
     private final static String NOTE = "雇员填写-流程测试";
-
     private volatile static int errorcount = 0;
-
     private static String xmapplyid = new String();
 
 
@@ -80,6 +74,7 @@ public class XmFacadeServiceImplTest {
         initXmFinal();
     }
 
+
     // 受理项目申请
     public void acceptXmapply() {
         xmApplyService.addXmApply(XMTASK_ID, GY_ID, false);
@@ -91,11 +86,9 @@ public class XmFacadeServiceImplTest {
 
 
     public void feedback() {
-
         Ioc ioc = AppContext.getDefault().getIoc();
         Dao dao = ioc.get(Dao.class);
         dao.execute(Sqls.create("delete from xm_feedback where xminfid = @xminfid").setParam("xminfid",XMINF_ID));
-
         // 第一次反馈
         xm_feedback xmFeedback = new xm_feedback();
         xmFeedback.setGyid(GY_ID);
@@ -107,7 +100,6 @@ public class XmFacadeServiceImplTest {
         assertEquals(true,xmFeedbackService.commitXmfeedback(xmFeedback.getId()));
         assertEquals(true,xmFeedbackService.checkXmfeedback(xmFeedback.getId(), ((int) (Times.getTS())),"测试反馈",UID));
         assertEquals(true,xmFeedbackService.confirmXmfeedback(xmFeedback.getId(),false));
-
         // 第二次反馈
         xm_feedback xmFeedback2 = new xm_feedback();
         xmFeedback2.setGyid(GY_ID);
@@ -118,8 +110,6 @@ public class XmFacadeServiceImplTest {
         assertEquals(true,xmFeedbackService.commitXmfeedback(xmFeedback2.getId()));
         assertEquals(true,xmFeedbackService.checkXmfeedback(xmFeedback2.getId(), ((int) (Times.getTS())),"测试反馈",UID));
         assertEquals(true,xmFeedbackService.confirmXmfeedback(xmFeedback2.getId(),true));
-
-
     }
 
     // 项目完结
@@ -127,13 +117,10 @@ public class XmFacadeServiceImplTest {
         assertEquals(true, xmFacadeService.initXmFinal(XMINF_ID, 100, 10000, "nice eva", "nice bill", UID));
     }
 
-    // 项目完
-
+    // 启动器
     public static NbApp createNbApp() {
         NbApp nb = new NbApp().setMainClass(DubboRpcXmMainLauncher.class).setPrintProcDoc(false);
         nb.getAppContext().setMainPackage("com.marveliu");
         return nb;
     }
-
-
 }

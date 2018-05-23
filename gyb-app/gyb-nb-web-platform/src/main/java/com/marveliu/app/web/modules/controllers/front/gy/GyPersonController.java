@@ -170,9 +170,7 @@ public class GyPersonController {
     @RequiresPermissions("gy.person")
     public void infedit(HttpServletRequest req) {
         Cnd cnd = Cnd.NEW();
-        gy_inf gy = gyInfService.getGyByUserId(StringUtil.getPlatformUid());
-        req.setAttribute("gy", gy);
-        // req.setAttribute("email",gyInfService.getUserByGyid(gyid).getEmail());
+        req.setAttribute("obj", shiroUtil.getSysuser());
     }
 
     //  提交个人信息修改

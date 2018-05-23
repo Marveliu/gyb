@@ -340,6 +340,7 @@ public class XmPersonController {
             @Param("::order") List<DataTableOrder> order,
             @Param("::columns") List<DataTableColumn> columns) {
         Cnd cnd = Cnd.NEW();
+        // cnd.and("status",">=",ConfigUtil.XM_INF_CHECKING);
         String gyid =  shiroUtil.getCurrentGyid();
         cnd.and("gyid", "=", gyid);
 
@@ -351,7 +352,7 @@ public class XmPersonController {
     }
 
     @At("/xmcompleteddetail/?")
-    @Ok("beetl:/platform/xm/person/xmcompleteddetail.html")
+    @Ok("beetl:/platform/xm/person/xmcompletedetail.html")
     @RequiresPermissions("platform.xm.person")
     public void xmcompleteddetail(String id, HttpServletRequest req) {
         if (!Strings.isBlank(id)) {

@@ -12,40 +12,49 @@
                     <table class="table table-bordered table-striped mg-t datatable">
                         <tbody>
                         <tr>
-                            <td>项目编号</td><td>${obj.id}</td>
+                            <td>项目编号</td>
+                            <td>${obj.id}</td>
                         </tr>
                         <tr>
-                            <td>项目名称</td><td>${obj.taskname}</td>
+                            <td>项目名称</td>
+                            <td>${obj.taskname}</td>
                         </tr>
 
                         <tr>
-                            <td>管理员</td><td>${obj.author}</td>
+                            <td>管理员</td>
+                            <td>${obj.author}</td>
                         </tr>
 
                         <tr>
-                            <td>${msg['xm.feedback.column.gyid']}</td><td>${obj.gyid}</td>
+                            <td>${msg['xm.feedback.column.gyid']}</td>
+                            <td>${obj.gyid}</td>
                         </tr>
 
                         <tr>
-                            <td>${msg['xm.feedback.column.at']}</td><td>${@date.getDate(obj.publishAt)}</td>
+                            <td>${msg['xm.feedback.column.at']}</td>
+                            <td>${@date.getDate(obj.publishAt)}</td>
                         </tr>
 
                         <tr>
-                            <td>${msg['xm.feedback.column.fileurl']}</td><td><a href="${obj.fileurl}" class="btn btn-default btn-sm mr5">附件下载</a></td>
+                            <td>${msg['xm.feedback.column.fileurl']}</td>
+                            <td><a href="${obj.fileurl}" class="btn btn-default btn-sm mr5">附件下载</a></td>
                         </tr>
 
                         <tr>
-                            <td>项目简介</td><td>${obj.taskinfo}</td>
+                            <td>项目简介</td>
+                            <td>${obj.taskinfo}</td>
                         </tr>
 
                         <tr>
-                            <td>项目内容</td><td>${obj.taskcontent}</td>
+                            <td>项目内容</td>
+                            <td>${obj.taskcontent}</td>
                         </tr>
 
                         <tr>
-                            <td>项目状态</td><td>${@status.bind("xminfstatus"+obj.status)}</td>
+                            <td>项目状态</td>
+                            <td>${@status.bind("xminfstatus"+obj.status)}</td>
                         </tr>
-                                                    </tbody>
+                        </tbody>
                     </table>
                 </div>
             </section>

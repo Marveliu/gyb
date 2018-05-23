@@ -69,7 +69,7 @@ public class ShiroUtil {
     public  Sys_user getCurrentUser(HttpServletRequest req){
         Subject subject = SecurityUtils.getSubject();
         AuthenticationToken token  = (AuthenticationToken) req.getSession().getAttribute("sysUserToken");
-        subject.logout();
+        // subject.logout();
         subject.login(token);
         Sys_user user = (Sys_user) subject.getPrincipal();
         return  user;

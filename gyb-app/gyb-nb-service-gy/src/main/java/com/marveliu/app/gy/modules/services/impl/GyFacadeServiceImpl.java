@@ -98,6 +98,12 @@ public class GyFacadeServiceImpl implements GyFacadeService {
     }
 
 
+    /**
+     * 信息修改
+     * @param gyInf
+     * @param gyAuth
+     * @return
+     */
     public boolean editInfo(gy_inf gyInf, gy_auth gyAuth) {
         try {
             gyInfService.updateIgnoreNull(gyInf);
