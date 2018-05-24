@@ -5,23 +5,19 @@
                 <header class="panel-heading clearfix brtl brtr">
                     <div class="overflow-hidden">
                         <a href="javascript:;" class="h4 show no-m pt5">项目详情</a>
-                        <small>${obj.id}</small>
+                        <small>项目编号:${obj.id}</small>
                     </div>
                 </header>
                 <div class="list-group">
                     <table class="table table-bordered table-striped mg-t datatable">
                         <tbody>
                         <tr>
-                            <td>项目编号</td>
-                            <td>${obj.id}</td>
-                        </tr>
-                        <tr>
                             <td>项目名称</td>
                             <td>${obj.taskname}</td>
                         </tr>
 
                         <tr>
-                            <td>管理员</td>
+                            <td>项目经理</td>
                             <td>${obj.author}</td>
                         </tr>
 
@@ -37,7 +33,12 @@
 
                         <tr>
                             <td>${msg['xm.feedback.column.fileurl']}</td>
-                            <td><a href="${obj.fileurl}" class="btn btn-default btn-sm mr5">附件下载</a></td>
+                            <%if(obj.fileurl == ""){%>
+                            <td><p  class="btn btn-default btn-sm mr5">无附件</p></td>
+                            <% }else{%>
+                            <td><a href="${obj.fileurl}" target="_blank" class="btn btn-default btn-sm mr5">附件下载</a></td>
+                            <%}%>
+
                         </tr>
 
                         <tr>
@@ -49,11 +50,33 @@
                             <td>项目内容</td>
                             <td>${obj.taskcontent}</td>
                         </tr>
+                        <tr>
+                            <td>项目酬金</td>
+                            <td>${obj.award}</td>
+                        </tr>
+                        <tr>
+                            <td>项目结算金额</td>
+                            <td>${obj.paysum}</td>
+                        </tr>
+                        <tr>
+                            <td>项目账单说明</td>
+                            <td>${obj.xmbillnote}</td>
+                        </tr>
+                        <tr>
+                            <td>任务评分</td>
+                            <td>${obj.xmevagrade}</td>
+                        </tr>
+                        <tr>
+                            <td>任务评分说明</td>
+                            <td>${obj.xmevanote}</td>
+                        </tr>
 
                         <tr>
                             <td>项目状态</td>
-                            <td>${@status.bind("xminfstatus"+obj.status)}</td>
+                            <td>${obj.xminfstatus}</td>
                         </tr>
+
+
                         </tbody>
                     </table>
                 </div>

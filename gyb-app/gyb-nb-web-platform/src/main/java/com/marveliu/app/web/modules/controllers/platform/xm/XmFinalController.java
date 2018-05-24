@@ -127,7 +127,7 @@ public class XmFinalController {
     @At("/detail/?")
     @Ok("beetl:/platform/xm/final/detail.html")
     @RequiresPermissions("platform.xm.final")
-    @SLog(type = "xm", tag = "", msg = "")
+    // @SLog(type = "xm", tag = "", msg = "")
     public void detail(String id, HttpServletRequest req) {
         if (!Strings.isBlank(id)) {
             req.setAttribute("obj", xmInfService.fetch(Cnd.where("id","=",id)));

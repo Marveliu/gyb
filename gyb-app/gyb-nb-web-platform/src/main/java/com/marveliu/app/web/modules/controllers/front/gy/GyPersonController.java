@@ -36,6 +36,7 @@ import com.marveliu.framework.services.xm.XmBillService;
 import com.marveliu.framework.services.xm.XmFeedbackService;
 import com.marveliu.framework.services.xm.XmInfService;
 import com.marveliu.framework.util.ConfigUtil;
+import com.marveliu.framework.util.Toolkit;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
@@ -104,6 +105,9 @@ public class GyPersonController {
     @Reference
     private XmFeedbackService xmFeedbackService;
 
+    @Inject
+    @Reference
+    private SysUserService sysUserService;
 
     @Inject
     private ShiroUtil shiroUtil;
@@ -118,7 +122,6 @@ public class GyPersonController {
     @Ok("re:beetl:/platform/gy/person/index.html")
     @RequiresPermissions("gy.person")
     public String index(HttpServletRequest req) {
-
         Sys_user user = shiroUtil.getCurrentUser(req);
         req.setAttribute("obj", user);
         // 检查是否已经注册
@@ -181,10 +184,12 @@ public class GyPersonController {
     public Object infeditDo(
             @Param("..") Sys_user sysUser,
             HttpServletRequest req) {
-
         try {
             String userid = StringUtil.getPlatformUid();
             sysUser.setId(userid);
+            if(sysUser.getEmail().equals(shiroUtil.getSysuser().getEmail())){
+                sysUser.setEmailChecked(shiroUtil.getSysuser().isEmailChecked());
+            }
             sysuserService.updateIgnoreNull(sysUser);
             return Result.success("system.success");
         } catch (Exception e) {
@@ -273,7 +278,7 @@ public class GyPersonController {
     @At("/payaddDo")
     @Ok("json")
     @RequiresPermissions("gy.person")
-    @SLog(type = "gy", tag = "添加收款方式", msg = "${args[0].id}")
+    @SLog(type = "gy", tag = "添加收款方式", msg = "${args[0]}")
     public Object payaddDo(@Param("..") gy_pay gyPay, HttpServletRequest req) {
         try {
             gyPay.setGyid(gyInfService.getGyByUserId(StringUtil.getPlatformUid()).getId());
@@ -344,6 +349,29 @@ public class GyPersonController {
     @RequiresPermissions("gy.person")
     public void payselect() {
     }
+
+
+    /**
+     * 验证邮箱
+     * @return
+     */
+    @At("/email/sendActiveMail")
+    @SLog(type = "sys",tag = "发送邮箱激活邮件",param = true,result = true)
+    @Ok("json")
+    @RequiresPermissions("gy.person")
+    public Object sendActiveMail() {
+        Sys_user sysUser = shiroUtil.getSysuser();
+        if (sysUser.isEmailChecked()) return Result.error("邮箱已经验证!");
+        try {
+            if(sysUserService.sendActiveEmail(sysUser)){
+                return Result.success("已发送邮箱验证邮件!");
+            }
+        } catch (Throwable e) {
+            log.error("发送邮箱激活邮件失败", e);
+        }
+        return Result.error("发送邮箱激活邮件失败");
+    }
+
 
 
 }

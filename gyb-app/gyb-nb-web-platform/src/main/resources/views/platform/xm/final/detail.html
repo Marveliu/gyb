@@ -33,7 +33,12 @@
 
                         <tr>
                             <td>${msg['xm.feedback.column.fileurl']}</td>
-                            <td><a href="${obj.fileurl}" class="btn btn-default btn-sm mr5">附件下载</a></td>
+                            <%if(obj.fileurl == ""){%>
+                            <td><p  class="btn btn-default btn-sm mr5">无附件</p></td>
+                            <% }else{%>
+                            <td><a href="${obj.fileurl}" target="_blank" class="btn btn-default btn-sm mr5">附件下载</a></td>
+                            <%}%>
+
                         </tr>
 
                         <tr>

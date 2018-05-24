@@ -25,7 +25,6 @@ public class ConfigUtil {
     public static final int GY_AUTH_DECLINE = 3;
     public static final int GY_AUTH_PASS = 2;
     public static final int GY_AUTH_CHECKING = 1;
-    public static final int GY_AUTH_WAIT = 0;
 
 
     public final static int XM_APPLY_INIT = 0;

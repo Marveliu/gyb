@@ -89,6 +89,7 @@ public class GyFacadeServiceImpl implements GyFacadeService {
             // 修改角色
             this.updateGyRoleByGyid(gy_inf.getId(),"gy2");
             gyAuth.setGyid(gy_inf.getId());
+            gyAuth.setStatus(ConfigUtil.GY_AUTH_CHECKING);
             gyAuthService.insertOrUpdate(gyAuth);
             return true;
         }catch (Exception e){
@@ -109,6 +110,7 @@ public class GyFacadeServiceImpl implements GyFacadeService {
             gyInfService.updateIgnoreNull(gyInf);
             this.updateGyRoleByGyid(gyInf.getId(),"gy2");
             gyAuth.setGyid(gyInf.getId());
+            gyAuth.setStatus(ConfigUtil.GY_AUTH_CHECKING);
             gyAuthService.updateIgnoreNull(gyAuth);
             return true;
         }catch (Exception e){

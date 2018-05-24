@@ -23,9 +23,14 @@ package com.marveliu.app.web.commons.utils;
 import com.marveliu.app.web.commons.base.Globals;
 import com.marveliu.framework.model.library.lib_skill;
 import com.marveliu.framework.services.library.LibSkillService;
+import com.marveliu.framework.services.sys.SysDictService;
 import jdk.nashorn.internal.ir.annotations.Reference;
+import org.nutz.boot.AppContext;
+import org.nutz.boot.NbApp;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Lang;
+import org.nutz.lang.Strings;
 
 /**
  * 自用状态码，封装在数据字典
@@ -35,45 +40,54 @@ import org.nutz.ioc.loader.annotation.IocBean;
  */
 
 @IocBean
-public class StatusCodeUtil
-{
+public class StatusCodeUtil {
+
 
     @Inject
     @Reference
     private LibSkillService libSkillService;
 
-    public static String bind(String code){
-        return  Globals.MyDict.get(code);
+    @Inject
+    @Reference
+    private SysDictService sysDictService;
+
+    public String bind(String code) {
+        String result = Globals.MyDict.get(code);
+        if (Lang.isEmpty(result)) {
+           result =  sysDictService.getNameByCode(code);
+        }
+        Strings.sNull(result,"暂无数据");
+        return  result;
     }
 
 
-    public static String test(){
-        return  "fuckyou";
+    public  String test() {
+        return "fuckyou";
     }
 
 
-    public String GyAuthStatusMean(int status){
+    public String GyAuthStatusMean(int status) {
         String code = "gyau" + status;
-        return  Globals.MyDict.get(code);
+        return Globals.MyDict.get(code);
     }
 
-    public String SexStatusMean(int status){
+    public String SexStatusMean(int status) {
         String code = "sex" + status;
-        return  Globals.MyDict.get(code);
+        return Globals.MyDict.get(code);
     }
 
-    public String StulevelStatusMean(int status){
+    public String StulevelStatusMean(int status) {
         String code = "stulevel" + status;
-        return  Globals.MyDict.get(code);
+        return Globals.MyDict.get(code);
     }
 
 
-    public String TwoStatusMean(int status){
-        String code = "twostatu"+ status;
-        return  Globals.MyDict.get(code);
+    public String TwoStatusMean(int status) {
+        String code = "twostatu" + status;
+        return Globals.MyDict.get(code);
     }
 
-    public String getSkillNameById(String id){
+    public String getSkillNameById(String id) {
         lib_skill skill = libSkillService.fetch(id);
         return skill.getName();
     }

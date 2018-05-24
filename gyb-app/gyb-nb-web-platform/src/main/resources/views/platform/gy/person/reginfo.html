@@ -327,10 +327,15 @@ layout("/layouts/platform.html"){
     }
 
 
+    function clearFile(temp) {
+        $("#" + temp + "img").html("");
+        $("#" + temp + "queue").html("");
+        $("#" + temp + "picurl").val("");
+    }
+
     $(document).ready(function () {
         initSysDictTreeView("85ea1fe85f5449cd86cbae0c1354f523");
         myForm.init();
-
         // 年份选择器
         $('.form_datetime').datetimepicker({
             language: 'zh-CN',
@@ -484,33 +489,22 @@ layout("/layouts/platform.html"){
                 clearFile("stuCardB");
             }
         });
-
-        function clearFile(temp) {
-            $("#" + temp + "img").html("");
-            $("#" + temp + "queue").html("");
-            $("#" + temp + "picurl").val("");
-        }
-
-        //        提交注册信息
+        // 注册
         $('#addForm').ajaxForm({
             dataType: 'json',
             beforeSubmit: function (arr, form, options) {
                 form.find("button:submit").button("loading");
-
             },
             success: function (data, statusText, xhr, form) {
                 if (data.code == 0) {
                     Toast.success(data.msg);
-                    window.location.href = "/platform/gy/person";
-                    //登入系统
+                    setTimeout(window.location.href = "/platform/gy/person",2000);
                 } else {
                     Toast.error(data.msg);
                 }
                 form.find("button:submit").button("reset");
             }
         });
-
-
     });
 
 

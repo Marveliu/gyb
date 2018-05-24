@@ -68,9 +68,9 @@ public class xm_bill extends BaseModel implements Serializable {
     @ColDefine(type = ColType.INT)
     private Long at;
 
-    //参照
-    @One(field = "gypayid")
-    private gy_pay gypay;
+    // //参照
+    // @One(field = "gypayid")
+    // private gy_pay gypay;
 
     //参照
     @One(field = "realgypayid")
@@ -194,11 +194,11 @@ public class xm_bill extends BaseModel implements Serializable {
     }
 
     public gy_pay getGypay() {
-        return gypay;
+        return realgypay;
     }
 
     public void setGypay(gy_pay gypay) {
-        this.gypay = gypay;
+        this.realgypay = gypay;
     }
 
     public Float getAward() {

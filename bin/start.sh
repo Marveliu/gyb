@@ -2,11 +2,11 @@
 # 端口号
 #PORTS=()
 # 系统模块
-MODULES=("gyb-nb-service-sys" "gyb-nb-service-library" "gyb-nb-service-xm" "gyb-nb-service-gy" "gyb-nb-web-api"  "gyb-nb-task" "gyb-nb-service-cms" "gyb-nb-service-msg" "gyb-nb-web-platform")
+MODULES=("gyb-nb-service-sys" "gyb-nb-service-library" "gyb-nb-service-xm" "gyb-nb-service-gy"  "gyb-nb-task"  "gyb-nb-service-msg" "gyb-nb-web-platform")
 # 系统模块名称
-MODULE_NAMES=("gyb-nb-service-sys" "gyb-nb-service-library" "gyb-nb-service-xm" "gyb-nb-service-gy" "gyb-nb-web-api"  "gyb-nb-task" "gyb-nb-service-cms" "gyb-nb-service-msg" "gyb-nb-web-platform")
+MODULE_NAMES=("基础系统服务" "任务技能库服务" "阶段性任务管理服务" "雇员关系管理服务"  "任务调度服务" "消息队列消费者服务" "客户端界面服务")
 # jar包数组
-JARS=(gyb-nb-service-sys.jar gyb-nb-service-library.jar gyb-nb-service-xm.jar gyb-nb-service-gy.jar gyb-nb-web-api.jar  gyb-nb-task.jar gyb-nb-service-cms.jar gyb-nb-service-msg.jar gyb-nb-web-platform.jar)
+JARS=(gyb-nb-service-sys.jar gyb-nb-service-library.jar gyb-nb-service-xm.jar gyb-nb-service-gy.jar   gyb-nb-task.jar  gyb-nb-service-msg.jar gyb-nb-web-platform.jar)
 # jar包路径
 JAR_PATH='jarData'
 # 日志路径

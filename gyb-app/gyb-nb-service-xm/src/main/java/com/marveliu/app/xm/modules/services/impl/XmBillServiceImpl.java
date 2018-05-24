@@ -42,6 +42,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.lang.Lang;
+import org.nutz.lang.Strings;
 import org.nutz.lang.Times;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
@@ -66,11 +67,9 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
     @Reference
     private SysRoleService  sysRoleService;
 
-
     @Inject
     @Reference
     private SysMsgService sysMsgService;
-
 
 
     public XmBillServiceImpl(Dao dao) {
@@ -169,16 +168,17 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
                 Chain chain = Chain.make("realgypayid",xmBill.getGypayid()).add("status",ConfigUtil.XM_BILL_PAYED).add("payby",sysuserinfid).add("opAt",Times.getTS());
                 if(this.update(chain,cnd)!=0){
                     // 财务结算给雇员
-                    Thread t = new Thread(new Runnable(){
-                        public void run(){
+                    Lang.runInAnThread(new Runnable() {
+                        @Override
+                        public void run() {
                             gy_inf gyInf =  dao().fetch(gy_inf.class, xmBill.getXmInf().getGyid());
                             TMsg tMsg = new XmbillTMsg(
                                     gyInf.getRealname(),
                                     xmbillid,
                                     xmBill.getXmInf().getId(),
                                     String.valueOf(xmBill.getPaysum()),
-                                    xmBill.getGypay().getPayname(),
-                                    xmBill.getGypay().getTypename()
+                                    Strings.sNull(xmBill.getGypay().getPayname(),"暂无数据"),
+                                    Strings.sNull(xmBill.getGypay().getTypename(),"暂无数据")
                             );
                             Sys_msg sysMsg = new Sys_msg();
                             sysMsg.setRevid(gyInf.getUserid());
@@ -188,9 +188,8 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
                             sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_XM);
                             sysMsg.setTmsgclass(tMsg.getTMsgClass());
                             sysMsgService.pushMsg(sysMsg);
-                        }});
-                    t.start();
-                    return true;
+                        }
+                    });
                 }
             }
         }catch (Exception e){

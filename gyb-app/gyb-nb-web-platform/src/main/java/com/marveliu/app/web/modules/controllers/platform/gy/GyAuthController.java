@@ -94,7 +94,7 @@ public class GyAuthController{
     @At("/detail/?")
     @Ok("beetl:/platform/gy/auth/detail.html")
     @RequiresPermissions("platform.gy.auth")
-    @SLog(tag = "查看具体雇员信息",msg = "${args[0]}")
+    // @SLog(tag = "查看具体雇员信息",msg = "${args[0]}")
     public void detail(String gyid, HttpServletRequest req) {
         Cnd cnd = Cnd.NEW();
         if (!Strings.isBlank(gyid)) {
@@ -115,6 +115,7 @@ public class GyAuthController{
             @Param("flag") boolean flag,
             @Param("note") String note,
             HttpServletRequest req) {
+        if(gyAuthService.isAuth(gyid)) return Result.error("已经审核通过无需再审!");
         try {
             // 修改雇员认证信息状态
             if (gyAuthService.setStatus(gyid, flag,note)) {

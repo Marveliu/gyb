@@ -63,19 +63,19 @@ public class ApiStatController {
     private XmFeedbackService xmFeedbackService;
 
 
-    @At("/xminf")
-    @Ok("json")
-    @Filters(@By(type=CrossOriginFilter.class))
-    public Object getXmStat(@Param("gyid") String gyid) {
-        Cnd cnd = Cnd.NEW();
-        if(!Strings.isEmpty(gyid)){
-            cnd.where("gyid","=",gyid);
-        }
-        Map<String,Integer> data = new HashMap<>();
-        // data.put("申请中",xmApplyService.count(cnd));
-        data.put("进行中",xmInfService.count(Cnd.where("gyid","=",gyid).and("status","=",ConfigUtil.XM_INF_DOING)));
-        data.put("待结算",xmInfService.count(Cnd.where("gyid","=",gyid).and("status","=",ConfigUtil.XM_INF_CHECKING)));
-        data.put("已完成",xmInfService.count(Cnd.where("gyid","=",gyid).and("status",">",ConfigUtil.XM_INF_CHECKING)));
-        return Result.success().addData(data);
-    }
+    // @At("/xminf")
+    // @Ok("json")
+    // @Filters(@By(type=CrossOriginFilter.class))
+    // public Object getXmStat(@Param("gyid") String gyid) {
+    //     Cnd cnd = Cnd.NEW();
+    //     if(!Strings.isEmpty(gyid)){
+    //         cnd.where("gyid","=",gyid);
+    //     }
+    //     Map<String,Integer> data = new HashMap<>();
+    //     // data.put("申请中",xmApplyService.count(cnd));
+    //     data.put("进行中",xmInfService.count(Cnd.where("gyid","=",gyid).and("status","=",ConfigUtil.XM_INF_DOING)));
+    //     data.put("待结算",xmInfService.count(Cnd.where("gyid","=",gyid).and("status","=",ConfigUtil.XM_INF_CHECKING)));
+    //     data.put("已完成",xmInfService.count(Cnd.where("gyid","=",gyid).and("status",">",ConfigUtil.XM_INF_CHECKING)));
+    //     return Result.success().addData(data);
+    // }
 }

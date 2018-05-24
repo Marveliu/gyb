@@ -234,6 +234,7 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
             Chain chain = null;
             if(flag){
                 // deadline 添加定时任务
+
                 // updateIgnoreNull
                 chain = Chain.make("status",ConfigUtil.XM_FEEDBACK_FINAL);
                 // 设置xm_inf状态
@@ -243,9 +244,11 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
             }
             Cnd cnd = Cnd.where("id","=",xmfeedbackid);
             if(this.update(chain,cnd)!=0){
+                // 消息通知
                 xm_feedback xmFeedback = this.dao().fetchLinks(this.dao().fetch(xm_feedback.class,xmfeedbackid),"");
-                Thread t = new Thread(new Runnable(){
-                    public void run(){
+                Lang.runInAnThread(new Runnable() {
+                    @Override
+                    public void run() {
                         TMsg tMsg = new XmfdbRelpyTMsg(
                                 xmFeedback.getGyInf().getRealname(),
                                 xmFeedback.getXmInf().getId(),
@@ -265,8 +268,8 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
                         sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_XM);
                         sysMsg.setTmsgclass(tMsg.getTMsgClass());
                         sysMsgService.pushMsg(sysMsg);
-                    }});
-                t.start();
+                    }
+                });
                 return true;
             }
         }catch (Exception e){

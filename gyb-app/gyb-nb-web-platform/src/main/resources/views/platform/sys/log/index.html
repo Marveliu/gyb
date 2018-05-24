@@ -116,7 +116,7 @@ layout("/layouts/platform.html"){
                 {
                     "render": function (data, type, row) {
                         if (data) {
-                            return data.replace("cn.wizzer.app.web.modules.controllers.platform.sys.","");
+                            return data.replace("com.marveliu.app.web.modules.controllers.","");
                         }
                         return '';
                     },
@@ -130,7 +130,18 @@ layout("/layouts/platform.html"){
                         return '';
                     },
                     "targets": 5
-                }
+                },
+                {
+                    "render": function (data, type, row) {
+                        if(data == null) return "暂无数据";
+                        var str = data;
+                        if (str.length > 30) {
+                            return str.substring(0,30)+"...";
+                        }
+                        return data;
+                    },
+                    "targets": [1,3,4]
+                },
             ]
         });
         datatable.on('click', 'tr', function () {

@@ -144,6 +144,15 @@ layout("/layouts/platform.html"){
                     },
                     "targets": 4
                 },
+                {
+                    "render": function (data, type, row) {
+                        if (data == null) {
+                            return '暂无数据';
+                        }
+                        return data;
+                    },
+                    "targets": [2,3]
+                },
             ]
         });
         datatable.on('click', 'tr', function () {

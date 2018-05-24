@@ -30,14 +30,17 @@ import com.marveliu.framework.services.sys.SysMsgService;
 import com.marveliu.framework.services.sys.SysRoleService;
 import com.marveliu.framework.services.sys.SysUserService;
 import com.marveliu.framework.util.ConfigUtil;
+import com.marveliu.framework.util.Toolkit;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Sha256Hash;
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.lang.Lang;
+import org.nutz.lang.Strings;
 import org.nutz.lang.random.R;
 import org.nutz.lang.util.Context;
 import org.nutz.log.Log;
@@ -103,7 +106,7 @@ public class SysController {
      * @note: 直接进入后台的系统登陆界面
      */
     @At("/redirect")
-    @Ok("beetl:/public/redirect.html")
+    @Ok("beetl:/public/msg.html")
     public void redirect(HttpServletRequest request) {
 
     }
@@ -196,6 +199,8 @@ public class SysController {
     public Object doReg(
             @Param("username") String username,
             @Param("email") String email,
+            @Param("phone") String phone,
+            @Param("qq") String qq,
             @Param("password") String password,
             HttpServletRequest req
     ) {
@@ -214,6 +219,8 @@ public class SysController {
             RandomNumberGenerator rng = new SecureRandomNumberGenerator();
             String salt = rng.nextBytes().toBase64();
             String hashedPasswordBase64 = new Sha256Hash(password, salt, 1024).toBase64();
+            user.setPhone(phone);
+            user.setQq(qq);
             user.setPassword(hashedPasswordBase64);
             user.setSalt(salt);
             user.setLoginname(username);
@@ -232,6 +239,39 @@ public class SysController {
             log.error("用户注册失败!");
         }
         return Result.error("system.error");
+    }
+
+
+    /**
+     * 验证邮箱
+     * @param token
+     * @param userId
+     * @return
+     */
+    @At("/email/checkActiveMail")
+    @SLog(type = "sys",tag = "邮箱验证",param = true,result = true)
+    @Ok("json")
+    public Object checkActiveMail(
+            @Param("token") String token,
+            @Param("userId") String userId) {
+        if (Strings.isBlank(token)) return Result.error("请不要直接访问这个链接!!!");
+        if (token.length() < 10) return Result.error("非法token");
+        try {
+            token = Toolkit._3DES_decode(sysUserService.fetch(userId).getSalt().getBytes(), Toolkit.hexstr2bytearray(token));
+            if (Lang.isEmpty(token)) return Result.error("非法token");
+            String[] tmp = token.split(",", 2);
+            if (tmp.length != 2 || tmp[0].length() == 0 || tmp[1].length() == 0) return Result.error("非法token");
+            long time = Long.parseLong(tmp[1]);
+            if (System.currentTimeMillis() - time > 10 * 60 * 1000) return Result.error("该验证链接已经超时");
+            Cnd cnd = Cnd.where("id", "=", userId);
+            if (1 ==  sysUserService.update(Chain.make("emailChecked",true),cnd)) {
+                return Result.success("邮箱激活，请登录系统查看!");
+            }
+            return Result.error("验证失败!!请重新验证!!");
+        } catch (Throwable e) {
+            log.debug("检查token时出错", e);
+        }
+        return Result.error("非法token");
     }
 
 }

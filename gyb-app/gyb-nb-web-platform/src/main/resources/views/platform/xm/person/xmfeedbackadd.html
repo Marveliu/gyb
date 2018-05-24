@@ -38,7 +38,7 @@ layout("/layouts/platform.html"){
                         <div class="form-group">
                             <label for="parentid" class="col-sm-2 control-label">${msg['xm.feedback.column.parentid']}</label>
                             <div class="col-sm-8">
-                                <input type="text" id="parentid" class="form-control"
+                                <input type="text" id="parentid" class="form-control" disabled
                                 <%if(count == 0){ %>
                                 value="初次提交反馈" disabled="disabled" >
                                 <%}else{%>
@@ -120,7 +120,7 @@ layout("/layouts/platform.html"){
                 if (data.code == 0) {
                     Toast.success(data.msg);
 //                    $("#file").html("<img src='" + data.data + "' style='width:150px;height:95px;'>");
-                    $("#fileurl").val(data.data);
+                    $("#fileurl").val(data.data.);
                 } else {
                     clearFile();
                     Toast.error(data.msg);

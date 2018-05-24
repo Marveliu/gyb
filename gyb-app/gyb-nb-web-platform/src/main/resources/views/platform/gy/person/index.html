@@ -37,7 +37,7 @@ layout("/layouts/platform.html"){
                                                             class="fa fa-rmb"></i>交易方式 </a>
                                             <% if(!obj.emailChecked){ %>
                                                     <p id="emailchecked" class="btn btn-social btn-xs btn-twitter mr5 mt5"
-                                                       onclick="askActiviEmail('${obj.id}')">
+                                                       onclick="askActiviEmail()">
                                                         <i class="fa fa-mail-forward"></i>发送激活邮件
                                                     </p>
                                             <%}%>
@@ -251,7 +251,7 @@ layout("/layouts/platform.html"){
     });
     myChart.showLoading();// 加载动画
     // 异步加载数据
-    $.post('${AppApiDomain}/open/api/stat/xminf?gyid=${gy.id}').done(function (data) {//jQuery触发ajax 从后台异步获取数据
+    $.post('/platform/xm/person/xminf?gyid=${gy.id}').done(function (data) {//jQuery触发ajax 从后台异步获取数据
         if (data.code == 0) {
             var array = new Array();
             var legendName = new Array();
@@ -288,8 +288,8 @@ layout("/layouts/platform.html"){
     });
 
 
-    function askActiviEmail(id) {
-        var url = "${base}/open/api/sys/email/mail/activeMail?userid=" + id;
+    function askActiviEmail() {
+        var url = "/platform/gy/person/email/sendActiveMail";
         $.post(url, function (data) {
             if (data.code == 0) {
                 Toast.success(data.msg);
@@ -298,22 +298,6 @@ layout("/layouts/platform.html"){
             }
         })
     }
-
-    // function gyauthedit() {
-    //     // if (${gyauth.status} == 1 || ${gyauth.status} == 2)
-    //     // {
-    //     //     Toast.warning("您的身份信息正在she")
-    //     //     return null;
-    //     // }
-    //     // if (!${isAuth}) {
-    //         $("#dialogAuthDeal").modal({
-    //             remote: "${base}/platform/gy/person/authedit"
-    //         });
-    //         $("#dialogAuthDeal").show();
-    //     // } else {
-    //     //     Toast.warning("身份已经验证！")
-    //     // }
-    // }
 
     // // 首先,需要创建一个WebSocket连接
     // var ws;

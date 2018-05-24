@@ -118,7 +118,6 @@ public class XmController {
                     cnd.desc("publishAt");
             }
         }
-
         List<?> list = xmTaskService.query(cnd, pager);
         if (!Strings.isBlank(linkName)) {
             xmTaskService.fetchLinks(list, linkName);

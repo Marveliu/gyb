@@ -60,5 +60,12 @@ public interface SysUserService extends BaseService<Sys_user> {
      */
     Sys_user regUser(Sys_user user);
 
+    /**
+     * 发送验证邮件
+     * @param sysUser
+     * @return
+     */
+    boolean sendActiveEmail(Sys_user sysUser);
+
 
 }

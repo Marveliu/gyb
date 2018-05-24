@@ -115,7 +115,7 @@ public class XmFeedbackController {
     @RequiresPermissions("platform.xm.feedback")
     public View edit(int id, HttpServletRequest req) {
         String author = xmFeedbackService.fetch(Cnd.where("id", "=", id)).getAuthor();
-        if (author.equals(sysUserinfService.getSysuserinfid(StringUtil.getPlatformUid()))) {
+        if (shiroUtil.isSuper() || author.equals(sysUserinfService.getSysuserinfid(StringUtil.getPlatformUid()))) {
             xm_feedback xmFeedback = xmFeedbackService.fetch(id);
             req.setAttribute("obj", xmFeedback);
         } else {
@@ -150,7 +150,7 @@ public class XmFeedbackController {
     @At("/detail/?")
     @Ok("beetl:/platform/xm/feedback/detail.html")
     @RequiresPermissions("platform.xm.feedback")
-    @SLog(type = "xm", tag = "查看任务反馈详细信息", msg = "任务反馈编号:${args[0]}")
+    // @SLog(type = "xm", tag = "查看任务反馈详细信息", msg = "任务反馈编号:${args[0]}")
     public void detail(long xmfeedbackid, HttpServletRequest req) {
         if (isAllowForFeedback(xmfeedbackid)) {
             xm_feedback feedback = xmFeedbackService.fetch(xmfeedbackid);

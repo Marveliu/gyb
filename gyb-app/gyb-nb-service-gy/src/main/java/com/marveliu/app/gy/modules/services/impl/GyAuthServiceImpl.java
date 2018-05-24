@@ -35,6 +35,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.lang.Lang;
+import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
@@ -98,21 +99,23 @@ public class GyAuthServiceImpl extends BaseServiceImpl<gy_auth> implements GyAut
     public boolean setStatus(String gyid, Boolean flag, String note) {
         try {
             Cnd cnd = Cnd.where("gyid", "=", gyid);
-            int status = 0;
-            if (Lang.isEmpty(note)) note = GY_AUTH_DECLINE_NOTE;
+            int status = ConfigUtil.GY_AUTH_DECLINE;
             if (flag) {
                 status = ConfigUtil.GY_AUTH_PASS;
-                if (Lang.isEmpty(note)) note = GY_AUTH_PASS_NOTE;
+                Strings.sNull(note,GY_AUTH_PASS_NOTE);
+            }else {
+                Strings.sNull(note,GY_AUTH_DECLINE_NOTE);
             }
             int count = this.dao().update(gy_auth.class, Chain.make("status", status).add("note", note), cnd);
             if (count == 1) {
+                String result = note;
                 Lang.runInAnThread(new Runnable() {
                     @Override
                     public void run() {
                         gy_inf gyInf = dao().fetch(gy_inf.class, gyid);
                         TMsg tMsg = new GyAuthTMsg(
-                                gyInf.getRealname(),
-                                String.valueOf(flag)
+                                gyInf.getGyid(),
+                                result
                         );
                         Sys_msg sysMsg = new Sys_msg();
                         sysMsg.setRevid(gyInf.getId());

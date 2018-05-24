@@ -72,7 +72,7 @@ public class Globals {
         //每次从队列获取的数量
         channel.basicQos(1);
         // 声明一个队列
-        String QUEUE_NAME = "gy";
+        String QUEUE_NAME = ConfigUtil.SYS_MSG_TAG_GY;
         channel.queueDeclare(QUEUE_NAME, true, false, false, null);
         log.info("Consumer Wating Receive Message begin!");
         Consumer consumer = new DefaultConsumer(channel) {
@@ -85,6 +85,7 @@ public class Globals {
                         emailService.sendHtmlTemplateByTemplateName(sysMsg.getRevaccount(), (TMsg) obj);
                     }
                     channel.basicAck(envelope.getDeliveryTag(), false);
+                    // channel.basicNack();
                     log.info("Msg Done!");
                 } catch (Exception e) {
                     System.out.println(e);
@@ -104,7 +105,7 @@ public class Globals {
         //每次从队列获取的数量
         channel.basicQos(1);
         // 声明一个队列
-        String QUEUE_NAME = "xm";
+        String QUEUE_NAME = ConfigUtil.SYS_MSG_TAG_XM;
         channel.queueDeclare(QUEUE_NAME, true, false, false, null);
         log.info("Consumer Wating Receive Message begin!");
         Consumer consumer = new DefaultConsumer(channel) {
@@ -137,7 +138,7 @@ public class Globals {
         //每次从队列获取的数量
         channel.basicQos(1);
         // 声明一个队列
-        String QUEUE_NAME = "sys";
+        String QUEUE_NAME = ConfigUtil.SYS_MSG_TAG_SYS;
         channel.queueDeclare(QUEUE_NAME, true, false, false, null);
         log.info("Consumer Wating Receive Message begin!");
         Consumer consumer = new DefaultConsumer(channel) {

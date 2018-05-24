@@ -188,7 +188,7 @@ layout("/layouts/platform-xm.html"){
                 {
                     "render": function (data, type, row) {
                         if (data.length == 0) return '暂无附件';
-                        return '<a href="' + data + '" class="btn btn-default btn-sm mr5">附件下载</a>'
+                        return '<a target="_blank" href="' + data + '" class="btn btn-default btn-sm mr5">附件下载</a>'
                     },
                     "targets": 3
                 },

@@ -202,19 +202,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
             Lang.runInAnThread(new Runnable() {
                 @Override
                 public void run() {
-                    Sys_msg sysMsg = new Sys_msg();
-                    String token = String.format("%s,%s", sysUser.getEmail(), System.currentTimeMillis());
-                    token = Toolkit._3DES_encode(sysUser.getSalt().getBytes(), token.getBytes());
-                    String url = ConfigUtil.AppApiDomain + "/open/api/sys/email/checkActiveMail?token=" + token + "&userId=" + sysUser.getId();
-                    System.out.println("url:" + url);
-                    TMsg tMsg = new RegTMsg(sysUser.getUsername(), url);
-                    sysMsg.setRevid(sysUser.getId());
-                    sysMsg.setRevaccount(sysUser.getEmail());
-                    sysMsg.setMsg(Json.toJson(tMsg));
-                    sysMsg.setType(ConfigUtil.SYS_MSG_TYPE_EMAIL);
-                    sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_GY);
-                    sysMsg.setTmsgclass(tMsg.getTMsgClass());
-                    sysMsgService.pushMsg(sysMsg);
+                    sendActiveEmail(sysUser);
                 }
             });
             return sysUser;
@@ -222,5 +210,34 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
             log.error("用户注册失败", e);
         }
         return null;
+    }
+
+
+    /**
+     * 发送验证邮件
+     * @param sysUser
+     * @return
+     */
+    public boolean sendActiveEmail(Sys_user sysUser) {
+        try {
+            Sys_msg sysMsg = new Sys_msg();
+            String token = String.format("%s,%s", sysUser.getEmail(), System.currentTimeMillis());
+            token = Toolkit._3DES_encode(sysUser.getSalt().getBytes(), token.getBytes());
+            // String url = ConfigUtil.AppApiDomain + "/front/api/sys/email/checkActiveMail?token=" + token + "&userId=" + sysUser.getId();
+            String url = ConfigUtil.AppDomain+"/public/email/checkActiveMail?token=" + token + "&userId=" + sysUser.getId();
+            System.out.println("url:" + url);
+            TMsg tMsg = new RegTMsg(sysUser.getUsername(), url);
+            sysMsg.setRevid(sysUser.getId());
+            sysMsg.setRevaccount(sysUser.getEmail());
+            sysMsg.setMsg(Json.toJson(tMsg));
+            sysMsg.setType(ConfigUtil.SYS_MSG_TYPE_EMAIL);
+            sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_GY);
+            sysMsg.setTmsgclass(tMsg.getTMsgClass());
+            sysMsgService.pushMsg(sysMsg);
+            return true;
+        } catch (Exception e) {
+            log.error("发送邮箱验证邮件失败!");
+        }
+        return false;
     }
 }
