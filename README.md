@@ -12,7 +12,7 @@
 
 ## 系统设计
 
-核心模块概要设计：
+模块说明：
 
 1. gyb-nb-dubbo-sys:  	    其他服务基础，提供用户权限管理基础服务。
 2. gyb-nb-dubbo-msg:  	    提供邮件传输等消息消费服务，需要进行邮箱配置。
@@ -24,14 +24,6 @@
 8. gyb-nb-cms:       	    内容管理服务。
 9. gyb-nb-web-api:          API支持。
 
-在测试启用过程之中，建议按照需要进行启动，8,9模块仅为测试，并未参与项目构建之中。
-
-系统架构图如下:
-
-![系统架构图](.README_images/2c7c454d.png)
-
-
-
 ## 项目构建
 
 `bin`目录下包括基于maven构建和apidoc插件的相关脚本，主要内容如下:
@@ -41,6 +33,13 @@
 - 停止：`sh ./bin/start.sh stop  system`。
 - api生成：`sh ./bin/apidoc.sh`,主要生成gyb-nb-web-api的文档，相关配置设置见`apidoc.json`。
 - api文档ftp上传：`sh ./bin/apisync.sh`,脚本中可以自行设置服务器相关信息。
+
+在测试启用过程之中，建议按照需要进行启动，8,9模块仅为测试，并未参与项目构建之中。
+
+系统架构图如下:
+
+![系统架构图](.README_images/2c7c454d.png)
+
 
 *注意*
 
