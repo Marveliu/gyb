@@ -1,1 +1,1 @@
-apidoc -i wk-parent/wk-app/wk-web/src/main/java/ -o apidoc
+apidoc -i gyb-app/gyb-nb-web-api/src/main/java/ -o apidoc
