@@ -20,7 +20,7 @@
 4. gyb-nb-dubbo-gy:         提供雇员认证，雇员基础数据管理等微服务。
 5. gyb-nb-dubbo-xm:   	    提供雇佣交易服务，维护阶段性任务流程。
 6. gyb-nb-dubbo-web:  	    依赖其他微服务，实现Web界面服务。
-7. gyb-nb-task:       	    提供自定任务调度等服务。
+7. gyb-nb-task:       	    基于quartz提供自定任务调度等服务。
 8. gyb-nb-cms:       	    内容管理服务。
 9. gyb-nb-web-api:          API支持。
 
