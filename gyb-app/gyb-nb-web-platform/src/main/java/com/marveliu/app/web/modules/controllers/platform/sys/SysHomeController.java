@@ -11,8 +11,10 @@ import com.marveliu.framework.model.sys.Sys_role;
 import com.marveliu.framework.model.sys.Sys_user;
 import com.marveliu.framework.services.sys.SysMenuService;
 import com.marveliu.framework.services.sys.SysRoleService;
+import com.marveliu.framework.services.sys.SysUserinfService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.session.Session;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -35,6 +37,11 @@ public class SysHomeController {
     @Reference
     private SysMenuService menuService;
 
+
+    @Inject
+    @Reference
+    private SysUserinfService sysUserinfService;
+
     @Inject
     private ShiroUtil shiroUtil;
 
@@ -45,10 +52,12 @@ public class SysHomeController {
     @Ok("re:beetl:/platform/sys/home.html")
     @RequiresAuthentication
     public String home(HttpServletRequest req) {
-        // 角色：管理员和雇员
+        // 角色 雇员
         if(shiroUtil.isGy()){
             return "forward:/platform/gy/person";
         }
+        Session session =  SecurityUtils.getSubject().getSession();
+        session.setAttribute("sysuser_id",sysUserinfService.fetch(Cnd.where("userid","=",StringUtil.getPlatformUid())).getId());
         return null;
     }
 

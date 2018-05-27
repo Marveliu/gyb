@@ -11,7 +11,7 @@ public interface SysUserinfService extends BaseService<Sys_userinf> {
 
 
     /**
-     *
+     * 获得uid
      * @param uid
      * @return
      */

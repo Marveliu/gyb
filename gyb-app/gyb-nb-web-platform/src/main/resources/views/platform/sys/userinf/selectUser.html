@@ -1,0 +1,97 @@
+<section class="content-wrap bg-white">
+    <header class="header navbar bg-white shadow row">
+        <div class="pull-left offscreen-left col-md-4" style="padding-top:10px;" >
+            <div class="input-group mb10">
+                <input id="name" type="text" class="form-control"  placeholder="请输入用户名或昵称">
+                <span id="namego" class="input-group-btn"><button class="btn btn-default" type="button">Go!</button></span>
+            </div>
+        </div>
+        <div class="pull-right offscreen-right btn-group tool-button">
+            <a class="btn btn-primary navbar-btn" onclick="_selectOn()">确定</a>
+        </div>
+    </header>
+
+
+    <div class=panel-body style="padding-top: 50px;">
+        <div class="table-responsive no-border" style="padding-top: 5px;" >
+            <input id="unitid" type="hidden">
+            <table id="datatable_select" class="table table-bordered table-striped mg-t datatable">
+                <thead>
+                <tr>
+                    <th>用户名</th>
+                    <th>邮箱</th>
+                    <th>状态</th>
+            </table>
+        </div>
+    </div>
+</section>
+
+<script language="JavaScript">
+    var datatable_select;
+    function initdatatable_select() {
+        datatable_select = $('#datatable_select').DataTable({
+            "dom": '<"toolbar">frtip',
+            "searching":false,
+            "processing": false,
+            "serverSide": true,
+            "select": true,
+            "ordering": true,
+            "language": {
+                "url": "${base}/assets/plugins/datatables/cn.json"
+            },
+            "ajax": {
+                "url": "${base}/platform/sys/user/data",
+                "type": "post",
+                "data": function (d) {
+                    d.username = $('#name').val();
+                }
+            },
+            "order": [[0, "desc"]],
+            "columns": [
+                {"data": "username", "bSortable": true},
+                {"data": "email", "bSortable": true},
+                {"data": "disabled", "bSortable": true}
+            ],
+            "columnDefs": [
+                {
+                    "render": function (data, type, row) {
+                        if (!data) {
+                            return '<i id="disable_' + row.id + '" class="fa fa-circle text-success ml5"></i>';
+                        } else {
+                            return '<i id="disable_' + row.id + '" class="fa fa-circle text-danger ml5"></i>';
+                        }
+                    },
+                    "targets": 2
+                }
+            ]
+        });
+        datatable_select.on('click', 'tr', function () {
+            $(this).toggleClass('selected');
+        });
+        $("#namego").on('click', function () {
+            datatable_select.ajax.reload();
+        });
+    }
+    //    function _selectAll() {
+    //        $("#datatable_select").find("tr").each(function () {
+    //            if (!$(this).hasClass('selected'))
+    //                $(this).addClass('selected');
+    //        });
+    //    }
+    //
+    function _selectOn() {
+        var user = datatable_select.rows('.selected');
+        if (user.length > 1) {
+            Toast.error("一个员工信息只能绑定一个用户")
+        }else if(user.length = 0){
+            Toast.error("必须要选择一个用户")
+        }else {
+            $("#userid ").val(user.data()[0]["id"]);
+            $("#username ").val(user.data()[0]["username"]);
+            $("#dialogUserSelect").modal("hide");
+        }
+    }
+    $(document).ready(function () {
+        initdatatable_select();
+    });
+</script>

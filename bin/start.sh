@@ -35,7 +35,7 @@ start() {
     else
       rm $LOG_PATH/$JAR_NAME.out
       touch $LOG_PATH/$JAR_NAME.out
-      exec java -jar $JAR_PATH/$JAR_NAME >> $LOG_PATH/$JAR_NAME.out &
+      exec java -jar -Dnutz.profiles.active=prod $JAR_PATH/$JAR_NAME >> $LOG_PATH/$JAR_NAME.out &
       sleep 5s
       while [ -z "$PID" ]
       do

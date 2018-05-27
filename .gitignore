@@ -38,3 +38,4 @@ hs_err_pid*
 /gyb-app/gyb-nb-service-xm/src/main/resources/application-prod.properties
 /gyb-app/gyb-nb-task/src/main/resources/application-prod.properties
 /gyb-app/gyb-nb-web-platform/src/main/resources/application-prod.properties
+/gyb-app/gyb-nb-service-gy/src/main/resources/application-prod.properties

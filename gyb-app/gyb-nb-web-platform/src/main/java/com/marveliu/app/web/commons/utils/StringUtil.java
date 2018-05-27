@@ -38,6 +38,23 @@ public class StringUtil {
     }
 
     /**
+     * 获取平台后台登陆UID
+     *
+     * @return
+     */
+    public static String getSysuserinfId() {
+        try {
+            HttpServletRequest request = Mvcs.getReq();
+            if (request != null) {
+                return Strings.sNull(request.getSession(true).getAttribute("sysuser_id"));
+            }
+        } catch (Exception e) {
+
+        }
+        return "";
+    }
+
+    /**
      * 获取平台后台登陆用户名称
      *
      * @return

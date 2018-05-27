@@ -49,7 +49,7 @@ import java.util.Map;
  * @since 21/04/2018
  **/
 @IocBean
-@At("/platform/lib/tmsg")
+@At("/platform/lib/task")
 public class LibTaskController {
     private static final Log log = Logs.get();
     @Inject
@@ -65,8 +65,8 @@ public class LibTaskController {
 
     //todo:给了管理员什么的权限？
     @At("")
-    @Ok("beetl:/platform/lib/tmsg/index.html")
-    @RequiresPermissions("lib.tmsg")
+    @Ok("beetl:/platform/lib/task/index.html")
+    @RequiresPermissions("lib.task")
     public Object index() {
         if (shiroUtil.hasRole("sysadmin")) {
             return libTaskService.query(Cnd.where("parentId", "=", "").or("parentId", "is", null).asc("path"));
@@ -81,8 +81,8 @@ public class LibTaskController {
 
 
     @At
-    @Ok("beetl:/platform/lib/tmsg/add.html")
-    @RequiresPermissions("lib.tmsg")
+    @Ok("beetl:/platform/lib/task/add.html")
+    @RequiresPermissions("lib.task")
     public Object add(@Param("pid") String pid) {
 
         return Strings.isBlank(pid) ? null : libTaskService.fetch(pid);
@@ -90,7 +90,7 @@ public class LibTaskController {
 
     @At
     @Ok("json")
-    @RequiresPermissions("lib.tmsg.add")
+    @RequiresPermissions("lib.task.add")
     @SLog(type="lib",tag = "新建技能", msg = "技能名称:${args[0].name}")
     public Object addDo(@Param("..") lib_task task, @Param("parentId") String parentId, HttpServletRequest req) {
         try {
@@ -102,22 +102,22 @@ public class LibTaskController {
     }
 
     @At("/child/?")
-    @Ok("beetl:/platform/lib/tmsg/child.html")
-    @RequiresPermissions("lib.tmsg")
+    @Ok("beetl:/platform/lib/task/child.html")
+    @RequiresPermissions("lib.task")
     public Object child(String id) {
         return libTaskService.query(Cnd.where("parentId", "=", id).asc("path"));
     }
 
     @At("/detail/?")
-    @Ok("beetl:/platform/lib/tmsg/detail.html")
-    @RequiresPermissions("lib.tmsg")
+    @Ok("beetl:/platform/lib/task/detail.html")
+    @RequiresPermissions("lib.task")
     public Object detail(String id) {
         return libTaskService.fetch(id);
     }
 
     @At("/edit/?")
-    @Ok("beetl:/platform/lib/tmsg/edit.html")
-    @RequiresPermissions("lib.tmsg")
+    @Ok("beetl:/platform/lib/task/edit.html")
+    @RequiresPermissions("lib.task")
     public Object edit(String id, HttpServletRequest req) {
         lib_task task = libTaskService.fetch(id);
         if (task != null) {
@@ -128,7 +128,7 @@ public class LibTaskController {
 
     @At
     @Ok("json")
-    @RequiresPermissions("lib.tmsg.edit")
+    @RequiresPermissions("lib.task.edit")
     @SLog(type="lib",tag = "编辑技能", msg = "技能名称:${args[0].name}")
     public Object editDo(@Param("..") lib_task task, @Param("parentId") String parentId, HttpServletRequest req) {
         try {
@@ -143,7 +143,7 @@ public class LibTaskController {
 
     @At("/delete/?")
     @Ok("json")
-    @RequiresPermissions("lib.tmsg.delete")
+    @RequiresPermissions("lib.task.delete")
     @SLog(type="lib", tag = "删除技能", msg = "技能名称:${args[1].getAttribute('name')}")
     public Object delete(String id, HttpServletRequest req) {
         try {
@@ -161,7 +161,7 @@ public class LibTaskController {
 
     @At
     @Ok("json")
-    @RequiresPermissions("lib.tmsg")
+    @RequiresPermissions("lib.task")
     public Object tree(@Param("pid") String pid) {
         List<lib_task> list = new ArrayList<>();
         if (shiroUtil.hasRole("sysadmin")) {
@@ -200,8 +200,8 @@ public class LibTaskController {
         return tree;
     }
     @At("/editSkill/?")
-    @Ok("beetl:/platform/lib/tmsg/editskill.html")
-    @RequiresPermissions("lib.tmsg")
+    @Ok("beetl:/platform/lib/task/editskill.html")
+    @RequiresPermissions("lib.task")
     public Object editSkill(String taskId, HttpServletRequest req) {
         StringBuilder roleMenuIds = new StringBuilder();
         List<lib_skill> list = new ArrayList<>();
@@ -243,7 +243,7 @@ public class LibTaskController {
 
     @At
     @Ok("json")
-    @RequiresPermissions("lib.tmsg")
+    @RequiresPermissions("lib.task")
     @SLog(type = "lib",tag = "修改任务所需技能类型", msg = "角色名称:${args[1]}")
     public Object editSkillDo(@Param("skillIds") String skillIds, @Param("taskid") String taskid, HttpServletRequest req) {
         try {
