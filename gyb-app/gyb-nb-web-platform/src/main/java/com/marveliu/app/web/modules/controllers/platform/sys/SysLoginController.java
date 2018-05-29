@@ -218,7 +218,7 @@ public class SysLoginController {
                 Sys_log sysLog = new Sys_log();
                 sysLog.setType("info");
                 sysLog.setTag("用户登出");
-                sysLog.setMsg(user.getLoginname());
+                sysLog.setMsg(user.getUsername());
                 sysLog.setSrc(this.getClass().getName() + "#logout");
                 sysLog.setMsg(StringUtil.getPlatformUsername());
                 sysLog.setIp(Lang.getIP(req));

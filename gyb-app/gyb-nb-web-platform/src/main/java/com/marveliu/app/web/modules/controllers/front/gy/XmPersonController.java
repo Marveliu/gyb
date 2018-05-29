@@ -326,7 +326,7 @@ public class XmPersonController {
 
     // 项目结算
     @At
-    @Ok("beetl:/platform//xm/person/xmcompleted.html")
+    @Ok("beetl:/platform/xm/person/xmcompleted.html")
     @RequiresPermissions("platform.xm.person")
     public void xmcompleted() { }
 
