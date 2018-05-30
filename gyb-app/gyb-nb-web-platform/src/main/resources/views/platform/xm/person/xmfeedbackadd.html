@@ -119,8 +119,8 @@ layout("/layouts/platform.html"){
                 data = JSON.parse(data);
                 if (data.code == 0) {
                     Toast.success(data.msg);
-//                    $("#file").html("<img src='" + data.data + "' style='width:150px;height:95px;'>");
-                    $("#fileurl").val(data.data.);
+                    // $("#file").html("<img src='" + data.data + "' style='width:150px;height:95px;'>");
+                    $("#fileurl").val(data.data);
                 } else {
                     clearFile();
                     Toast.error(data.msg);
