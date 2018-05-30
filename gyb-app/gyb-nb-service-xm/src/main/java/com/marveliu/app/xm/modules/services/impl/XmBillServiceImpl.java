@@ -30,6 +30,7 @@ import com.marveliu.framework.services.msg.tmsg.XmfdbRelpyTMsg;
 import com.marveliu.framework.services.sys.SysMsgService;
 import com.marveliu.framework.services.sys.SysRoleService;
 import com.marveliu.framework.services.sys.SysUserService;
+import com.marveliu.framework.services.xm.XmInfService;
 import com.marveliu.framework.util.ConfigUtil;
 import com.marveliu.framework.model.xm.xm_bill;
 import com.marveliu.framework.services.base.BaseServiceImpl;
@@ -70,6 +71,9 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
     @Inject
     @Reference
     private SysMsgService sysMsgService;
+
+    @Inject
+    private XmInfService xmInfService;
 
 
     public XmBillServiceImpl(Dao dao) {
@@ -166,7 +170,9 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
             if(!Lang.isEmpty(xmBill) && xmBill.getStatus() == ConfigUtil.XM_BILL_PAYING){
                 Cnd cnd = Cnd.where("id","=",xmbillid);
                 Chain chain = Chain.make("realgypayid",xmBill.getGypayid()).add("status",ConfigUtil.XM_BILL_PAYED).add("payby",sysuserinfid).add("opAt",Times.getTS());
-                if(this.update(chain,cnd)!=0){
+                Chain xminfchain = Chain.make("status",ConfigUtil.XM_INF_PAYED).add("opAt",Times.getTS());
+                // 更新账单和任务信息表
+                if(this.update(chain,cnd)!=0 && xmInfService.update(xminfchain,Cnd.where("id","=",xmBill.getXminfid()))!=0){
                     // 财务结算给雇员
                     Lang.runInAnThread(new Runnable() {
                         @Override
@@ -190,6 +196,7 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
                             sysMsgService.pushMsg(sysMsg);
                         }
                     });
+                    return true;
                 }
             }
         }catch (Exception e){

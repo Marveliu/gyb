@@ -19,12 +19,15 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.marveliu.app.web.commons.slog.annotation.SLog;
 import com.marveliu.app.web.commons.utils.StringUtil;
 import com.marveliu.framework.model.base.Result;
+import com.marveliu.framework.model.sys.Sys_user;
 import com.marveliu.framework.model.sys.Sys_userinf;
 import com.marveliu.framework.page.datatable.DataTableColumn;
 import com.marveliu.framework.page.datatable.DataTableOrder;
 import com.marveliu.framework.services.sys.SysRoleService;
+import com.marveliu.framework.services.sys.SysUserService;
 import com.marveliu.framework.services.sys.SysUserinfService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.ioc.loader.annotation.Inject;
@@ -53,6 +56,10 @@ public class SysUserinfController {
     @Inject
     @Reference
     private SysUserinfService sysUserinfService;
+
+    @Inject
+    @Reference
+    private SysUserService sysUserService;
 
     @Inject
     @Reference
@@ -105,20 +112,20 @@ public class SysUserinfController {
     @Ok("beetl:/platform/sys/userinf/person.html")
     @RequiresPermissions("platform.sys.userinf.person")
     public void person(HttpServletRequest req) {
-        String userid =  StringUtil.getSysuserinfId();
-        req.setAttribute("obj", sysUserinfService.fetch(userid));
+        req.setAttribute("obj", sysUserService.fetch(StringUtil.getPlatformUid()));
+        req.setAttribute("sysuser", sysUserinfService.fetch(StringUtil.getSysuserinfId()));
     }
 
 
     @At("/personeditDo")
     @Ok("json")
     @RequiresPermissions("platform.sys.userinf.person")
-    public Object personeditDo(@Param("..")Sys_userinf userinf, @Param("birthdayat") String birthday, HttpServletRequest req) {
+    public Object personeditDo(@Param("..")Sys_user sysUser, @Param("birthdayat") String birthday, HttpServletRequest req) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             int birthdayat = (int) (sdf.parse(birthday).getTime() / 1000);
-            userinf.setBirthday(birthdayat);
-            sysUserinfService.updateIgnoreNull(userinf);
+            sysUserService.updateIgnoreNull(sysUser);
+            sysUserinfService.update(Chain.make("birthday",birthdayat),Cnd.where("id","=",StringUtil.getSysuserinfId()));
             return Result.success("system.success");
         } catch (Exception e) {
             return Result.error("system.error");

@@ -16,21 +16,21 @@ layout("/layouts/platform.html"){
                 <div class="row mb10">
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="id" class="col-sm-2 control-label">员工编号</label>
+                            <label for="userid" class="col-sm-2 control-label">员工编号</label>
                             <div class="col-sm-8">
-                                <input type="text" id="id" class="form-control"  data-parsley-required="true" disabled="disabled"
-                                       placeholder="" value="${obj.id}" >
+                                <input type="text" id="userid" class="form-control"  data-parsley-required="true" disabled="disabled"
+                                       placeholder="" value="${sysuser.id}" >
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="realname" class="col-sm-2 control-label">${msg['gz.inf.column.realname']}</label>
                             <div class="col-sm-8">
-                                <input type="text" id="realname" class="form-control" name="realname" data-parsley-required="true"
-                                       placeholder="${msg['gz.inf.column.realname!']}" value="${obj.realname}" >
+                                <input type="text" id="realname" class="form-control" data-parsley-required="true"
+                                       placeholder="${msg['gz.inf.column.realname!']}" value="${sysuser.realname}" disabled >
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="email" class="col-sm-2 control-label">邮件</label>
+                            <label for="email" class="col-sm-2 control-label">邮箱</label>
                             <div class="col-sm-8">
                                 <input type="text" id="email" class="form-control" name="email" data-parsley-required="true"
                                        placeholder="${msg['gz.inf.column.qq']}" value="${obj.email}" >
@@ -55,7 +55,7 @@ layout("/layouts/platform.html"){
                             <label for="birthday" class="col-sm-2 control-label">${msg['gy.inf.column.birthday']}</label>
                             <div class="col-sm-8 input-group date form_datetime" style="padding-left: 16px;padding-right: 16px;" data-date="1979-09-16T05:25:07Z"
                                  data-date-format="dd MM yyyy - HH:ii p" data-link-field="birthday">
-                                <input type="text" size="16" readonly class="form-control" value="${@date.getDate(obj.birthday,'yyyy-MM-dd')}" data-parsley-required="true">
+                                <input type="text" size="16" readonly class="form-control" value="${@date.getDate(sysuser.birthday,'yyyy-MM-dd')}" data-parsley-required="true">
                                 <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-remove"></span>
                                     </span>
@@ -63,7 +63,7 @@ layout("/layouts/platform.html"){
                                         <span class="glyphicon glyphicon-th"></span>
                                     </span>
                             </div>
-                            <input type="hidden" id="birthday" name="birthdayat" value="${@date.getDate(obj.birthday,'yyyy-MM-dd')}" />
+                            <input type="hidden" id="birthday" name="birthdayat" value="${@date.getDate(sysuser.birthday,'yyyy-MM-dd')}" />
                         </div>
 
 
@@ -71,14 +71,14 @@ layout("/layouts/platform.html"){
                         <div class="form-group">
                             <label for="sex" class="col-sm-2 control-label">${msg['gz.inf.column.sex']}</label>
                             <div class="col-sm-8">
-                                <select id="sex" name="sex" data-parsley-required="true" class="form-control">
+                                <select id="sex" name="sex" data-parsley-required="true" class="form-control" disabled>
                                     <option value="0"
-                                    <%if(0 == obj.sex){%>
+                                    <%if(0 == sysuser.sex){%>
                                     selected
                                     <%} %>
                                     >男</option>
                                     <option value="1"
-                                    <%if(1 == obj.sex){%>
+                                    <%if(1 == sysuser.sex){%>
                                     selected
                                     <%} %>
                                     >女</option>
