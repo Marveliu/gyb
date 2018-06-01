@@ -28,11 +28,12 @@
 
 `bin`目录下包括基于maven构建和apidoc插件的相关脚本，主要内容如下:
 
-- 构建：`sh ./bin/build.sh`。
-- 启动：`sh ./bin/start.sh start system`。
-- 停止：`sh ./bin/start.sh stop  system`。
-- api生成：`sh ./bin/apidoc.sh`,主要生成gyb-nb-web-api的文档，相关配置设置见`apidoc.json`。
-- api文档ftp上传：`sh ./bin/apisync.sh`,脚本中可以自行设置服务器相关信息。
+- 构建：`sh ./bin/build.sh`
+- 启动：`sh ./bin/gyb.sh start`
+- 停止：`sh ./bin/gyb.sh stop`
+- 单个服务启停：`sh ./bin/jar.sh 1`,1对应gyb-nb-service-sys,具体配置看sh.
+- api生成：`sh ./bin/apidoc.sh`,主要生成gyb-nb-web-api的文档，相关配置设置见`apidoc.json`
+- api文档ftp上传：`sh ./bin/apisync.sh`,脚本中可以自行设置服务器相关信息
 
 在测试启用过程之中，建议按照需要进行启动，8,9模块仅为测试，并未参与项目构建之中。
 

@@ -241,7 +241,7 @@ public class XmPersonController {
     @Ok("json")
     @RequiresPermissions("platform.xm.person")
     @AdaptBy(type = WhaleAdaptor.class)
-    @SLog(type = "xm",tag = "雇员添加项目反馈", msg = "${args[0]}")
+    @SLog(type = "xm",tag = "雇员添加项目反馈", msg = "${args[0].note}")
     public Object feedbackaddDo(@Param("..") xm_feedback xmFeedback, HttpServletRequest req) {
         String gyid =  shiroUtil.getCurrentGyid();
         if (xmFacadeService.isGyForXm(xmFeedback.getXminfid(), gyid)) {

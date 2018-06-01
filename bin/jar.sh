@@ -1,7 +1,6 @@
 #!/bin/bash
-# 端口号
-#PORTS=()
-# 系统模块
+
+
 MODULES=("gyb-nb-service-sys" "gyb-nb-service-library" "gyb-nb-service-xm" "gyb-nb-service-gy"  "gyb-nb-task"  "gyb-nb-service-msg" "gyb-nb-web-platform")
 # 系统模块名称
 MODULE_NAMES=("基础系统服务" "任务技能库服务" "阶段性任务管理服务" "雇员关系管理服务"  "任务调度服务" "消息队列消费者服务" "客户端界面服务")
@@ -13,91 +12,57 @@ JAR_PATH='jarData'
 LOG_PATH='logs'
 
 
+
 start() {
-  local MODULE=
-  local MODULE_NAME=
-  local JAR_NAME=
-  local command="$1"
-  local commandOk=0
-  local count=0
-  local okCount=0
- # local port=0
-  for ((i=0;i<${#MODULES[@]};i++))
-  do
-    MODULE=${MODULES[$i]}
-    MODULE_NAME=${MODULE_NAMES[$i]}
-    JAR_NAME=${JARS[$i]}
-    commandOk=1
-    count=0
-    PID=`ps -ef |grep $(echo $JAR_NAME | awk -F/ '{print $NF}') | grep -v grep | awk '{print $2}'`
+    MODULE=${MODULES[$2]}
+    MODULE_NAME=${MODULE_NAMES[$2]}
+    JAR_NAME=${JARS[$2]}
+    PID=`ps -ef | grep $JAR_NAME | grep -v grep | awk '{print $2}'`
     if [ -n "$PID" ];then
       echo "$MODULE---$MODULE_NAME:已经运行,PID=$PID"
     else
       rm $LOG_PATH/$JAR_NAME.out
       touch $LOG_PATH/$JAR_NAME.out
-      exec java -jar -Dnutz.profiles.active=prod $JAR_PATH/$JAR_NAME >> $LOG_PATH/$JAR_NAME.out &
+      exec java -jar $JAR_PATH/$JAR_NAME >> $LOG_PATH/$JAR_NAME.out &
       sleep 5s
       while [ -z "$PID" ]
       do
         if (($count == 5));then
-          echo "$MODULE---$MODULE_NAME:$(expr $count \* 10)秒内未启动,请检查!"
+          echo "$(expr $count \* 10)秒内未启动,请检查!"
           break
         fi
-          count=$(($count+1))
           echo "${MODULE_NAME}启动中.................."
           sleep 5s
           PID=`ps -ef |grep $(echo $JAR_NAME | awk -F/ '{print $NF}') | grep -v grep | awk '{print $2}'`
 	  done
-      okCount=$(($okCount+1))
       echo "$MODULE---$MODULE_NAME:已经启动成功,PID=$PID"
     fi
-  done
-  echo "............本次共启动:${okCount}个服务..........."
 }
 
 stop() {
-  local MODULE=
-  local MODULE_NAME=
-  local JAR_NAME=
-  local command="$1"
-  local commandOk=0
-  local okCount=0
-  for((i=0;i<${#MODULES[@]};i++))
-  do
-    MODULE=${MODULES[$i]}
-    MODULE_NAME=${MODULE_NAMES[$i]}
-    JAR_NAME=${JARS[$i]}
-      commandOk=1
+    MODULE=${MODULES[$2]}
+    MODULE_NAME=${MODULE_NAMES[$2]}
+    JAR_NAME=${JARS[$2]}
       PID=`ps -ef |grep $(echo $JAR_NAME | awk -F/ '{print $NF}') | grep -v grep | awk '{print $2}'`
       if [ -n "$PID" ];then
         echo "$MODULE---$MODULE_NAME:准备结束,PID=$PID"
-        kill -9 $PID
-        PID=`ps -ef |grep $(echo $JAR_NAME | awk -F/ '{print $NF}') | grep -v grep | awk '{print $2}'`
-        while [ -n "$PID" ]
-        do
-          sleep 3s
-          PID=`ps -ef |grep $(echo $JAR_NAME | awk -F/ '{print $NF}') | grep -v grep | awk '{print $2}'`
-        done
+        kill $PID
         echo "$MODULE---$MODULE_NAME:成功结束"
-        okCount=$(($okCount+1))
       else
         echo "$MODULE---$MODULE_NAME:未运行"
       fi
-  done
-  echo "............本次共停止:${okCount}个服务............"
 }
 
 
 case "$1" in
   start)
-    start "$2"
+    start
   ;;
   stop)
-    stop "$2"
+    stop
   ;;
   restart)
-    stop "$2"
-[java] view plain copy
+    stop
   sleep 3s
   start "$2"
 ;;
