@@ -304,7 +304,7 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
      */
     @Override
     public xm_task getXmtaskByXmfeedbackid(long xmfeedbackid) {
-        return this.dao().fetch(xm_task.class,Cnd.where("id","=",this.fetch(xmfeedbackid)));
+        return this.dao().fetch(xm_task.class,Cnd.where("id","=",this.fetch(xmfeedbackid).getXminfid()));
     }
 
     public int getXmfeedbackStatus(long xmfeedbackid){

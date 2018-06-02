@@ -169,10 +169,16 @@ public class XmFeedbackController {
             @Param("xmfeedbackid") long xmfeedbackid,
             @Param("flag") boolean flag,
             HttpServletRequest req) {
-        if (isAllowForFeedback(xmfeedbackid)) {
-            if (xmFeedbackService.confirmXmfeedback(xmfeedbackid, flag)) return Result.success("提交反馈信息成功，请刷新界面!");
-        }else {
-            return Result.error("你没有权限进行操作！");
+        try {
+            if (isAllowForFeedback(xmfeedbackid)) {
+                if (xmFeedbackService.confirmXmfeedback(xmfeedbackid, flag)){
+                    return Result.success("提交反馈信息成功，请刷新界面!");
+                }
+            }else {
+                return Result.error("你没有权限进行操作！");
+            }
+        }catch (Exception e){
+            log.error("提交反馈失败",e);
         }
         return Result.error("system.error");
     }
@@ -182,7 +188,7 @@ public class XmFeedbackController {
         if (shiroUtil.isSuper()) return true;
         xm_task xmTask = xmFeedbackService.getXmtaskByXmfeedbackid(xmfeedbackid);
         if (!Lang.isEmpty(xmTask)) {
-            return xmTask.getAuthor().equals(sysUserinfService.getSysuserinfid(StringUtil.getPlatformUid()));
+            return xmTask.getAuthor().equals(StringUtil.getSysuserinfId());
         }
         return false;
     }
