@@ -20,6 +20,7 @@ import com.marveliu.app.web.commons.slog.annotation.SLog;
 import com.marveliu.app.web.commons.utils.ShiroUtil;
 import com.marveliu.app.web.commons.utils.StringUtil;
 import com.marveliu.framework.model.base.Result;
+import com.marveliu.framework.model.xm.xm_feedback;
 import com.marveliu.framework.page.datatable.DataTableColumn;
 import com.marveliu.framework.page.datatable.DataTableOrder;
 import com.marveliu.framework.services.gy.GyPayService;
@@ -193,11 +194,9 @@ public class XmFinalController {
             @Param("xminfid") String xminfid) {
 
         if (Strings.isNotBlank(xminfid)) {
-
             if (!shiroUtil.isSuper()) {
                 return Result.error("你没有权限");
             }
-
             try {
                 Trans.exec(
                         new Atom() {
@@ -207,17 +206,59 @@ public class XmFinalController {
                                 Cnd cnd = Cnd.where("id","like",regexid);
                                 xmTaskService.update(Chain.make("status",ConfigUtil.XM_TASK_DOING),cnd);
                                 xmInfService.update(Chain.make("status",ConfigUtil.XM_INF_DOING),cnd);
-                                xmFeedbackService.update(Chain.make("status",ConfigUtil.XM_FEEDBACK_CHECKING),Cnd.where("id","=",xmFeedbackService.getLatestXmfeedback(xminfid)));
+                                xm_feedback xmFeedback = xmFeedbackService.getLatestXmfeedback(xminfid);
+                                xmFeedback.setStatus(ConfigUtil.XM_FEEDBACK_CHECKING);
+                                xmFeedbackService.update(xmFeedback);
                                 xmBillService.update(Chain.make("status",ConfigUtil.XM_BILL_INIT),cnd);
                             }
                         }
                 );
                 return  Result.success("system.success");
             } catch (Exception e) {
-                log.error("重新打开完结任务shibai,");
+                log.error("重新打开完结任务失败",e);
             }
         }
+        return Result.error("system.error");
+    }
 
+
+    /**
+     * 强制删除一个任务
+     *
+     * @param xminfid
+     * @return
+     */
+    @At("/clear")
+    @Ok("json")
+    @RequiresPermissions("platform.xm.inf")
+    @SLog(type = "xm", tag = "项目删除", msg = "删除编号${args[0]}")
+    public Object clear(
+            @Param("xminfid") String xminfid) {
+
+        if (Strings.isNotBlank(xminfid)) {
+            if (!shiroUtil.isSuper()) {
+                return Result.error("你没有权限");
+            }
+            try {
+                Trans.exec(
+                        new Atom() {
+                            @Override
+                            public void run() {
+                                String regexid = "%"+xminfid.split("_")[1];
+                                Cnd cnd = Cnd.where("id","like",regexid);
+                                xmTaskService.clear(cnd);
+                                xmInfService.clear(cnd);
+                                xmFeedbackService.clear(Cnd.where("xminfid","=",xminfid));
+                                xmBillService.clear(cnd);
+                                xmEvaluationService.clear(cnd);
+                            }
+                        }
+                );
+                return  Result.success("system.success");
+            } catch (Exception e) {
+                log.error("重新打开完结任务失败",e);
+            }
+        }
         return Result.error("system.error");
     }
 
