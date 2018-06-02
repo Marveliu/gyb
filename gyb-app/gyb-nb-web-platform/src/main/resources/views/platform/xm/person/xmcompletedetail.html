@@ -157,12 +157,9 @@ layout("/layouts/platform.html"){
         $("#save").on("click", function () {
             $("#dialogCommit").modal("show");
         });
-
         $("#doCommit").on("click", function () {
             var btn = $(this);
             btn.button("loading");
-
-
             $.ajax({
                 type:'post',
                 url:'${base}/platform/xm/person/xmcompletedcommit',
@@ -180,7 +177,6 @@ layout("/layouts/platform.html"){
             });
 
         });
-
         $("#dialogDetail").on("hidden.bs.modal", function () {
             $(this).removeData("bs.modal");
         });

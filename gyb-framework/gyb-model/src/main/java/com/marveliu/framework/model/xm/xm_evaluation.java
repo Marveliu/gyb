@@ -19,7 +19,7 @@ public class xm_evaluation extends BaseModel implements Serializable {
     @Name
     @Comment("评价编号")
     @ColDefine(type = ColType.VARCHAR, width = 32)
-    @Prev(els = {@EL("$me.xmevaid()")})
+    // @Prev(els = {@EL("$me.xmevaid()")})
     private String id;
 
     @Column
@@ -87,11 +87,12 @@ public class xm_evaluation extends BaseModel implements Serializable {
      * 项目评价编号
      * @return
      */
-    public String xmevaid() {
+    public xm_evaluation xmevaid() {
         StringBuilder str = new StringBuilder();
         String[] arr = this.xminfid.split("_");
         str.append("eva_");
         str.append(arr[1]);
-        return str.toString();
+        this.setId(str.toString());
+        return this;
     }
 }

@@ -24,12 +24,10 @@ import com.marveliu.framework.page.datatable.DataTableColumn;
 import com.marveliu.framework.page.datatable.DataTableOrder;
 import com.marveliu.framework.services.gy.GyPayService;
 import com.marveliu.framework.services.sys.SysUserinfService;
-import com.marveliu.framework.services.xm.XmBillService;
-import com.marveliu.framework.services.xm.XmEvaluationService;
-import com.marveliu.framework.services.xm.XmFacadeService;
-import com.marveliu.framework.services.xm.XmInfService;
+import com.marveliu.framework.services.xm.*;
 import com.marveliu.framework.util.ConfigUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -39,6 +37,8 @@ import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
+import org.nutz.trans.Atom;
+import org.nutz.trans.Trans;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -54,7 +54,17 @@ public class XmFinalController {
 
     @Inject
     @Reference
+    private XmTaskService xmTaskService;
+
+    @Inject
+    @Reference
     private XmInfService xmInfService;
+
+
+    @Inject
+    @Reference
+    private XmFeedbackService xmFeedbackService;
+
 
     @Inject
     @Reference
@@ -82,16 +92,16 @@ public class XmFinalController {
     @At("")
     @Ok("beetl:/platform/xm/final/index.html")
     @RequiresPermissions("platform.xm.final")
-    public void index( HttpServletRequest req) {
+    public void index(HttpServletRequest req) {
         int total = 0;
         int doing = 0;
         int done = 0;
         int finish = 0;
-        total =  xmInfService.count();
-        doing = xmInfService.count(Cnd.where("status","=",0));
-        done = xmInfService.count(Cnd.where("status","=",1));
-        finish = xmInfService.count(Cnd.where("status",">",1));
-        req.setAttribute("total",total);
+        total = xmInfService.count();
+        doing = xmInfService.count(Cnd.where("status", "=", 0));
+        done = xmInfService.count(Cnd.where("status", "=", 1));
+        finish = xmInfService.count(Cnd.where("status", ">", 1));
+        req.setAttribute("total", total);
         req.setAttribute("doing", doing);
         req.setAttribute("final", done);
         req.setAttribute("finish", finish);
@@ -109,17 +119,17 @@ public class XmFinalController {
             @Param("::order") List<DataTableOrder> order,
             @Param("::columns") List<DataTableColumn> columns) {
         Cnd cnd = Cnd.NEW();
-        cnd.and("status",">=",ConfigUtil.XM_INF_DONE);
-        if(!Strings.isEmpty(xminfd)){
-            cnd.and("id","=",xminfd);
+        cnd.and("status", ">=", ConfigUtil.XM_INF_DONE);
+        if (!Strings.isEmpty(xminfd)) {
+            cnd.and("id", "=", xminfd);
         }
 
-        if(status != 0){
-            cnd.and("status","=",status);
+        if (status != 0) {
+            cnd.and("status", "=", status);
         }
 
-        if(!shiroUtil.isSuper()){
-            cnd.and("author","=",sysUserinfService.getSysuserinfid(StringUtil.getPlatformUid()));
+        if (!shiroUtil.isSuper()) {
+            cnd.and("author", "=", sysUserinfService.getSysuserinfid(StringUtil.getPlatformUid()));
         }
         return xmInfService.data(length, start, draw, order, columns, cnd, null);
     }
@@ -130,8 +140,8 @@ public class XmFinalController {
     // @SLog(type = "xm", tag = "", msg = "")
     public void detail(String id, HttpServletRequest req) {
         if (!Strings.isBlank(id)) {
-            req.setAttribute("obj", xmInfService.fetch(Cnd.where("id","=",id)));
-        }else{
+            req.setAttribute("obj", xmInfService.fetch(Cnd.where("id", "=", id)));
+        } else {
             req.setAttribute("obj", null);
         }
     }
@@ -142,7 +152,7 @@ public class XmFinalController {
     public void item(String id, HttpServletRequest req) {
         if (!Strings.isBlank(id)) {
             req.setAttribute("obj", xmInfService.fetch(id));
-        }else{
+        } else {
             req.setAttribute("obj", null);
         }
     }
@@ -154,18 +164,61 @@ public class XmFinalController {
     public Object commit(
             @Param("id") String id,
             @Param("grade") float grade,
-            @Param("paysum")float paysum,
-            @Param("evanote")String evanote,
-            @Param("billnote")String billnote,
+            @Param("paysum") float paysum,
+            @Param("evanote") String evanote,
+            @Param("billnote") String billnote,
             HttpServletRequest req) {
         try {
-            if(xmFacadeService.initXmFinal(id,grade,paysum,evanote,billnote,StringUtil.getPlatformUid())) {
+            if (xmFacadeService.initXmFinal(id, grade, paysum, evanote, billnote, StringUtil.getPlatformUid())) {
                 return Result.success("system.success");
             }
         } catch (Exception e) {
             return Result.error("system.error");
         }
         return Result.error("操作失败，请注意不能重复进行结算！");
+    }
+
+
+    /**
+     * 强制打开一个已经完结的任务
+     *
+     * @param xminfid
+     * @return
+     */
+    @At("/reset")
+    @Ok("json")
+    @RequiresPermissions("platform.xm.inf")
+    @SLog(type = "xm", tag = "项目重置", msg = "重置编号${args[0]}")
+    public Object reset(
+            @Param("xminfid") String xminfid) {
+
+        if (Strings.isNotBlank(xminfid)) {
+
+            if (!shiroUtil.isSuper()) {
+                return Result.error("你没有权限");
+            }
+
+            try {
+                Trans.exec(
+                        new Atom() {
+                            @Override
+                            public void run() {
+                                String regexid = "%"+xminfid.split("_")[1];
+                                Cnd cnd = Cnd.where("id","like",regexid);
+                                xmTaskService.update(Chain.make("status",ConfigUtil.XM_TASK_DOING),cnd);
+                                xmInfService.update(Chain.make("status",ConfigUtil.XM_INF_DOING),cnd);
+                                xmFeedbackService.update(Chain.make("status",ConfigUtil.XM_FEEDBACK_CHECKING),Cnd.where("id","=",xmFeedbackService.getLatestXmfeedback(xminfid)));
+                                xmBillService.update(Chain.make("status",ConfigUtil.XM_BILL_INIT),cnd);
+                            }
+                        }
+                );
+                return  Result.success("system.success");
+            } catch (Exception e) {
+                log.error("重新打开完结任务shibai,");
+            }
+        }
+
+        return Result.error("system.error");
     }
 
 

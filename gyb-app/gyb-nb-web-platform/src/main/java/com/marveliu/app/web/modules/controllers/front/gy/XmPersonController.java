@@ -241,14 +241,17 @@ public class XmPersonController {
     @Ok("json")
     @RequiresPermissions("platform.xm.person")
     @AdaptBy(type = WhaleAdaptor.class)
-    @SLog(type = "xm",tag = "雇员添加项目反馈", msg = "${args[0].note}")
+    @SLog(type = "xm",tag = "雇员提交项目反馈", msg = "${args[0].note}")
     public Object feedbackaddDo(@Param("..") xm_feedback xmFeedback, HttpServletRequest req) {
         String gyid =  shiroUtil.getCurrentGyid();
         if (xmFacadeService.isGyForXm(xmFeedback.getXminfid(), gyid)) {
             try {
                 xmFeedback.setGyid(gyid);
                 xmFeedback.setReply(" ");
-                if(!Lang.isEmpty(xmFeedbackService.addXmfeedback(xmFeedback))){
+                // 用户总是添加，但是没有提交，故合并
+                xm_feedback xmfeedbackAdd = xmFeedbackService.addXmfeedback(xmFeedback);
+                if(!Lang.isEmpty(xmfeedbackAdd)){
+                    this.feedbackcommit(xmfeedbackAdd.getId());
                     return Result.success("system.success");
                 }
             } catch (Exception e) {

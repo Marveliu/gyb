@@ -18,6 +18,7 @@ package com.marveliu.app.web.modules.controllers.platform.xm;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.marveliu.app.web.commons.utils.ShiroUtil;
 import com.marveliu.app.web.commons.utils.StringUtil;
+import com.marveliu.framework.model.base.Result;
 import com.marveliu.framework.model.xm.xm_inf;
 import com.marveliu.framework.page.datatable.DataTableColumn;
 import com.marveliu.framework.page.datatable.DataTableOrder;
@@ -125,5 +126,4 @@ public class XmInfController{
         List<xm_inf> xmInfList = xmInfService.query(cnd.desc("at"));
         return xmInfList;
     }
-
 }

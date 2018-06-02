@@ -211,13 +211,16 @@ public class XmFacadeServiceImpl implements XmFacadeService {
             xmEvaluation.setXminfid(xminfid);
             xmEvaluation.setGrade(xmEvaluationGrade);
             xmEvaluation.setNote(xmEvaluationNote);
+            xmEvaluation.xmevaid();
+
             xm_inf xmInf = xmInfService.fetch(xminfid);
             Chain xmBillChain =  Chain.make("status",ConfigUtil.XM_BILL_CHECKING).add("paysum",paySum).add("note",xmBillNote).add("opAt",Times.getTS());
 
             Trans.exec(new Atom() {
                 @Override
                 public void run() {
-                    xmEvaluationService.insert(xmEvaluation);
+
+                    xmEvaluationService.insertOrUpdate(xmEvaluation);
 
                     // 默认pay由前端显示
                     // if (!Lang.isEmpty(pay)) {
@@ -304,7 +307,7 @@ public class XmFacadeServiceImpl implements XmFacadeService {
                         xmBill.getId(),
                         xmInf.getId(),
                         String.valueOf(xmBill.getPaysum()),
-                        xmBill.getRealgypay().getId(),
+                        xmBill.getRealgypay().getPayid(),
                         xmBill.getRealgypay().getPayname(),
                         xmBill.getRealgypay().getTypename()
                 );
