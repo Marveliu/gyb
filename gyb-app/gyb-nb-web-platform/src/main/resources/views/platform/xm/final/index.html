@@ -65,6 +65,8 @@ layout("/layouts/platform-xm.html"){
                     <th>任务名称</th>
                     <th>雇员编号</th>
                     <th>雇员名称</th>
+                    <th>项目经理编号</th>
+                    <th>项目经理名称</th>
                     <th>任务状态</th>
                     <th>${msg['globals.table.column.operation']}</th>
                 </tr>
@@ -113,7 +115,9 @@ layout("/layouts/platform-xm.html"){
                 {"data": "id", "bSortable": true},
                 {"data": "taskname", "bSortable": true},
                 {"data": "gyid", "bSortable": true},
+                {"data": "realname", "bSortable": true},
                 {"data": "author", "bSortable": true},
+                {"data": "authorrealname", "bSortable": true},
                 {"data": "xminfstatus", "bSortable": true},
             ],
             "columnDefs": [
@@ -125,7 +129,7 @@ layout("/layouts/platform-xm.html"){
                                 '<li><a href="${base}/platform/xm/final/item/' + row.id + '">结 算</a></li>' +
                                 '</ul></div>';
                     },
-                    "targets": 5
+                    "targets": 7
                 }
             ]
         });
