@@ -45,6 +45,8 @@ import org.nutz.lang.Times;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
+import java.util.List;
+
 /**
  * @author Marveliu
  * @since 02/05/2018
@@ -285,7 +287,9 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
      */
     public xm_feedback getLatestXmfeedback(String xminfid) {
         try {
-            return this.query(Cnd.where("xminfid", "=", xminfid).desc("at")).get(0);
+            List<xm_feedback> xm_feedbackList = this.query(Cnd.where("xminfid", "=", xminfid).desc("at"));
+            if(Lang.isEmpty(xm_feedbackList)) return null;
+            return xm_feedbackList.get(0);
         } catch (Exception e) {
             log.error("getLatestXmfeedback fail", e);
         }

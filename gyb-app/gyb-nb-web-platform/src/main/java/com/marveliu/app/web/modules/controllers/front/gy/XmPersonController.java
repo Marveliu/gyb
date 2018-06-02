@@ -241,7 +241,7 @@ public class XmPersonController {
     @Ok("json")
     @RequiresPermissions("platform.xm.person")
     @AdaptBy(type = WhaleAdaptor.class)
-    @SLog(type = "xm",tag = "雇员提交项目反馈", msg = "${args[0].note}")
+    @SLog(type = "xm",tag = "雇员提交项目反馈", msg = "${args[0].getNote()}")
     public Object feedbackaddDo(@Param("..") xm_feedback xmFeedback, HttpServletRequest req) {
         String gyid =  shiroUtil.getCurrentGyid();
         if (xmFacadeService.isGyForXm(xmFeedback.getXminfid(), gyid)) {
@@ -266,7 +266,7 @@ public class XmPersonController {
     @At("/feedbackcommit/?")
     @Ok("json")
     @RequiresPermissions("platform.xm.person")
-    @SLog(type = "xm",tag = "雇员提交项目反馈", msg = "${args[0]}")
+    @SLog(type = "xm",tag = "雇员提交项目反馈", msg = "主键:${args[0]}")
     public Object feedbackcommit(@Param("id") Long id) {
         try {
             if(xmFeedbackService.commitXmfeedback(id)){
@@ -388,7 +388,7 @@ public class XmPersonController {
     @At("/xmcompletedcommit")
     @Ok("json")
     @RequiresPermissions("platform.xm.person")
-    @SLog(type = "xm",tag = "雇员提交任务结算", msg = "${args[0]},${args[1]}")
+    @SLog(type = "xm",tag = "雇员提交任务结算", msg = "任务：${args[0]},支付方式：${args[1]}")
     public Object commit(
             @Param("id") String xminfid,
             @Param("gypayid") String gypayid,

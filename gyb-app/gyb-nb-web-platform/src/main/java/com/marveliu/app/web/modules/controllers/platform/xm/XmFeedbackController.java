@@ -129,7 +129,7 @@ public class XmFeedbackController {
     @Ok("json")
     @RequiresPermissions("platform.xm.feedback.edit")
     @AdaptBy(type = WhaleAdaptor.class)
-    @SLog(type = "xm", tag = "项目经理审核反馈", msg = "反馈编号:{args[0]}")
+    @SLog(type = "xm", tag = "项目经理审核反馈", msg = "反馈编号:${args[0]}")
     public Object editDo(
             @Param("xmfeedbackid") long xmfeedbackid,
             @Param("nextcommitat") String nextcommit,
@@ -164,7 +164,7 @@ public class XmFeedbackController {
     @At("/feedbackcommit")
     @Ok("json")
     @RequiresPermissions("platform.xm.feedback.edit")
-    @SLog(type = "xm", tag = "提交反馈信息", msg = "任务反馈编号:${args[0]},是否为最终反馈：${flag}")
+    @SLog(type = "xm", tag = "提交反馈信息", msg = "任务反馈编号:${args[0]},是否为最终反馈：${args[1]}")
     public Object feedbackcommit(
             @Param("xmfeedbackid") long xmfeedbackid,
             @Param("flag") boolean flag,

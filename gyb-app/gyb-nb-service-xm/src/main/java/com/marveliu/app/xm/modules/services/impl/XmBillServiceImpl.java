@@ -169,7 +169,9 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
             xm_bill xmBill = this.fetchLinks(this.fetch(xmbillid),"");
             if(!Lang.isEmpty(xmBill) && xmBill.getStatus() == ConfigUtil.XM_BILL_PAYING){
                 Cnd cnd = Cnd.where("id","=",xmbillid);
-                Chain chain = Chain.make("realgypayid",xmBill.getGypayid()).add("status",ConfigUtil.XM_BILL_PAYED).add("payby",sysuserinfid).add("opAt",Times.getTS());
+                // gypayid
+                // Chain chain = Chain.make("realgypayid",xmBill.getGypayid()).add("status",ConfigUtil.XM_BILL_PAYED).add("payby",sysuserinfid).add("opAt",Times.getTS());
+                Chain chain = Chain.make("status",ConfigUtil.XM_BILL_PAYED).add("payby",sysuserinfid).add("opAt",Times.getTS());
                 Chain xminfchain = Chain.make("status",ConfigUtil.XM_INF_PAYED).add("opAt",Times.getTS());
                 // 更新账单和任务信息表
                 if(this.update(chain,cnd)!=0 && xmInfService.update(xminfchain,Cnd.where("id","=",xmBill.getXminfid()))!=0){

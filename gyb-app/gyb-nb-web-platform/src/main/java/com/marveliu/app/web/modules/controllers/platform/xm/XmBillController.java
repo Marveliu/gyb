@@ -118,7 +118,7 @@ public class XmBillController{
     public void detail(String id, HttpServletRequest req) {
         if (!Strings.isBlank(id)) {
             xm_bill bill = xmBillService.fetch(id);
-            bill = xmBillService.fetchLinks(bill,"realgypay");
+            bill = xmBillService.fetchLinks(bill,"");
             req.setAttribute("obj", bill);
         }else{
             req.setAttribute("obj", null);
@@ -128,7 +128,7 @@ public class XmBillController{
     @At("/check/?")
     @Ok("json")
     @RequiresPermissions("platform.xm.bill")
-    @SLog(type = "xm",tag = "账单支付确认", msg = "${req.getAttribute('id')}")
+    @SLog(type = "xm",tag = "账单支付确认", msg = "账单编号：${req.getAttribute('id')}")
     public Object check(String id, HttpServletRequest req) {
         try {
             String sysuerid = StringUtil.getPlatformUid();
