@@ -10,7 +10,7 @@ import org.nutz.mvc.NutConfig;
 import org.nutz.mvc.impl.processor.AbstractProcessor;
 
 /**
- * Created by wizzer on 2016/6/22.
+ * Created by wiz on 2016/6/22.
  */
 public class GlobalsSettingProcessor extends AbstractProcessor {
     private ShiroUtil shiroUtil;

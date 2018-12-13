@@ -6,7 +6,7 @@ import org.nutz.dao.entity.annotation.*;
 import java.io.Serializable;
 
 /**
- * Created by Wizzer on 2016/7/30.
+ * Created by wiz on 2016/7/30.
  */
 @Table("sys_task")
 public class Sys_task extends BaseModel implements Serializable {

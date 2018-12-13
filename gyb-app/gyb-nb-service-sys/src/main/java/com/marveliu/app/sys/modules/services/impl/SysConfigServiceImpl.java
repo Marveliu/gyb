@@ -11,7 +11,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/12/23.
+ * Created by wiz on 2016/12/23.
  */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass=SysConfigService.class)

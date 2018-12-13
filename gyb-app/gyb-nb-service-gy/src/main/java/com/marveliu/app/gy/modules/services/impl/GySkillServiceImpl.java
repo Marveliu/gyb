@@ -48,27 +48,27 @@ public class GySkillServiceImpl extends BaseServiceImpl<gy_skill> implements GyS
      */
     @Override
     public Map<String, Float> getGySkills(String gyid) {
-            Map<String,Float> result = new HashMap<String, Float>();
-            Map<String,Integer> count = new HashMap<>();
-            Cnd cnd = Cnd.where("gyid","=",gyid);
-            List<gy_skill> skillList =  this.dao().query(gy_skill.class,cnd);
-            if(!skillList.isEmpty()){
-                for (gy_skill skill : skillList){
-                    if (count.containsKey(skill.getSkillid())){
-                        // 加权计算
-                        result.put(skill.getSkillid(),skill.getSkilllevel());
-                        count.put(skill.getSkillid(),count.get(skill.getSkillid())+1);
-                    }else {
-                        result.put(skill.getSkillid(),skill.getSkilllevel());
-                    }
+        Map<String, Float> result = new HashMap<String, Float>();
+        Map<String, Integer> count = new HashMap<>();
+        Cnd cnd = Cnd.where("gyid", "=", gyid);
+        List<gy_skill> skillList = this.dao().query(gy_skill.class, cnd);
+        if (!skillList.isEmpty()) {
+            for (gy_skill skill : skillList) {
+                if (count.containsKey(skill.getSkillid())) {
+                    // 加权计算
+                    result.put(skill.getSkillid(), skill.getSkilllevel());
+                    count.put(skill.getSkillid(), count.get(skill.getSkillid()) + 1);
+                } else {
+                    result.put(skill.getSkillid(), skill.getSkilllevel());
                 }
             }
-            for (Map.Entry<String,Integer> item : count.entrySet()){
-                if(result.containsKey(item.getKey())){
-                    result.put(item.getKey(),result.get(item.getKey())/item.getValue());
-                }
+        }
+        for (Map.Entry<String, Integer> item : count.entrySet()) {
+            if (result.containsKey(item.getKey())) {
+                result.put(item.getKey(), result.get(item.getKey()) / item.getValue());
             }
-            return result;
+        }
+        return result;
     }
 
     /**
@@ -79,6 +79,6 @@ public class GySkillServiceImpl extends BaseServiceImpl<gy_skill> implements GyS
      */
     @Override
     public Boolean setGySkillLevel(List<gy_skill> skills) {
-        return !this.dao().insert(skills).isEmpty() ;
+        return !this.dao().insert(skills).isEmpty();
     }
 }

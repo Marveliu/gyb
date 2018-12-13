@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by wizzer on 2016/6/24.
+ * Created by wiz on 2016/6/24.
  */
 @IocBean
 @At("/platform/sys/unit")

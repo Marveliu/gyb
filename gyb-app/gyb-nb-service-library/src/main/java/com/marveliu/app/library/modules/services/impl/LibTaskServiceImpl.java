@@ -19,7 +19,7 @@ import org.nutz.lang.Strings;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/12/22.
+ * Created by wiz on 2016/12/22.
  */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass=LibTaskService.class)

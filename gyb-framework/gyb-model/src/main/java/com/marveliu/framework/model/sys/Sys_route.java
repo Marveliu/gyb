@@ -6,7 +6,7 @@ import org.nutz.dao.entity.annotation.*;
 import java.io.Serializable;
 
 /**
- * Created by Wizzer on 2016/7/31.
+ * Created by wiz on 2016/7/31.
  */
 @Table("sys_route")
 public class Sys_route extends BaseModel implements Serializable {

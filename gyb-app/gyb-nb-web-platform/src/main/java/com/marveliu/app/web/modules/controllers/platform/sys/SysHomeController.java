@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 /**
- * Created by wizzer on 2016/6/23.
+ * Created by wiz on 2016/6/23.
  */
 @IocBean
 @At("/platform/home")

@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by Wizzer on 2016/7/18.
+ * Created by wiz on 2016/7/18.
  */
 @Table("cms_link_class")
 public class Cms_link_class extends BaseModel implements Serializable {

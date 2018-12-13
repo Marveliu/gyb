@@ -9,7 +9,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.quartz.JobKey;
 
 /**
- * Created by wizzer on 2018/3/19.
+ * Created by wiz on 2018/3/19.
  */
 @IocBean
 @Service(interfaceClass = TaskPlatformService.class)
@@ -89,7 +89,7 @@ public class TaskPlatformServiceImpl implements TaskPlatformService {
     /**
      * 清除任务
      */
-    public void clear(){
+    public void clear() {
         quartzManager.clear();
     }
 }

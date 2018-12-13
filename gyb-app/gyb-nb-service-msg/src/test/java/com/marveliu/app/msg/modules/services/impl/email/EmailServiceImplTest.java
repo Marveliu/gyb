@@ -39,7 +39,7 @@ public class EmailServiceImplTest {
 
     @Test
     public void sendTemplate() throws Exception {
-        TMsg msg = new PasswordTMsg("刘尚楠","www.baidu.com");
+        TMsg msg = new PasswordTMsg("marveliu","www.baidu.com");
         assertEquals(true,emailService.sendHtmlTemplateByTemplateName(TO,msg));
     }
 

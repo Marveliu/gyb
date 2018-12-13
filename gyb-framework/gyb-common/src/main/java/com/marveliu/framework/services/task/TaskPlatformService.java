@@ -1,7 +1,7 @@
 package com.marveliu.framework.services.task;
 
 /**
- * Created by wizzer on 2018/3/19.
+ * Created by wiz on 2018/3/19.
  */
 public interface TaskPlatformService {
     /**

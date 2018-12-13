@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/6/21.
+ * Created by wiz on 2016/6/21.
  */
 @Table("sys_role")
 @TableIndexes({@Index(name = "INDEX_SYS_ROLE_CODE", fields = {"code"}, unique = true)})

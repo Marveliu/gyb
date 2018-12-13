@@ -21,21 +21,21 @@ public class XmBillServiceImplTest {
 
     private static final Log log = Logs.get();
 
-    private final static  String XMTASK_ID = "rw_test0";
-    private final static  String XMBILL_ID = "bill_test0";
-    private final static  String XMINF_ID = "xm_test0";
-    private final static  String GY_ID = "gy18041";             //liushangnan
-    private final static  String PAY_ID = "test_pay0";             //liushangnan
-    private final static  String UID = "405a28c9389d4a8581a29c283dc9f5b9";             //liushangnan
-    private final static  String GYBID = "gyb201800";             //liushangnan
+    private final static String XMTASK_ID = "rw_test0";
+    private final static String XMBILL_ID = "bill_test0";
+    private final static String XMINF_ID = "xm_test0";
+    private final static String GY_ID = "gy18041";             //liushangnan
+    private final static String PAY_ID = "test_pay0";             //liushangnan
+    private final static String UID = "405a28c9389d4a8581a29c283dc9f5b9";             //liushangnan
+    private final static String GYBID = "gyb201800";             //liushangnan
 
     @Inject
     private XmBillService xmBillService;
 
     @Test
     public void test() {
-        assertEquals(true,xmBillService.checkXmbillByGy(XMBILL_ID,PAY_ID,GY_ID));
-        assertEquals(true,xmBillService.commitXmbill(XMBILL_ID,GYBID));
+        assertEquals(true, xmBillService.checkXmbillByGy(XMBILL_ID, PAY_ID, GY_ID));
+        assertEquals(true, xmBillService.commitXmbill(XMBILL_ID, GYBID));
     }
 
 }

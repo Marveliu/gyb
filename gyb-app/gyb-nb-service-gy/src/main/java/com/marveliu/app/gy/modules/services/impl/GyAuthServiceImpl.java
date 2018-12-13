@@ -102,9 +102,9 @@ public class GyAuthServiceImpl extends BaseServiceImpl<gy_auth> implements GyAut
             int status = ConfigUtil.GY_AUTH_DECLINE;
             if (flag) {
                 status = ConfigUtil.GY_AUTH_PASS;
-                Strings.sNull(note,GY_AUTH_PASS_NOTE);
-            }else {
-                Strings.sNull(note,GY_AUTH_DECLINE_NOTE);
+                Strings.sNull(note, GY_AUTH_PASS_NOTE);
+            } else {
+                Strings.sNull(note, GY_AUTH_DECLINE_NOTE);
             }
             int count = this.dao().update(gy_auth.class, Chain.make("status", status).add("note", note), cnd);
             if (count == 1) {

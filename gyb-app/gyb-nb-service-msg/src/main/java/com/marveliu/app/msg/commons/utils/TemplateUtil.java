@@ -35,7 +35,7 @@ import java.util.HashMap;
 public class TemplateUtil {
 
     private final static Log log = Logs.get();
-    private HashMap<String,String> dataMap = new HashMap<>();
+    private HashMap<String, String> dataMap = new HashMap<>();
 
 
     public TemplateUtil() {
@@ -46,17 +46,17 @@ public class TemplateUtil {
         StringBuilder path = new StringBuilder();
         try {
             addDate(tMsg);
-            Template t =  AppContext.getDefault().getIoc().get(GroupTemplate.class).getTemplate( tMsg.getTemplatePath());
+            Template t = AppContext.getDefault().getIoc().get(GroupTemplate.class).getTemplate(tMsg.getTemplatePath());
             t.binding(dataMap);
             return t;
-        }catch (Exception e){
-            log.error("buildTemplate error",e);
+        } catch (Exception e) {
+            log.error("buildTemplate error", e);
         }
         return null;
     }
 
-    private void addDate(String key,String value){
-        this.dataMap.put(key,value);
+    private void addDate(String key, String value) {
+        this.dataMap.put(key, value);
     }
 
 
@@ -64,25 +64,25 @@ public class TemplateUtil {
         Field[] fields = msg.getClass().getDeclaredFields();
         Field[] basefields = msg.getClass().getSuperclass().getDeclaredFields();
         try {
-            addDate(fields,msg);
-            addDate(basefields,msg);
+            addDate(fields, msg);
+            addDate(basefields, msg);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("添加模板信息失败");
         }
         return true;
     }
 
-    private void addDate(Field[] fs,Object obj){
+    private void addDate(Field[] fs, Object obj) {
         for (int j = 0; j < fs.length; j++) {
             fs[j].setAccessible(true);
-            String name =fs[j].getType().getName();
+            String name = fs[j].getType().getName();
             // String type
             if (name.equals(java.lang.String.class.getName())) {
                 try {
                     String K = fs[j].getName();
                     String V = fs[j].get(obj).toString();
-                    addDate(K,V);
+                    addDate(K, V);
                 } catch (IllegalArgumentException e) {
                     log.error(e);
                 } catch (IllegalAccessException e) {

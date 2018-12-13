@@ -14,7 +14,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 /**
- * Created by Wizzer.cn on 2015/6/27.
+ * Created by wiz.cn on 2015/6/27.
  */
 @IocBean
 public class TestJob implements Job {

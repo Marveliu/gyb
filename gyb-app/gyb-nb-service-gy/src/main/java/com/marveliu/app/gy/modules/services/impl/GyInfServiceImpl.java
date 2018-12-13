@@ -40,11 +40,12 @@ public class GyInfServiceImpl extends BaseServiceImpl<gy_inf> implements GyInfSe
 
     /**
      * 通过用户id获得雇员信息
+     *
      * @param userid
      * @return
      */
-    public gy_inf getGyByUserId(String userid){
-        return this.dao().fetch(gy_inf.class,Cnd.where("userid","=",userid));
+    public gy_inf getGyByUserId(String userid) {
+        return this.dao().fetch(gy_inf.class, Cnd.where("userid", "=", userid));
     }
 
     /**
@@ -53,8 +54,8 @@ public class GyInfServiceImpl extends BaseServiceImpl<gy_inf> implements GyInfSe
      * @param gyid
      * @return
      */
-    public String getUidByGyid(String gyid){
-        return this.fetch(Cnd.where("id","=",gyid)).getUserid();
+    public String getUidByGyid(String gyid) {
+        return this.fetch(Cnd.where("id", "=", gyid)).getUserid();
     }
 
     /**
@@ -66,28 +67,22 @@ public class GyInfServiceImpl extends BaseServiceImpl<gy_inf> implements GyInfSe
      */
     @Override
     public Boolean setGyStatus(String gyid, Boolean flag) {
-        Cnd cnd = Cnd.where("id","=",gyid);
-        Chain chain = Chain.make("disabled",!flag);
-        if(this.dao().update(gy_inf.class,chain,cnd)!=0)
-        {
+        Cnd cnd = Cnd.where("id", "=", gyid);
+        Chain chain = Chain.make("disabled", !flag);
+        if (this.dao().update(gy_inf.class, chain, cnd) != 0) {
             return true;
         }
         return false;
     }
 
-    public boolean setQq(String userid , String qq)
-    {
-        Chain chain = Chain.make("qq",qq);
-        Cnd cnd =Cnd.where("userid","=",userid);
-        if(this.dao().update(gy_inf.class,chain,cnd)!=0)
-        {
+    public boolean setQq(String userid, String qq) {
+        Chain chain = Chain.make("qq", qq);
+        Cnd cnd = Cnd.where("userid", "=", userid);
+        if (this.dao().update(gy_inf.class, chain, cnd) != 0) {
             return true;
         }
         return false;
     }
-
-
-
 
 
 }

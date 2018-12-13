@@ -33,8 +33,8 @@ import org.nutz.mvc.view.UTF8JsonView;
 
 /**
  * JWT Token拦截器
- *
- * Created by wizzer on 2016/8/11.
+ * <p>
+ * Created by wiz on 2016/8/11.
  */
 public class ApiTokenFilter implements ActionFilter {
     private static final Log log = Logs.get();

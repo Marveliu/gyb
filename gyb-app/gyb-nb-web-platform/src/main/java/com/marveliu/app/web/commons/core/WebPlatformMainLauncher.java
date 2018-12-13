@@ -16,7 +16,7 @@ import org.nutz.mvc.annotation.*;
 import java.security.Security;
 
 /**
- * Created by wizzer on 2018/3/16.
+ * Created by wiz on 2018/3/16.
  */
 @IocBean(create = "init", depose = "depose")
 @Modules(packages = "com.marveliu")

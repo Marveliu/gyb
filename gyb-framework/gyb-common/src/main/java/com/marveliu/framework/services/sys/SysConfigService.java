@@ -7,7 +7,7 @@ import com.marveliu.framework.services.base.BaseService;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/12/23.
+ * Created by wiz on 2016/12/23.
  */
 public interface SysConfigService extends BaseService<Sys_config> {
     List<Sys_config> getAllList();

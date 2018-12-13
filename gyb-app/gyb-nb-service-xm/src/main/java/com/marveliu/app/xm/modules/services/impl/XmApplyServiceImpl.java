@@ -176,14 +176,14 @@ public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmA
             if (queue != null)
                 try {
                     // 失效时间
-                    if(queue.contains(xmApply)) return false;
+                    if (queue.contains(xmApply)) return false;
                     boolean re = queue.offer(xmApply, 50, TimeUnit.MILLISECONDS);
                     if (!re) {
                         log.error("xmApply queue is full, drop it ...");
                     }
                     return re;
                 } catch (InterruptedException e) {
-                log.error("something wroing:",e);
+                    log.error("something wroing:", e);
                 }
         } else {
             return sync(xmApply);

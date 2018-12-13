@@ -25,7 +25,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/6/29.
+ * Created by wiz on 2016/6/29.
  */
 @IocBean
 @At("/platform/sys/log")

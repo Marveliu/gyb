@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by wizzer on 2016/6/22.
+ * Created by wiz on 2016/6/22.
  */
 public class SLogAopInterceptor implements MethodInterceptor {
     private static final Log log = Logs.get();

@@ -7,7 +7,7 @@ import org.nutz.dao.entity.annotation.*;
 import java.io.Serializable;
 
 /**
- * Created by wizzer on 2016/7/2.
+ * Created by wiz on 2016/7/2.
  */
 @Table("wx_mass_news")
 public class Wx_mass_news extends BaseModel implements Serializable {

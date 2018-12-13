@@ -58,17 +58,17 @@ public class XmFacadeServiceImplTest {
         Ioc ioc = AppContext.getDefault().getIoc();
         Dao dao = ioc.get(Dao.class);
         // 重置任务书为申请阶段
-        dao.execute(Sqls.create("update xm_task set status = 2 where id = @xmtaskid").setParam("xmtaskid",XMTASK_ID));
-        dao.execute(Sqls.create("delete from xm_apply where xmtaskid = @xmtaskid").setParam("xmtaskid",XMTASK_ID));
-        dao.execute(Sqls.create("delete from xm_limit where xmtaskid = @xmtaskid").setParam("xmtaskid",XMTASK_ID));
-        dao.execute(Sqls.create("delete from xm_inf where id = @xminfid").setParam("xminfid",XMINF_ID));
-        dao.execute(Sqls.create("delete from xm_bill where xminfid = @xminfid").setParam("xminfid",XMINF_ID));
-        dao.execute(Sqls.create("delete from xm_feedback where xminfid = @xminfid").setParam("xminfid",XMINF_ID));
-        dao.execute(Sqls.create("delete from xm_evaluation where xminfid = @xminfid").setParam("xminfid",XMINF_ID));
+        dao.execute(Sqls.create("update xm_task set status = 2 where id = @xmtaskid").setParam("xmtaskid", XMTASK_ID));
+        dao.execute(Sqls.create("delete from xm_apply where xmtaskid = @xmtaskid").setParam("xmtaskid", XMTASK_ID));
+        dao.execute(Sqls.create("delete from xm_limit where xmtaskid = @xmtaskid").setParam("xmtaskid", XMTASK_ID));
+        dao.execute(Sqls.create("delete from xm_inf where id = @xminfid").setParam("xminfid", XMINF_ID));
+        dao.execute(Sqls.create("delete from xm_bill where xminfid = @xminfid").setParam("xminfid", XMINF_ID));
+        dao.execute(Sqls.create("delete from xm_feedback where xminfid = @xminfid").setParam("xminfid", XMINF_ID));
+        dao.execute(Sqls.create("delete from xm_evaluation where xminfid = @xminfid").setParam("xminfid", XMINF_ID));
     }
 
     @Test
-    public void test(){
+    public void test() {
         acceptXmapply();
         feedback();
         initXmFinal();
@@ -88,7 +88,7 @@ public class XmFacadeServiceImplTest {
     public void feedback() {
         Ioc ioc = AppContext.getDefault().getIoc();
         Dao dao = ioc.get(Dao.class);
-        dao.execute(Sqls.create("delete from xm_feedback where xminfid = @xminfid").setParam("xminfid",XMINF_ID));
+        dao.execute(Sqls.create("delete from xm_feedback where xminfid = @xminfid").setParam("xminfid", XMINF_ID));
         // 第一次反馈
         xm_feedback xmFeedback = new xm_feedback();
         xmFeedback.setGyid(GY_ID);
@@ -97,9 +97,9 @@ public class XmFacadeServiceImplTest {
         xmFeedback = xmFeedbackService.addXmfeedback(xmFeedback);
         assertNotNull(xmFeedback);
         assertNull(xmFeedbackService.addXmfeedback(xmFeedback));
-        assertEquals(true,xmFeedbackService.commitXmfeedback(xmFeedback.getId()));
-        assertEquals(true,xmFeedbackService.checkXmfeedback(xmFeedback.getId(), ((int) (Times.getTS())),"测试反馈",UID));
-        assertEquals(true,xmFeedbackService.confirmXmfeedback(xmFeedback.getId(),false));
+        assertEquals(true, xmFeedbackService.commitXmfeedback(xmFeedback.getId()));
+        assertEquals(true, xmFeedbackService.checkXmfeedback(xmFeedback.getId(), ((int) (Times.getTS())), "测试反馈", UID));
+        assertEquals(true, xmFeedbackService.confirmXmfeedback(xmFeedback.getId(), false));
         // 第二次反馈
         xm_feedback xmFeedback2 = new xm_feedback();
         xmFeedback2.setGyid(GY_ID);
@@ -107,9 +107,9 @@ public class XmFacadeServiceImplTest {
         xmFeedback2.setXminfid(XMINF_ID);
         xmFeedback2 = xmFeedbackService.addXmfeedback(xmFeedback);
         assertNotNull(xmFeedback2);
-        assertEquals(true,xmFeedbackService.commitXmfeedback(xmFeedback2.getId()));
-        assertEquals(true,xmFeedbackService.checkXmfeedback(xmFeedback2.getId(), ((int) (Times.getTS())),"测试反馈",UID));
-        assertEquals(true,xmFeedbackService.confirmXmfeedback(xmFeedback2.getId(),true));
+        assertEquals(true, xmFeedbackService.commitXmfeedback(xmFeedback2.getId()));
+        assertEquals(true, xmFeedbackService.checkXmfeedback(xmFeedback2.getId(), ((int) (Times.getTS())), "测试反馈", UID));
+        assertEquals(true, xmFeedbackService.confirmXmfeedback(xmFeedback2.getId(), true));
     }
 
     // 项目完结

@@ -6,7 +6,7 @@ import org.nutz.dao.entity.annotation.*;
 import java.io.Serializable;
 
 /**
- * Created by Wizzer on 2016/7/18.
+ * Created by wiz on 2016/7/18.
  */
 @Table("cms_site")
 public class Cms_site extends BaseModel implements Serializable {

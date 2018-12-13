@@ -25,7 +25,7 @@ import java.io.File;
 import java.util.Date;
 
 /**
- * Created by Wizzer on 2016/7/5.
+ * Created by wiz on 2016/7/5.
  */
 @IocBean
 @At("/open/file/upload")

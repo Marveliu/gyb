@@ -60,18 +60,18 @@ public class ApiXmController {
     @At("/xminf")
     @Ok("json")
     @POST
-    @Filters(@By(type=CrossOriginFilter.class))
+    @Filters(@By(type = CrossOriginFilter.class))
     public Object getXmStat(@Param("gyid") String gyid) {
         Cnd cnd = Cnd.NEW();
-        if(!Strings.isEmpty(gyid)){
-            cnd.where("gyid","=",gyid);
+        if (!Strings.isEmpty(gyid)) {
+            cnd.where("gyid", "=", gyid);
         }
-        String[] xcontent = {"apply","doing","final","finish"};
-        Map<String,Integer> data = new HashMap<>();
+        String[] xcontent = {"apply", "doing", "final", "finish"};
+        Map<String, Integer> data = new HashMap<>();
         // data.put("申请中",xmApplyService.count(cnd));
-        data.put("进行中",xmInfService.countGyByStatus(ConfigUtil.XM_INF_DOING,gyid));
-        data.put("已完成",xmInfService.countGyByStatus(ConfigUtil.XM_INF_DONE,gyid));
-        data.put("待结算",xmInfService.countGyByStatus(ConfigUtil.XM_INF_CHECKING,gyid));
+        data.put("进行中", xmInfService.countGyByStatus(ConfigUtil.XM_INF_DOING, gyid));
+        data.put("已完成", xmInfService.countGyByStatus(ConfigUtil.XM_INF_DONE, gyid));
+        data.put("待结算", xmInfService.countGyByStatus(ConfigUtil.XM_INF_CHECKING, gyid));
         return Result.success().addData(data);
     }
 }

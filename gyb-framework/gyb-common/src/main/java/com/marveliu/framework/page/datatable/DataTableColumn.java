@@ -3,7 +3,7 @@ package com.marveliu.framework.page.datatable;
 import java.io.Serializable;
 
 /**
- * Created by wizzer on 2016/6/27.
+ * Created by wiz on 2016/6/27.
  */
 public class DataTableColumn implements Serializable {
     private static final long serialVersionUID = 1L;

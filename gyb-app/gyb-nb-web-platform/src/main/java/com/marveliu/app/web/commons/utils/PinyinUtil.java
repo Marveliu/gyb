@@ -4,7 +4,7 @@ import net.sourceforge.pinyin4j.PinyinHelper;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 /**
- * Created by wizzer on 2017/5/24.
+ * Created by wiz on 2017/5/24.
  */
 @IocBean
 public class PinyinUtil {

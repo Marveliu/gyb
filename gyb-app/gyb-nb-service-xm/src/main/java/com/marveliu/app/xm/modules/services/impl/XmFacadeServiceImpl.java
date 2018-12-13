@@ -123,9 +123,10 @@ public class XmFacadeServiceImpl implements XmFacadeService {
     public xm_inf acceptXmapply(String xmapplyid, String uid) {
         xm_apply xmApply = xmApplyService.fetch(xmapplyid);
         // 检查申请信息是否存在且不可重复受理
-        if(Lang.isEmpty(xmApply) || xmApply.getStatus() == ConfigUtil.XM_APPLY_FINAL || xmApply.getStatus() == ConfigUtil.XM_APPLY_PASS ) return null;
+        if (Lang.isEmpty(xmApply) || xmApply.getStatus() == ConfigUtil.XM_APPLY_FINAL || xmApply.getStatus() == ConfigUtil.XM_APPLY_PASS)
+            return null;
         // 更新任务书申请状态为完结，同时可以检查任务书是否存在
-        if (xmApplyService.setXmApplyStatus(xmapplyid,true,uid)){
+        if (xmApplyService.setXmApplyStatus(xmapplyid, true, uid)) {
             xm_inf xmInf = null;
             xm_bill xmBill = null;
             try {
@@ -162,7 +163,7 @@ public class XmFacadeServiceImpl implements XmFacadeService {
                                     xmApply.getXmtaskid(),
                                     xmApply.getAuthorrealname(),
                                     DateUtil.getDate(xmTask.getFirstcommit()));
-                            gy_inf gyInf = dao.fetch(gy_inf.class,xmApply.getGyid());
+                            gy_inf gyInf = dao.fetch(gy_inf.class, xmApply.getGyid());
                             sysMsg.setRevid(gyInf.getUserid());
                             sysMsg.setRevaccount(gyInf.getEmail());
                             sysMsg.setMsg(Json.toJson(tMsg));
@@ -175,8 +176,8 @@ public class XmFacadeServiceImpl implements XmFacadeService {
                     t.start();
                     return xmInf;
                 }
-            }catch (Exception e){
-                log.error("建立项目失败："+xmapplyid,e);
+            } catch (Exception e) {
+                log.error("建立项目失败：" + xmapplyid, e);
             }
         }
         return null;
@@ -204,9 +205,9 @@ public class XmFacadeServiceImpl implements XmFacadeService {
         int currentStatus = xmInfService.fetch(xminfid).getStatus();
 
         // 如果已经结算，返回失败
-        if( currentStatus != ConfigUtil.XM_INF_DONE) return false;
+        if (currentStatus != ConfigUtil.XM_INF_DONE) return false;
 
-        try{
+        try {
             xm_evaluation xmEvaluation = new xm_evaluation();
             xmEvaluation.setXminfid(xminfid);
             xmEvaluation.setGrade(xmEvaluationGrade);
@@ -214,7 +215,7 @@ public class XmFacadeServiceImpl implements XmFacadeService {
             xmEvaluation.xmevaid();
 
             xm_inf xmInf = xmInfService.fetch(xminfid);
-            Chain xmBillChain =  Chain.make("status",ConfigUtil.XM_BILL_CHECKING).add("paysum",paySum).add("note",xmBillNote).add("opAt",Times.getTS());
+            Chain xmBillChain = Chain.make("status", ConfigUtil.XM_BILL_CHECKING).add("paysum", paySum).add("note", xmBillNote).add("opAt", Times.getTS());
 
             Trans.exec(new Atom() {
                 @Override
@@ -228,14 +229,14 @@ public class XmFacadeServiceImpl implements XmFacadeService {
                     // }
 
                     xmFeedbackService.update(
-                            Chain.make("status",ConfigUtil.XM_FEEDBACK_FINAL),
-                            Cnd.where("id","=",xmFeedbackService.getLatestXmfeedback(xminfid).getId()));
+                            Chain.make("status", ConfigUtil.XM_FEEDBACK_FINAL),
+                            Cnd.where("id", "=", xmFeedbackService.getLatestXmfeedback(xminfid).getId()));
                     // 任务书更新为: 完结
-                    xmTaskService.update(Chain.make("status",ConfigUtil.XM_TASK_FINISH),Cnd.where("id","=",xmInf.getXmtaskid()));
+                    xmTaskService.update(Chain.make("status", ConfigUtil.XM_TASK_FINISH), Cnd.where("id", "=", xmInf.getXmtaskid()));
                     // 项目账单更新为: 雇员审查
-                    xmBillService.update(xmBillChain,Cnd.where("xminfid","=",xminfid));
+                    xmBillService.update(xmBillChain, Cnd.where("xminfid", "=", xminfid));
                     // 项目信息更新为: 雇员审查
-                    xmInfService.update(Chain.make("status",ConfigUtil.XM_INF_CHECKING),Cnd.where("id","=",xminfid));
+                    xmInfService.update(Chain.make("status", ConfigUtil.XM_INF_CHECKING), Cnd.where("id", "=", xminfid));
                 }
             });
 
@@ -243,7 +244,7 @@ public class XmFacadeServiceImpl implements XmFacadeService {
                 @Override
                 public void run() {
                     // 任务结算消息
-                    gy_inf gyInf = dao.fetch(gy_inf.class,xmInf.getGyid());
+                    gy_inf gyInf = dao.fetch(gy_inf.class, xmInf.getGyid());
                     Sys_msg sysMsg = new Sys_msg();
                     TMsg tMsg = new XmfinalTMsg(
                             gyInf.getRealname(),
@@ -263,8 +264,8 @@ public class XmFacadeServiceImpl implements XmFacadeService {
                 }
             });
             return true;
-        }catch (Exception e){
-            log.error("项目结算出错:"+xminfid,e);
+        } catch (Exception e) {
+            log.error("项目结算出错:" + xminfid, e);
         }
         return false;
     }
@@ -294,12 +295,12 @@ public class XmFacadeServiceImpl implements XmFacadeService {
             });
             // 任务账单审批 > 财务经理
             Sys_role sysRole = sysRoleService.getRoleFromCode("sys.fn");
-            sysRole = sysRoleService.fetchLinks(sysRole,"users");
+            sysRole = sysRoleService.fetchLinks(sysRole, "users");
 
-            if(!Lang.isEmpty(sysRole.getUsers())){
+            if (!Lang.isEmpty(sysRole.getUsers())) {
                 xm_inf xmInf = xmInfService.fetch(xminfid);
-                xm_bill xmBill = xmBillService.fetch(Cnd.where("xminfid","=",xminfid));
-                xmBill = xmBillService.fetchLinks(xmBill,"");
+                xm_bill xmBill = xmBillService.fetch(Cnd.where("xminfid", "=", xminfid));
+                xmBill = xmBillService.fetchLinks(xmBill, "");
                 Sys_user sysUser = sysRole.getUsers().get(0);
                 Sys_msg sysMsg = new Sys_msg();
                 TMsg tMsg = new XmbillCheckTMsg(
@@ -320,8 +321,8 @@ public class XmFacadeServiceImpl implements XmFacadeService {
                 sysMsgService.pushMsg(sysMsg);
             }
             return true;
-        }catch (Exception e){
-            log.error("雇员确认项目结算失败,任务编号:"+xminfid,e);
+        } catch (Exception e) {
+            log.error("雇员确认项目结算失败,任务编号:" + xminfid, e);
         }
         return false;
     }

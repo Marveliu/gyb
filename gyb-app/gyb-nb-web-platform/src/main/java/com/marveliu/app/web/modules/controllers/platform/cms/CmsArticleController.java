@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by wizzer on 2016/6/28.
+ * Created by wiz on 2016/6/28.
  */
 @IocBean
 @At("/platform/cms/article")

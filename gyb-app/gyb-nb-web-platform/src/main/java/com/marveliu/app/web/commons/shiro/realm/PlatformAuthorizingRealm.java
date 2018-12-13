@@ -31,7 +31,7 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
 /**
- * Created by wizzer on 2017/1/11.
+ * Created by wiz on 2017/1/11.
  */
 @IocBean(name = "platformRealm")
 public class PlatformAuthorizingRealm extends AuthorizingRealm {

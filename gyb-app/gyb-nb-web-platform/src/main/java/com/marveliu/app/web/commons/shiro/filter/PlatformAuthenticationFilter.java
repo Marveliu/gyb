@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.interfaces.RSAPrivateKey;
 
 /**
- * Created by wizzer on 2017/1/10.
+ * Created by wiz on 2017/1/10.
  */
 @IocBean(name = "platformAuthc")
 public class PlatformAuthenticationFilter extends FormAuthenticationFilter implements ActionFilter {

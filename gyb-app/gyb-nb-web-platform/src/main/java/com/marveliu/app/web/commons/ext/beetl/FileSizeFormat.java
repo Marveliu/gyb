@@ -4,7 +4,7 @@ import org.beetl.core.Format;
 import org.nutz.lang.Strings;
 
 /**
- * Created by wizzer on 2018/1/23.
+ * Created by wiz on 2018/1/23.
  */
 public class FileSizeFormat implements Format {
     public Object format(Object data, String pattern) {

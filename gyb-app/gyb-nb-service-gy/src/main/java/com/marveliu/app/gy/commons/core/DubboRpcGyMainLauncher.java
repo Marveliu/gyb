@@ -38,13 +38,12 @@ import java.util.Enumeration;
 
 @IocBean(create = "init", depose = "depose")
 @Modules(packages = "com.marveliu")
-public class    DubboRpcGyMainLauncher {
+public class DubboRpcGyMainLauncher {
 
     private static final Log log = Logs.get();
 
     @Inject
     private Dao dao;
-
 
     public static void main(String[] args) throws Exception {
         NbApp nb = new NbApp().setArgs(args).setPrintProcDoc(true);

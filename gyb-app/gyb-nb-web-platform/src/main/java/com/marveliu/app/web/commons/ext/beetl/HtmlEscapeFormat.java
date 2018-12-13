@@ -1,7 +1,7 @@
 package com.marveliu.app.web.commons.ext.beetl;
 
 /**
- * Created by wizzer on 2017/2/8.
+ * Created by wiz on 2017/2/8.
  */
 
 import org.beetl.core.Format;

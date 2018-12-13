@@ -7,7 +7,7 @@ import org.nutz.dao.entity.annotation.*;
 import java.io.Serializable;
 
 /**
- * Created by wizzer on 2016/6/21.
+ * Created by wiz on 2016/6/21.
  */
 @Table("sys_dict")
 @TableIndexes({@Index(name = "INDEX_SYS_DICT_PATH", fields = {"path"}, unique = true)})

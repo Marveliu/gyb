@@ -66,7 +66,7 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
 
     @Inject
     @Reference
-    private SysRoleService  sysRoleService;
+    private SysRoleService sysRoleService;
 
     @Inject
     @Reference
@@ -89,9 +89,9 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
      * @return
      */
     @Override
-    public xm_bill initXmbill(String xminfid,float award, String uid) {
-        if(!Lang.isEmpty(this.fetch(Cnd.where("xminfid","=",xminfid)))){
-            log.error("重复创建项目账单："+xminfid);
+    public xm_bill initXmbill(String xminfid, float award, String uid) {
+        if (!Lang.isEmpty(this.fetch(Cnd.where("xminfid", "=", xminfid)))) {
+            log.error("重复创建项目账单：" + xminfid);
             return null;
         }
         try {
@@ -102,7 +102,7 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
             bill.setOpBy(uid);
             bill.setAt(Times.getTS());
             return this.insert(bill);
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         return null;
@@ -119,14 +119,15 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
     @Override
     public boolean checkXmbillByGy(String xmbillid, String payid, String gyid) {
         try {
-            xm_bill xmBill = this.fetchLinks(this.fetch(xmbillid),"");
+            xm_bill xmBill = this.fetchLinks(this.fetch(xmbillid), "");
             // 检查 账单存在，账单状态
-            if(!Lang.isEmpty(xmBill) && xmBill.getStatus() == ConfigUtil.XM_BILL_CHECKING){
-                Cnd cnd = Cnd.where("id","=",xmbillid);
-                Chain chain = Chain.make("gypayid",payid).add("status",ConfigUtil.XM_BILL_PAYING).add("opAt",Times.getTS());
-                if(this.update(chain,cnd)!=0){
+            if (!Lang.isEmpty(xmBill) && xmBill.getStatus() == ConfigUtil.XM_BILL_CHECKING) {
+                Cnd cnd = Cnd.where("id", "=", xmbillid);
+                Chain chain = Chain.make("gypayid", payid).add("status", ConfigUtil.XM_BILL_PAYING).add("opAt", Times.getTS());
+                if (this.update(chain, cnd) != 0) {
                     Lang.runInAnThread(new Runnable() {
-                        Sys_role sysRole = sysRoleService.fetchLinks(sysRoleService.getRoleFromCode("sys.fn"),"");
+                        Sys_role sysRole = sysRoleService.fetchLinks(sysRoleService.getRoleFromCode("sys.fn"), "");
+
                         @Override
                         public void run() {
                             TMsg tMsg = new XmbillCheckTMsg(
@@ -150,8 +151,8 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
                     });
                 }
             }
-        }catch (Exception e){
-            log.error("雇员修改项目支付方式失败",e);
+        } catch (Exception e) {
+            log.error("雇员修改项目支付方式失败", e);
         }
         return false;
     }
@@ -166,27 +167,27 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
     @Override
     public boolean commitXmbill(String xmbillid, String sysuserinfid) {
         try {
-            xm_bill xmBill = this.fetchLinks(this.fetch(xmbillid),"");
-            if(!Lang.isEmpty(xmBill) && xmBill.getStatus() == ConfigUtil.XM_BILL_PAYING){
-                Cnd cnd = Cnd.where("id","=",xmbillid);
+            xm_bill xmBill = this.fetchLinks(this.fetch(xmbillid), "");
+            if (!Lang.isEmpty(xmBill) && xmBill.getStatus() == ConfigUtil.XM_BILL_PAYING) {
+                Cnd cnd = Cnd.where("id", "=", xmbillid);
                 // gypayid
                 // Chain chain = Chain.make("realgypayid",xmBill.getGypayid()).add("status",ConfigUtil.XM_BILL_PAYED).add("payby",sysuserinfid).add("opAt",Times.getTS());
-                Chain chain = Chain.make("status",ConfigUtil.XM_BILL_PAYED).add("payby",sysuserinfid).add("opAt",Times.getTS());
-                Chain xminfchain = Chain.make("status",ConfigUtil.XM_INF_PAYED).add("opAt",Times.getTS());
+                Chain chain = Chain.make("status", ConfigUtil.XM_BILL_PAYED).add("payby", sysuserinfid).add("opAt", Times.getTS());
+                Chain xminfchain = Chain.make("status", ConfigUtil.XM_INF_PAYED).add("opAt", Times.getTS());
                 // 更新账单和任务信息表
-                if(this.update(chain,cnd)!=0 && xmInfService.update(xminfchain,Cnd.where("id","=",xmBill.getXminfid()))!=0){
+                if (this.update(chain, cnd) != 0 && xmInfService.update(xminfchain, Cnd.where("id", "=", xmBill.getXminfid())) != 0) {
                     // 财务结算给雇员
                     Lang.runInAnThread(new Runnable() {
                         @Override
                         public void run() {
-                            gy_inf gyInf =  dao().fetch(gy_inf.class, xmBill.getXmInf().getGyid());
+                            gy_inf gyInf = dao().fetch(gy_inf.class, xmBill.getXmInf().getGyid());
                             TMsg tMsg = new XmbillTMsg(
                                     gyInf.getRealname(),
                                     xmbillid,
                                     xmBill.getXmInf().getId(),
                                     String.valueOf(xmBill.getPaysum()),
-                                    Strings.sNull(xmBill.getGypay().getPayname(),"暂无数据"),
-                                    Strings.sNull(xmBill.getGypay().getTypename(),"暂无数据")
+                                    Strings.sNull(xmBill.getGypay().getPayname(), "暂无数据"),
+                                    Strings.sNull(xmBill.getGypay().getTypename(), "暂无数据")
                             );
                             Sys_msg sysMsg = new Sys_msg();
                             sysMsg.setRevid(gyInf.getUserid());
@@ -201,8 +202,8 @@ public class XmBillServiceImpl extends BaseServiceImpl<xm_bill> implements XmBil
                     return true;
                 }
             }
-        }catch (Exception e){
-            log.error("财务支付失败",e);
+        } catch (Exception e) {
+            log.error("财务支付失败", e);
         }
         return false;
     }

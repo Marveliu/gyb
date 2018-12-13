@@ -98,7 +98,7 @@
 -- ####### insert gy_pay
 -- # INSERT INTO gy_pay (id, gyid, payid, payname, first, disabled, opBy, opAt, delFlag, type) VALUES ('006e2c8f2199441d89c19cd42c33aaec', 'gy180396', '15926299633', '丁梦兰', 1, 0, '62295ef34aa24d7e86cbf7fa8a622d48', 1521943553, 0, 0);
 -- # INSERT INTO gy_pay (id, gyid, payid, payname, first, disabled, opBy, opAt, delFlag, type) VALUES ('06cfccfde0d442a099f58d007b7a95ae', 'gy18025', '13296699483', '朱振江', 1, 0, '035918003c1d4a85be7050a23b9c8b80', 1517553854, 0, 0);
--- # INSERT INTO gy_pay (id, gyid, payid, payname, first, disabled, opBy, opAt, delFlag, type) VALUES ('31a99e732a8448e7a3ca5e7fec93774b', 'gy18011', '897920245@qq.com', '刘尚楠(木南天华)', 1, 0, '7e77f453dc364c4d8c8fa4413092335f', 1520585247, 0, 0);
+-- # INSERT INTO gy_pay (id, gyid, payid, payname, first, disabled, opBy, opAt, delFlag, type) VALUES ('31a99e732a8448e7a3ca5e7fec93774b', 'gy18011', '897920245@qq.com', 'marveliu(木南天华)', 1, 0, '7e77f453dc364c4d8c8fa4413092335f', 1520585247, 0, 0);
 -- # INSERT INTO gy_pay (id, gyid, payid, payname, first, disabled, opBy, opAt, delFlag, type) VALUES ('4403eef5b3914df295da8e8366c9b348', 'gy18013', '15719391689', '潘娜', 0, 0, '77ea196f5b47427d8702fefbe3749c66', 1517968702, 0, 0);
 -- # INSERT INTO gy_pay (id, gyid, payid, payname, first, disabled, opBy, opAt, delFlag, type) VALUES ('586cd3afa7ae4c98a83658dbca7447f7', 'gy18027', '13125178389', '万紫荆', 1, 0, '517e59bf2d4d4188a4653fee341d9f4a', 1518247690, 0, 0);
 -- # INSERT INTO gy_pay (id, gyid, payid, payname, first, disabled, opBy, opAt, delFlag, type) VALUES ('6ad3f6490d7a485c8eb275c8b970f374', 'gy180445', '123123', '12', 1, 0, 'f766be379f6a46c08b6b4d63b39b9dce', 1523676934, 0, 0);
@@ -106,7 +106,7 @@
 -- # INSERT INTO gy_pay (id, gyid, payid, payname, first, disabled, opBy, opAt, delFlag, type) VALUES ('9fc12dc039634e25be79f07c76a1ffe2', 'gy201810497007', 'zxc123', '21', 1, 0, '1ed43cea05414ad18f15b7736f0027e3', 1519623632, 0, 0);
 -- # INSERT INTO gy_pay (id, gyid, payid, payname, first, disabled, opBy, opAt, delFlag, type) VALUES ('a2448a4d09c84f6593268c5374ff7b38', 'gy18012', '13125186198', '董玉芳', 1, 0, 'ea04e9c777534afc804d1dba6ceb4f72', 1517970615, 0, 0);
 -- # INSERT INTO gy_pay (id, gyid, payid, payname, first, disabled, opBy, opAt, delFlag, type) VALUES ('de2380adee574544859d137bf050d5f4', 'gy18039', '13477057515', '吴昊', 1, 0, 'd2156b9ff6d44276bb51762e6759b88f', 1520590731, 0, 0);
--- # INSERT INTO gy_pay (id, gyid, payid, payname, first, disabled, opBy, opAt, delFlag, type) VALUES ('pay1gy201811946001', 'gy201811946001', '15927448761', '刘尚楠', 1, 0, '7e77f453dc364c4d8c8fa4413092335f', 1516855226, 0, 0);
+-- # INSERT INTO gy_pay (id, gyid, payid, payname, first, disabled, opBy, opAt, delFlag, type) VALUES ('pay1gy201811946001', 'gy201811946001', '15927448761', 'marveliu', 1, 0, '7e77f453dc364c4d8c8fa4413092335f', 1516855226, 0, 0);
 -- # INSERT INTO gy_pay (id, gyid, payid, payname, first, disabled, opBy, opAt, delFlag, type) VALUES ('pay1gy201811946102', 'gy201811946102', '15972220112@139.com', '周江宝宝', 1, 0, '6b74772a94d5453393b905f77998bce5', 1516861960, 0, 0);
 -- #
 --

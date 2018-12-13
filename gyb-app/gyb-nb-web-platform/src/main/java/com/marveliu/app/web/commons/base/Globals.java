@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by wizzer on 2016/12/19.
+ * Created by wiz on 2016/12/19.
  */
 @IocBean(create = "init")
 public class Globals {
@@ -111,7 +111,6 @@ public class Globals {
             Globals.RouteMap.put(route.getUrl(), route);
         }
     }
-
 
 
     public static void initWx() {

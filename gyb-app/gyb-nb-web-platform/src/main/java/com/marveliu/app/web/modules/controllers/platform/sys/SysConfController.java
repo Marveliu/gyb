@@ -23,7 +23,7 @@ import org.nutz.mvc.annotation.Param;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/6/28.
+ * Created by wiz on 2016/6/28.
  */
 @IocBean
 @At("/platform/sys/conf")

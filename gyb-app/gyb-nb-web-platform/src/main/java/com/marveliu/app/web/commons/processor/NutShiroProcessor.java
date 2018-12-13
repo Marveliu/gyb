@@ -14,7 +14,7 @@ import org.nutz.mvc.impl.processor.AbstractProcessor;
 import org.nutz.mvc.view.ServerRedirectView;
 
 /**
- * Created by wizzer on 2016/6/24.
+ * Created by wiz on 2016/6/24.
  */
 public class NutShiroProcessor extends AbstractProcessor {
 

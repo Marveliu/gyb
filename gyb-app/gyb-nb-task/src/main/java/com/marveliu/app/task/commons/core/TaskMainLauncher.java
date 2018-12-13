@@ -27,7 +27,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 /**
- * Created by wizzer on 2018/3/19.
+ * Created by wiz on 2018/3/19.
  */
 @IocBean(create = "init", depose = "depose")
 @Modules(packages = "com.marveliu")
@@ -68,8 +68,8 @@ public class TaskMainLauncher {
             task.setName("测试任务");
             task.setJobClass("com.marveliu.app.tmsg.commons.ext.quartz.job.TestJob");
             task.setCron("*/5 * * * * ?");
-            task.setData("{\"hi\":\"Wechat:wizzer | send red packets of support,thank u\"}");
-            task.setNote("微信号：wizzer | 欢迎发送红包以示支持，多谢。。");
+            task.setData("{\"hi\":\"Wechat:wiz | send red packets of support,thank u\"}");
+            task.setNote("微信号：wiz | 欢迎发送红包以示支持，多谢。。");
             sysTaskService.insert(task);
         }
         ioc.get(Globals.class).init(sysTaskService);

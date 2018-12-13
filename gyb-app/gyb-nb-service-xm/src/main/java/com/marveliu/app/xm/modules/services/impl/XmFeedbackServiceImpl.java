@@ -74,7 +74,6 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
     private SysMsgService sysMsgService;
 
 
-
     /**
      * 获得项目反馈总数
      *
@@ -124,13 +123,13 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
         try {
             xm_feedback parent = getLatestXmfeedback(xmFeedback.getXminfid());
             xmFeedback.setParentid(0);
-            xmFeedback.setCode("fk_"+xmFeedback.getXminfid().split("_")[1]+"_0");
-            if(!Lang.isEmpty(parent)){
+            xmFeedback.setCode("fk_" + xmFeedback.getXminfid().split("_")[1] + "_0");
+            if (!Lang.isEmpty(parent)) {
                 xmFeedback.setParentid(parent.getId());
-                int count = Integer.valueOf(parent.getCode().split("_")[2])+1;
-                xmFeedback.setCode("fk_"+xmFeedback.getXminfid().split("_")[1]+"_"+count);
+                int count = Integer.valueOf(parent.getCode().split("_")[2]) + 1;
+                xmFeedback.setCode("fk_" + xmFeedback.getXminfid().split("_")[1] + "_" + count);
             }
-            xmFeedback.setFileurl(Strings.sBlank(xmFeedback.getFileurl(),""));
+            xmFeedback.setFileurl(Strings.sBlank(xmFeedback.getFileurl(), ""));
             xmFeedback.setStatus(ConfigUtil.XM_FEEDBACK_INIT);
             xmFeedback.setAt(Times.getTS());
 
@@ -149,7 +148,7 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
      */
     @Override
     public boolean commitXmfeedback(long xmfeedbackid) {
-        if(getXmfeedbackStatus(xmfeedbackid) != ConfigUtil.XM_FEEDBACK_INIT) return false;
+        if (getXmfeedbackStatus(xmfeedbackid) != ConfigUtil.XM_FEEDBACK_INIT) return false;
 
         try {
 
@@ -157,7 +156,7 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
             Chain chain = Chain.make("status", ConfigUtil.XM_FEEDBACK_COMMIT);
             Cnd cnd = Cnd.where("id", "=", xmfeedbackid);
 
-            if(this.update(chain, cnd) != 0) {
+            if (this.update(chain, cnd) != 0) {
                 xm_feedback xmFeedback = this.dao().fetchLinks(this.dao().fetch(xm_feedback.class, xmfeedbackid), "");
                 Thread t = new Thread(new Runnable() {
                     public void run() {
@@ -184,8 +183,8 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
                 t.start();
                 return true;
             }
-        }catch (Exception e){
-            log.error("雇员提交项目反馈失败",e);
+        } catch (Exception e) {
+            log.error("雇员提交项目反馈失败", e);
         }
         return false;
     }
@@ -206,15 +205,15 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
             String reply,
             String uid) {
         int currentstatus = getXmfeedbackStatus(xmfeedbackid);
-        if(currentstatus == ConfigUtil.XM_FEEDBACK_COMMIT || currentstatus == ConfigUtil.XM_FEEDBACK_CHECKING){
+        if (currentstatus == ConfigUtil.XM_FEEDBACK_COMMIT || currentstatus == ConfigUtil.XM_FEEDBACK_CHECKING) {
             try {
-                Cnd cnd = Cnd.where("id","=",xmfeedbackid);
-                Chain chain = Chain.make("nextcommit",nextcommitat)
-                        .add("reply",reply)
-                        .add("status",ConfigUtil.XM_FEEDBACK_CHECKING)
-                        .add("opBy",uid)
-                        .add("opAt",Times.getTS());
-                return this.update(chain,cnd)!= 0;
+                Cnd cnd = Cnd.where("id", "=", xmfeedbackid);
+                Chain chain = Chain.make("nextcommit", nextcommitat)
+                        .add("reply", reply)
+                        .add("status", ConfigUtil.XM_FEEDBACK_CHECKING)
+                        .add("opBy", uid)
+                        .add("opAt", Times.getTS());
+                return this.update(chain, cnd) != 0;
             } catch (Exception e) {
                 log.error("项目经理审批失败", e);
             }
@@ -232,22 +231,22 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
     @Override
     public boolean confirmXmfeedback(long xmfeedbackid, Boolean flag) {
         try {
-            if(getXmfeedbackStatus(xmfeedbackid) != ConfigUtil.XM_FEEDBACK_CHECKING) return false;
+            if (getXmfeedbackStatus(xmfeedbackid) != ConfigUtil.XM_FEEDBACK_CHECKING) return false;
             Chain chain = null;
-            if(flag){
+            if (flag) {
                 // deadline 添加定时任务
 
                 // updateIgnoreNull
-                chain = Chain.make("status",ConfigUtil.XM_FEEDBACK_FINAL);
+                chain = Chain.make("status", ConfigUtil.XM_FEEDBACK_FINAL);
                 // 设置xm_inf状态
-                this.dao().update(xm_inf.class,Chain.make("status",ConfigUtil.XM_INF_DONE),Cnd.where("id","=",this.fetch(xmfeedbackid).getXminfid()));
-            }else {
-                chain = Chain.make("status",ConfigUtil.XM_FEEDBACK_FINISH);
+                this.dao().update(xm_inf.class, Chain.make("status", ConfigUtil.XM_INF_DONE), Cnd.where("id", "=", this.fetch(xmfeedbackid).getXminfid()));
+            } else {
+                chain = Chain.make("status", ConfigUtil.XM_FEEDBACK_FINISH);
             }
-            Cnd cnd = Cnd.where("id","=",xmfeedbackid);
-            if(this.update(chain,cnd)!=0){
+            Cnd cnd = Cnd.where("id", "=", xmfeedbackid);
+            if (this.update(chain, cnd) != 0) {
                 // 消息通知
-                xm_feedback xmFeedback = this.dao().fetchLinks(this.dao().fetch(xm_feedback.class,xmfeedbackid),"");
+                xm_feedback xmFeedback = this.dao().fetchLinks(this.dao().fetch(xm_feedback.class, xmfeedbackid), "");
                 Lang.runInAnThread(new Runnable() {
                     @Override
                     public void run() {
@@ -274,21 +273,22 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
                 });
                 return true;
             }
-        }catch (Exception e){
-            log.error("项目经理确认项目反馈失败",e);
+        } catch (Exception e) {
+            log.error("项目经理确认项目反馈失败", e);
         }
         return false;
     }
 
     /**
      * 获得项目最新一次的反馈
+     *
      * @param xminfid
      * @return
      */
     public xm_feedback getLatestXmfeedback(String xminfid) {
         try {
             List<xm_feedback> xm_feedbackList = this.query(Cnd.where("xminfid", "=", xminfid).desc("at"));
-            if(Lang.isEmpty(xm_feedbackList)) return null;
+            if (Lang.isEmpty(xm_feedbackList)) return null;
             return xm_feedbackList.get(0);
         } catch (Exception e) {
             log.error("getLatestXmfeedback fail", e);
@@ -304,12 +304,12 @@ public class XmFeedbackServiceImpl extends BaseServiceImpl<xm_feedback> implemen
      */
     @Override
     public xm_task getXmtaskByXmfeedbackid(long xmfeedbackid) {
-        return this.dao().fetch(xm_task.class,Cnd.where("id","=",this.fetch(xmfeedbackid).getXminfid()));
+        return this.dao().fetch(xm_task.class, Cnd.where("id", "=", this.fetch(xmfeedbackid).getXminfid()));
     }
 
-    public int getXmfeedbackStatus(long xmfeedbackid){
-        xm_feedback xmFeedback =  this.fetch(xmfeedbackid);
-        if(Lang.isEmpty(xmFeedback)) return -1;
+    public int getXmfeedbackStatus(long xmfeedbackid) {
+        xm_feedback xmFeedback = this.fetch(xmfeedbackid);
+        if (Lang.isEmpty(xmFeedback)) return -1;
         return xmFeedback.getStatus();
     }
 }

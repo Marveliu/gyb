@@ -3,7 +3,7 @@ package com.marveliu.app.web.commons.shiro.exception;
 import org.apache.shiro.authc.AuthenticationException;
 
 /**
- * Created by wizzer on 2017/1/10.
+ * Created by wiz on 2017/1/10.
  */
 public class CaptchaIncorrectException extends AuthenticationException {
 

@@ -1,5 +1,5 @@
 /**
- * Created by wizzer.cn on 3/7/16.
+ * Created by wiz.cn on 3/7/16.
  */
 (function($){
   var ms = {

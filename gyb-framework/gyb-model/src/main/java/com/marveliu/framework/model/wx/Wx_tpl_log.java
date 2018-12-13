@@ -6,7 +6,7 @@ import org.nutz.dao.entity.annotation.*;
 import java.io.Serializable;
 
 /**
- * Created by wizzer on 2016/8/5.
+ * Created by wiz on 2016/8/5.
  */
 @Table("wx_tpl_log")
 public class Wx_tpl_log extends BaseModel implements Serializable {

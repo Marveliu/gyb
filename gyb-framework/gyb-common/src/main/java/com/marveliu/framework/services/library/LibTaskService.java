@@ -9,7 +9,7 @@ import org.nutz.mvc.annotation.Param;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/12/22.
+ * Created by wiz on 2016/12/22.
  */
 public interface LibTaskService extends BaseService<lib_task> {
     List<lib_skill> getMenusAndButtons(String taskId);

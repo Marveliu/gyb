@@ -20,7 +20,7 @@ import java.io.File;
 import java.util.Date;
 
 /**
- * Created by Wizzer on 2016/7/9.
+ * Created by wiz on 2016/7/9.
  */
 @IocBean
 @At("/open/ueditor/bd")

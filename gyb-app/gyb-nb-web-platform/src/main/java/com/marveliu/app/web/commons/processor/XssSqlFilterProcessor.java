@@ -15,7 +15,7 @@ import java.util.Iterator;
 
 /**
  * SQL XSS拦截
- * Created by wizzer on 2016/7/1.
+ * Created by wiz on 2016/7/1.
  */
 public class XssSqlFilterProcessor extends AbstractProcessor {
 

@@ -48,7 +48,7 @@ public class GyPayServiceImpl extends BaseServiceImpl<gy_pay> implements GyPaySe
      */
     @Override
     public gy_pay getFirstPay(String gyid) {
-        return this.fetch(Cnd.where("gyid","=",gyid).and("first","=",true));
+        return this.fetch(Cnd.where("gyid", "=", gyid).and("first", "=", true));
     }
 
     /**
@@ -59,25 +59,23 @@ public class GyPayServiceImpl extends BaseServiceImpl<gy_pay> implements GyPaySe
      */
     @Override
     public String getGyidByPayid(String payid) {
-        return this.fetch(Cnd.where("id","=",payid)).getGyid();
+        return this.fetch(Cnd.where("id", "=", payid)).getGyid();
     }
 
 
     @Override
     public gy_pay addOrUpdateGypay(gy_pay gyPay) {
-
-        if(Strings.isEmpty(gyPay.getId())){
+        if (Strings.isEmpty(gyPay.getId())) {
             //检查是否已经添加了
             if (null != this.fetch(
                     Cnd.where("gyid", "=", gyPay.getGyid()).and("type", "=", gyPay.getType())
                             .and("payid", "=", gyPay.getPayid()))) {
                 return null;
             }
-        }else {
+        } else {
             this.updateIgnoreNull(gyPay);
             return this.fetch(gyPay.getId());
         }
-
         //检查是否未首要支付方式
         if (gyPay.isFirst()) {
             //取消其他首要支付

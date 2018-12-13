@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by Wizzer on 2016/7/31.
+ * Created by wiz on 2016/7/31.
  */
 public class RouteFilter implements Filter {
 

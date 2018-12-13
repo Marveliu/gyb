@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by wizzer on 2016/7/3.
+ * Created by wiz on 2016/7/3.
  */
 @IocBean
 @At("/open/pay/wx/back")

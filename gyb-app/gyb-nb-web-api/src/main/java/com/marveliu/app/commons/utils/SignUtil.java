@@ -34,7 +34,7 @@ public class SignUtil {
         Iterator<String> it = keySet.iterator();
         while (it.hasNext()) {
             String k = it.next();
-            String v = (String)map.get(k);
+            String v = (String) map.get(k);
             if (null != v && !"".equals(v)
                     && !"sign".equals(k)) {
                 sb.append(k + "=" + v + "&");

@@ -11,7 +11,7 @@ import org.nutz.log.Logs;
 import java.util.List;
 
 /**
- * Created by wizzer on 2018/3/19.
+ * Created by wiz on 2018/3/19.
  */
 @IocBean
 public class Globals {

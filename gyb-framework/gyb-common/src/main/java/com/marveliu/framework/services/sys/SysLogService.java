@@ -10,7 +10,7 @@ import org.nutz.lang.util.NutMap;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/12/22.
+ * Created by wiz on 2016/12/22.
  */
 public interface SysLogService extends BaseService<Sys_log> {
     /**

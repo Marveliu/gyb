@@ -51,25 +51,23 @@ public class XmTaskServiceImpl extends BaseServiceImpl<xm_task> implements XmTas
     }
 
 
-
     /**
      * 启用或者禁用任务书
      *
      * @param xmtaskid
-     * @param flag true 启用 false 禁用
+     * @param flag     true 启用 false 禁用
      * @return
      */
     @Override
     public Boolean setXmTaskStatus(String xmtaskid, Boolean flag) {
-        Cnd cnd = Cnd.where("id","=",xmtaskid);
-        Chain chain = Chain.make("disabled",!flag);
-        if(flag){
-            chain.add("status",ConfigUtil.XM_TASK_APPLYING);
-        }else {
-            chain.add("status",ConfigUtil.XM_TASK_PUBLISH);
+        Cnd cnd = Cnd.where("id", "=", xmtaskid);
+        Chain chain = Chain.make("disabled", !flag);
+        if (flag) {
+            chain.add("status", ConfigUtil.XM_TASK_APPLYING);
+        } else {
+            chain.add("status", ConfigUtil.XM_TASK_PUBLISH);
         }
-        if(this.update(chain,cnd)!=0)
-        {
+        if (this.update(chain, cnd) != 0) {
             return true;
         }
         return false;
@@ -90,9 +88,9 @@ public class XmTaskServiceImpl extends BaseServiceImpl<xm_task> implements XmTas
             xm_task oldxmtask = this.fetchLinks(this.fetch(xmtask.getId()), null);
             this.dao().deleteLinks(oldxmtask, "xmlimits");
             this.insertLinks(xmtask, "xmlimits");
-            int result =  this.updateIgnoreNull(xmtask);
+            int result = this.updateIgnoreNull(xmtask);
             return result == 1;
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         return false;
@@ -116,7 +114,7 @@ public class XmTaskServiceImpl extends BaseServiceImpl<xm_task> implements XmTas
             }
             xmTask.setXmlimits(xmlimits);
             return xmTask;
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         return null;
@@ -135,10 +133,10 @@ public class XmTaskServiceImpl extends BaseServiceImpl<xm_task> implements XmTas
             this.delete(xmtaskid);
             this.dao().execute(
                     Sqls.create("delete from xm_limit where xmtaskid = @xmtaskid")
-                            .setParam("xmtaskid",xmtaskid)
+                            .setParam("xmtaskid", xmtaskid)
             );
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         return false;

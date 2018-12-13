@@ -41,7 +41,7 @@ public class SysMsgServiceImplTest {
         // sysMsg.setTag(ConfigUtil.SYS_MSG_TAG_GY);
         // sysMsg.setTmsgclass(tMsg.getTMsgClass());
         Sys_msg sysMsg = sysMsgService.fetch(59);
-        assertEquals(true,sysMsgService.pushMsg(sysMsg));
+        assertEquals(true, sysMsgService.pushMsg(sysMsg));
     }
 
     // 测试类可提供public的static的createNbApp方法,用于定制当前测试类所需要的NbApp对象.

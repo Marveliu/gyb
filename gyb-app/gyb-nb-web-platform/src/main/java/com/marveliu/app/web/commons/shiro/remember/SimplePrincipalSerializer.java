@@ -12,7 +12,7 @@ import java.util.zip.GZIPOutputStream;
 
 /**
  * Creates A GZIPed rememberMe cookie, based on the patch for SHIRO-226 (https://issues.apache.org/jira/browse/SHIRO-226)
- * Created by wizzer on 2017/1/18.
+ * Created by wiz on 2017/1/18.
  */
 
 public class SimplePrincipalSerializer implements Serializer<PrincipalCollection> {

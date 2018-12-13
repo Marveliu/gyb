@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/12/22.
+ * Created by wiz on 2016/12/22.
  */
 @IocBean(args = {"refer:dao"})
 @Service(interfaceClass=SysRoleService.class)

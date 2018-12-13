@@ -33,7 +33,7 @@ public class DubboRpcSysMainLauncher {
     private Dao dao;
 
     @Inject
-    private Globals globals;//注入一下为了初始化
+    private Globals globals;
 
     public static void main(String[] args) throws Exception {
         NbApp nb = new NbApp().setArgs(args).setPrintProcDoc(true);

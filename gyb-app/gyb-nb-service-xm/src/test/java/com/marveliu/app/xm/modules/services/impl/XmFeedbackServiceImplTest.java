@@ -14,9 +14,9 @@ import static org.junit.Assert.*;
 @RunWith(NbJUnit4Runner.class)
 public class XmFeedbackServiceImplTest {
 
-    private final static String xminfid ="xm_ts201805071";
-    private final static String note ="雇员填写-流程测试";
-    private final static String gyid ="gy18041";
+    private final static String xminfid = "xm_ts201805071";
+    private final static String note = "雇员填写-流程测试";
+    private final static String gyid = "gy18041";
 
     @Inject
     private XmFeedbackService xmFeedbackService;

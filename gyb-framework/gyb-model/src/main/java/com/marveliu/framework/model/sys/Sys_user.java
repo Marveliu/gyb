@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by wizzer on 2016/6/21.
+ * Created by wiz on 2016/6/21.
  */
 
 @Table("sys_user")

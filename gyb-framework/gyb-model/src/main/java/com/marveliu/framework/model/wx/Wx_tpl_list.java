@@ -6,7 +6,7 @@ import org.nutz.dao.entity.annotation.*;
 import java.io.Serializable;
 
 /**
- * Created by wizzer on 2016/8/5.
+ * Created by wiz on 2016/8/5.
  */
 @Table("wx_tpl_list")
 @TableIndexes({@Index(name = "INDEX_WX_TPL_LIST", fields = {"template_id","wxid"}, unique = true)})

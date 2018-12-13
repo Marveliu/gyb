@@ -6,7 +6,7 @@ import org.nutz.dao.entity.annotation.*;
 import java.io.Serializable;
 
 /**
- * Created by Wizzer on 2016/12/6.
+ * Created by wiz on 2016/12/6.
  */
 @Table("sys_plugin")
 @TableIndexes({@Index(name = "INDEX_SYS_PLUGIN", fields = {"code"}, unique = true),@Index(name = "INDEX_SYS_CLASSNAME", fields = {"className"}, unique = true)})

@@ -42,16 +42,17 @@ public class XmInfServiceImpl extends BaseServiceImpl<xm_inf> implements XmInfSe
 
     /**
      * 初始化项目信息
+     *
      * @param xmTask
      * @param gyid
      * @param uid
      * @return
      */
     @Override
-    public xm_inf initXminf(xm_task xmTask, String gyid, String uid){
+    public xm_inf initXminf(xm_task xmTask, String gyid, String uid) {
         try {
             // 项目信息
-            xm_inf xmInf = new  xm_inf();
+            xm_inf xmInf = new xm_inf();
             xmInf.setGyid(gyid);
             xmInf.setXmtaskid(xmTask.getId());
             xmInf.setAt(Times.getTS());
@@ -59,7 +60,7 @@ public class XmInfServiceImpl extends BaseServiceImpl<xm_inf> implements XmInfSe
             xmInf.setOpBy(uid);
             xmInf.setStatus(ConfigUtil.XM_INF_DOING);
             return this.insert(xmInf);
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         return null;
@@ -76,11 +77,11 @@ public class XmInfServiceImpl extends BaseServiceImpl<xm_inf> implements XmInfSe
     @Override
     public int countGyByStatus(int status, String gyid) {
         Cnd cnd = Cnd.NEW();
-        if(!Strings.isEmpty(gyid)){
-            cnd.and("gyid","=",gyid);
+        if (!Strings.isEmpty(gyid)) {
+            cnd.and("gyid", "=", gyid);
         }
-        if(status != -1){
-            cnd.and("status","=",status);
+        if (status != -1) {
+            cnd.and("status", "=", status);
         }
         return this.count(cnd);
     }

@@ -39,8 +39,8 @@ import java.util.concurrent.TimeUnit;
  **/
 
 @IocBean(create = "init", depose = "close")
-@Service(interfaceClass= EmailService.class)
-public class EmailServiceImpl implements EmailService,Runnable {
+@Service(interfaceClass = EmailService.class)
+public class EmailServiceImpl implements EmailService, Runnable {
 
     private static final Log log = Logs.get();
 
@@ -96,22 +96,24 @@ public class EmailServiceImpl implements EmailService,Runnable {
 
     /**
      * 发送邮件
+     *
      * @param email
      * @return
      */
-    private boolean send(Email email){
+    private boolean send(Email email) {
         try {
             email.buildMimeMessage();
             email.sendMimeMessage();
             return true;
-        }catch (Exception e){
-            log.error("邮件发送失败",e);
+        } catch (Exception e) {
+            log.error("邮件发送失败", e);
         }
         return false;
     }
 
     /**
      * 加入邮件发送队列
+     *
      * @param to
      * @param subject
      * @param html
@@ -150,15 +152,15 @@ public class EmailServiceImpl implements EmailService,Runnable {
      * @param tMsg
      * @return
      */
-    public boolean sendHtmlTemplateByTemplateName(String to,TMsg tMsg){
+    public boolean sendHtmlTemplateByTemplateName(String to, TMsg tMsg) {
         StringBuilder path = new StringBuilder();
         try {
-            Template t =  templateUtil.buildTemplate(tMsg);
+            Template t = templateUtil.buildTemplate(tMsg);
             String sw = t.render();
-            this.send(to,tMsg.getSubject(),sw);
+            this.send(to, tMsg.getSubject(), sw);
             return true;
-        }catch (Exception e){
-            log.error("模板邮件发送失败",e);
+        } catch (Exception e) {
+            log.error("模板邮件发送失败", e);
         }
         return false;
     }

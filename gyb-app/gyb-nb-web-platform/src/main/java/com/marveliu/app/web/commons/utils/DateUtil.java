@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by wizzer on 2016/6/24.
+ * Created by wiz on 2016/6/24.
  */
 @IocBean
 public class DateUtil {

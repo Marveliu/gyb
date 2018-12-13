@@ -21,7 +21,7 @@ import java.beans.PropertyDescriptor;
 import java.util.Collection;
 
 /**
- * Created by wizzer on 2017/1/16.
+ * Created by wiz on 2017/1/16.
  */
 @IocBean
 public class ShiroUtil {

@@ -4,7 +4,7 @@ import org.beetl.core.Format;
 import org.nutz.lang.Strings;
 
 /**
- * Created by wizzer on 2018/2/6.
+ * Created by wiz on 2018/2/6.
  */
 public class StrlenFormat implements Format {
 

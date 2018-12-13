@@ -12,9 +12,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by wizzer on 2016/6/22.
+ * Created by wiz on 2016/6/22.
  */
-@IocBean(name="$aop_syslog")
+@IocBean(name = "$aop_syslog")
 public class SLogAopConfigration extends SimpleAopMaker<SLog> {
 
     @Inject("refer:$ioc")

@@ -9,7 +9,7 @@ import org.nutz.mvc.impl.processor.AbstractProcessor;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by Wizzer.cn on 2015/7/2.
+ * Created by wiz.cn on 2015/7/2.
  */
 public class LogTimeProcessor extends AbstractProcessor {
 

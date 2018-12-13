@@ -8,6 +8,7 @@ import java.lang.annotation.*;
 @Inherited
 public @interface SLog {
     String type() default "api";
+
     /**
      * 标签
      *

@@ -12,7 +12,7 @@ import java.security.spec.RSAPublicKeySpec;
 import java.util.HashMap;
 
 /**
- * Created by wizzer on 2017/4/24.
+ * Created by wiz on 2017/4/24.
  */
 @IocBean
 public class RSAUtil {
