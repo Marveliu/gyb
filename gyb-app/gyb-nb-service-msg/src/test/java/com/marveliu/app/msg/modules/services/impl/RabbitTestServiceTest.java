@@ -55,7 +55,7 @@ public class RabbitTestServiceTest {
     }
 
     @Test
-    public void testBasicConsumer() throws Exception{
+    public void testBasicConsumer() throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("127.0.0.1");
         factory.setPort(AMQP.PROTOCOL.PORT);    // 5672
@@ -69,7 +69,7 @@ public class RabbitTestServiceTest {
         String QUEUE_NAME = "hello";
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
         System.out.println("Consumer Wating Receive Message");
-        Consumer consumer = new DefaultConsumer(channel){
+        Consumer consumer = new DefaultConsumer(channel) {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String message = new String(body, "UTF-8");

@@ -44,6 +44,7 @@ public class GyInfServiceImpl extends BaseServiceImpl<gy_inf> implements GyInfSe
      * @param userid
      * @return
      */
+    @Override
     public gy_inf getGyByUserId(String userid) {
         return this.dao().fetch(gy_inf.class, Cnd.where("userid", "=", userid));
     }
@@ -54,6 +55,7 @@ public class GyInfServiceImpl extends BaseServiceImpl<gy_inf> implements GyInfSe
      * @param gyid
      * @return
      */
+    @Override
     public String getUidByGyid(String gyid) {
         return this.fetch(Cnd.where("id", "=", gyid)).getUserid();
     }

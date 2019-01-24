@@ -19,7 +19,6 @@ import com.marveliu.framework.model.sys.Sys_user;
 import org.nutz.boot.NbApp;
 import org.nutz.dao.Dao;
 import org.nutz.dao.util.Daos;
-import org.nutz.el.opt.custom.CustomMake;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Mirror;
@@ -51,7 +50,6 @@ public class DubboRpcGyMainLauncher {
         nb.run();
     }
 
-
     public void init() {
         try {
             Daos.createTablesInPackage(dao, "com.marveliu.framework.model.gy", false);
@@ -60,7 +58,6 @@ public class DubboRpcGyMainLauncher {
         }
         try {
             if (log.isDebugEnabled()) {
-                //通过POJO类修改表结构
                 Daos.migration(dao, "com.marveliu.framework.model.gy", true, false);
             }
         } catch (Exception e) {
@@ -73,13 +70,10 @@ public class DubboRpcGyMainLauncher {
     }
 
     public void depose() {
-        // 非mysql数据库,或多webapp共享mysql驱动的话,以下语句删掉
         try {
             Mirror.me(Class.forName("com.mysql.jdbc.AbandonedConnectionCleanupThread")).invoke(null, "shutdown");
         } catch (Throwable e) {
         }
-        // 解决com.alibaba.druid.proxy.DruidDriver和com.mysql.jdbc.Driver在reload时报warning的问题
-        // 多webapp共享mysql驱动的话,以下语句删掉
         Enumeration<Driver> en = DriverManager.getDrivers();
         while (en.hasMoreElements()) {
             try {

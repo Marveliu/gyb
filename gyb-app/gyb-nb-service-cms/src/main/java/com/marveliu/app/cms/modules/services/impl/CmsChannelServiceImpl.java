@@ -19,7 +19,7 @@ import org.nutz.plugins.wkcache.annotation.CacheResult;
 import java.util.List;
 
 @IocBean(args = {"refer:dao"})
-@Service(interfaceClass=CmsChannelService.class)
+@Service(interfaceClass = CmsChannelService.class)
 @CacheDefaults(cacheName = "cms_channel")
 public class CmsChannelServiceImpl extends BaseServiceImpl<Cms_channel> implements CmsChannelService {
     public CmsChannelServiceImpl(Dao dao) {
@@ -67,14 +67,14 @@ public class CmsChannelServiceImpl extends BaseServiceImpl<Cms_channel> implemen
     @CacheResult
     public Cms_channel getChannel(String id, String code) {
         if (Strings.isNotBlank(code)) {
-            return this.fetch(Cnd.where("code", "=", code).and("disabled","=",false));
+            return this.fetch(Cnd.where("code", "=", code).and("disabled", "=", false));
         }
         return this.fetch(id);
     }
 
     @CacheResult
     public boolean hasChannel(String code) {
-        return this.count(Cnd.where("code", "=", code).and("disabled","=",false)) > 0;
+        return this.count(Cnd.where("code", "=", code).and("disabled", "=", false)) > 0;
     }
 
 

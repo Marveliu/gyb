@@ -37,7 +37,7 @@ public class RabbitTestService {
 
     private static Log log = Logs.getLog(RabbitTestService.class);
 
-    @Aop("rabbitmq") // 会自动管理Connection/Channel的开启和关闭.
+    @Aop("rabbitmq")
     public void publish(String routingKey, byte[] body) throws Exception {
         channel().basicPublish("", routingKey, null, body);
     }
@@ -51,7 +51,6 @@ public class RabbitTestService {
                                        BasicProperties properties,
                                        byte[] body)
                     throws IOException {
-
                 log.info(body);
             }
         });

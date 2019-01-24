@@ -8,7 +8,7 @@ import org.nutz.dao.Dao;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 @IocBean(args = {"refer:dao"})
-@Service(interfaceClass=CmsLinkClassService.class)
+@Service(interfaceClass = CmsLinkClassService.class)
 public class CmsLinkClassServiceImpl extends BaseServiceImpl<Cms_link_class> implements CmsLinkClassService {
     public CmsLinkClassServiceImpl(Dao dao) {
         super(dao);

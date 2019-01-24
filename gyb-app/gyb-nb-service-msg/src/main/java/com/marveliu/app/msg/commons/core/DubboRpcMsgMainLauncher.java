@@ -16,23 +16,14 @@ package com.marveliu.app.msg.commons.core;
  */
 
 import com.marveliu.app.msg.commons.base.Globals;
-import com.marveliu.app.msg.modules.services.impl.RabbitTestService;
-import com.marveliu.framework.model.sys.Sys_user;
 import org.beetl.core.GroupTemplate;
 import org.nutz.boot.NbApp;
-import org.nutz.dao.Dao;
-import org.nutz.dao.util.Daos;
 import org.nutz.ioc.Ioc;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.lang.Mirror;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.annotation.Modules;
-
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.util.Enumeration;
 
 /**
  * @author Marveliu
@@ -49,7 +40,7 @@ public class DubboRpcMsgMainLauncher {
     protected Ioc ioc;
 
     @Inject
-    private Globals globals; // 注入为了初始化
+    private Globals globals;
 
     public static void main(String[] args) throws Exception {
         NbApp nb = new NbApp().setArgs(args).setPrintProcDoc(true);

@@ -17,7 +17,7 @@ import org.nutz.lang.Strings;
  * Created by wiz on 2016/12/22.
  */
 @IocBean(args = {"refer:dao"})
-@Service(interfaceClass=LibSkillService.class)
+@Service(interfaceClass = LibSkillService.class)
 public class LibSkillServiceImpl extends BaseServiceImpl<lib_skill> implements LibSkillService {
 
     public LibSkillServiceImpl(Dao dao) {

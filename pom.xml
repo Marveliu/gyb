@@ -13,7 +13,6 @@
     <name>gyb</name>
     <url>http://www.guyongbang.cn</url>
 
-
     <modules>
         <module>gyb-framework</module>
         <module>gyb-app</module>
@@ -58,6 +57,7 @@
             </releases>
         </repository>
     </repositories>
+
     <pluginRepositories>
         <pluginRepository>
             <id>nutz-snapshots</id>

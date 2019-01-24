@@ -48,7 +48,7 @@ import java.util.List;
  **/
 
 @IocBean
-@Service(interfaceClass=GyFacadeService.class)
+@Service(interfaceClass = GyFacadeService.class)
 public class GyFacadeServiceImpl implements GyFacadeService {
 
     private static final Log log = Logs.get();
@@ -87,13 +87,13 @@ public class GyFacadeServiceImpl implements GyFacadeService {
         try {
             gy_inf gy_inf = gyInfService.insertOrUpdate(gyInf);
             // 修改角色
-            this.updateGyRoleByGyid(gy_inf.getId(),"gy2");
+            this.updateGyRoleByGyid(gy_inf.getId(), "gy2");
             gyAuth.setGyid(gy_inf.getId());
             gyAuth.setStatus(ConfigUtil.GY_AUTH_CHECKING);
             gyAuthService.insertOrUpdate(gyAuth);
             return true;
-        }catch (Exception e){
-            log.error("雇员信息注册失败",e);
+        } catch (Exception e) {
+            log.error("雇员信息注册失败", e);
         }
         return false;
     }
@@ -101,6 +101,7 @@ public class GyFacadeServiceImpl implements GyFacadeService {
 
     /**
      * 信息修改
+     *
      * @param gyInf
      * @param gyAuth
      * @return
@@ -108,13 +109,13 @@ public class GyFacadeServiceImpl implements GyFacadeService {
     public boolean editInfo(gy_inf gyInf, gy_auth gyAuth) {
         try {
             gyInfService.updateIgnoreNull(gyInf);
-            this.updateGyRoleByGyid(gyInf.getId(),"gy2");
+            this.updateGyRoleByGyid(gyInf.getId(), "gy2");
             gyAuth.setGyid(gyInf.getId());
             gyAuth.setStatus(ConfigUtil.GY_AUTH_CHECKING);
             gyAuthService.updateIgnoreNull(gyAuth);
             return true;
-        }catch (Exception e){
-            log.error("雇员信息注册失败",e);
+        } catch (Exception e) {
+            log.error("雇员信息注册失败", e);
         }
         return false;
     }
@@ -129,11 +130,11 @@ public class GyFacadeServiceImpl implements GyFacadeService {
     @Override
     public boolean updateGyRoleByGyid(String gyid, String rolecode) {
         try {
-            String roleid =  sysRoleService.getRoleFromCode(rolecode).getId();
+            String roleid = sysRoleService.getRoleFromCode(rolecode).getId();
             String userid = gyInfService.getUidByGyid(gyid);
-            return sysRoleService.setUserRoleByRoleid(userid,roleid);
-        }catch (Exception e){
-            log.error("修改雇员角色出错:",e);
+            return sysRoleService.setUserRoleByRoleid(userid, roleid);
+        } catch (Exception e) {
+            log.error("修改雇员角色出错:", e);
         }
         return false;
     }
@@ -165,25 +166,27 @@ public class GyFacadeServiceImpl implements GyFacadeService {
 
     /************ 支付相关 ************/
 
-     /**
+    /**
      * 通过支付id获得雇员信息
+     *
      * @param payid
      * @return
      */
     @Override
     public gy_inf getGyByPayid(String payid) {
-        if(!Lang.isEmpty(payid)) return gyInfService.getGyByUserId(gyPayService.getGyidByPayid(payid));
+        if (!Lang.isEmpty(payid)) return gyInfService.getGyByUserId(gyPayService.getGyidByPayid(payid));
         return null;
     }
 
 
     /**
      * 根据雇员id获取支付信息
+     *
      * @param gyid
      * @return
      */
-    public List<gy_pay> getPaysByGyid(String gyid){
-        return gyPayService.query(Cnd.where("gyid","=",gyid));
+    public List<gy_pay> getPaysByGyid(String gyid) {
+        return gyPayService.query(Cnd.where("gyid", "=", gyid));
     }
 
 
@@ -202,6 +205,7 @@ public class GyFacadeServiceImpl implements GyFacadeService {
     /**
      * 修改联系方式,迁移联系方式
      * 在已认证的情况下，只允许修改联系方式信息，并且全部需要重新验证
+     *
      * @param gy_inf 提交的雇员信息
      * @return
      */

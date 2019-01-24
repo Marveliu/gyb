@@ -68,8 +68,8 @@ public class TaskMainLauncher {
             task.setName("测试任务");
             task.setJobClass("com.marveliu.app.tmsg.commons.ext.quartz.job.TestJob");
             task.setCron("*/5 * * * * ?");
-            task.setData("{\"hi\":\"Wechat:wiz | send red packets of support,thank u\"}");
-            task.setNote("微信号：wiz | 欢迎发送红包以示支持，多谢。。");
+            task.setData("{\"hi\":\"hello world!\"}");
+            task.setNote("test");
             sysTaskService.insert(task);
         }
         ioc.get(Globals.class).init(sysTaskService);

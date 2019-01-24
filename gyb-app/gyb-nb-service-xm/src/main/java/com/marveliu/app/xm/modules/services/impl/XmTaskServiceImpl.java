@@ -50,7 +50,6 @@ public class XmTaskServiceImpl extends BaseServiceImpl<xm_task> implements XmTas
         super(dao);
     }
 
-
     /**
      * 启用或者禁用任务书
      *

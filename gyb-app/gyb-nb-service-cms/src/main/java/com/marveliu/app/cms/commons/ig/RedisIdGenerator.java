@@ -33,7 +33,7 @@ public class RedisIdGenerator implements IdGenerator {
             key = key.substring(0, 16);
         }
         try (Jedis jedis = jedisAgent.getResource()) {
-            String ym = Times.format("yyyyMM",new Date());
+            String ym = Times.format("yyyyMM", new Date());
             String id = String.valueOf(jedis.incr("gyb:ig:" + tableName.toUpperCase() + ym));
             return key + ym + Strings.alignRight(id, 10, '0');
         }

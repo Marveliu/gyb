@@ -16,28 +16,16 @@ package com.marveliu.app.msg.commons.base;
  */
 
 import com.marveliu.framework.model.sys.Sys_msg;
-import com.marveliu.framework.model.sys.Sys_task;
 import com.marveliu.framework.services.msg.TMsg;
 import com.marveliu.framework.services.msg.email.EmailService;
-import com.marveliu.framework.services.sys.SysTaskService;
-import com.marveliu.framework.services.task.TaskPlatformService;
 import com.marveliu.framework.util.ConfigUtil;
 import com.rabbitmq.client.*;
-import org.nutz.boot.NbApp;
-import org.nutz.ioc.Ioc;
-import org.nutz.ioc.aop.Aop;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
 import org.nutz.lang.Lang;
-import org.nutz.lang.Times;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-
-import java.io.IOException;
-import java.util.List;
-
-import static org.nutz.integration.rabbitmq.aop.RabbitmqMethodInterceptor.channel;
 
 /**
  * @author Marveliu
@@ -54,7 +42,6 @@ public class Globals {
     @Inject
     ConnectionFactory rabbitmq_cf;
 
-
     public void init() {
         try {
             initGyChannel();
@@ -65,11 +52,10 @@ public class Globals {
         }
     }
 
-
     public void initGyChannel() throws Exception {
         // 创建一个通道(一个轻量级的连接)
         Channel channel = rabbitmq_cf.newConnection().createChannel();
-        //每次从队列获取的数量
+        // 每次从队列获取的数量
         channel.basicQos(1);
         // 声明一个队列
         String QUEUE_NAME = ConfigUtil.SYS_MSG_TAG_GY;

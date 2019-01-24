@@ -24,6 +24,7 @@ public class TaskPlatformServiceImpl implements TaskPlatformService {
      * @param jobGroup
      * @return
      */
+    @Override
     public boolean isExist(String jobName, String jobGroup) {
         return quartzManager.exist(new JobKey(jobName, jobGroup));
     }
@@ -38,6 +39,7 @@ public class TaskPlatformServiceImpl implements TaskPlatformService {
      * @param comment
      * @param dataMap
      */
+    @Override
     public void addCron(String jobName, String jobGroup, String className, String cron, String comment, String dataMap) {
         QuartzJob qj = new QuartzJob();
         qj.setJobName(jobName);
@@ -60,6 +62,7 @@ public class TaskPlatformServiceImpl implements TaskPlatformService {
      * @param comment
      * @param dataMap
      */
+    @Override
     public void addSimple(String jobName, String jobGroup, String className, String scheduled, String comment, String dataMap) {
         QuartzJob qj = new QuartzJob();
         qj.setJobName(jobName);
@@ -79,6 +82,7 @@ public class TaskPlatformServiceImpl implements TaskPlatformService {
      * @param jobGroup
      * @return
      */
+    @Override
     public boolean delete(String jobName, String jobGroup) {
         QuartzJob qj = new QuartzJob();
         qj.setJobName(jobName);
@@ -89,6 +93,7 @@ public class TaskPlatformServiceImpl implements TaskPlatformService {
     /**
      * 清除任务
      */
+    @Override
     public void clear() {
         quartzManager.clear();
     }

@@ -56,7 +56,6 @@ import org.nutz.trans.Trans;
 @Service(interfaceClass = XmFacadeService.class)
 public class XmFacadeServiceImpl implements XmFacadeService {
 
-
     private static final Log log = Logs.get();
 
     @Inject

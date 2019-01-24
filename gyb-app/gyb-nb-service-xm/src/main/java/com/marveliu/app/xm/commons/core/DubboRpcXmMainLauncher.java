@@ -71,13 +71,10 @@ public class DubboRpcXmMainLauncher {
     }
 
     public void depose() {
-        // 非mysql数据库,或多webapp共享mysql驱动的话,以下语句删掉
         try {
             Mirror.me(Class.forName("com.mysql.jdbc.AbandonedConnectionCleanupThread")).invoke(null, "shutdown");
         } catch (Throwable e) {
         }
-        // 解决com.alibaba.druid.proxy.DruidDriver和com.mysql.jdbc.Driver在reload时报warning的问题
-        // 多webapp共享mysql驱动的话,以下语句删掉
         Enumeration<Driver> en = DriverManager.getDrivers();
         while (en.hasMoreElements()) {
             try {

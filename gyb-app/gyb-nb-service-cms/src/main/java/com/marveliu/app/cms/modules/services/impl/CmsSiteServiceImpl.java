@@ -20,11 +20,13 @@ public class CmsSiteServiceImpl extends BaseServiceImpl<Cms_site> implements Cms
     }
 
     @CacheResult
+    @Override
     public Cms_site getSite(String code) {
         return this.fetch(Cnd.where("id", "=", code));
     }
 
     @CacheRemoveAll
+    @Override
     public void clearCache() {
 
     }

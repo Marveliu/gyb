@@ -1,4 +1,6 @@
 
+![服务注册](http://marveliu-md.oss-cn-beijing.aliyuncs.com/md/2019-01-24-151052.png)
+
 > 面向在校大学生的分布式短期雇佣任务管理系统，本科毕业设计，基于Nutzwk。
 
 # 使用说明

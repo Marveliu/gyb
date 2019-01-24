@@ -13,9 +13,8 @@ import org.nutz.plugins.wkcache.annotation.CacheRemoveAll;
 import org.nutz.plugins.wkcache.annotation.CacheResult;
 
 
-
 @IocBean(args = {"refer:dao"})
-@Service(interfaceClass=CmsArticleService.class)
+@Service(interfaceClass = CmsArticleService.class)
 @CacheDefaults(cacheName = "cms_article")
 public class CmsArticleServiceImpl extends BaseServiceImpl<Cms_article> implements CmsArticleService {
     public CmsArticleServiceImpl(Dao dao) {
@@ -23,16 +22,19 @@ public class CmsArticleServiceImpl extends BaseServiceImpl<Cms_article> implemen
     }
 
     @CacheResult
+    @Override
     public Pagination getListPage(int pageNumber, int pageSize, Condition cnd) {
         return this.listPage(pageNumber, pageSize, cnd);
     }
 
     @CacheResult
+    @Override
     public Cms_article getArticle(Condition cnd) {
         return this.fetch(cnd);
     }
 
     @CacheRemoveAll
+    @Override
     public void clearCache() {
 
     }

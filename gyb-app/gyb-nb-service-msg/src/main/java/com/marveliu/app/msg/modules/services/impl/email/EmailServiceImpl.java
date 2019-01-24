@@ -44,7 +44,6 @@ public class EmailServiceImpl implements EmailService, Runnable {
 
     private static final Log log = Logs.get();
 
-
     ExecutorService es;
 
     LinkedBlockingQueue<Email> queue;
@@ -67,7 +66,7 @@ public class EmailServiceImpl implements EmailService, Runnable {
     }
 
     public void close() throws InterruptedException {
-        queue = null; // 触发关闭
+        queue = null;
         if (es != null && !es.isShutdown()) {
             es.shutdown();
             es.awaitTermination(5, TimeUnit.SECONDS);
@@ -119,6 +118,7 @@ public class EmailServiceImpl implements EmailService, Runnable {
      * @param html
      * @return
      */
+    @Override
     public boolean send(String to, String subject, String html) {
         try {
             HtmlEmail email = ioc.get(HtmlEmail.class);
@@ -152,6 +152,7 @@ public class EmailServiceImpl implements EmailService, Runnable {
      * @param tMsg
      * @return
      */
+    @Override
     public boolean sendHtmlTemplateByTemplateName(String to, TMsg tMsg) {
         StringBuilder path = new StringBuilder();
         try {

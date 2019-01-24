@@ -15,10 +15,7 @@ import org.nutz.mvc.annotation.*;
 
 import java.security.Security;
 
-/**
- * Created by wiz on 2018/3/16.
- */
-@IocBean(create = "init", depose = "depose")
+
 @Modules(packages = "com.marveliu")
 @Localization(value = "locales/", defaultLocalizationKey = "zh_CN")
 @Encoding(input = "UTF-8", output = "UTF-8")
@@ -34,9 +31,9 @@ public class WebPlatformMainLauncher {
     @Inject
     private JedisAgent jedisAgent;
     @Inject
-    private Globals globals;//注入一下为了初始化
+    private Globals globals;
     @Inject
-    private WebPubSub webPubSub;//注入一下为了初始化
+    private WebPubSub webPubSub;
 
     public static void main(String[] args) throws Exception {
         NbApp nb = new NbApp().setArgs(args).setPrintProcDoc(true);
@@ -44,10 +41,4 @@ public class WebPlatformMainLauncher {
         nb.run();
     }
 
-    public void init() {
-    }
-
-    public void depose() {
-
-    }
 }

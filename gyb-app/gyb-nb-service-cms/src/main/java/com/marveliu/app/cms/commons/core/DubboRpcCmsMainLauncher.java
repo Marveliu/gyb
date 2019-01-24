@@ -28,9 +28,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.regex.Pattern;
 
-/**
- * Created by wiz on 2018/3/17.
- */
 @IocBean(create = "init", depose = "depose")
 @Modules(packages = "com.marveliu")
 public class DubboRpcCmsMainLauncher {

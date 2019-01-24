@@ -22,7 +22,7 @@ import java.util.List;
  * Created by wiz on 2016/12/22.
  */
 @IocBean(args = {"refer:dao"})
-@Service(interfaceClass=LibTaskService.class)
+@Service(interfaceClass = LibTaskService.class)
 public class LibTaskServiceImpl extends BaseServiceImpl<lib_task> implements LibTaskService {
 
     public LibTaskServiceImpl(Dao dao) {
@@ -72,6 +72,7 @@ public class LibTaskServiceImpl extends BaseServiceImpl<lib_task> implements Lib
         }
     }
 
+    @Override
     public List<lib_skill> getDatas(String taskId) {
         Sql sql = Sqls.create("select distinct a.* from lib_skill a,lib_task_skill b where a.id=b.skillId and" +
                 " b.taskId=@taskId order by a.location ASC,a.path asc");
@@ -83,6 +84,7 @@ public class LibTaskServiceImpl extends BaseServiceImpl<lib_task> implements Lib
         return sql.getList(lib_skill.class);
     }
 
+    @Override
     public List<lib_skill> getDatas() {
         Sql sql = Sqls.create("select distinct a.* from lib_skill a,lib_task_skill b where a.id=b.skillId order by a.location ASC,a.path asc");
         Entity<lib_skill> entity = dao().getEntity(lib_skill.class);
@@ -92,6 +94,7 @@ public class LibTaskServiceImpl extends BaseServiceImpl<lib_task> implements Lib
         return sql.getList(lib_skill.class);
     }
 
+    @Override
     public List<lib_skill> getMenusAndButtons(String taskId) {
         Sql sql = Sqls.create("select distinct a.* from lib_skill a,lib_task_skill b where a.id=b.skillId and" +
                 " b.taskId=@taskId order by a.location ASC,a.path asc");
@@ -105,6 +108,7 @@ public class LibTaskServiceImpl extends BaseServiceImpl<lib_task> implements Lib
 
     /**
      * 修改任务所需要的技能信息
+     *
      * @param skillIds
      * @param taskid
      * @return
@@ -116,7 +120,7 @@ public class LibTaskServiceImpl extends BaseServiceImpl<lib_task> implements Lib
             this.clear("lib_task_skill", Cnd.where("taskid", "=", taskid));
             for (String s : ids) {
                 if (!Strings.isEmpty(s)) {
-                    this.insert("lib_task_skill",Chain.make("taskId", taskid).add("skillId", s));
+                    this.insert("lib_task_skill", Chain.make("taskId", taskid).add("skillId", s));
                 }
             }
             return true;

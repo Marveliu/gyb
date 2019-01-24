@@ -16,7 +16,6 @@ package com.marveliu.app.gy.modules.services.impl;
  */
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.marveliu.framework.model.base.Result;
 import com.marveliu.framework.model.gy.gy_pay;
 import com.marveliu.framework.services.base.BaseServiceImpl;
 import com.marveliu.framework.services.gy.GyPayService;

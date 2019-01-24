@@ -26,6 +26,7 @@ import org.nutz.mvc.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Created by wiz on 2016/6/23.
  */
@@ -53,11 +54,11 @@ public class SysHomeController {
     @RequiresAuthentication
     public String home(HttpServletRequest req) {
         // 角色 雇员
-        if(shiroUtil.isGy()){
+        if (shiroUtil.isGy()) {
             return "forward:/platform/gy/person";
         }
-        Session session =  SecurityUtils.getSubject().getSession();
-        session.setAttribute("sysuser_id",sysUserinfService.fetch(Cnd.where("userid","=",StringUtil.getPlatformUid())).getId());
+        Session session = SecurityUtils.getSubject().getSession();
+        session.setAttribute("sysuser_id", sysUserinfService.fetch(Cnd.where("userid", "=", StringUtil.getPlatformUid())).getId());
         return null;
     }
 
@@ -137,8 +138,9 @@ public class SysHomeController {
             req.setAttribute("perpath", perpath);
         }
     }
-    
-    @At(value={"/", "/index"}, top=true)
+
+    @At(value = {"/", "/index"}, top = true)
     @Ok(">>:/sysadmin")
-    public void index() {}
+    public void index() {
+    }
 }

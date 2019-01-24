@@ -136,7 +136,7 @@
             <li class="dropdown">
                 <% if(!isEmpty(@secondMenus.get(firstMenu.path))){%>
                 <a href="javascript:;" data-toggle="dropdown">
-                    <% if(has(firstMenu.icon)){ %>
+                    <% if(isEmpty(firstMenu.icon)){ %>
                     <i class="${firstMenu.icon}"></i>
                     <% } %>
                     <span>
@@ -229,12 +229,6 @@
             ${layoutContent}
         </section>
     </div>
-
-    <footer style="width:300px;margin:0 auto;">
-        <a target="_blank" href="http://www.miitbeian.gov.cn" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂ICP备 18000705号-1</p></a>
-        <br>
-        <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42011102001026" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">鄂公网安备 42011102001026号</p></a>
-    </footer>
 
 </div>
 <div id="homeDetail" class="modal fade bs-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">

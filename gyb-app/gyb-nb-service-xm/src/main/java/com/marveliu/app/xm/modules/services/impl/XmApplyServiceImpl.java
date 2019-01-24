@@ -43,8 +43,6 @@ import java.util.concurrent.TimeUnit;
  * @author Marveliu
  * @since 02/05/2018
  **/
-
-
 @IocBean(args = {"refer:dao"}, create = "init", depose = "close")
 @Service(interfaceClass = XmApplyService.class)
 public class XmApplyServiceImpl extends BaseServiceImpl<xm_apply> implements XmApplyService, Runnable {
