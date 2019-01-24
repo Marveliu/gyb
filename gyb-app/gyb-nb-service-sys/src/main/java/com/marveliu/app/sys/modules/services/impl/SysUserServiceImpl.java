@@ -215,6 +215,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
 
     /**
      * 发送验证邮件
+     *
      * @param sysUser
      * @return
      */
@@ -224,7 +225,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<Sys_user> implements Sys
             String token = String.format("%s,%s", sysUser.getEmail(), System.currentTimeMillis());
             token = Toolkit._3DES_encode(sysUser.getSalt().getBytes(), token.getBytes());
             // String url = ConfigUtil.AppApiDomain + "/front/api/sys/email/checkActiveMail?token=" + token + "&userId=" + sysUser.getId();
-            String url = ConfigUtil.AppDomain+"/public/email/checkActiveMail?token=" + token + "&userId=" + sysUser.getId();
+            String url = ConfigUtil.AppDomain + "/public/email/checkActiveMail?token=" + token + "&userId=" + sysUser.getId();
             System.out.println("url:" + url);
             TMsg tMsg = new RegTMsg(sysUser.getUsername(), url);
             sysMsg.setRevid(sysUser.getId());

@@ -30,7 +30,6 @@ import static org.nutz.integration.rabbitmq.aop.RabbitmqMethodInterceptor.channe
  * @since 17/05/2018
  **/
 
-
 @IocBean(create = "init")
 public class Globals {
     private static final Log log = Logs.get();
@@ -39,7 +38,9 @@ public class Globals {
         initMqChannel();
     }
 
-    // 初始化Channel队列
+    /**
+     * 初始化Channel队列
+     */
     @Aop("rabbitmq")
     public void initMqChannel() {
         try {

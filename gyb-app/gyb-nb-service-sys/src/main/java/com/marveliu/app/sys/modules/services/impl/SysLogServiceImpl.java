@@ -70,10 +70,12 @@ public class SysLogServiceImpl extends BaseServiceImpl<Sys_log> implements SysLo
     }
 
     @Async
+    @Override
     public void fastInsertSysLog(Sys_log syslog) {
         logDao().fastInsert(syslog);
     }
 
+    @Override
     public NutMap logData(String tableName, int length, int start, int draw, List<DataTableOrder> orders, List<DataTableColumn> columns, Cnd cnd, String linkName) {
         if (logDao(tableName).exists(Sys_log.class)) {
             SysLogService sysLogService2 = new SysLogServiceImpl(logDao(tableName));

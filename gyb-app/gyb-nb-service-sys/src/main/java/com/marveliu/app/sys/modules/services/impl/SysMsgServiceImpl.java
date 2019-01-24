@@ -16,7 +16,7 @@ import java.io.IOException;
 import static org.nutz.integration.rabbitmq.aop.RabbitmqMethodInterceptor.channel;
 
 @IocBean(args = {"refer:dao"})
-@Service(interfaceClass=SysMsgService.class)
+@Service(interfaceClass = SysMsgService.class)
 public class SysMsgServiceImpl extends BaseServiceImpl<Sys_msg> implements SysMsgService {
 
 
@@ -39,9 +39,9 @@ public class SysMsgServiceImpl extends BaseServiceImpl<Sys_msg> implements SysMs
             this.insert(sysMsg);
             channel().basicPublish("", sysMsg.getTag(), null, Lang.toBytes(sysMsg));
             return true;
-        }catch (IOException e){
-            log.error("fail to get byte[]",e);
-        }catch (Exception e){
+        } catch (IOException e) {
+            log.error("fail to get byte[]", e);
+        } catch (Exception e) {
             log.error("插入消息队列失败");
         }
         return false;

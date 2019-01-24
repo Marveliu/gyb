@@ -11,7 +11,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
  * Created by wiz on 2016/12/23.
  */
 @IocBean(args = {"refer:dao"})
-@Service(interfaceClass=SysPluginService.class)
+@Service(interfaceClass = SysPluginService.class)
 public class SysPluginServiceImpl extends BaseServiceImpl<Sys_plugin> implements SysPluginService {
     public SysPluginServiceImpl(Dao dao) {
         super(dao);

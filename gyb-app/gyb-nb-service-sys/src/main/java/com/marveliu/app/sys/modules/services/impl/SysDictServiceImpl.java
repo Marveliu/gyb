@@ -23,7 +23,7 @@ import java.util.Map;
  * Created by mac on 2017/1/19.
  */
 @IocBean(args = {"refer:dao"})
-@Service(interfaceClass=SysDictService.class)
+@Service(interfaceClass = SysDictService.class)
 public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements SysDictService {
     public SysDictServiceImpl(Dao dao) {
         super(dao);
@@ -129,6 +129,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
      * @param pid
      */
     @Aop(TransAop.READ_COMMITTED)
+    @Override
     public void save(Sys_dict dict, String pid) {
         String path = "";
         if (!Strings.isEmpty(pid)) {
@@ -149,6 +150,7 @@ public class SysDictServiceImpl extends BaseServiceImpl<Sys_dict> implements Sys
      * @param dict
      */
     @Aop(TransAop.READ_COMMITTED)
+    @Override
     public void deleteAndChild(Sys_dict dict) {
         dao().execute(Sqls.create("delete from sys_dict where path like @path").setParam("path", dict.getPath() + "%"));
         if (!Strings.isEmpty(dict.getParentId())) {

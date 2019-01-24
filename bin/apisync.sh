@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 updir=./../apidoc   #要上传的文件夹
 todir=/             #目标文件夹
 ip=                 #服务器

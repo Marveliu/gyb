@@ -17,7 +17,7 @@ import org.nutz.lang.Strings;
  * Created by wiz on 2016/12/22.
  */
 @IocBean(args = {"refer:dao"})
-@Service(interfaceClass=SysMenuService.class)
+@Service(interfaceClass = SysMenuService.class)
 public class SysMenuServiceImpl extends BaseServiceImpl<Sys_menu> implements SysMenuService {
     public SysMenuServiceImpl(Dao dao) {
         super(dao);
@@ -30,6 +30,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<Sys_menu> implements Sys
      * @param pid
      */
     @Aop(TransAop.READ_COMMITTED)
+    @Override
     public void save(Sys_menu menu, String pid) {
         String path = "";
         if (!Strings.isEmpty(pid)) {
@@ -50,6 +51,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<Sys_menu> implements Sys
      * @param unit
      */
     @Aop(TransAop.READ_COMMITTED)
+    @Override
     public void deleteAndChild(Sys_menu unit) {
         dao().execute(Sqls.create("delete from sys_menu where path like @path").setParam("path", unit.getPath() + "%"));
         dao().execute(Sqls.create("delete from sys_role_menu where menuId=@id or menuId in(SELECT id FROM sys_menu WHERE path like @path)").setParam("id", unit.getId()).setParam("path", unit.getPath() + "%"));

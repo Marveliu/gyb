@@ -22,7 +22,7 @@ import java.util.List;
  * Created by wiz on 2016/12/22.
  */
 @IocBean(args = {"refer:dao"})
-@Service(interfaceClass=SysRoleService.class)
+@Service(interfaceClass = SysRoleService.class)
 public class SysRoleServiceImpl extends BaseServiceImpl<Sys_role> implements SysRoleService {
     public SysRoleServiceImpl(Dao dao) {
         super(dao);
@@ -32,7 +32,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<Sys_role> implements Sys
         Sql sql = Sqls.create("select distinct a.* from sys_menu a,sys_role_menu b where a.id=b.menuId and" +
                 " b.roleId=@roleId and a.disabled=@f order by a.location ASC,a.path asc");
         sql.params().set("roleId", roleId);
-        sql.params().set("f",false);
+        sql.params().set("f", false);
         Entity<Sys_menu> entity = dao().getEntity(Sys_menu.class);
         sql.setEntity(entity);
         sql.setCallback(Sqls.callback.entities());
@@ -44,7 +44,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<Sys_role> implements Sys
         Sql sql = Sqls.create("select distinct a.* from sys_menu a,sys_role_menu b where a.id=b.menuId and" +
                 " b.roleId=@roleId and a.type='data' and a.disabled=@f order by a.location ASC,a.path asc");
         sql.params().set("roleId", roleId);
-        sql.params().set("f",false);
+        sql.params().set("f", false);
         Entity<Sys_menu> entity = dao().getEntity(Sys_menu.class);
         sql.setEntity(entity);
         sql.setCallback(Sqls.callback.entities());
@@ -94,18 +94,19 @@ public class SysRoleServiceImpl extends BaseServiceImpl<Sys_role> implements Sys
 
     /**
      * 根据code获得角色
+     *
      * @param code
      * @return
      */
-    public Sys_role getRoleFromCode(String code){
-       return this.dao().fetch(Sys_role.class, Cnd.where("code", "=", code));
+    public Sys_role getRoleFromCode(String code) {
+        return this.dao().fetch(Sys_role.class, Cnd.where("code", "=", code));
     }
 
 
     @Override
     public Boolean setUserRoleByRoleid(String userid, String roleid) {
-        int count = this.dao().update("sys_user_role", org.nutz.dao.Chain.make("roleId",roleid),Cnd.where("userId","= ",userid));
-        if (count == 1) return  true;
+        int count = this.dao().update("sys_user_role", org.nutz.dao.Chain.make("roleId", roleid), Cnd.where("userId", "= ", userid));
+        if (count == 1) return true;
         return false;
     }
 }

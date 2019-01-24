@@ -17,7 +17,7 @@ import org.nutz.lang.Strings;
  * Created by wiz on 2016/12/22.
  */
 @IocBean(args = {"refer:dao"})
-@Service(interfaceClass=SysUnitService.class)
+@Service(interfaceClass = SysUnitService.class)
 public class SysUnitServiceImpl extends BaseServiceImpl<Sys_unit> implements SysUnitService {
     public SysUnitServiceImpl(Dao dao) {
         super(dao);

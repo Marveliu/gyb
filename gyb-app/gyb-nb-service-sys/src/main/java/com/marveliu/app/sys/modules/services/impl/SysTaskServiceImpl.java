@@ -11,7 +11,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
  * Created by wiz on 2016/12/22.
  */
 @IocBean(args = {"refer:dao"})
-@Service(interfaceClass=SysTaskService.class)
+@Service(interfaceClass = SysTaskService.class)
 public class SysTaskServiceImpl extends BaseServiceImpl<Sys_task> implements SysTaskService {
     public SysTaskServiceImpl(Dao dao) {
         super(dao);
