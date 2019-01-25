@@ -26,12 +26,40 @@ hs_err_pid*
 
 .settings
 
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+.idea/**/gradle.xml
+.idea/**/libraries
+cmake-build-*/
+.idea/**/mongoSettings.xml
+*.iws
+out/
+.idea_modules/
+atlassian-ide-plugin.xml
+.idea/replstate.xml
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+.idea/httpRequests
+
 /temp/
 /picture/
 /upload/
 /jarData/
 /logs/
 /venv/
+
+dependency-reduced-pom.xml
 
 
 /gyb-app/gyb-nb-service-msg/src/main/resources/application-prod.properties
@@ -42,4 +70,6 @@ hs_err_pid*
 /gyb-app/gyb-nb-service-xm/src/main/resources/application-prod.properties
 /gyb-app/gyb-nb-task/src/main/resources/application-prod.properties
 /gyb-app/gyb-nb-web-platform/src/main/resources/application-prod.properties
+.idea/**/workspace.xml
+
 /data/gyb.sql

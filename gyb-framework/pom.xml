@@ -7,17 +7,16 @@
         <groupId>com.marveliu</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.marveliu.framework</groupId>
-    <artifactId>gyb-framework</artifactId>
+    <packaging>pom</packaging>
 
+    <artifactId>gyb-framework</artifactId>
+    <groupId>com.marveliu.framework</groupId>
 
     <modules>
         <module>gyb-common</module>
         <module>gyb-model</module>
     </modules>
-
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

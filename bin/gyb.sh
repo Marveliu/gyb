@@ -35,17 +35,18 @@ start() {
     else
       rm $LOG_PATH/$JAR_NAME.out
       touch $LOG_PATH/$JAR_NAME.out
-      exec java -jar -Dnutz.profiles.active=prod $JAR_PATH/$JAR_NAME >> $LOG_PATH/$JAR_NAME.out &
-      sleep 5s
+      # 指定环境
+      # exec java -jar -Dnutz.profiles.active=prod $JAR_PATH/$JAR_NAME >> $LOG_PATH/$JAR_NAME.out &
+      exec java -jar $JAR_PATH/$JAR_NAME >> $LOG_PATH/$JAR_NAME.out &
       while [ -z "$PID" ]
       do
-        if (($count == 5));then
+        if (($count == 1000));then
           echo "$MODULE---$MODULE_NAME:$(expr $count \* 10)秒内未启动,请检查!"
           break
         fi
           count=$(($count+1))
           echo "${MODULE_NAME}启动中.................."
-          sleep 5s
+          sleep 10s
           PID=`ps -ef |grep $(echo $JAR_NAME | awk -F/ '{print $NF}') | grep -v grep | awk '{print $2}'`
 #          PID=`ps -ef |grep $(echo gyb-nb-service-sys.jar  | awk -F/ '{print $NF}') | grep -v grep | awk '{print $2}'`
 	  done
